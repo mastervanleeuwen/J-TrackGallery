@@ -1432,7 +1432,7 @@ class JtgModelFiles extends JModelLegacy
 			$id = $result->id;
 
 			// Images upload part
-			$imgpath = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/uploaded_tracks_images/track_' . $id . '/';
+			$imgpath = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/track_' . $id . '/';
 			$jInput = JFactory::getApplication()->input;
 			$jFileInput = new jInput($_FILES);
 			$images = $jFileInput->get('images', array(), 'array');
@@ -1739,7 +1739,7 @@ class JtgModelFiles extends JModelLegacy
 		$jFileInput = new jInput($_FILES);
 		$images = $jFileInput->get('images', array(), 'array');
 
-		if (count($images['name']) > 1)
+		if (count($images['name']) > 0)
 		{
 			$cfg = JtgHelper::getConfig();
 			$types = explode(',', $cfg->type);
