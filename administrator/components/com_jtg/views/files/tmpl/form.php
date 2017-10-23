@@ -45,7 +45,7 @@ JToolBarHelper::help('files/form', true);
 $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 //$document->addStyleSheet('https://dev.openlayers.org/theme/default/style.css');
-$document->addStyleSheet(JUri::base(true) . '/components/com_jtg/assets/template/default/openlayers_style.css');
+$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/default/openlayers_style.css');
 
 // Add jtg_map stylesheet
 $cfg = JtgHelper::getConfig();

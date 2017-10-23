@@ -590,7 +590,7 @@ class JtgViewFiles extends JViewLegacy
 		if (JVERSION >= 3.0)
 		{
 			JHtml::_('jquery.framework');
-			JHtml::script(Juri::base() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
+			JHtml::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
 			JHTML::_('behavior.framework');
 		}
 		else
