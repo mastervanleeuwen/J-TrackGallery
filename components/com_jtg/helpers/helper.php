@@ -108,14 +108,13 @@ class JtgHelper
 				$vName == 'config'
 		);
 		JSubMenuHelper::addEntry(
-				JText::_('COM_JTG_INFO'),
-				'index.php?option=com_jtg&task=info&controller=info',
-				$vName == 'config'
-		);
-
-		JSubMenuHelper::addEntry(
 				JText::_('COM_JTG_TRANSLATE'),
 				'index.php?option=com_jtg&task=translations&controller=translations',
+				$vName == 'config'
+		);
+		JSubMenuHelper::addEntry(
+				JText::_('COM_JTG_INFO'),
+				'index.php?option=com_jtg&task=info&controller=info',
 				$vName == 'config'
 		);
 

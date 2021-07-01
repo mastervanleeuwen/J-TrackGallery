@@ -44,14 +44,14 @@
 	<administration>
 		<menu img="../components/com_jtg/assets/images/icon-16-jtg.png">J!Track Gallery</menu>
 		<submenu>
-			<menu controller="config" task="config">configuration</menu>
-			<menu controller="files" task="files">files</menu>
-			<menu controller="maps" task="maps">maps</menu>
-			<menu controller="cats" task="cats">categories</menu>
-			<menu controller="terrain" task="terrain">terrain</menu>
-			<menu controller="comments" task="comments">comments</menu>
-			<menu controller="translations" task="translations">translations</menu>
-			<menu controller="info" task="info">info</menu>
+			<menu controller="config" task="config">Configuration</menu>
+			<menu controller="files" task="files">Tracks</menu>
+			<menu controller="maps" task="maps">Maps</menu>
+			<menu controller="cats" task="cats">Categories</menu>
+			<menu controller="terrain" task="terrain">Terrain</menu>
+			<menu controller="comments" task="comments">Comments</menu>
+			<menu controller="translations" task="translations">Translations</menu>
+			<menu controller="info" task="info">Information</menu>
 		</submenu>
 		<files folder="administrator/components/com_jtg">
 			<file>access.xml</file>
