@@ -324,14 +324,14 @@ class JtgViewFiles extends JViewLegacy
 			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($track->file);
 			$cache = JFactory::getCache('com_jtg');
 			// Cache: $gpsData structure is cached, after LoadFileAndData
-			$gpsData = $cache->get(array ( $gpsData, 'loadFileAndData' ), array ($file, $track->file ), $cfg->unit);
+			$gpsData = $cache->call(array ( $gpsData, 'loadFileAndData' ), $file, $track->file );
 
 			if (! $gpsData->displayErrors())
       	{
 				$params = JComponentHelper::getParams('com_jtg');
 				$makepreview = false;
 				if (!JFile::exists(JPATH_SITE . '/images/jtrackgallery/maps/track_'.$id.'.png')) $makepreview = true;
-				$this->map = $cache->get(array ( $gpsData, 'writeTrackOL' ), array ( $track, $params, null, $makepreview));
+				$this->map = $cache->call(array ( $gpsData, 'writeTrackOL' ), $track, $params, null, $makepreview);
       	}
 
 			$catid = $track->catid;
@@ -534,7 +534,7 @@ class JtgViewFiles extends JViewLegacy
 		$gpsData = new GpsDataClass($cfg->unit);
 
 		// Cache: $gpsData structure is cached, after LoadFileAndData
-		$gpsData = $cache->get(array ( $gpsData, 'loadFileAndData' ), array ($file, $track->file ), $cfg->unit);
+		$gpsData = $cache->call(array ( $gpsData, 'loadFileAndData' ), $file, $track->file );
 
 		if ($gpsData->displayErrors())
 		{
@@ -547,7 +547,7 @@ class JtgViewFiles extends JViewLegacy
 		{
 		   $imageList = $model->getImages($id);
 			// Kartenauswahl BEGIN
-			$map = $cache->get(array ( $gpsData, 'writeTrackOL' ), array ( $track, $params, $imageList ));
+			$map = $cache->call(array ( $gpsData, 'writeTrackOL' ), $track, $params, $imageList );
 
 			// Kartenauswahl END
 			$distance_float = (float) $track->distance;
