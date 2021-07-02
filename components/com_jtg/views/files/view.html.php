@@ -252,7 +252,6 @@ class JtgViewFiles extends JViewLegacy
 
 		JHtml::_('behavior.modal');
 		JHtml::_('behavior.tooltip');
-		$cache = JFactory::getCache('com_jtg');
 		$yesnolist = array(
 				array('id' => 0, 'title' => JText::_('JNO')),
 				array('id' => 1, 'title' => JText::_('JYES'))
@@ -322,16 +321,14 @@ class JtgViewFiles extends JViewLegacy
 			$this->id = $id;
 			$gpsData = new GpsDataClass($cfg->unit);
 			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($track->file);
-			$cache = JFactory::getCache('com_jtg');
-			// Cache: $gpsData structure is cached, after LoadFileAndData
-			$gpsData = $cache->call(array ( $gpsData, 'loadFileAndData' ), $file, $track->file );
+			$gpsData->loadFileAndData( $file, $track->file );
 
 			if (! $gpsData->displayErrors())
       	{
 				$params = JComponentHelper::getParams('com_jtg');
 				$makepreview = false;
 				if (!JFile::exists(JPATH_SITE . '/images/jtrackgallery/maps/track_'.$id.'.png')) $makepreview = true;
-				$this->map = $cache->call(array ( $gpsData, 'writeTrackOL' ), $track, $params, null, $makepreview);
+				$this->map = $gpsData->writeTrackOL( $track, $params, null, $makepreview);
       	}
 
 			$catid = $track->catid;

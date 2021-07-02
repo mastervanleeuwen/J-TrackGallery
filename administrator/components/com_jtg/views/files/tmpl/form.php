@@ -57,18 +57,17 @@ $map = "";
 if ($this->id >= 1)
 {
 	// Edit file
-	$cache = JFactory::getCache('com_jtg');
 	$cfg = JtgHelper::getConfig();
 	$params = JComponentHelper::getParams('com_jtg');
 	$model = $this->getModel();
-	$track = $cache->get(array($model, 'getFile'), array($this->id));
+	$track = $model->getFile($this->id);
 	$document = JFactory::getDocument();
 	require_once '../components/com_jtg/helpers/gpsClass.php';
 	$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js');
 	$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
 	$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $this->track->file;
 	$gpsData = new GpsDataClass($cfg->unit);
-	$gpsData = $cache->get(array ( $gpsData, 'loadFileAndData' ), array ($file, $track->file ), $cfg->unit);
+	$gpsData->loadFileAndData( $file, $track->file );
 	$imageList = $model->getImages($this->id);
 
 	if ($gpsData->displayErrors())
@@ -77,7 +76,7 @@ if ($this->id >= 1)
 	}
 	else
 	{
-		$map = $cache->get(array ( $gpsData, 'writeTrackOL' ), array ( $track, $params, $imageList ));
+		$map = $gpsData->writeTrackOL( $track, $params, $imageList );
 		$map.= '<style type="text/css">
 
 .olButton::before{
