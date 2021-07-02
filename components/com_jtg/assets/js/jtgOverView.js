@@ -20,7 +20,7 @@ function addMarkers() {
 	}
 }
 
-function addDPCalLocs(locations, markerstyle) {
+function addDPCalLocs(locations, iconfile) {
 	for (i=0; i<locations.length; i++)
 	{
 		ll = ol.proj.fromLonLat([locations[i].lon, locations[i].lat], olview.getProjection());
@@ -30,7 +30,11 @@ function addDPCalLocs(locations, markerstyle) {
 					name: '<a href="'+locations[i].url+'">'+locations[i].title+'</a>',
 					description: ''
 		} );
-      f.setStyle( markerstyle );
+		f.setStyle( new ol.style.Style( { 
+			image: new ol.style.Icon( { 
+				src: iconfile, 
+				color: '#'+locations[i].color 
+		}) }) );
 		arrayOfMarkers.push(f);
 	}
 }
@@ -211,7 +215,7 @@ function addClusteredLayerOfMarkers(){
             // Create a vector layers and add markers
             addMarkers();
 				// TODO: pass these as arguments instead of global vars
-				addDPCalLocs(DPCalLocs, DPCalMarkerStyle);
+				if (DPCalLocs) { addDPCalLocs(DPCalLocs, DPCalIconFile); }
             // Create a vector layers
             var source = new ol.source.Vector({
                 features: arrayOfMarkers

@@ -25,7 +25,7 @@ echo $this->lh;
 
 echo "\n<script>\n";
 echo "  DPCalLocs = ".$this->gpsData->parseDPCalLocations($this->dpcallocs);
-echo "\n  DPCalMarkerStyle = new ol.style.Style( { image: new ol.style.Icon( { src: '/components/com_jtg/assets/images/orange-dot.png'}) });\n";
+echo "\n  DPCalIconFile = '/components/com_jtg/assets/images/orange-dot.png';\n";
 echo "</script>\n";
 
 echo $this->gpsData->writeOLMap(null, $this->showtracks, $this->params, $this->items, JFactory::getApplication()->input->get('geoloc'));

@@ -28,8 +28,9 @@ class JtgModelDPCalLocations extends JModelList
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 		$query->select('loc.*')
-		->from('#__dpcalendar_locations as loc');
-		// TODO: check whether locations are published etc/user can view etc
+		->from('#__dpcalendar_locations as loc')
+		->where("loc.state='1'");
+		// TODO: check whether user can view etc
 		//->join('LEFT','#__users AS c ON a.uid=c.id');
 		return $query;
 	}

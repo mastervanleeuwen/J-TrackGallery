@@ -2423,7 +2423,8 @@ return true;
 			$DPCalItem = "  \n{\n    'lon' : $item->longitude,\n";
 			$DPCalItem .= "    'lat' : $item->latitude,\n";
 			$DPCalItem .= "    'title' : '".htmlentities($item->title)."',\n";
-			$DPCalItem .= "    'url' : '".JRoute::_("index.php?option=com_dpcalendar&view=location&id=$item->id")."'\n";
+			$DPCalItem .= "    'url' : '".JRoute::_("index.php?option=com_dpcalendar&view=location&id=$item->id")."',\n";
+			$DPCalItem .= "    'color' : '".$item->color."'\n";
 			$DPCalItem .= "  }";
 			$DPCalLocArray[] = $DPCalItem;
 		}
