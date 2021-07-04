@@ -179,7 +179,7 @@ class GpsDataClass
 		}
 
 		// Calculate start,
-		$this->start = $this->track[1]->coords[0];
+		$this->start = $this->track[0]->coords[0];
 		$this->speedDataExists = ( ( isset ($this->start[3])  && $this->start[3] > 0) ? true: false);
 		$this->elevationDataExists = ( isset ($this->start[2])? true: false);
 		$this->beatDataExists = ( (isset ($this->start[4]) && $this->start[4] > 0)? true: false);
@@ -369,11 +369,11 @@ class GpsDataClass
 								if ($coordinates)
 								{
 									$coordinatesCount = count($coordinates);
-									$this->trackCount++;
 									$this->track[$this->trackCount] = new stdClass;
 									$this->track[$this->trackCount]->coords = $coordinates;
 									$this->track[$this->trackCount]->start = ($coordinates[0][0] . "," . $coordinates[0][1]);
 									$this->track[$this->trackCount]->stop = ($coordinates[$coordinatesCount - 1][0] . "," . $coordinates[$coordinatesCount - 1][1]);
+									$this->trackCount++;
 								}
 							}
 							break;
@@ -383,8 +383,8 @@ class GpsDataClass
 
 			if ($this->trackCount AND $coordinates)
 			{
-				$this->track[$this->trackCount]->trackname = ($name? $name : $description);
-				$this->track[$this->trackCount]->description = $description;
+				$this->track[$this->trackCount-1]->trackname = ($name? $name : $description);
+				$this->track[$this->trackCount-1]->description = $description;
 			}
 
 			// Use description and name for file description
@@ -406,7 +406,7 @@ class GpsDataClass
 
 			if ( ( strlen($this->trackname) < 10 ) AND ($this->trackCount == 1))
 			{
-				$this->trackname .= $this->track[1]->trackname;
+				$this->trackname .= $this->track[0]->trackname;
 			}
 
 			if ( strlen($this->trackname) < 10 )
@@ -723,15 +723,14 @@ private function extractCoordsGPX($xmlcontents)
 								{
 									// This is a track with more than 2 points
 									$this->isTrack = true;
-									$this->trackCount++;
 									$this->track[$this->trackCount] = new stdClass;
 									$this->track[$this->trackCount]->description = '';
 
-									if ($tracksegname)
+									if ($tracksegname != '')
 									{
 										$this->track[$this->trackCount]->trackname = $tracksegname;
 									}
-									elseif ($trackname)
+									elseif ($trackname != '')
 									{
 										$this->track[$this->trackCount]->trackname = $trackname;
 									}
@@ -743,6 +742,7 @@ private function extractCoordsGPX($xmlcontents)
 									$this->track[$this->trackCount]->coords = $coords;
 									$this->track[$this->trackCount]->start = ($coords[0][0] . "," . $coords[0][1]);
 									$this->track[$this->trackCount]->stop = ($coords[$coordinatesCount - 1][0] . "," . $coords[$coordinatesCount - 1][1]);
+									$this->trackCount++;
 								}
 							}
 							else
@@ -883,10 +883,9 @@ private function extractCoordsGPX($xmlcontents)
 						{
 							// This is a track with more than 2 points
 							$this->isRoute = true;
-							$this->trackCount++;
 							$this->track[$this->trackCount] = new stdClass;
 							$this->track[$this->trackCount]->description = '';
-							if ($trackname)
+							if ($trackname != '')
 							{
 								$this->track[$this->trackCount]->trackname = $trackname;
 							}
@@ -898,6 +897,7 @@ private function extractCoordsGPX($xmlcontents)
 							$this->track[$this->trackCount]->coords = $coords;
 							$this->track[$this->trackCount]->start = ($coords[0][0] . "," . $coords[0][1]);
 							$this->track[$this->trackCount]->stop = ($coords[$coordinatesCount - 1][0] . "," . $coords[$coordinatesCount - 1][1]);
+							$this->trackCount++;
 						}
 					
 						break;
@@ -907,11 +907,11 @@ private function extractCoordsGPX($xmlcontents)
 
 		if (strlen($this->trackname) == 0)
 		{
-			if ($this->trackCount == 1)
+			if ($this->trackCount)
 			{
-				if ($this->track[1]->trackname)
+				if ($this->track[0]->trackname != '')
 				{
-					$this->trackname = $this->track[1]->trackname;
+					$this->trackname = $this->track[0]->trackname;
 				}
 				else
 				{
@@ -928,15 +928,17 @@ private function extractCoordsGPX($xmlcontents)
 		{
 			if ($this->trackCount == 1)
 			{
-				$this->description = $this->track[1]->description? $this->track[1]->description: '';
+				$this->description = strlen($this->track[0]->description)? $this->track[0]->description: '';
 			}
 			elseif ($this->trackCount > 1)
 			{
-				$this->description = $this->track[1]->description? $this->track[1]->description: '';
+				$this->description = strlen($this->track[0]->description)? $this->track[0]->description: '';
 
-				for ($i = 2; $i <= $this->trackCount; $i++)
+				for ($i = 1; $i < $this->trackCount; $i++)
 				{
-				$this->description .= '<br>' . $this->track[$i]->description? $this->track[$i]->description: '';
+					if (strlen($this->track[$i]->description)) {
+						$this->description .= '<br>' . $this->track[$i]->description;
+					}
 				}
 			}
 		}
@@ -1046,7 +1048,7 @@ return true;
 		*/
 		$earthRadius = 6378.137;
 
-		for ($t = 1; $t <= $this->trackCount; $t++)
+		for ($t = 0; $t < $this->trackCount; $t++)
 		{
 			$this->allCoords = array_merge($this->allCoords, $this->track[$t]->coords);
 
@@ -1214,9 +1216,9 @@ return true;
 		}
 
 		// Is this track a roundtrip ?
-		$t = $this->trackCount;
-		$n = count($first_coord = $this->track[$t]->coords);
-		$first_coord = $this->track[1]->coords[0];
+		$t = $this->trackCount-1;
+		$n = count($this->track[$t]->coords);
+		$first_coord = $this->track[0]->coords[0];
 		$first_lat_rad = deg2rad($first_coord[1]);
 		$first_lon_rad = deg2rad($first_coord[0]);
 		$last_coord = $this->track[$t]->coords[$n-1];
@@ -2198,7 +2200,7 @@ return true;
 		foreach ( $track_array AS $row )
 		{
 			$i++;
-			$url = JROUTE::_("index.php?option=com_jtg&view=files&layout=file&id=" . $row->id);
+			$url = JRoute::_("index.php?option=com_jtg&view=track&id=" . $row->id);
 			$lon = $row->start_e;
 			$lat = $row->start_n;
 
@@ -2325,37 +2327,14 @@ return true;
 		$i = 0;
 		$cache = JFactory::getCache();
 
-		// MvL: things to check: the vectors are now added one by one instead of as layers with many vectors.
+		// TODO: the vectors are now added one by one instead of as layers with many vectors.
 		foreach ($rows AS $row)
 		{
 			$file = JUri::base()."images/jtrackgallery/uploaded_tracks/" . $row->file;
 			$filename = $file;
-			// MvL TODO: check file type; this code builds the overview map?
+			// TODO: check file type; this code builds the overview map?
 			$string .= "layer_vector = new ol.layer.Vector({";
 			$string.="source: new ol.source.Vector({ url: '".$file."', format: new ol.format.GPX() }),\n";
-
-         /*
-			// MvL: check remove
-			$gpsData = new GpsDataClass("Kilometer");
-			$gpsData = $cache->get(array ( $gpsData, 'loadFileAndData' ), array ($file, $filename ), "Kilometer");
-			$coords = $gpsData->allCoords;
-			$string .= "geometries = new Array();geometries.push(drawLine([\n";
-
-			if ($coords)
-			{
-				$string .= "// <!-- parseOLSingleTrack BEGIN -->\n";
-				foreach ($coords as $key => $fetch)
-				{
-					$string .= "[" . $coords[$key][0] . "," . $coords[$key][1] . "],";
-				}
-				$string .= "// <!-- parseOLSingleTrack END -->\n";
-			}
-			else
-			{
-				// Dummy line for Coding standard (else required!)
-			}
-			//$string .= "],\n{strokeColor:\"" . $this->getHexColor("#" . $color[$i]) . "\",\nstrokeWidth: 2,\nfillColor: \"" . $this->getHexColor("#" . $color[$i]) . "\",\nfillOpacity: 0.4}));\n";
-			*/
 			$string .= "   style: new ol.style.Style({ stroke: new ol.style.Stroke({ color:'" . $this->getHexColor("#" . $color[$i]) . "',\n width: 2}) })";
 			$string .= "});\n";
 			$string .= "olmap.addLayer(layer_vector);\n";
@@ -2479,8 +2458,6 @@ return true;
 			{
 				$defaultMap = $track->default_map;
 			}
-			$defaultOverlays = $track->default_overlays? $track->default_overlays: $defaultOverlays;
-			$defaultOverlays = unserialize($defaultOverlays);
 		}
 
 		for ($i = 0;$i < count($maps);$i++)
@@ -2521,16 +2498,6 @@ return true;
 				{
 					//$baselayer = "		olmap.setBaseLayer(layer" . $name . ");\n";
 					$baselayer = "		\n";// MvL TODO check how to deal with base layers
-				}
-
-				// Activate default overlays
-				if (is_array($defaultOverlays))
-				{
-					if (in_array($map->id, $defaultOverlays))
-					{
-						// Set this as an active overlay
-						$overlays .= "layer" . $name . ".setVisibility(true);\n";
-					}
 				}
 
 				$return .= "layer" . $name . " = new " . $param . ";\n" .
@@ -3054,7 +3021,7 @@ $center .= "           source: new ol.source.Vector(),
                 $center .= "}\n";
                 $center .= "    gpsTrack.getSource().addFeature(new ol.Feature({geometry: new ol.geom.LineString(points)}));\n";
 		$track_name = htmlentities($this->trackname, ENT_QUOTES, 'UTF-8');
-                if (($params === false) OR ($params->get('jtg_param_disable_map_animated_cursor') == "0") ) {
+		if (($params === false) OR ($params->get('jtg_param_disable_map_animated_cursor') == "0") ) {
 			$center .= "\n// <!-- parseOLMapAnimatedCursorLayer BEGIN -->\n";
 			$center .= "urlbase = '".JUri::base()."';\n"; // needed in animatedCurser.js
 			$center .= "animatedCursorLayer = new ol.layer.Vector({ ".
@@ -3070,14 +3037,8 @@ $center .= "           source: new ol.source.Vector(),
 			$center .= "animatedCursorLayer.gpxPoints = points;\n";
 			$center .= "olmap.addLayer(animatedCursorLayer);\n";
 
-			/* Add AnimatedCursor
-		 	* MUST be added after olmap.zoomToExtent
-		 	*/
-			$document = JFactory::getDocument();
-			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
-
 			$center .= "\n// <!-- parseOLMapAnimatedCursorIcon BEGIN -->\n";
-                	$center .= "animatedCursorIcon = new ol.geom.Point( ol.proj.fromLonLat([".$this->track[1]->start."], olview.getProjection()));\n";
+                	$center .= "animatedCursorIcon = new ol.geom.Point( ol.proj.fromLonLat([".$this->track[0]->start."], olview.getProjection()));\n";
                 	// setting the style directly for a feature does not seem to work...
                 	$center .= "animatedCursorLayer.getSource().addFeature( new ol.Feature( { geometry: animatedCursorIcon } ) );\n";
 			$center .= "// <!-- parseOLMapAnimatedCursorIcon END -->\n";
@@ -3109,12 +3070,12 @@ $center .= "           source: new ol.source.Vector(),
                            "      image: new ol.style.Icon({ src: '$iconpath/trackDest.png',\n".
                            "           anchorOrigin: 'bottom-right', anchor: [0,0] })\n})\n});\n";
 
-		for ($i = 1; $i <= $this->trackCount; $i++)
+		for ($i = 0; $i < $this->trackCount; $i++)
 		{
 			$m = microtime(true);
 			$coords = $this->track[$i]->coords;
 			$subid = $link . "&amp;subid=" . $i;
-			$color = "#" . $tracksColors[$i - 1];
+			$color = "#" . $tracksColors[$i];
 
                         $string_se .= " startMarkers.getSource().addFeature( new ol.Feature({ \n".
                                       "      geometry: new ol.geom.Point(ol.proj.transform( [".$this->track[$i]->start."],\n".

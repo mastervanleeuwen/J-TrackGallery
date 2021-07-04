@@ -88,26 +88,25 @@ function _jtgParseRouteFile($segments)
 {
 	switch ($segments[1])
 	{
-		case 'file':
-			$vars['view'] = 'files';
-			$vars['layout'] = 'file';
+		case 'file': // backward compatibility for files/file/<id>
+			$vars['view'] = 'track';
 			$vars['id'] = $segments[2];
 			break;
 
 		case 'form':
-			$vars['view'] = 'files';
+			$vars['view'] = 'track';
 			$vars['layout'] = 'form';
 			$vars['id'] = $segments[2];
 			break;
 
 		case 'delete':
-			$vars['controller'] = 'files';
+			$vars['controller'] = 'track';
 			$vars['task'] = 'delete';
 			$vars['id'] = $segments[2];
 			break;
 
 		case 'vote':
-			$vars['controller'] = 'files';
+			$vars['controller'] = 'track'; 
 			$vars['task'] = 'vote';
 			$vars['id'] = $segments[2];
 			break;
@@ -140,6 +139,9 @@ function _jtgParseRouteCategory($segments)
 			$vars['view'] = 'cats';
 			$vars['layout'] = 'default';
 			break;
+		case 'track':
+			$vars['view'] = 'track';
+			break;
 		case 'jtg':
 			$vars['view'] = 'jtg';
 			break;
@@ -171,7 +173,7 @@ function _jtgParseRouteSubCategory($segments)
 			switch ($segments[1])
 			{
 				case 'form':
-					$vars['view'] = 'files';
+					$vars['view'] = 'track';
 					$vars['layout'] = 'form';
 					break;
 
@@ -194,6 +196,19 @@ function _jtgParseRouteSubCategory($segments)
 					$vars['view'] = 'jtg';
 					$vars['layout'] = 'geo';
 					break;
+			}
+			break;
+		case 'track':
+			if ($segments[1] == 'form')
+			{
+				$vars['view'] = 'track';
+				$vars['layout'] = 'form';
+			}
+			else
+			{
+				$vars['view'] = 'track';
+				$vars['layout'] = 'default';
+				$vars['id'] = $segments[1];
 			}
 	}
 
@@ -245,7 +260,8 @@ function jtgParseRoute($segments)
 	{
 		switch ($segments[0])
 		{
-			case 'files':
+			case 'files': // kept for backward compatibility
+			case 'track':
 				$vars = _jtgParseRouteFile($segments);
 				break;
 		}

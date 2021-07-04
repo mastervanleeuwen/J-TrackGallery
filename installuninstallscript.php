@@ -92,6 +92,9 @@ class Com_JtgInstallerScript
 		// Abort if the component being installed is not newer than the currently installed version
 		if ( $type == 'update' )
 		{
+			$cache = JFactory::getCache('com_jtg');
+			$cache->clean();
+
 			$oldRelease = $this->getParam('version');
 
 			if ( version_compare($this->release, $oldRelease, 'lt') )
@@ -334,6 +337,11 @@ class Com_JtgInstallerScript
 		$folder = JPATH_SITE . '/components/com_jtg/views/files/tmpl';
 		JFile::delete($folder.'/map.php'); // Function checks whether file exists
 		JFile::delete($folder.'/map.xml');
+		JFile::delete($folder.'/file.php'); // Moved to new track view
+		JFile::delete($folder.'/file.xml');
+		JFile::delete($folder.'/form.php');
+		JFile::delete($folder.'/form.xml');
+		JFile::delete(JPATH_SITE.'/components/com_jtg/controllers/files.php');
 		/*
 		 * Move existing old image gallery
 		 * from /images/jtrackgallery/track_xx (version<= 0.9.9)

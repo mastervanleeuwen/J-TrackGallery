@@ -53,8 +53,8 @@ class JtgViewConfig extends JViewLegacy
 
 		// Unit array for lists
 		$unit = array();
-		array_push($unit, array("unit" => "Kilometer"));
-		array_push($unit, array("unit" => "Miles"));
+		array_push($unit, array("unit" => "kilometer"));
+		array_push($unit, array("unit" => "miles"));
 
 		// Users array for lists
 		$users = array(
@@ -66,13 +66,6 @@ class JtgViewConfig extends JViewLegacy
 		$inform = array(
 				array('id' => 1, 'text' => JText::_('JYES')),
 				array('id' => 0, 'text' => JText::_('JNO'))
-		);
-
-		// Yes/no/registered users only array for download list
-		$download = array(
-				array('id' => 0, 'text' => JText::_('JNONE')),
-				array('id' => 2, 'text' => JText::_('COM_JTG_REGISTERED')),
-				array('id' => 1, 'text' => JText::_('JALL'))
 		);
 
 		// Comments order aray for lists
@@ -150,20 +143,6 @@ class JtgViewConfig extends JViewLegacy
 			$routingiconset[] = JHtml::_('select.option', $files[$i], $string);
 		}
 
-		// Build the html select list
-		// First build the groups tree
-		$query = 'SELECT CONCAT( REPEAT(\'..\', COUNT(parent.id) - 1), node.title) as text, node.id as value'
-		. ' FROM #__usergroups AS node, #__usergroups AS parent'
-		. ' WHERE node.lft BETWEEN parent.lft AND parent.rgt'
-		. ' GROUP BY node.id'
-		. ' ORDER BY node.lft';
-
-		$db = JFactory::getDbo();
-		$db->setQuery($query);
-		$gtree = $db->loadObjectList();
-		$lists['gid']				= JHtml::_('select.genericlist', $gtree, 'gid[]', 'class="inputbox" multiple="true" size="8"', 'value', 'text', unserialize($config->gid));
-		$lists['deletegid']				= JHtml::_('select.genericlist', $gtree, 'deletegid[]', 'class="inputbox" multiple="true" size="8"', 'value', 'text', unserialize($config->deletegid));
-
 		if ($row)
 		{
 			// If article(s) found in section jtg and category term
@@ -176,11 +155,9 @@ class JtgViewConfig extends JViewLegacy
 
 		$lists['unit']				= JHtml::_('select.genericlist', $unit, 'unit', 'size="1"', 'unit', 'unit', $config->unit);
 		$lists['tmpl']				= JHtml::_('select.genericlist', $tmpl, 'template', 'size="1"', 'name', 'name', $config->template);
-		$lists['comment_who']		= JHtml::_('select.genericlist', $gtree, 'comment_who[]', 'class="inputbox" multiple="true" size="8"', 'value', 'text', unserialize($config->comment_who));
 		$lists['inform']			= JHtml::_('select.genericlist', $inform, 'inform_autor', 'size="1"', 'id', 'text', $config->inform_autor);
 		$lists['captcha']			= JHtml::_('select.genericlist', $inform, 'captcha', 'size="1"', 'id', 'text', $config->captcha);
 		$lists['usevote']			= JHtml::_('select.genericlist', $inform, 'usevote', 'size="1"', 'id', 'text', $config->usevote);
-		$lists['download']			= JHtml::_('select.genericlist', $download, 'download', 'size="1"', 'id', 'text', $config->download);
 		$lists['order']				= JHtml::_('select.genericlist', $order, 'ordering', 'size="1"', 'order', 'text', $config->ordering);
 		$lists['comments']			= JHtml::_('select.genericlist', $comments, 'comments', 'size="1"', 'id', 'text', $config->comments);
 		$lists['access']			= JHtml::_('select.genericlist', $inform, 'access', 'size="1"', 'id', 'text', $config->access);

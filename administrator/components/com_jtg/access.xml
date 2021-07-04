@@ -13,6 +13,14 @@
 			description="JACTION_EDITSTATE_COMPONENT_DESC" />
 		<action name="core.edit.own" title="JACTION_EDITOWN"
 			description="JACTION_EDITOWN_COMPONENT_DESC" />
+		<action name="jtg.download" title="COM_JTG_DOWNLOAD" 
+			description="COM_JTG_DOWNLOAD_DESC" />
+		<action name="jtg.comment" title="COM_JTG_COMMENT" 
+			description="COM_JTG_COMMENT_DESC" />
+		<action name="jtg.comment.delete" title="COM_JTG_DELETE_COMMENT" 
+			description="COM_JTG_DELETE_COMMENT_DESC" />
+		<action name="jtg.comment.edit.own" title="COM_JTG_EDITOWN_COMMENT" 
+			description="COM_JT_EDITOWN_COMMENT_DESC" />
 	</section>
 	<section name="category">
 		<action name="core.create" title="JACTION_CREATE"

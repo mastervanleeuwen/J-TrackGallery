@@ -394,13 +394,6 @@ margin: 1px 0 0 0;
 		<tr>
 			<td valign="top">
 				<?php echo '<span class="hasTip" title=" ' . JText::_('COM_JTG_TT_TITLE')
-				. '::' . JText::_('COM_JTG_TT_COMMENT_WHO') . '">' . JText::_('COM_JTG_COMMENT_WHO') . '</span>'; ?>
-			</td>
-			<td><?php echo $this->lists['comment_who']; ?></td>
-		</tr>
-		<tr>
-			<td valign="top">
-				<?php echo '<span class="hasTip" title=" ' . JText::_('COM_JTG_TT_TITLE')
 				. '::' . JText::_('COM_JTG_TT_INFORM_AUTOR') . '">' . JText::_('COM_JTG_INFORM_AUTOR') . '</span>'; ?>
 			</td>
 			<td><?php echo $this->lists['inform']; ?></td>

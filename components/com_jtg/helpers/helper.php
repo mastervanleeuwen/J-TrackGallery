@@ -525,113 +525,6 @@ class JtgHelper
 	/**
 	 * function_description
 	 *
-	 * @return return_description
-	 */
-	static public function userHasCommentsRights()
-	{
-		$user_groups = JFactory::getUser()->getAuthorisedGroups();
-
-		// Admin (root) is not allowed excepted if explicitly given the right to manage front-end.
-		// If ( JFactory::getUser()->get('isRoot') ) { return true;};
-
-		if (!$user_groups)
-		{
-			return false;
-		}
-		// Seems $user_groups is never empty !!
-		$cfg_id = unserialize(self::getConfig()->comment_who);
-
-		if (!$cfg_id )
-		{
-			return false;
-		}
-
-		foreach ($cfg_id as $key => $group)
-		{
-			if (array_search($group, $user_groups) )
-			{
-				return true;
-			}
-		}
-
-		return  false;
-	}
-
-	/**
-	 * function_description
-	 * @params int trkuid User ID of track that is being shown (for 'own track' rights)
-	 *
-	 * @return bool true if user has FrontEnd rights (for uploading tracks)
-	 */
-	static public function userHasFrontendRights($trkuid = null)
-	{
-		$user_groups = JFactory::getUser()->getAuthorisedGroups();
-
-		// Admin (root) is not allowed excepted if explicitly given the right to manage front-end.
-
-		// User can edit their own tracks
-		if (JFactory::getUser()->id === $trkuid) return true;
-		if (!$user_groups)
-		{
-			return false;
-		}
-		// Seems $user_groups is never empty !!
-		$cfg_id = unserialize(self::getConfig()->gid);
-
-		if (!$cfg_id )
-		{
-			return false;
-		}
-
-		foreach ($cfg_id as $key => $group)
-		{
-			if (array_search($group, $user_groups) )
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * function_description
-	 *
-	 * @return bool true if user has FrontEnd rights (for deleting tracks)
-	 */
-	static public function userHasFrontendDeleteRights($trkuid=null)
-	{
-		$user_groups = JFactory::getUser()->getAuthorisedGroups();
-
-		// Admin (root) is not allowed excepted if explicitly given the right to delte in front-end.
-
-		if (!$user_groups)
-		{
-			return false;
-		}
-		// Seems $user_groups is never empty !!
-		$cfg_id = unserialize(self::getConfig()->deletegid);
-
-		if (!$cfg_id )
-		{
-			return false;
-		}
-
-		foreach ($cfg_id as $key => $group)
-		{
-			if (array_search($group, $user_groups) )
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-
-	/**
-	 * function_description
-	 *
 	 * @param   integer  $accesslevel  param_description
 	 * @param   string   $name         the select name
 	 * @param   string   $js           javascript string to add to select
@@ -919,6 +812,9 @@ static public function autoRotateImage($image) {
 		imagecopyresampled($tmp, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 
 		$outfullname = $image_dir .'/'. $outfname;
+		if (JFile::exists($outfullname)) {
+			return false;
+		}
 		switch (strtolower($ext))
 		{
 			case 'jpeg':
@@ -959,6 +855,9 @@ static public function autoRotateImage($image) {
 	 * @return return_description
 	 */
 	static public function resizeConvertImk($file_tmp_name, $image_dir, $outfname) {
+		if (JFile::exists($image_dir.'/'.$outfname)) {
+			return false;
+		}
 		$image = new Imagick($file_tmp_name);
 		jtgHelper::autoRotateImage($image);
 		$height = $image->getImageHeight();
@@ -1029,6 +928,10 @@ static public function autoRotateImage($image) {
 		}
 
 		$outfname = str_replace('.' . $ext, '.jpg', $outfname);		
+		if (JFile::exists($image_dir.'/'.$outfname)) {
+			JFactory::getApplication()->enqueueMessage(JText::_sprintf("COM_JTG_FILE_ALREADY_EXISTS",$outfname));
+			return false;
+		}
 		if (phpversion('imagick')) {
 		   $statusupload = jtgHelper::resizeConvertImk($file_tmp_name, $image_dir, $outfname);
 		}

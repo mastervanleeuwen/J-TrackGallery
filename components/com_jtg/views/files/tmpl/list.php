@@ -167,7 +167,7 @@ $trackcategoryOptions=$trackcategory->getOptions(); // works only if you set you
 						$link_only = "&nbsp;<img alt=\"" . JText::_('COM_JTG_PRIVATE') . "\" src=\"" . $iconpath . "private_only.png\" />";
 						break;
 				}
-				$link = JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $row->id, false);
+				$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $row->id, false);
 				$profile = JtgHelper::getProfileLink($row->uid, $row->user);
 				$cat = JtgHelper::parseMoreCats($this->sortedcats, $row->catid, "list", true, $iconheight);
 				$cat = $cat ? $cat: "<img $height src =\"/components/com_jtg/assets/images/cats/symbol_inter.png\" />\n";
@@ -204,18 +204,20 @@ $trackcategoryOptions=$trackcategory->getOptions(); // works only if you set you
 					$profile .= "<font class=\"emptyEntry\">" . JText::_('COM_JTG_NO_USER') . "</font>&nbsp;";
 				}
 
-
-				if (JtgHelper::userHasFrontendRights($row->uid))
+				$user = JFactory::getUser();
+				if ($this->canDo->get('core.edit') ||
+					($this->canDo->get('core.edit.own') && ($row->uid==$user->id)))
 				{
-					$editlink = JRoute::_('index.php?option=com_jtg&view=files&layout=form&id=' . $row->id, false);
+					$editlink = JRoute::_('index.php?option=com_jtg&view=track&layout=form&id=' . $row->id, false);
 					$links = " <a href=\"" . $editlink . "\">" .
 					"<img title=\"" . JText::_('JACTION_EDIT') . "\" alt=\"" .
 						JText::_('JACTION_EDIT') . "\" src=\"" . JUri::root() . "components/com_jtg/assets/images/edit_f2.png\" width=\"16px\" />" .
 					"</a> ";
 				}
-				if (jtgHelper::userHasFrontendDeleteRights($row->uid))
+				if ($this->canDo->get('core.delete') ||
+					($this->canDo->get('core.edit.own') && ($row->uid==$user->id)))
 				{
-					$deletelink = JRoute::_('index.php?option=com_jtg&controller=files&task=delete&id=' . $row->id, false);
+					$deletelink = JRoute::_('index.php?option=com_jtg&controller=track&task=delete&id=' . $row->id, false);
 					$links .= "<a href=\"" . $deletelink . "\" onclick=\"return confirm('". JText::_('COM_JTG_VALIDATE_DELETE_TRACK') ."')\">" .
 						"<img title=\"" . JText::_('JACTION_DELETE') . "\" alt=\"" .
 						JText::_('JACTION_DELETE') . "\" src=\"" . JUri::root() . "components/com_jtg/assets/images/cancel_f2.png\" width=\"16px\" />" .

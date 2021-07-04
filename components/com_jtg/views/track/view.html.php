@@ -6,13 +6,11 @@
  *
  * @package     Comjtg
  * @subpackage  Frontend
- * @author      Christophe Seguinot <christophe@jtrackgallery.net>
- * @author      Pfister Michael, JoomGPStracks <info@mp-development.de>
- * @author      Christian Knorr, InJooOSM  <christianknorr@users.sourceforge.net>
+ * @author      Marco van Leeuwen <mastervanleeuwen@gmail.com>
  * @copyright   2015 J!TrackGallery, InJooosm and joomGPStracks teams
  *
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU/GPLv3
- * @link        http://jtrackgallery.net/
+ * @link        https://github.com/mastervanleeuwen/J-TrackGallery
  *
  */
 
@@ -21,16 +19,8 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.view');
 
-/*
- * Pagination previously made with J!2.5 pagination
- * jimport('joomla.html.pagination');
- * Now include a modified JPagination class working under J!2.5 and J3.x
- */
-//include_once JPATH_BASE . '/components/com_jtg/views/files/pagination.php';
-
-
 /**
- * JtgViewFiles class @ see JViewLegacy
+ * JtgViewTrack class @ see JViewLegacy
  * HTML View class for the jtg component
  *
  * Returns the specified model
@@ -39,7 +29,7 @@ jimport('joomla.application.component.view');
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgViewFiles extends JViewLegacy
+class JtgViewTrack extends JViewLegacy
 {
 	/**
 	 * Returns true|false if user is allowed to see the file
@@ -147,26 +137,6 @@ class JtgViewFiles extends JViewLegacy
 	}
 
 	/**
-	 *  Reset the filter form and corresponding state
-	 *  Used between layout switches
-	 *
-	 */
-	protected function resetFilter($catid = null)
-	{
-		$this->get("State"); // need to get the state before we can change it
-		$filterform = $this->get('FilterForm');
-		$filterform->setValue("search","filter",null);
-		$this->getModel()->setState("filter.search",null);
-		$filterform->setValue("trackcat","filter",$catid);
-		$this->getModel()->setState("filter.trackcat",$catid);
-		$filterform->setValue("tracklevel","filter",null);
-		$this->getModel()->setState("filter.tracklevel",null);
-		$filterform->setValue("mindist","filter",null);
-		$this->getModel()->setState("filter.mindist",null);
-		$filterform->setValue("maxdist","filter",null);
-		$this->getModel()->setState("filter.maxdist",null);
-	}
-	/**
 	 * function_description
 	 *
 	 * @param   object  $tpl  template
@@ -178,139 +148,102 @@ class JtgViewFiles extends JViewLegacy
 		$file = JPATH_SITE . "/components/com_jtg/models/jtg.php";
 		require_once $file;
 
-		$app = JFactory::getApplication();
-		if ($app->getUserState("jtg.files.layout") && $this->getLayout() != $app->getUserState("jtg.files.layout")) {
-			// Reset filters when layout changes (list->files and vice versa)
-			$this->resetFilter($app->input->get('cat'));
+		$mainframe = JFactory::getApplication();
+		jimport('joomla.filesystem.file');
+		jimport('joomla.filesystem.folder');
+
+		// Code support for joomla version greater than 3.0
+		if (JVERSION >= 3.0)
+		{
+			JHtml::_('jquery.framework');
+			JHtml::script(Juri::base() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
 		}
-		$app->setUserState("jtg.files.layout",$this->getLayout());
+		else
+		{
+			JHtml::script('jquery.js', 'components/com_jtg/assets/js/', false);
+			JHtml::script('jquery.MultiFile.js', 'components/com_jtg/assets/js/', false);
+		}
+
+		$cfg = JtgHelper::getConfig();
+		$this->cfg = $cfg;
+
+		$document = JFactory::getDocument();
+
+		// Load Openlayers stylesheet first (for overriding)
+		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/default/ol.css');
+
+		// Then load jtg_map stylesheet
+		$tmpl = ($cfg->template = "") ? $cfg->template : 'default';
+		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
+
+		// Then override style with user templates
+		$template = $mainframe->getTemplate();
+		$template_jtg_map_style = 'templates/' . $template . '/css/jtg_map_style.css';
+
+		$this->params = JComponentHelper::getParams('com_jtg');
+		$this->id = JFactory::getApplication()->input->getInt('id', null);
+		$uid = JFactory::getUser()->get('id');
+
+		$this->footer = LayoutHelper::footer();
+
+		$model = $this->getModel();
+		$gpsData = new GpsDataClass($cfg->unit);
+
+		$this->coords = "";
+		if (isset ($this->id))
+		{
+			// In the form view, $id would not be available for new files
+			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js');  // Load OpenLayers
+			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
+			if ($this->params->get('jtg_param_disable_map_animated_cursor') == "0") {
+				$document->addScript(JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
+			}
+			$this->track = $model->getFile( $this->id );
+			$cache = JFactory::getCache('com_jtg');
+			// Cache: $gpsData structure is cached, after LoadFileAndData
+			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($this->track->file);
+			$gpsData = $cache->call(array ( $gpsData, 'loadFileAndData' ), $file, $this->track->file );
+		   $this->imageList = $model->getImages($this->id);
+			$this->distance_float = (float) $this->track->distance;
+			$this->distance = JtgHelper::getLocatedFloat($this->distance_float, 0, $cfg->unit);
+
+			if (!$gpsData->displayErrors())
+			{
+				$this->map = $cache->call(array ( $gpsData, 'writeTrackOL' ), $this->track, $this->params, $this->imageList );
+
+				$this->coords = $gpsData->allCoords;
+      		$this->longitudeData = $gpsData->longitudeData;
+      		$this->latitudeData = $gpsData->latitudeData;
+				// Charts
+      		$this->beatdata = $gpsData->beatData;
+      		$this->heighdata = $gpsData->elevationData;
+      		$this->speeddata = $gpsData->speedData;
+				$this->date = JHtml::_('date', $this->track->date, JText::_('COM_JTG_DATE_FORMAT_LC4'));
+				if ( count($this->imageList) > 0) {
+		         $this->images = true;
+				}
+			}
+		}
+		if (! isset($this->track) )
+		{ // New track; set some defaults
+			$track = array('access' => '0', 'catid' => null, 'terrain' => null, 'published' => '1', 'hidden' => '0', 'level' => '3', 'default_map' => null);
+         $this->track = JArrayHelper::toObject($track);
+		}
+
+		if ( $this->params->get("jtg_param_lh") == 1 )
+		{
+			$this->menubar = LayoutHelper::navigation();
+		}
+		else
+		{
+			$this->menubar = null;
+		}
+
 		$this->canDo = JHelperContent::getActions('com_jtg');
-
-		if ($this->getLayout() == 'list')
-		{
-			$this->state = $this->get('State');
-			$this->items = $this->get('Items');
-			$this->pagination = $this->get('Pagination');
-			$this->filterForm = $this->get('FilterForm');
-			$this->activeFilters = $this->get('ActiveFilters');
-
-			$this->_displayList($tpl);
-
-			return;
-		}
-
-		if ($this->getLayout() == 'user')
-		{
-			$this->state = $this->get('State');
-			$this->items = $this->get('Items');
-			$this->pagination = $this->get('Pagination');
-			$this->_displayUserTracks($tpl);
-
-		return;
-		}
-
-		parent::display($tpl);
-	}
-
-	/**
-	 * function_description
-	 *
-	 * @param   object  $tpl  template
-	 *
-	 * @return return_description
-	 */
-	function _displayList($tpl)
-	{
-		$mainframe = JFactory::getApplication();
-		$option = JFactory::getApplication()->input->get('option');
-
-		$model = $this->getModel();
-		$cache = JFactory::getCache('com_jtg');
-		$sortedcats = JtgModeljtg::getCatsData(true);
-		$sortedter = JtgModeljtg::getTerrainData(true);
-		$user = JFactory::getUser();
-		$uid = $user->get('id');
-		$gid = $user->get('gid');
-		$deletegid = $user->get('deletegid');
-		$lh = LayoutHelper::navigation();
-		$footer = LayoutHelper::footer();
-		$cfg = JtgHelper::getConfig();
-		$pathway = $mainframe->getPathway();
-		$pathway->addItem(JText::_('COM_JTG_GPS_FILES'), '');
-		$sitename = $mainframe->getCfg('sitename');
-		$document = JFactory::getDocument();
-		$document->setTitle(JText::_('COM_JTG_GPS_FILES') . " - " . $sitename);
-		$params = $mainframe->getParams();
-
-		//Following variables used more than once
-		$this->sortColumn 	= $this->state->get('list.ordering');
-		$this->sortDirection	= $this->state->get('list.direction');
-
-		$filter_order = $mainframe->getUserStateFromRequest("$option.filter_order", 'filter_order', '', 'cmd');
-		$filter_order_Dir = $mainframe->getUserStateFromRequest("$option.filter_order_Dir", 'filter_order_Dir', '', 'cmd');
-
-		$action = JRoute::_('index.php?option=com_jtg&view=files&layout=list', false);
-
-		$lists['order'] = $filter_order;
-		$lists['order_Dir'] = $filter_order_Dir;
-
-		$this->sortedcats = $sortedcats;
-		$this->sortedter = $sortedter;
-		$this->lists = $lists;
-		$this->uid = $uid;
-		$this->gid = $gid;
-		$this->deletegid = $deletegid;
-		$this->lh = $lh;
-		$this->footer = $footer;
-		$this->action = $action;
-		$this->cfg = $cfg;
-		$this->params = $params;
-
-		parent::display($tpl);
-	}
-
-	/**
-	 * function_description
-	 *
-	 * @param   object  $tpl  template
-	 *
-	 * @return return_description
-	 */
-	function _displayUserTracks($tpl)
-	{
-		$mainframe = JFactory::getApplication();
-		$option = JFactory::getApplication()->input->get('option');
-		$cache = JFactory::getCache('com_jtg');
-		$lh = LayoutHelper::navigation();
-		$footer = LayoutHelper::footer();
-		$model = $this->getModel();
-		$cfg = JtgHelper::getConfig();
-		$pathway = $mainframe->getPathway();
-		$pathway->addItem(JText::_('COM_JTG_MY_FILES'), '');
-		$sitename = $mainframe->getCfg('sitename');
-		$document = JFactory::getDocument();
-		$document->setTitle(JText::_('COM_JTG_MY_FILES') . " - " . $sitename);
-
-		$order = JFactory::getApplication()->input->getWord('order', 'order');
-
-		$filter_order = $mainframe->getUserStateFromRequest("$option.filter_order", 'filter_order', '', 'word');
-		$filter_order_Dir = $mainframe->getUserStateFromRequest("$option.filter_order_Dir", 'filter_order_Dir', '', 'word');
-		$action = JRoute::_('index.php?option=com_jtg&view=files&layout=user', false);
-
-		$lists['order'] = $filter_order;
-		$lists['order_Dir'] = $filter_order_Dir;
-
-		$cats = JtgModeljtg::getCatsData(true);
-		$sortedter = JtgModeljtg::getTerrainData(true);
-		$params = $mainframe->getParams();
-		$this->params = $params;
-		$this->sortedter = $sortedter;
-		$this->lh = $lh;
-		$this->cats = $cats;
-		$this->footer = $footer;
-		$this->action = $action;
-		$this->cfg = $cfg;
-		$this->lists = $lists;
+		$this->model = $model;
+		$this->speedDataExists = $gpsData->speedDataExists;
+		$this->elevationDataExists = $gpsData->elevationDataExists;
+		$this->beatDataExists = $gpsData->beatDataExists;
 
 		parent::display($tpl);
 	}

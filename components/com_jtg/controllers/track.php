@@ -26,7 +26,7 @@ jimport('joomla.application.component.controller');
  * @since       0.8
  */
 
-class JtgControllerFiles extends JtgController
+class JtgControllerTrack extends JtgController
 {
 	/**
 	 * function_description
@@ -56,7 +56,7 @@ class JtgControllerFiles extends JtgController
 			exit;
 		}
 
-		$model = $this->getModel('files');
+		$model = $this->getModel('track');
 
 		$ext = JFile::getExt($file['name']);
 
@@ -67,7 +67,7 @@ class JtgControllerFiles extends JtgController
 				echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 			}
 
-			$this->setRedirect(JRoute::_('index.php', false), false);
+			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=track&id=' . $id, false), false);
 		}
 		else
 		{
@@ -87,13 +87,19 @@ class JtgControllerFiles extends JtgController
       JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
       $file = JFactory::getApplication()->input->files->get('file');
 
+		if (!JFactory::getUser()->authorise('core.create', 'com_jtg')) {
+			$app = JFactory::getApplication();
+			$app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
+			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=jtg',false), false);
+			return;
+		}
       if (!$file['name'])
       {
          echo "<script> alert('" . JText::_('COM_JTG_FILE_UPLOAD_NO_FILE') . "'); window.history.go(-1); </script>\n";
          exit;
       }
 
-      $model = $this->getModel('files');
+      $model = $this->getModel('track');
 
       $ext = JFile::getExt($file['name']);
 
@@ -105,7 +111,7 @@ class JtgControllerFiles extends JtgController
 				echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 			}
 			JFactory::getApplication()->setUserState('com_jtg.newfileid',$id);
-			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=files&layout=form&id=' . $id, false), false);
+			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=track&layout=form&id=' . $id, false), false);
       }
       else
       {  
@@ -123,11 +129,11 @@ class JtgControllerFiles extends JtgController
 		$input = JFactory::getApplication()->input;
 		$id = $input->getInt('id');
 		$rate = $input->getInt('rate');
-		$model = $this->getModel('files');
+		$model = $this->getModel('track');
 		$model->vote($id, $rate);
 
 		$msg = JText::_('COM_JTG_VOTED');
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $id, false), false);
+		$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=track&id=' . $id, false), false);
 	}
 
 	/**
@@ -140,7 +146,7 @@ class JtgControllerFiles extends JtgController
 		$input = JFactory::getApplication()->input;
 		$id = $input->getInt('id');
 		if ($id) {
-			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=files&layout=file&id='.$id, false), false);
+			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=track&id='.$id, false), false);
 		}
 		else {
 			$this->setRedirect(JRoute::_('index.php?option=com_jtg', false), false);
@@ -153,24 +159,8 @@ class JtgControllerFiles extends JtgController
 	 */
 	function delete()
 	{
-		$user = JFactory::getUser();
-
-		if (!$user->get('id'))
-		{
-			$this->setRedirect(JRoute::_('index.php?option=com_jtg', false), false);
-		}
-
-		// Make sure user is logged in and have the necessary access rights
-		if (! (JtgHelper::userHasFrontendRights() AND JtgHelper::userHasFrontendDeleteRights() ) )
-		{
-			$mainframe=JFactory::getApplication();
-			$mainframe->redirect(JRoute::_('index.php?option=com_jtg&view=files&layout=user', false),
-					JText::_('COM_JTG_ALERT_NOT_AUTHORISED'), 'Error');
-			exit(0);
-		}
-
 		$id = JFactory::getApplication()->input->getInt('id');
-		$model = $this->getModel('files');
+		$model = $this->getModel("Track");
 
 		if (!$model->deleteFile($id))
 		{
@@ -190,8 +180,8 @@ class JtgControllerFiles extends JtgController
 	 */
 	function deletenew()
 	{
-		$id = JFactory::getApplication()->getUserState('com_jtg.newfileid',$id);
-		$model = $this->getModel('files');
+		$id = JFactory::getApplication()->getUserState('com_jtg.newfileid');
+		$model = $this->getModel('track');
 
 		if (!$model->deleteFile($id))
 		{
@@ -221,7 +211,8 @@ class JtgControllerFiles extends JtgController
 		// Check for request forgeries
 		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 		$id = JFactory::getApplication()->input->getInt('id');
-		$model = $this->getModel('files');
+
+		$model = $this->getModel('track');
 		$errormsg = $model->updateFile($id);
 
 		if ($errormsg !== true)
@@ -231,7 +222,7 @@ class JtgControllerFiles extends JtgController
 		else
 		{
 			JFactory::getApplication()->setUserState('com_jtg.newfileid',-1);
-			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $id, false), false);
+			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=track&id=' . $id, false), false);
 		}
 	}
 
@@ -242,7 +233,7 @@ class JtgControllerFiles extends JtgController
 	 */
 	function addcomment()
 	{
-		$model = $this->getModel('files');
+		$model = $this->getModel('track');
 		$model->addcomment();
 	}
 
@@ -272,7 +263,7 @@ class JtgControllerFiles extends JtgController
 			}
 			else
 			{
-				$model = $this->getModel('files');
+				$model = $this->getModel('track');
 
 				if (!$model->savecomment($id, $cfg))
 				{
@@ -283,12 +274,12 @@ class JtgControllerFiles extends JtgController
 					$msg = JText::_('COM_JTG_COMMENT_SAVED');
 				}
 
-				$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $id . '#jtg_param_header_comment', false), $msg);
+				$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=track&id=' . $id . '#jtg_param_header_comment', false), $msg);
 			}
 		}
 		else
 		{
-			$model = $this->getModel('files');
+			$model = $this->getModel('track');
 
 			if (!$model->savecomment($id, $cfg))
 			{
@@ -299,7 +290,7 @@ class JtgControllerFiles extends JtgController
 				$msg = JText::_('COM_JTG_COMMENT_SAVED');
 			}
 
-			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $id . '#jtg_param_header_comment', false), $msg);
+			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=track&id=' . $id . '#jtg_param_header_comment', false), $msg);
 		}
 	}
 }

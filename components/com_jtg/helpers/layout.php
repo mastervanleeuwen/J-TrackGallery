@@ -79,9 +79,7 @@ class LayoutHelper
 			return '';
 		}
 
-		$user = JFactory::getUser();
-		$juser = new JUser($user->id);
-		$uri = $input->get('layout');
+		$view = $input->get('view');
 		$navi = '';
 		$navi .= '<div class="gps-navi">';
 		$navi .= '<div class="navi-part"><a href="' .
@@ -93,44 +91,21 @@ class LayoutHelper
 				JRoute::_("index.php?option=com_jtg&view=files&layout=list") . '">' . JText::_('COM_JTG_TRACKS') . '</a></div>';
 		$cfg = JtgHelper::getConfig();
 
+		$user = JFactory::getUser();
 		if ($user->get('id'))
 		{
 			// Erscheint nur, wenn User kein Gast
-			if ( JtgHelper::userHasFrontendRights() )
+			$canDo = JHelperContent::getActions('com_jtg');
+			if ( $canDo->get('core.create') )
 			{
 				$navi .= '<div class="navi-part"><a href="' .
-						JRoute::_("index.php?option=com_jtg&view=files&layout=form") . '">' .
+						JRoute::_("index.php?option=com_jtg&view=track&layout=form") . '">' .
 						JText::_('COM_JTG_ADD_FILE') . '</a></div>';
 			}
 			// Erscheint bei jedem Registrierten
 			$navi .= '<div class="navi-part"><a href="' .
 					JRoute::_("index.php?option=com_jtg&view=files&layout=user") . '">' .
 					JText::_('COM_JTG_MY_FILES') . '</a></div>';
-
-			if ( ($uri != null) AND ($uri == 'file') )
-			{
-				$gpsfile = new JtgModelFiles;
-				$track = $input->get('id');
-				$track = $gpsfile->getFile($track);
-
-				if ( ($track !== null) &&
-						JtgHelper::userHasFrontendRights($track->uid) ) 
-				{
-					// User can delete or, update its own tracks
-					$navi .= '<div class="navi-part"><a href="' .
-							JRoute::_("index.php?option=com_jtg&view=files&layout=form&id=" .
-									$input->get('id')
-									) . '">' . JText::_('COM_JTG_UPDATE_GPS_FILE') . '</a></div>';
-				}
-				if ( ($track !== null) &&
-						JtgHelper::userHasFrontendDeleteRights($track->uid) ) 
-				{
-					$navi .= '<div class="navi-part"><a href="' .
-							JRoute::_("index.php?option=com_jtg&controller=files&task=delete&id=" .
-									$input->get('id')
-									) . '">' . JText::_('COM_JTG_DELETE_FILE') . '</a></div>';
-				}
-			}
 		}
 
 		$navi .= '<div class="no-float"></div>';

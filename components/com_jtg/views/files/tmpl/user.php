@@ -97,22 +97,35 @@ if (empty($this->items)) {
 				}
 
 				$votes = LayoutHelper::parseVoteFloat($row->vote);
-				$link = JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $row->id, false);
+				$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $row->id, false);
 				$cats = JtgHelper::parseMoreCats($this->cats, $row->catid, "array");
 				$cats = implode(", ", $cats);
 				?>
 			<tr class="sectiontableentry<?php echo $k; ?>">
 				<td align="center"><?php echo $this->pagination->getRowOffset($i); ?>
+<?php
+	if ($this->canDo->get('core.edit') || $this->canDo->get('core.edit.own'))
+	{
+?>
 					<a
-					href="index.php?option=com_jtg&view=files&layout=form&id=<?php echo $row->id; ?>">
+					href="index.php?option=com_jtg&view=track&layout=form&id=<?php echo $row->id; ?>">
 						<img <?php echo $edit ?>
 						src="<?php echo JUri::root() ?>components/com_jtg/assets/images/edit_f2.png" width="16px" />
-				</a> <a
-					href="index.php?option=com_jtg&controller=files&task=delete&id=<?php echo $row->id; ?>"
+				</a> 
+<?php
+	}
+	if ($this->canDo->get('core.delete') || $this->canDo->get('core.edit.own'))
+	{
+?>
+<a
+					href="index.php?option=com_jtg&controller=track&task=delete&id=<?php echo $row->id; ?>"
 					onclick="return confirm('<?php echo JText::_('COM_JTG_VALIDATE_DELETE_TRACK')?>')">
 						<img <?php echo $delete ?>
 						src="<?php echo JUri::root() ?>components/com_jtg/assets/images/cancel_f2.png" width="16px" />
 				</a>
+<?php
+	}
+?>
 				</td>
 				<td><a href="<?php echo $link; ?>">
 					<?php echo $row->title; ?> </a></td>

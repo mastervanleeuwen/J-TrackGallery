@@ -18,13 +18,29 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Uri\Uri;
-echo $this->lh;
+$app = JFactory::getApplication();
+$sitename = $app->getCfg('sitename');
+$document = JFactory::getDocument();
+$document->setTitle($this->track->title . " - " . $sitename);
+$pathway = $app->getPathway();
+$pathway->addItem($this->track->title, '');
+
+echo $this->menubar;
 
 $JtgHelper = new JtgHelper;
 $maySeeSingleFile = $this->maySeeSingleFile($this);
 
 if ($maySeeSingleFile === true)
-{
+{	
+	if ($this->params->get('jtg_param_disable_map_animated_cursor') == "0") {
+		$document = JFactory::getDocument();
+		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
+	}
+	$mapimagefile='images/jtrackgallery/maps/track_'.$this->track->id.'.png';
+	if (JFile::exists(JPATH_SITE.'/'.$mapimagefile)) {
+		JFactory::getDocument()->setMetaData('og:image',JUri::base().$mapimagefile,'property');
+	}
+
 	$defaultlinecolor = "#000000";
 	$charts_bg = $this->cfg->charts_bg? '#' . $this->cfg->charts_bg :"#ffffff";
 
@@ -35,11 +51,77 @@ if ($maySeeSingleFile === true)
 	$charts_linec_heartbeat = $this->cfg->charts_linec_heartbeat? '#' . $this->cfg->charts_linec_heartbeat: $defaultlinecolor;
 
 	$durationbox = (bool) $this->params->get("jtg_param_show_durationcalc");
+?>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v11.0&appId=180128866079216&autoLogAppEvents=1" nonce="mBqx9YbV"></script>
+
+<?php
 	echo $this->map;
 
-	if ( ( $this->cfg->gallery == "jd2" ) OR ( $this->cfg->gallery == "jd21" )  OR ( $this->cfg->gallery == "highslide" ) )
+	if ( !empty($this->imageList) && 
+		( ( $this->cfg->gallery == "jd2" ) OR ( $this->cfg->gallery == "highslide" ) ) )
 	{
-		echo $this->galscript;
+		switch ($this->cfg->gallery)
+  		{
+			case 'jd2' :
+?>
+               <script type="text/javascript">
+               startGallery = function()  {
+               var myGallery = new gallery($('myGallery'), {
+               timed: true,
+               showArrows: true,
+               embedLinks: false,
+               showCarousel: false
+         });
+         }
+         window.addEventListener('domready',startGallery);
+         </script>
+<?php
+				break;
+            case 'highslide' :
+?>
+              <script type="text/javascript">
+               hs.graphicsDir = '<?php echo JUri::base() . "components/com_jtg/assets/highslide/graphics/"; ?>';
+               hs.align = 'center';
+               hs.transitions = ['expand', 'crossfade'];
+               hs.fadeInOut = true;
+               hs.outlineType = 'rounded-white';
+               hs.headingEval = 'this.a.title';
+               hs.numberPosition = 'heading';
+               hs.useBox = true;
+               hs.width = 600;
+               hs.height = 400;
+               hs.showCredits = false;
+               hs.dimmingOpacity = 0.8;
+
+               // Add the slideshow providing the controlbar and the thumbstrip
+               hs.addSlideshow({
+               //slideshowGroup: 'group1',
+               interval: 5000,
+               repeat: false,
+               useControls: true,
+fixedControls: 'fit',
+               overlayOptions: {
+               position: 'top right',
+               offsetX: 200,
+               offsetY: -65
+         },
+         thumbstrip: {
+         position: 'rightpanel',
+         mode: 'float',
+         relativeTo: 'expander',
+         width: '210px'
+         }
+         });
+         // Make all images animate to the one visible thumbnail
+         var miniGalleryOptions1 = {
+         	thumbnailId: 'thumb1'
+         }
+ </script>
+<?php
+			break;
+		}
 	}
 
 	if ( $this->params->get("jtg_param_hide_track_info") )
@@ -60,10 +142,11 @@ if ($maySeeSingleFile === true)
 		$heightchart = false;
 	}
 
+	$sortedcats = JtgModeljtg::getCatsData(true);
 	if ( $this->params->get("jtg_param_show_speedchart") AND $this->speedDataExists )
 	{
 		$speedchart = true;
-		$pacechart = $this->track->catid? $this->sortedcats[$this->track->catid]->usepace: 0;
+		$pacechart = $this->track->catid? $sortedcats[$this->track->catid]->usepace: 0;
 	}
 	else
 	{
@@ -129,14 +212,7 @@ if ($maySeeSingleFile === true)
 		{
 			JHtml::script('jquery.js', 'components/com_jtg/assets/js/', false);
 		}
-		$mapimagefile='images/jtrackgallery/maps/track_'.$this->track->id.'.png';
-		if (JFile::exists(JPATH_SITE.'/'.$mapimagefile)) {
-			JFactory::getDocument()->setMetaData('og:image',JUri::base().$mapimagefile,'property');
-		}
-		?>
-
-<div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v10.0&appId=504399847271326&autoLogAppEvents=1" nonce="kKhGPPnX"></script>
+?>
 
 <!-- begin Charts -->
 
@@ -550,14 +626,14 @@ if ($this->track->ele_desc)
 		?>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_LEVEL'); ?>:</td>
-				<td><?php echo $this->level; ?></td>
+				<td><?php echo $this->model->getLevel($this->track->level); ?></td>
 			</tr>
 <?php
 } ?>
 	 		<tr>
 				<td><?php echo JText::_('COM_JTG_CATS'); ?>:</td>
 				<td colspan="2"><?php
-				echo $JtgHelper->parseMoreCats($this->sortedcats, $this->track->catid, "TrackDetails", true);
+				echo $JtgHelper->parseMoreCats($sortedcats, $this->track->catid, "TrackDetails", true);
 				?>
 				</td>
 			</tr>
@@ -598,7 +674,7 @@ if (! $this->params->get("jtg_param_disable_terrains"))
 		<table class="gps-info-tab">
 				<tr>
 					<td><?php echo JText::_('COM_JTG_UPLOADER'); ?>:</td>
-					<td><?php echo $this->profile; ?></td>
+					<td><?php echo JtgHelper::getProfileLink($this->track->uid, $this->track->user); ?></td>
 				</tr>
 					</td>
 				</tr>
@@ -616,22 +692,38 @@ if (! $this->params->get("jtg_param_disable_terrains"))
 	<?php
     if ($this->cfg->usevote == 1)
     {
-	//echo $this->parseTemplate("headline", JText::_('COM_JTG_VOTING'), "jtg_param_header_rating");
-	$template = "<div id=\"ratingbox\">
-	<ul id=\"1001\" class=\"rating " . $this->vote['class'] . "\">\n";
+		//echo $this->parseTemplate("headline", JText::_('COM_JTG_VOTING'), "jtg_param_header_rating");
+		$vote = $this->model->getVotes($this->id);
+
+		$stars = array(
+			1 => "one",
+			2 => "two",
+			3 => "three",
+			4 => "four",
+			5 => "five",
+			6 => "six",
+			7 => "seven",
+			8 => "eight",
+			9 => "nine",
+			10 => "ten"
+			);
+		$stars = JArrayHelper::toObject($stars);
+		$template = "<div id=\"ratingbox\">
+			<ul id=\"1001\" class=\"rating " . $vote['class'] . "\">\n";
+
 
 	for ($i = 1; $i <= 10; $i++)
 	{
-		$link = "index.php?option=com_jtg&controller=files&id=" . $this->track->id . "&task=vote&rate=" . $i . "#jtg_param_header_rating";
+		$link = "index.php?option=com_jtg&controller=track&id=" . $this->track->id . "&task=vote&rate=" . $i . "#jtg_param_header_rating";
 		$link = JRoute::_($link, false);
-		$template .= "		<li id=\"" . $i . "\" class=\"rate " . $this->stars->$i . "\">\n"
+		$template .= "		<li id=\"" . $i . "\" class=\"rate " . $stars->$i . "\">\n"
 		. "			<a href=\"" . $link . "\" title=\"" . JText::_('COM_JTG_STARS_' . $i) . "\" rel=\"nofollow\">" . $i . "</a>\n"
 		. "		</li>\n";
 	}
 
 	$template .= "	</ul>\n";
 
-	if ( $this->vote['count'] == 0 )
+	if ( $vote['count'] == 0 )
 	{
 		$template .= JText::_('COM_JTG_NOT_VOTED') . "\n";
 	}
@@ -639,8 +731,8 @@ if (! $this->params->get("jtg_param_disable_terrains"))
 	{
 		$template .= JText::sprintf(
 				'COM_JTG_TRACK_RATING',
-				$JtgHelper->getLocatedFloat($this->vote['rate']),
-				$this->vote['count']
+				$JtgHelper->getLocatedFloat($vote['rate']),
+				$vote['count']
 				) . "\n";
 	}
 
@@ -690,69 +782,58 @@ else
 	echo '<a name="jtg_param_header_description"></a>';
 }
 
-//echo $this->parseTemplate("headline","");
-if ($this->cfg->download >= 1)
+$user = JFactory::getUser();
+if ($this->canDo->get('jtg.download'))
 {
 	$download_buttons ='';
-	//echo $this->parseTemplate("headline", JText::_('COM_JTG_DOWNLOAD'), "jtg_param_header_download");
-	//echo $this->parseTemplate("description", null, null, "open");
-    echo "<div class=\"gps-info\"> <div class=\"block-header\">".
+	echo "<div class=\"gps-info\"> <div class=\"block-header\">".
           JText::_('COM_JTG_DOWNLOAD')."</div>";
-  	if (($this->cfg->download == 2) AND ($this->user->get('id') == 0))
+	// Registered users only
+	// TODO: print text if download only authorised for some users?
+	//echo $this->parseTemplate("description", JText::_('COM_JTG_NOT_DOWNLOAD'));
+	if ( (bool) $this->params->get("jtg_param_offer_download_original") )
 	{
-		// Registered users only
-		echo $this->parseTemplate("description", JText::_('COM_JTG_NOT_DOWNLOAD'));
+		$ext = JFile::getExt($this->track->file);
+		$download_buttons .= "<button class=\"button\" type=\"button\"
+		onclick=\"document.getElementById('format').value = 'original';Joomla.submitbutton('download')\">
+		$ext ". JText::_('COM_JTG_ORIGINAL_FILE') ."</button>";
 	}
-	else
+
+	if ( (bool) $this->params->get("jtg_param_offer_download_gpx") )
 	{
-		if ( (bool) $this->params->get("jtg_param_offer_download_original") )
-		{
-			$ext = JFile::getExt($this->track->file);
-			$download_buttons .= "<button class=\"button\" type=\"button\"
-			onclick=\"document.getElementById('format').value = 'original';Joomla.submitbutton('download')\">
-			$ext ". JText::_('COM_JTG_ORIGINAL_FILE') ."</button>";
-		}
+		$download_buttons .= "<button class=\"button\" type=\"button\"
+		onclick=\"document.getElementById('format').value = 'gpx';Joomla.submitbutton('download')\">
+		GPX " . JText::_('COM_JTG_CONVERTED_FILE') ."</button>";
+	}
 
-		if ( (bool) $this->params->get("jtg_param_offer_download_gpx") )
-		{
-			$download_buttons .= "<button class=\"button\" type=\"button\"
-			onclick=\"document.getElementById('format').value = 'gpx';Joomla.submitbutton('download')\">
-			GPX " . JText::_('COM_JTG_CONVERTED_FILE') ."</button>";
-		}
+	if ( (bool) $this->params->get("jtg_param_offer_download_kml") )
+	{
+		$download_buttons .= "<button class=\"button\" type=\"button\"
+		onclick=\"document.getElementById('format').value = 'kml';Joomla.submitbutton('download')\">
+		KML " . JText::_('COM_JTG_CONVERTED_FILE') . "</button>";
+	}
 
-		if ( (bool) $this->params->get("jtg_param_offer_download_kml") )
-		{
-			$download_buttons .= "<button class=\"button\" type=\"button\"
-			onclick=\"document.getElementById('format').value = 'kml';Joomla.submitbutton('download')\">
-			KML " . JText::_('COM_JTG_CONVERTED_FILE') . "</button>";
-		}
-
-		if ( (bool) $this->params->get("jtg_param_offer_download_tcx") )
-		{
-			$download_buttons .= "<button class=\"button\" type=\"button\"
-			onclick=\"document.getElementById('format').value = 'tcx';Joomla.submitbutton('download')\">
-			TCX " . JText::_('COM_JTG_CONVERTED_FILE') . "</button>";
-		}
-
-		echo $this->jscript;
-		?>
+	if ( (bool) $this->params->get("jtg_param_offer_download_tcx") )
+	{
+		$download_buttons .= "<button class=\"button\" type=\"button\"
+		onclick=\"document.getElementById('format').value = 'tcx';Joomla.submitbutton('download')\">
+		TCX " . JText::_('COM_JTG_CONVERTED_FILE') . "</button>";
+	}
+?>
 <form name="adminForm" id="adminForm" method="post"
-	action="<?php echo $this->action; ?>">
+	action="<?php echo JUri::root()."/index.php?option=com_jtg&amp;controller=download&amp;task=download"; ?>">
 
 	<div class="block-text"> <label for="format"><?php echo JText::_('COM_JTG_DOWNLOAD_THIS_TRACK'); ?>&nbsp;</label>
     	<?php echo $download_buttons;?>
-			<?php
-	echo JHtml::_('form.token') . "\n"; ?>
+		<?php echo JHtml::_('form.token') . "\n"; ?>
 	<input type="hidden" name="format" id="format" value="original" />
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="id" value="<?php echo $this->track->id; ?>" /> 
     <input type="hidden" name="task" value="" />
+</div>
 </form>
 </div>
-<?php echo $this->parseTemplate("description", null, null, "close");
-	}
-	?>
-</div>
+
 <?php
 }
 
@@ -797,11 +878,87 @@ if ( ($durationbox) AND ($this->track->distance != "") AND ((float) $this->track
 <?php
 }
 
-if (($this->imageBlock) AND ( $this->cfg->gallery != "none" ))
+if (($this->imageList) AND ( $this->cfg->gallery != "none" ))
 {
 	echo $this->parseTemplate('headline', JText::_('COM_JTG_GALLERY'), 'jtg_param_header_gallery');
-	echo $this->parseTemplate('description', $this->imageBlock);
-}
+	echo "<div class=\"description\">";
+	
+	$imgurlpath=JUri::base() . "images/jtrackgallery/uploaded_tracks_images/track_" . $this->track->id . "/";
+   switch ($this->cfg->gallery)
+   {
+		case 'jd2' :
+         	JHTML::_('behavior.framework', true); // Load mootools
+$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jd.gallery.js');
+               echo "<div id=\"myGallery\">";
+
+               foreach ($imageList as $image)
+               {
+                  echo "  <div class=\"imageElement\"> <h3>" . $track->title . " <small>(" . $image->filename . ")</small></h3>
+                  <p></p>
+                  <img src=\"" . $imgurlpath . $image->filename . "\" class=\"full\" height=\"0px\" />
+                  </div>\n";
+               }
+
+               echo "</div>\n";
+               break;
+
+            case 'highslide' :
+
+               $document->addScript( JUri::root(true) . '/components/com_jtg/assets/highslide/highslide-with-gallery.packed.js');
+               $document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/highslide/highslide.css');
+
+               // TODO This style sheet is not overridden.
+              	echo "\n<div class=\"highslide-gallery\" style=\"width: auto; margin: auto\">\n";
+               echo "\n<div class=\"jtg-photo-grid\">\n";
+               $imgcount = count($this->imageList);
+
+               foreach ($this->imageList as $image)
+               {
+                  if ($imgcount < 5)
+                  {
+                     $thumb = 'thumbs/thumb1_' . $image->filename;
+                  }
+ else
+                  {
+                     $thumb = 'thumbs/thumb2_' . $image->filename;
+                  }
+
+                  if ( ! JFile::exists(JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/track_' . $this->track->id . '/' . $thumb) )
+                  {
+                     $thumb = $image->filename;
+                  }
+                  $title = $image->title;
+                  if (strlen($title)==0) $title = $image->filename;
+                  echo "  <div class=\"jtg-photo-item\"> <a class=\"highslide\" href='" . $imgurlpath . $image->filename . "' title=\"" . $title . "\" onclick=\"return hs.expand(this)\">
+                     <img src=\"" . $imgurlpath . $thumb . "\" alt=\"$image->filename\"  /></a>
+                     <div class=\"jtg-caption\">$image->title</div> <br>
+                     </div>\n";
+               }
+
+               echo "</div></div>\n";
+               break;
+
+            case 'straight' :
+               echo "<div class=\"jtg-photo-grid\">\n";
+               foreach ($imageList as $image)
+               {
+                  echo "<div class=\"jtg-photo-item\"> <img src=\"" . $imgurlpath
+                     . $image->filename . "\" alt=\"" . $image->filename . " (" . $image->filename . ")" . "\" title=\"" . $track->title
+                     . "\" />\n <br>$image->title</div>";
+               }
+               echo "</div>\n";
+               break;
+
+            case 'ext_plugin':
+               $gallery_folder = "jtrackgallery/uploaded_tracks_images/track_" . $this->track->id;
+               $external_gallery = str_replace('%folder%', $gallery_folder, $cfg->gallery_code);
+               echo JHTML::_('content.prepare', $external_gallery);
+               break;
+
+            default:
+         }
+			echo "</div>";
+      }
 else
 {
 	echo '<a name="jtg_param_header_gallery"></a>';
@@ -838,22 +995,42 @@ else
 	echo "<a name=\"jtg_param_header_approach\"></a>";
 }
 // Approach END
-
+?>
+<div>
+<?php
+	if ($this->canDo->get('core.edit') || ($this->canDo->get('core.edit.own') && $this->track->uid == $user->id)) { ?>
+  <button class="button" type="button" onclick="location = '<?php echo JRoute::_("index.php?option=com_jtg&view=track&layout=form&id=$this->id"); ?>'">
+    <?php echo JText::_('JACTION_EDIT'); ?>
+  </button>
+<?php
+	}
+	if ($this->canDo->get('core.delete')) {
+?>
+  <a href="index.php?option=com_jtg&controller=track&task=delete&id=<?php echo $this->id; ?>"
+               onclick="return confirm('<?php echo JText::_('COM_JTG_VALIDATE_DELETE_TRACK')?>')">
+  <button class="button" type="button">
+    <?php echo JText::_('JACTION_DELETE'); ?>
+  </button></a>
+<?php
+	}
+?>
+</div>
+<?php
 // Adding the comments
 if ($this->cfg->comments == 1)
 {
 	echo $this->parseTemplate("headline", JText::_('COM_JTG_COMMENTS'), "jtg_param_header_comment");
+	$comments = $this->model->getComments($this->id, $this->cfg->ordering);
 
-	if (!$this->comments)
+	if (!$comments)
 	{
-		//echo "<div>" . JText::_('COM_JTG_NO_COMMENTS_DESC') . "</div>";
 		echo $this->parseTemplate("description",JText::_('COM_JTG_NO_COMMENTS_DESC'));
 	}
 	else
 	{
-		for ($i = 0, $n = count($this->comments); $i < $n; $i++)
+		for ($i = 0, $n = count($comments); $i < $n; $i++)
 		{
-			$comment = $this->comments[$i];
+			$comment = $comments[$i];
 			?>
 <div class='comment'>
 	<div class="comment-header">
@@ -888,8 +1065,15 @@ if ($this->cfg->comments == 1)
 	}
 	//
 
-	if ($JtgHelper->userHasCommentsRights() )
+	if ($this->canDo->get('jtg.comment'))
 	{
+?>
+<script type=\"text/javascript\">
+   Joomla.submitbutton = function(pressbutton)  {
+   var form = document.adminForm;
+   submitform( pressbutton);}
+</script>
+<?php
 		echo $this->model->addcomment($this->cfg);
 	}
 	else

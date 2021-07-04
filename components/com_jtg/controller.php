@@ -56,9 +56,9 @@ class JtgController extends JControllerLegacy
 		}
 
 		// Update the hit count for the file
-		if ($input->get('view') == 'files')
+		if ($input->get('view') == 'track')
 		{
-			$model = $this->getModel('files');
+			$model = $this->getModel('track');
 			$model->hit();
 		}
 
