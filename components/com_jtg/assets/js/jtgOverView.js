@@ -215,7 +215,7 @@ function addClusteredLayerOfMarkers(){
             // Create a vector layers and add markers
             addMarkers();
 				// TODO: pass these as arguments instead of global vars
-				if (DPCalLocs) { addDPCalLocs(DPCalLocs, DPCalIconFile); }
+				if (typeof DPCalLocs !== 'undefined') { addDPCalLocs(DPCalLocs, DPCalIconFile); }
             // Create a vector layers
             var source = new ol.source.Vector({
                 features: arrayOfMarkers
