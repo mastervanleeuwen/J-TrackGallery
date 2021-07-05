@@ -65,6 +65,9 @@ if ($this->id >= 1)
 	require_once '../components/com_jtg/helpers/gpsClass.php';
 	$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js');
 	$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
+	if ($params->get('jtg_param_disable_map_animated_cursor') == "0") {
+		$document->addScript(JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
+	}
 	$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $this->track->file;
 	$gpsData = new GpsDataClass($cfg->unit);
 	$gpsData->loadFileAndData( $file, $track->file );
