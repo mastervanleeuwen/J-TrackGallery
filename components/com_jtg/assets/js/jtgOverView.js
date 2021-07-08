@@ -49,6 +49,7 @@ function addPopup() {
     var closer = document.getElementById('popup-closer');
 
     var popupActive = false;
+    var popupHover = false;
     /**
      * Create an overlay to anchor the popup to the map.
      */
@@ -68,8 +69,15 @@ function addPopup() {
     closer.onclick = function() {
         overlay.setPosition(undefined);
         closer.blur();
-       popupActive = false;
-        return false;
+        popupActive = false;
+    };
+
+    container.onmouseover = function() {
+        popupHover = true;
+    };
+
+    container.onmouseout = function() {
+        popupHover = false;
     };
 
     olmap.addOverlay(overlay);
@@ -117,7 +125,7 @@ function addPopup() {
 
     // Handler for pointer movement
     olmap.on('pointermove', function(evt) {
-       if (evt.dragging || popupActive) {
+       if (evt.dragging || popupActive || popupHover) {
            return;
        }
 
@@ -214,8 +222,8 @@ function addClusteredLayerOfMarkers(){
             */
             // Create a vector layers and add markers
             addMarkers();
-				// TODO: pass these as arguments instead of global vars
-				if (typeof DPCalLocs !== 'undefined') { addDPCalLocs(DPCalLocs, DPCalIconFile); }
+			// TODO: pass these as arguments instead of global vars
+			if (typeof DPCalLocs !== 'undefined') { addDPCalLocs(DPCalLocs, DPCalIconFile); }
             // Create a vector layers
             var source = new ol.source.Vector({
                 features: arrayOfMarkers
