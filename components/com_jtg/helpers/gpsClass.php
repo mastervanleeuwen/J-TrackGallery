@@ -755,7 +755,7 @@ private function extractCoordsGPX($xmlcontents)
 						// Route
 						$trackname = '';
 						$i_trk++;
-				                $coords = array();
+						$coords = array();
 					 	$i_trkpt = 0;
 						$ele = 0;
 						$time = '0';
@@ -881,7 +881,7 @@ private function extractCoordsGPX($xmlcontents)
 
 						if ($coordinatesCount > 1 )
 						{
-							// This is a track with more than 2 points
+							// This is a route segment with 2 or more points
 							$this->isRoute = true;
 							$this->track[$this->trackCount] = new stdClass;
 							$this->track[$this->trackCount]->description = '';
@@ -947,8 +947,7 @@ private function extractCoordsGPX($xmlcontents)
 
 	}
 
-// Nothing to return
-return true;
+	return true;
 }
 
 	/**
@@ -1776,7 +1775,7 @@ return true;
 
 				// Trennung nach Wörter BEGIN
 				$words = explode(' ', $chapter);
-				$return .= "<p>";
+				$return .= "<p class=\"jtg-centered\">";
 				$rowlen = 0;
 
 				foreach ($words AS $word)
@@ -2325,7 +2324,6 @@ return true;
 		// MvL: TODO see whether we can keep the name and other options \"" . JText::_('COM_JTG_TRACKS') . "\", { displayInLayerSwitcher: true } );\n";
 		//$string .= "olmap.addLayer(layer_vectors);\n";
 		$i = 0;
-		$cache = JFactory::getCache();
 
 		// TODO: the vectors are now added one by one instead of as layers with many vectors.
 		foreach ($rows AS $row)

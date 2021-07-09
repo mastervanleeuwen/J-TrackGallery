@@ -113,4 +113,7 @@ img.olTileImage {
     max-height: 250px;
     overflow-y: auto;
 }
-
+.jtg-centered {
+	padding: 0px;
+	text-align: center;
+}
