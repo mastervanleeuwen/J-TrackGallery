@@ -189,16 +189,10 @@ $document->addStyleDeclaration($style);
 				}
 			}
 
-			$gpsData = new GpsDataClass("Kilometer");
-			$cache = JFactory::getCache('com_jtg');
+			$gpsData = new GpsDataClass("kilometer");
 
-			// New gps Data are cached
 			// TODO strtolower or not??
-			$cache->clean();
-			$gpsData = $cache->get(
-					array($gpsData, 'loadFileAndData'),
-					array($file, strtolower($filename_wof)),
-					"Kilometer");
+			$gpsData->loadFileAndData($file, strtolower($filename_wof));
 
 			if ($check === true)
 			{

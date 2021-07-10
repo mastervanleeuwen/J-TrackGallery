@@ -100,7 +100,7 @@ class JtgModelFiles extends JModelList
 			$query->where("a.uid=$uid");
       }
 		else {
-			$query->where("(( a.published = '1' AND a.hidden = '0' ) OR ( a.uid=$uid))");
+			$query->where("(( a.published = 1 AND a.hidden = 0 ) OR ( a.uid=$uid))");
 		}
 	
 		// Filter: like / search
@@ -123,7 +123,7 @@ class JtgModelFiles extends JModelList
 		//->order(	$db->escape($this->getState('list.ordering', 'pa.id')) . ' ' //.
 			//	$db->escape($this->getState('list.direction', 'desc')));
 
-		//error_log($db->replacePrefix( (string) $query ));//debug
+		//error_log("Query for track list: ".$db->replacePrefix( (string) $query ));//debug
 		
 		return $query;
 	}

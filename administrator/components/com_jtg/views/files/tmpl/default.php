@@ -77,23 +77,6 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 				$row = $this->rows[$i];
 				$row->groupname = $this->buildRowGroupname($row->access);
 
-				$temp = unserialize($row->default_overlays);
-				if (is_array($temp))
-				{
-					if ($temp[0]<>0)
-					{
-						$default_overlays_string = implode(",", $temp);
-					}
-					else
-					{
-						$default_overlays_string='';
-					}
-				}
-				else
-				{
-					$default_overlays_string='';
-				}
-
 				switch ($row->access)
 				{
 					case 9:
@@ -209,7 +192,6 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 				<td align="center"><?php echo $row->date; ?></td>
 				<td align="center"><?php echo $published;?></td>
 				<td><?php echo $row->default_map? $row->default_map: ''; ?></td>
-				<td><?php echo $default_overlays_string; ?></td>
 				<td align="center"><?php echo $hiddenlink;?></td>
 				<td align="center"><?php echo $access; ?></td>
 				<td align="center"><?php echo $user->username;?></td>

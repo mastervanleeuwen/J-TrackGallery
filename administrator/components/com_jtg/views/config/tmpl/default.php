@@ -102,20 +102,6 @@ margin: 1px 0 0 0;
 			<tr>
 				<td>
 					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_TT_GID_DESC') . '">' . JText::_('COM_JTG_AUTHORISED_GROUPS') . '</span>'; ?>
-				</td>
-				<td><?php echo $this->lists['gid']; ?></td>
-			</tr>
-			<tr>
-				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_TT_DELETE_GID_DESC') . '">' . JText::_('COM_JTG_AUTHORISED_GROUPS_DELETE') . '</span>'; ?>
-				</td>
-				<td><?php echo $this->lists['deletegid']; ?></td>
-			</tr>
-			<tr>
-				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
 					. '::' . JText::_('COM_JTG_TT_USE_ACCESS_LEVEL') . '">' . JText::_('COM_JTG_USE_ACCESS_LEVEL') . '</span>'; ?>
 				</td>
 				<td><?php echo $this->lists['access']; ?></td>
@@ -178,13 +164,6 @@ margin: 1px 0 0 0;
 					. JText::_('COM_JTG_TT_VOTE') . '">' . JText::_('COM_JTG_VOTE') . '</span>'; ?>
 				 </td>
 				<td><?php echo $this->lists['usevote']; ?></td>
-			</tr>
-			<tr>
-				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE') . '::'
-					. JText::_('COM_JTG_TT_DOWNLOAD') . '">' . JText::_('COM_JTG_ENABLE_DOWNLOAD_FILE_FOR') . '</span>'; ?>
-				</td>
-				<td><?php echo $this->lists['download']; ?></td>
 			</tr>
 			<tr>
 				<td>

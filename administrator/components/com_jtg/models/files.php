@@ -81,7 +81,7 @@ class JtgModelFiles extends JModelLegacy
 
 		$isTrack = $gpsData->isTrack;
 		$isWaypoint = $gpsData->isWaypoint;
-		$isRoute = (int) 0;
+		$isRoute = $gpsData->isRoute;
 
 		if ( $isWaypoint == 1 )
 		{
@@ -144,7 +144,7 @@ class JtgModelFiles extends JModelLegacy
 		. "\n ele_asc='" . $gpsData->totalAscent . "',"
 		. "\n ele_desc='" . $gpsData->totalDescent . "',"
 		. "\n vote='" . $vote . "'"
-		. "\n WHERE id='" . $id . "'";
+		. "\n WHERE id=" . $id;
 
 		$db = JFactory::getDBO();
 		$db->setQuery($query);
@@ -392,7 +392,7 @@ class JtgModelFiles extends JModelLegacy
 		$mainframe = JFactory::getApplication();
 		$db = JFactory::getDBO();
 		$query = "SELECT * FROM #__jtg_files"
-		. "\n WHERE id='" . $id . "'";
+		. "\n WHERE id=" . $id;
 		$db->setQuery($query);
 		$result = $db->loadObject();
 
@@ -424,7 +424,7 @@ class JtgModelFiles extends JModelLegacy
 		$mainframe = JFactory::getApplication();
                 $db = JFactory::getDBO();
                 $query = "SELECT * FROM #__jtg_photos"
-                . "\n WHERE trackID='" . $id . "'";
+                . "\n WHERE trackID=" . $id . "";
                 $db->setQuery($query);
                 $result = $db->loadObjectList();
 
@@ -856,7 +856,7 @@ class JtgModelFiles extends JModelLegacy
 	{
 		$mainframe = JFactory::getApplication();
 		$db = JFactory::getDBO();
-		$query = "SELECT access FROM #__jtg_files WHERE id='" . $id . "'";
+		$query = "SELECT access FROM #__jtg_files WHERE id=" . $id ;
 		$db->setQuery($query);
 		$row = $db->loadResult();
 
@@ -910,7 +910,7 @@ class JtgModelFiles extends JModelLegacy
 				$file_tmp = explode('/', $file);
 				$filename = strtolower($file_tmp[(count($file_tmp) - 1)]);
 				$target = File::MakeSafe($filename);
-				$extension = JFile::getExt($file_tmp);
+				$extension = JFile::getExt($filename);
 
 				// Truncate filename to 127 characters
 				if (strlen($target) > 127)
@@ -951,7 +951,7 @@ class JtgModelFiles extends JModelLegacy
 
 				// TODO use $target below!!
 				$gpsData = new GpsDataClass("kilometer");
-				$gpsData = $cache->get(array ( $gpsData, 'loadFileAndData' ), array ($file, $filename ), "kilometer");
+				$gpsData->loadFileAndData($file, $filename);
 				$errors = $gpsData->displayErrors();
 
 				if ($errors)
@@ -985,8 +985,8 @@ class JtgModelFiles extends JModelLegacy
 					$coords = $gpsData->allCoords;
 					$isTrack = $gpsData->isTrack;
 					$isWaypoint = $gpsData->isWaypoint;
-					$isRoute = 0;
-					$isCache = 0;
+					$isRoute = $gpsData->isRoute;
+					$isCache = $gpsData->isCache;
 
 					$distance = $gpsData->distance;
 					$totalAscent = $gpsData->totalAscent;
@@ -1038,7 +1038,7 @@ class JtgModelFiles extends JModelLegacy
 					. "\n istrack='" . $isTrack . "',"
 					. "\n iswp='" . $isWaypoint . "',"
 					. "\n isroute='" . $isRoute . "',"
-					. "\n hidden='" . $hidden . "'";
+					. "\n hidden='" . $hidden."'";
 
 					$db->setQuery($query);
 					$db->execute();
@@ -1308,13 +1308,6 @@ class JtgModelFiles extends JModelLegacy
 		}
 
 		$default_map = $input->get('default_map');
-		$default_overlays = $input->get('default_overlays',null,'array');
-		if ($default_overlays[0]==0)
-		{
-			// None has been selected: deselect all other selection (multiple selection)
-			$default_overlays=array(0);
-		}
-		$default_overlays = serialize($default_overlays);
 
 		$desc = $db->escape(implode(' ', $input->get('description', '', 'array')));
 		$file = $input->files->get('file');
@@ -1380,8 +1373,7 @@ class JtgModelFiles extends JModelLegacy
 		// Default unit
 		$gpsData = new GpsDataClass("kilometer");
 		$file = $upload_dir . $target;
-		$cache = JFactory::getCache();
-		$gpsData = $cache->get(array ( $gpsData, 'loadFileAndData' ), array ($file, $target), "kilometer");
+		$gpsData->loadFileAndData($file, $target);
 		$errors = $gpsData->displayErrors();
 
 		if ($errors)
@@ -1407,14 +1399,14 @@ class JtgModelFiles extends JModelLegacy
 			$coords = $gpsData->allCoords;
 			$isTrack = $gpsData->isTrack;
 			$isWaypoint = $gpsData->isWaypoint;
-			$isRoute = 0;
-			$isCache = 0;
+			$isRoute = $gpsData->isRoute;
+			$isCache = $gpsData->isCache;
 			$totalAscent = $gpsData->totalAscent;
 			$totalDescent = $gpsData->totalDescent;
 			$distance = $gpsData->distance;
 
 			$query = "INSERT INTO #__jtg_files SET"
-			. "\n uid='" . $uid . "',"
+			. "\n uid=" . $uid . ","
 			. "\n catid='" . $catid . "',"
 			. "\n title=" . $title . ","
 			. "\n file='" . strtolower($filename) . "',"
@@ -1423,18 +1415,17 @@ class JtgModelFiles extends JModelLegacy
 			. "\n date='" . $date . "',"
 			. "\n start_n='" . $start_n . "',"
 			. "\n start_e='" . $start_e . "',"
-			. "\n distance='" . $distance . "',"
-			. "\n ele_asc='" . $totalAscent . "',"
-			. "\n ele_desc='" . $totalDescent . "',"
-			. "\n level='" . $level . "',"
-			. "\n access='" . $access . "',"
-			. "\n istrack='" . $isTrack . "',"
-			. "\n iswp='" . $isWaypoint . "',"
-			. "\n isroute='" . $isRoute . "',"
-			. "\n iscache='" . $isCache . "',"
-			. "\n default_map='" . $default_map . "',"
-			. "\n default_overlays='" . $default_overlays . "',"
-			. "\n hidden='" . $hidden . "'";
+			. "\n distance=" . $distance . ","
+			. "\n ele_asc=" . $totalAscent . ","
+			. "\n ele_desc=" . $totalDescent . ","
+			. "\n level=" . $level . ","
+			. "\n access=" . $access . ","
+			. "\n istrack=" . $isTrack . ","
+			. "\n iswp=" . $isWaypoint . ","
+			. "\n isroute=" . $isRoute . ","
+			. "\n iscache=" . $isCache . ","
+			. "\n default_map=" . $default_map . ","
+			. "\n hidden=" . $hidden;
 
 			$db->setQuery($query);
 			$db->execute();
@@ -1711,13 +1702,6 @@ class JtgModelFiles extends JModelLegacy
 		$published = $input->get('published');
 
 		$default_map = $input->get('default_map');
-		$default_overlays = $input->get('default_overlays',null,'array');
-		if ($default_overlays[0]==0)
-		{
-			// None has been selected: deselect all other selection (multiple selection)
-			$default_overlays=array(0);
-		}
-		$default_overlays = serialize($default_overlays);
 
 		$imagelist = $this->getImages($id);
 		$imgpath = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/track_' . $id . '/';
@@ -1804,7 +1788,6 @@ class JtgModelFiles extends JModelLegacy
 		. "\n access='" . $access . "',"
 		. "\n published='" . $published . "',"
 		. "\n default_map='" . $default_map . "',"
-		. "\n default_overlays='" . $default_overlays . "',"
 		. "\n hidden='" . $hidden . "'"
 		. "\n WHERE id='" . $id . "'";
 		$db->setQuery($query);

@@ -223,6 +223,9 @@ class JtgViewTrack extends JViewLegacy
 		         $this->images = true;
 				}
 			}
+			else {
+				$mainframe->enqueueMessage($gpsData->displayErrors(),'Error');
+			}
 		}
 		if (! isset($this->track) )
 		{ // New track; set some defaults

@@ -271,7 +271,7 @@ class JtgModelTrack extends JModelItem
 		$distance = $gpsData->distance;
 
 		$query = "INSERT INTO #__jtg_files SET"
-		. "\n uid='" . $uid . "',"
+		. "\n uid=" . $uid . ","
 		. "\n catid='" . $catid . "',"
 		. "\n title=" . $db->quote($title) . ","
 		. "\n file=" .	$db->quote($filename) . ","
@@ -389,7 +389,7 @@ class JtgModelTrack extends JModelItem
 		$db = JFactory::getDBO();
 
 		$query = "SELECT a.*, b.title AS cat, b.image AS image, c.name AS user" . "\n FROM #__jtg_files AS a" .
-				"\n LEFT JOIN #__jtg_cats AS b ON a.catid=b.id" . "\n LEFT JOIN #__users AS c ON a.uid=c.id" . "\n WHERE a.id='" . $id . "'";
+				"\n LEFT JOIN #__jtg_cats AS b ON a.catid=b.id" . "\n LEFT JOIN #__users AS c ON a.uid=c.id" . "\n WHERE a.id=" . $id;
 
 		$db->setQuery($query);
 		$result = $db->loadObject();
@@ -858,7 +858,7 @@ class JtgModelTrack extends JModelItem
 		$mainframe = JFactory::getApplication();
 
 		$db = JFactory::getDBO();
-		$query = "SELECT * FROM #__jtg_comments WHERE" . "\n tid='" . $id . "'" . "\n AND published='1'" . "\n ORDER BY date " . $order;
+		$query = "SELECT * FROM #__jtg_comments WHERE" . "\n tid=" . $id . "\n AND published=1" . "\n ORDER BY date " . $order;
 		$db->setQuery($query);
 		$result = $db->loadObjectList();
 
@@ -1006,7 +1006,7 @@ class JtgModelTrack extends JModelItem
 		$query = "INSERT INTO #__jtg_comments SET" . "\n tid='" . $id . "'," . 
 				"\n uid=" . $uid . "," .
 				"\n user=" . $db->quote($name) . "," . "\n email=" . $db->quote($email) . "," .
-				"\n homepage=" . $db->quote($homepage) . "," . "\n title=" . $db->quote($title) . "," . "\n text=" . $db->quote($text) . "," . "\n published='1'";
+				"\n homepage=" . $db->quote($homepage) . "," . "\n title=" . $db->quote($title) . "," . "\n text=" . $db->quote($text) . "," . "\n published=1";
 
 		$db->setQuery($query);
 		$db->execute();
@@ -1076,7 +1076,7 @@ class JtgModelTrack extends JModelItem
 		$mainframe = JFactory::getApplication();
 
 		$db = JFactory::getDBO();
-		$query = "SELECT a.uid, b.name, b.email FROM #__jtg_files AS a" . "\n LEFT JOIN #__users AS b ON a.uid=b.id" . "\n WHERE a.id='" . $id . "'";
+		$query = "SELECT a.uid, b.name, b.email FROM #__jtg_files AS a" . "\n LEFT JOIN #__users AS b ON a.uid=b.id" . "\n WHERE a.id=" . $id;
 
 		$db->setQuery($query);
 		$user = $db->loadObject();

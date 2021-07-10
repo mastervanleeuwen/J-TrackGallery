@@ -58,12 +58,6 @@ class JtgModelConfig extends JModelLegacy
 		}
 		// Bereinige $row um OSM-Available Map
 		$table = $this->getTable('jtg_config');
-		// For gid multiple select Normally done in bind  (/models/config.php but does not work!)
-		$row['gid'] = serialize($row['gid']);
-		$row['deletegid'] = serialize($row['deletegid']);
-
-		// Or comment_who multiple select Normally done in bind  (/models/config.php but does not work!)
-		$row['comment_who'] = serialize($row['comment_who']);
 		$table->bind($row);
 
 		if (!$table->store())

@@ -612,7 +612,6 @@ class JtgViewFiles extends JViewLegacy
 			$lists['hidden']	= JHtml::_('select.genericlist', $yesnolist, 'hidden', 'class="inputbox" size="2"', 'id', 'title', 0);
 			$lists['published']	= JHtml::_('select.genericlist', $yesnolist, 'published', 'class="inputbox" size="2"', 'id', 'title', 1);
 			$lists['default_map'] 	= JHtml::_('select.genericlist', $default_map, 'default_map', 'size="1"', 'id', 'name', null);
-			$lists['default_overlays'] 	= JHtml::_('select.genericlist', $default_overlays, 'default_overlays[]', 'class="inputbox" multiple="true" size="' . $size . '"', 'id', 'name', null);
 
 			$this->lists = $lists;
 			$this->track = $track;
@@ -630,9 +629,6 @@ class JtgViewFiles extends JViewLegacy
 			$default_map=$model->getDefaultMaps();
 			array_unshift($default_map, array('id' => 'null', "name" => JText::_('JNONE')) );
 
-			$default_overlays = $model->getDefaultOverlays();
-			array_unshift($default_overlays, array('id' => 'null', "name" => JText::_('JNONE')) );
-
 			$error = false;
 			$terrainlist = ($track->terrain? explode(',', $track->terrain): 0);
 			/*
@@ -648,9 +644,7 @@ class JtgViewFiles extends JViewLegacy
 			$lists['cats']		= JHtml::_('select.genericlist', $cats, 'catid[]', 'size="' . $size . '" multiple="multiple"', 'id', 'treename', $trackids, '', true);
 			$size = min(count($terrain), 6);
 			$lists['terrain']	= $error . JHtml::_('select.genericlist', $terrain, 'terrain[]', 'multiple="multiple" size="' . $size . '"', 'id', 'title', $terrainlist);
-			$size=min(4,count($default_overlays));
 			$lists['default_map'] 	= JHtml::_('select.genericlist', $default_map, 'default_map', 'size="1"', 'id', 'name', $track->default_map);
-			$lists['default_overlays'] 	= JHtml::_('select.genericlist', $default_overlays, 'default_overlays[]', 'class="inputbox" multiple="true" size="' . $size . '"', 'id', 'name', unserialize($track->default_overlays));
 
 			// 		$row->access = $access;
 			$lists['access']	= JtgHelper::getAccessList($access);
