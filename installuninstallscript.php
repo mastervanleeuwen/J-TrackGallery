@@ -341,6 +341,8 @@ class Com_JtgInstallerScript
 		JFile::delete($folder.'/file.xml');
 		JFile::delete($folder.'/form.php');
 		JFile::delete($folder.'/form.xml');
+		JFile::delete($folder.'/user.php');
+		JFile::delete($folder.'/user.xml');
 		JFile::delete(JPATH_SITE.'/components/com_jtg/controllers/files.php');
 		/*
 		 * Move existing old image gallery

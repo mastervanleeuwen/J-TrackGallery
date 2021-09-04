@@ -896,7 +896,6 @@ span label {
 }
 
 .comment-header {
-	height: 25px;
 	background-color: whitesmoke;
 	padding: 2px 0 0 25px;
 }
@@ -905,6 +904,12 @@ span label {
 	font-weight: bold;
 	font-size: 1.1em;
 	float: left;
+	min-width: 50%;
+}
+
+.comment-tracklink {
+	float: left;
+	min-width: 50%;
 }
 
 .date {
@@ -922,7 +927,7 @@ span label {
 .comment-text {
 	float: left;
 	display: inline;
-	padding: 5px 20px 20px 20px;
+	padding: 5px 20px 5px 20px;
 	width: 400px;
 	overflow: hidden;
 }

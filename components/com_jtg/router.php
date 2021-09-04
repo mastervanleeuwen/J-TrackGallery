@@ -145,6 +145,9 @@ function _jtgParseRouteCategory($segments)
 		case 'jtg':
 			$vars['view'] = 'jtg';
 			break;
+		case 'user':
+			$vars['view'] = 'user';
+			break;
 	}
 
 	if (!isset($vars))
@@ -178,8 +181,7 @@ function _jtgParseRouteSubCategory($segments)
 					break;
 
 				case 'user':
-					$vars['view'] = 'files';
-					$vars['layout'] = 'user';
+					$vars['view'] = 'user';
 					break;
 
 				case 'map':

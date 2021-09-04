@@ -558,7 +558,7 @@ class JtgModelTrack extends JModelItem
       if ( !$user->authorise('core.delete', 'com_jtg') ) 
 		{
         	$app=JFactory::getApplication();
-			if ($this->track->id != $id) $this->getFile($id);
+			if (!isset($this->track) || $this->track->id != $id) $this->getFile($id);
 			if (!($user->authorise('core.edit.own') && $this->track->uid == $user->id) &&
 				!($app->getUserState('com_jtg.newfileid') == $id))
      		{
@@ -685,7 +685,7 @@ class JtgModelTrack extends JModelItem
 		if (!$user->authorise('core.edit', 'com_jtg') &&
           !($user->authorise('core.create', 'com_jtg') && $app->getUserState('com_jtg.newfileid') == $id))
 		{
-			if ($this->track->id != $id) $this->getFile($id);
+			if (!isset($this->track) || $this->track->id != $id) $this->getFile($id);
 			if (!($user->authorise('core.edit.own', 'com_jtg') && $user->id == $this->track->uid))
 	      {
 				$app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');

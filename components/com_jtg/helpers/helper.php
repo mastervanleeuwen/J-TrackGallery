@@ -183,10 +183,9 @@ class JtgHelper
 
 		if ( $distance != 0 )
 		{
-			$km = self::getLocatedFloat($distance);
-			$miles = self::getMiles($distance);
-			$miles = self::getLocatedFloat($miles);
-			$distance = $km . " Km (" . $miles . " Miles)";
+			$km = self::getFormattedDistance($distance,null,'kilometers');
+			$miles = self::getFormattedDistance($distance,null,'miles');
+			$distance = $km . " km (" . $miles . " mi)";
 		}
 		else
 		{
@@ -211,7 +210,7 @@ class JtgHelper
 
 		$voted = JText::sprintf('COM_JTG_MENU_LIMIT_CONSTRUCT_VOTED', $voted) . $error;
 		$vote = (float) $track->vote;
-		$vote = self::getLocatedFloat($vote);
+		$vote = self::getLocatedFloat($vote, 0);
 		$vote = JText::sprintf('COM_JTG_MENU_LIMIT_CONSTRUCT_VOTE', $vote) . $error;
 		$button = "<button class=\"button\" type=\"button\" onclick=\"submitbutton('updateGeneratedValues')\">" . JText::_('COM_JTG_REFRESH_DATAS') . "</button>";
 
@@ -1136,63 +1135,65 @@ static public function autoRotateImage($image) {
 	}
 
 	/**
-	 * function_description
+	 * get formatted distance string (with units)
 	 *
-	 * @param   unknown_type  $float    param_description
+	 * @param   unknown_type  $dist     param_description
 	 * @param   unknown_type  $default  param_description
 	 * @param   unknown_type  $unit     param_description
 	 *
 	 * @return return_description
 	 */
-	static public function getLocatedFloat($float, $default = 0, $unit = null)
+	static public function getFormattedDistance($dist, $default = 0, $unit = null)
 	{
-		if ( $float == 0 )
+		if ( $dist == 0 )
 		{
 			return $default;
 		}
 
-		if ( strtolower($unit) == "kilometer" )
-		{
-			$unit = JText::_('COM_JTG_KILOMETER');
-		}
+		$dist = (float) $dist;
 
-		if ( strtolower($unit) == "miles" )
+		if ( strtolower($unit) == "miles" || strtolower($unit) == "mi")
 		{
-			$float = self::getMiles($float);
+			$dist = self::getMiles($dist);
 			$unit = JText::_('COM_JTG_MILES');
 		}
-
-		$float = (float) $float;
-
-		if ( ( $unit !== null ) AND ( $unit == JText::_('COM_JTG_KILOMETER') ) AND ( $float < 1 ) )
-		{
-			$float = $float * 1000;
-			$unit = "&nbsp;" . JText::_('COM_JTG_METERS');
+		else {
+			$unit = JText::_('COM_JTG_KILOMETER');
+			if ( $dist < 1 )
+			{
+				$dist = $dist * 1000;
+				$unit = JText::_('COM_JTG_METERS');
+			}
 		}
 
-		if ( $unit !== null )
-		{
-			$unit = "&nbsp;" . $unit;
-		}
+		$unit = "&nbsp;" . $unit;
 
-		if ( preg_match('/\./', $float) )
-		{
-			// Has decimal place
-			$digit = explode('.', $float);
+		$digits = 2;
+		if ($dist > 100) $digits = 1;
+		if ($dist > 1000) $digits = 0;
 
-			// Count of digits after decimal place
-			$digits = strlen($digit[1]);
-		}
-		else
-		{
-			$digits = 0;
-		}
+		return number_format(
+				$dist,
+				$digits,
+				JText::_('COM_JTG_SEPARATOR_DEC'),
+				JText::_('COM_JTG_SEPARATOR_THS')
+		) . $unit;
+	}
 
+	/**
+	 * get fixed position float with separators specified in JTG language strings
+	 *
+	 * @param   unknown_type  $float   param_description
+	 * @param   unknown_type  $digits  param_description
+	 *
+	 * @return return_description
+	 */
+	static public function getLocatedFloat($float, $digits) {
 		return number_format(
 				$float,
 				$digits,
 				JText::_('COM_JTG_SEPARATOR_DEC'),
 				JText::_('COM_JTG_SEPARATOR_THS')
-		) . $unit;
+		);
 	}
 }

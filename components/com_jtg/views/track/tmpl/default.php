@@ -731,7 +731,7 @@ if (! $this->params->get("jtg_param_disable_terrains"))
 	{
 		$template .= JText::sprintf(
 				'COM_JTG_TRACK_RATING',
-				$JtgHelper->getLocatedFloat($vote['rate']),
+				$JtgHelper->getLocatedFloat($vote['rate'],0),
 				$vote['count']
 				) . "\n";
 	}

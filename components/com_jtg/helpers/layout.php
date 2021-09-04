@@ -51,7 +51,7 @@ class LayoutHelper
 
 		$int = (int) round($float, 0);
 		$stars = JText::_('COM_JTG_STAR' . $int);
-		$return = "<font title=\"" . JtgHelper::getLocatedFloat($float) . "\">";
+		$return = "<font title=\"" . JtgHelper::getLocatedFloat($float, 1) . "\">";
 		$return .= $int;
 		$return .= " ";
 
@@ -104,7 +104,7 @@ class LayoutHelper
 			}
 			// Erscheint bei jedem Registrierten
 			$navi .= '<div class="navi-part"><a href="' .
-					JRoute::_("index.php?option=com_jtg&view=files&layout=user") . '">' .
+					JRoute::_("index.php?option=com_jtg&view=user") . '">' .
 					JText::_('COM_JTG_MY_FILES') . '</a></div>';
 		}
 
@@ -168,6 +168,58 @@ class LayoutHelper
 		$disclaimericons .= ' ' . JText::_('COM_JTG_SUBMITTER') . ': <a href="" target="_blank"></a></div>';
 
 		return $disclaimericons;
+	}
+
+	/**
+	 * format a list of comments to display
+	 *
+	 * @param   unknown_type  $comments list of comments
+	 *
+	 * @return return_description
+	**/
+	static public function parseComments($comments)
+	{
+  if (!$comments)
+   {  
+      echo $this->parseTemplate("description",JText::_('COM_JTG_NO_COMMENTS_DESC'));
+   }
+   else
+   {
+      for ($i = 0, $n = count($comments); $i < $n; $i++)
+      {
+         $comment = $comments[$i];
+         ?>
+<div class='comment'>
+   <div class="comment-header">
+      <div class="comment-title">
+         <?php echo $i + 1 . ": " . $comment->title; ?>
+      </div>
+      <div class="date">
+         <?php if ($comment->date != null) echo JHtml::_('date', $comment->date, JText::_('COM_JTG_DATE_FORMAT_LC4')); ?>
+      </div>
+      <div class="no-float"></div>
+   </div>
+   <div class="comment-autor">
+      <?php echo $comment->user; ?>
+      <br />
+      <?php
+      if (! empty($comment->email) ) {
+         echo $this->model->parseEMailIcon($comment->email);
+      }
+      if ($comment->homepage)
+      {
+         echo ' ' . $this->model->parseHomepageIcon($comment->homepage);
+      }
+      ?>
+   </div>
+   <div class="comment-text">
+      <?php echo $comment->text; ?>
+   </div>
+   <div class="no-float"></div>
+</div>
+<?php
+   	}
+	}
 	}
 
 	/**

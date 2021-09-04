@@ -22,10 +22,11 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('script', 'system/core.js', false, true);
 
 $user = JFactory::getUser();
+$uid = $user->id;
 
-if ($user->id != 0)
+if ($uid != 0)
 {
-	echo $this->lh;
+	echo $this->menubar;
 	?>
 <script type="text/javascript">
 
@@ -43,7 +44,37 @@ if (empty($this->items)) {
 	JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_LIST_NO_TRACK'), 'Warning');
 	echo '<b>' . JText::_('COM_JTG_LIST_NO_TRACK') . '</b>';
 } else 
-{ ?>
+{
+
+echo $this->parseTemplate("headline", JText::_("COM_JTG_USER_TOTALS"), "summary", null);
+$user_summary = $this->getModel()->getTotals($uid);
+// TODO: add units for distance
+ ?>
+<div class="gps-info">
+   <table class="gps-info-tab">
+	<tr>
+		<td><?php echo JText::_('COM_JTG_DISTANCE'); ?>:</td>
+		<td><?php echo JtgHelper::getFormattedDistance($user_summary->distance,'-',$this->cfg->unit); ?>
+		</td>
+	</tr>
+	<tr>
+		<td><?php echo JText::_('COM_JTG_ELEVATION_UP'); ?>:</td>
+		<td><?php
+			echo $user_summary->ele_asc;
+			echo ' ' . JText::_('COM_JTG_METERS');
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td><?php echo JText::_('COM_JTG_ELEVATION_DOWN'); ?>:</td>
+		<td><?php echo $user_summary->ele_desc; ?>
+			<?php echo ' ' . JText::_('COM_JTG_METERS'); ?>
+		</td>
+	</tr>
+
+	</table>
+</div>
+<?php echo $this->parseTemplate("headline", JText::_("My tracks"), "tracklist", null); ?>
 <form action="<?php echo $this->action; ?>" method="post"
 	name="adminForm" id="adminForm">
 	<table style="width:100%;">
@@ -87,14 +118,7 @@ if (empty($this->items)) {
 				$terrain = JtgHelper::parseMoreTerrains($this->sortedter, $row->terrain, "array");
 				$terrain = implode(", ", $terrain);
 
-				if ($this->cfg->unit == "Miles")
-				{
-					$distance = JtgHelper::getLocatedFloat(JtgHelper::getMiles($row->distance, "-", "Miles"));
-				}
-				else
-				{
-					$distance = JtgHelper::getLocatedFloat($row->distance, "-", "km");
-				}
+				$distance = JtgHelper::getFormattedDistance($row->distance, "-", $this->cfg->unit);
 
 				$votes = LayoutHelper::parseVoteFloat($row->vote);
 				$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $row->id, false);
@@ -108,7 +132,7 @@ if (empty($this->items)) {
 	{
 ?>
 					<a
-					href="index.php?option=com_jtg&view=track&layout=form&id=<?php echo $row->id; ?>">
+					href="<?php echo JRoute::_("index.php?option=com_jtg&view=track&layout=form&id=".$row->id); ?>">
 						<img <?php echo $edit ?>
 						src="<?php echo JUri::root() ?>components/com_jtg/assets/images/edit_f2.png" width="16px" />
 				</a> 
@@ -155,6 +179,91 @@ if (empty($this->items)) {
 </form>
 <?php
 }
+// Adding the comments
+if ($this->cfg->comments == 1)
+{
+   echo $this->parseTemplate("headline", JText::_('COM_JTG_COMMENTS'), "commentstome");
+   $comments = $this->getModel()->getCommentsToTracks();
+	// TODO: need to add links to the tracks in the displayed list
+	//LayoutHelper::parseComments($comments);
+	if (!$comments)
+   {
+      echo $this->parseTemplate("description",JText::_('COM_JTG_NO_COMMENTS_DESC'));
+   }
+   else
+   {
+      for ($i = 0, $n = count($comments); $i < $n; $i++)
+      {
+         $comment = $comments[$i];
+?>
+<div class='comment'>
+   <div class="comment-header">
+      <div class="comment-title">
+         <?php echo $i + 1 . ": " . $comment->title; ?>
+      </div>
+      <div class="date">
+         <?php if ($comment->date != null) echo JHtml::_('date', $comment->date, JText::_('COM_JTG_DATE_FORMAT_LC4')); ?>
+      </div>
+		<div class="comment-tracklink"> <a href="<?php echo JRoute::_("index.php?option=com_jtg&view=track&id=".$comment->tid); ?>"><?php echo $comment->tracktitle; ?></a>
+		</div>
+      <div class="no-float"></div>
+   </div>
+   <div class="comment-autor">
+      <?php echo $comment->user; ?>
+      <br />
+      <?php
+      if (! empty($comment->email) ) {
+			// TODO: move parseEMailIcon and HomePageIcon to LayoutHelper
+         echo $this->model->parseEMailIcon($comment->email);
+      }
+      if ($comment->homepage)
+      {
+         echo ' ' . $this->model->parseHomepageIcon($comment->homepage);
+      }
+      ?>
+   </div>
+   <div class="comment-text">
+      <?php echo $comment->text; ?>
+   </div>
+   <div class="no-float"></div>
+</div>
+<?php
+	}
+	}
+   echo $this->parseTemplate("headline", JText::_('COM_JTG_MYCOMMENTS'), "mycomments");
+   $mycomments = $this->getModel()->getComments();
+	if (!$mycomments)
+   {
+      echo $this->parseTemplate("description",JText::_('COM_JTG_NO_COMMENTS_DESC'));
+   }
+   else
+   {
+      for ($i = 0, $n = count($mycomments); $i < $n; $i++)
+      {
+         $comment = $mycomments[$i];
+// TODO: add track name + link and link
+?>
+<div class='comment'>
+   <div class="comment-header">
+      <div class="comment-title">
+         <?php echo $i + 1 . ": " . $comment->title; ?>
+      </div>
+      <div class="date">
+         <?php if ($comment->date != null) echo JHtml::_('date', $comment->date, JText::_('COM_JTG_DATE_FORMAT_LC4')); ?>
+      </div>
+		<div class="comment-tracklink"> <a href="<?php echo JRoute::_("index.php?option=com_jtg&view=track&id=".$comment->tid); ?>"><?php echo $comment->tracktitle; ?></a>
+		</div>
+      <div class="no-float"></div>
+   </div>
+   <div class="comment-text">
+      <?php echo $comment->text; ?>
+   </div>
+   <div class="no-float"></div>
+</div>
+<?php
+	}
+	}
+}
 }
 else
 {
@@ -163,3 +272,4 @@ else
 }
 
 echo $this->footer;
+?>

@@ -172,7 +172,7 @@ $trackcategoryOptions=$trackcategory->getOptions(); // works only if you set you
 				$cat = JtgHelper::parseMoreCats($this->sortedcats, $row->catid, "list", true, $iconheight);
 				$cat = $cat ? $cat: "<img $height src =\"/components/com_jtg/assets/images/cats/symbol_inter.png\" />\n";
 				$terrain = JtgHelper::parseMoreTerrains($this->sortedter, $row->terrain, "list", true);
-				$hits = JtgHelper::getLocatedFloat($row->hits);
+				$hits = JtgHelper::getLocatedFloat($row->hits, 0);
 				$layoutHelper = new LayoutHelper;
 				$votes = $layoutHelper->parseVoteFloat($row->vote, true);
 				$links = null;
@@ -186,14 +186,7 @@ $trackcategoryOptions=$trackcategory->getOptions(); // works only if you set you
 					$row->distance = 0;
 				}
 
-				if ($this->cfg->unit == "Miles")
-				{
-					$distance = JtgHelper::getLocatedFloat(JtgHelper::getMiles($row->distance, "-", "Miles"));
-				}
-				else
-				{
-					$distance = JtgHelper::getLocatedFloat($row->distance, "-", "km");
-				}
+				$distance = JtgHelper::getFormattedDistance($row->distance, "-", $this->cfg->unit);
 
 				if ($profile != "")
 				{

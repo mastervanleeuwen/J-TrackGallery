@@ -104,7 +104,7 @@ for ($x = 0;$x <= count($latlon);$x++)
 								array($userlon, $userlat),
 								array($latlon[$x]->jtglon, $latlon[$x]->jtglat))
 				);
-				$distance = JtgHelper::getLocatedFloat($distance, 0, $this->cfg->unit);
+				$distance = JtgHelper::getFormattedDistance($distance, 0, $this->cfg->unit);
 
 				$distancetext = "<br />" . JText::_('COM_JTG_DISTANCE_GUEST');
 			}

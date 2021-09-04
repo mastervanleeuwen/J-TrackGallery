@@ -209,7 +209,7 @@ if ($this->hits != 0)
 				</div>
 				<div class="list-right">
 					<?php
-					echo JtgHelper::getLocatedFloat($hits->hits);
+					echo JtgHelper::getLocatedFloat($hits->hits,0);
 					?>
 				</div>
 				<div class="no-float"></div>
@@ -277,9 +277,9 @@ if ($this->best != 0)
 				</div>
 				<div class="list-right">
 					<?php
-					$stars_int = JtgHelper::getLocatedFloat((int) round($best->vote, 0));
-					$stars_float = JtgHelper::getLocatedFloat((float) $best->vote);
-					$stars_float2 = JtgHelper::getLocatedFloat((float) round($best->vote, 2));
+					$stars_int = JtgHelper::getLocatedFloat($best->vote, 0);
+					$stars_float = $best->vote;
+					$stars_float2 = JtgHelper::getLocatedFloat($best->vote, 2);
 
 					if ( $stars_float == 0 )
 					{
