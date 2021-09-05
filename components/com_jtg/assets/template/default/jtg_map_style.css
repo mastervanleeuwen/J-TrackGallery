@@ -37,6 +37,11 @@
 	right: auto;
 }
 
+.jtg-geolocate {
+	left: 0.5em;
+	top: 2.5em;
+}
+
 #jtg_map.olMap { /* this is for normal size map */
 	z-index: 0;
 }

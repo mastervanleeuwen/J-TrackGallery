@@ -36,6 +36,8 @@ if ($maySeeSingleFile === true)
 		$document = JFactory::getDocument();
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 	}
+	JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
+	JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
 	$mapimagefile='images/jtrackgallery/maps/track_'.$this->track->id.'.png';
 	if (JFile::exists(JPATH_SITE.'/'.$mapimagefile)) {
 		JFactory::getDocument()->setMetaData('og:image',JUri::base().$mapimagefile,'property');
@@ -1126,5 +1128,7 @@ if ( isset($this->cfg) )
 {
 	echo "\n<script type=\"text/javascript\">\n
 	var olmap={ title: 'com_jtg_map_object' } \n
-	slippymap_init();</script>\n";
+	slippymap_init();\n
+   olmap.addControl(new ShowLocationControl());
+   </script>\n";
 }

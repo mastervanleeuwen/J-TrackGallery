@@ -29,6 +29,8 @@ echo "\n  DPCalIconFile = '/components/com_jtg/assets/images/orange-dot.png';\n"
 echo "</script>\n";
 
 echo $this->gpsData->writeOLMap(null, $this->showtracks, $this->params, $this->items, JFactory::getApplication()->input->get('geoloc'));
+JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
+JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
 ?>
 
 <style type="text/css">
@@ -408,5 +410,6 @@ if ($this->rand != 0)
 	    var olmap={ title: 'com_jtg_map_object' } 
 		 var jtgMapZoomLevel = <?php echo $this->default_zoom; ?>;
 	    slippymap_init("map");
+		olmap.addControl(new CenterOnGeoControl());
 	</script>
 </div>
