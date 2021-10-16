@@ -73,15 +73,12 @@ $link = JRoute::_('index.php?option=com_jtg&task=maps&controller=maps&layout=def
 					title="<?php echo JText::_('JGLOBAL_CHECK_ALL');?>" value=""
 					name="checkall-toggle"></th>
 				<th class="title"><?php
-				// 				echo JHtml::_('grid.sort', JText::_('COM_JTG_NAME'), 'title', @$this->lists['order_Dir'], @$this->lists['order'], 'maps' );
 				echo JText::_('COM_JTG_NAME');
-				?>:</th>
+				?></th>
 				<?php if ($ordering)
 				{
 				?>
-				<th class="order"><?php echo JText::_('COM_JTG_ORDER'); ?>: <?php
-
-				// 				echo JHtml::_('grid.sort', JText::_('COM_JTG_ORDER'), 'order', @$this->lists['order_Dir'], @$this->lists['order'], 'maps' ); ? >:</th>
+				<th class="order"><?php echo JText::_('COM_JTG_ORDER'); ?> <?php
 				?>
 				</th>
 				<th class="order"><?php echo JHtml::_('grid.order',  $this->maps); ?>
@@ -91,43 +88,29 @@ $link = JRoute::_('index.php?option=com_jtg&task=maps&controller=maps&layout=def
 ?>
 				<th class="title"><?php
 				// 				echo JHtml::_('grid.sort', JText::_('COM_JTG_PUBLISHED'), 'published', @$this->lists['order_Dir'], @$this->lists['order'], 'maps' ); ? >:</th>
-				echo JText::_('COM_JTG_PUBLISHED'); ?>:</th>
+				echo JText::_('COM_JTG_PUBLISHED'); ?></th>
+				<th class="title"><?php
+				echo JText::_('COM_JTG_MAP_TYPE');
+				?></th>
 				<th class="title"><?php
 				echo JText::_('COM_JTG_OL_PARAMETERS');
-				?>:</th>
-				<th class="title"><?php
-				echo JText::_('COM_JTG_NEEDSCRIPT');
-				?>:</th>
-				<th class="title"><?php
-				echo JText::_('COM_JTG_CODE');
-				?>:</th>
+				?></th>
+				<th class="title">API Key</th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php
 			$k = 0;
 			$user = JFactory::getUser();
-
+			$maptypes = JtgMapHelper::getMapTypes();
 			for ($i = 0, $n = count($this->maps); $i < $n; $i++)
 			{
 				// $map->published
 				$map = $this->maps[$i];
 				$published 	= JHtml::_('jgrid.published', $map->published, $i);
 				$checked 	= JHtml::_('grid.checkedout', $map, $i);
-				$name		= $this->buildEditKlicks(JText::_($map->name), $i);
-				$map_parameters = JHtml::tooltip($map->param, JText::_('COM_JTG_OL_PARAMETERS'), 'tooltip.png', JText::_('COM_JTG_OL_PARAMETERS'));
-				$map_script = ($map->script? JHtml::tooltip(
-						$map->script, JText::_('COM_JTG_NEEDSCRIPT'), 'tooltip.png',
-						JText::_('COM_JTG_NEEDSCRIPT')
-						)
-						: '<i>' . JText::_('JNONE') . '</i>'
-						);
-				$map_code = ($map->code? JHtml::tooltip(
-						$map->code, JText::_('COM_JTG_CODE'), 'tooltip.png', JText::_('COM_JTG_CODE')
-						)
-						: '<i>' . JText::_('JNONE') . '</i>'
-						);
-
+				$name		= $this->buildEditKlicks(JText::_($map->name), $i, $map->id);
+				$map_type = $maptypes[$map->type];
 				?>
 			<tr
 				class="<?php
@@ -153,9 +136,9 @@ if ($ordering)
 }
 ?>
 				<td align="center"><?php echo $published; ?></td>
-				<td align="center"><?php echo $map_parameters; ?></td>
-				<td align="center"><?php echo $map_script;?></td>
-				<td align="center"><?php echo $map_code;?></td>
+				<td align="center"><?php echo $map_type; ?></td>
+				<td align="center"><?php echo $map->param; ?></td>
+				<td align="center"><?php echo $map->apikey; ?></td>
 			</tr>
 			<?php
 			}

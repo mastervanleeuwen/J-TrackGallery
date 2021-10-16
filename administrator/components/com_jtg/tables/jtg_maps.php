@@ -37,9 +37,9 @@ class TableJTG_Maps extends JTable
 
 	var $published		= null;
 
-	var $script			= null;
+	var $type			= null;
 
-	var $code			= null;
+	var $apikey			= null;
 
 	var $checked_out	= null;
 

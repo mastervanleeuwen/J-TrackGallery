@@ -24,12 +24,12 @@ $this->activeFilters = $this->get('ActiveFilters');
 echo $this->lh;
 
 echo "\n<script>\n";
-echo "  DPCalLocs = ".$this->gpsData->parseDPCalLocations($this->dpcallocs);
+echo "  DPCalLocs = ".JtgMapHelper::parseDPCalLocations($this->dpcallocs);
 echo "\n  DPCalIconFile = '/components/com_jtg/assets/images/orange-dot.png';\n";
 echo "</script>\n";
 
-echo $this->gpsData->writeOLMap(null, $this->showtracks, $this->params, $this->items, JFactory::getApplication()->input->get('geoloc'));
 JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
+JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/jtgOverView.js');
 JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
 ?>
 
@@ -392,24 +392,7 @@ if ($this->rand != 0)
 ?>
 <div class="no-float">
 	<?php
-/*
-	// Needed Pics preload
+		echo JtgMapHelper::parseOverviewMapJS($this->items,$this->showtracks);
+		echo $this->footer;
 	?>
-	<div style="display: none">
-		<img alt="cloud-popup-relative.png"
-			src="///www.openlayers.org/api/img/cloud-popup-relative.png" /> <img
-			alt="marker.png" src="///www.openlayers.org/api/img/marker.png" />
-		<img alt="close.png"
-			src="///www.openlayers.org/api/theme/default/img/close.gif" />
-	</div>
-	<?php
-*/
-	echo $this->footer;
-	?>
-	<script type="text/javascript">
-	    var olmap={ title: 'com_jtg_map_object' } 
-		 var jtgMapZoomLevel = <?php echo $this->default_zoom; ?>;
-	    slippymap_init("map");
-		olmap.addControl(new CenterOnGeoControl());
-	</script>
 </div>

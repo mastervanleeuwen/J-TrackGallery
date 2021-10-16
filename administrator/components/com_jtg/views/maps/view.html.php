@@ -103,10 +103,16 @@ class JtgViewMaps extends JViewLegacy
 	 *
 	 * @return string
 	 */
-	function buildEditKlicks($map, $count)
+	function buildEditKlicks($map, $count, $id)
 	{
-		return "<a href=\"javascript:void(0);\" onclick=\"javascript:return listItemTask('cb" . $count .
-		"','editmap')\">" . $map . "</a>";
+		if (JVERSION < 4.0)
+		{
+			return "<a href=\"javascript:void(0);\" onclick=\"javascript:return listItemTask('cb" . $count . "','editmap')\">" . $map . "</a>";
+		}
+		else
+		{
+			return "<a href=\"".JRoute::_("index.php?option=com_jtg&task=editmap&controller=maps&id=$id")."\">". $map."</a>";
+		}
 	}
 
 	/**

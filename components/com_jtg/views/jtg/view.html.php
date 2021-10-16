@@ -19,6 +19,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.view');
+require_once JPATH_COMPONENT . '/helpers/maphelper.php';
 
 /**
  * HTML View class for the jtg component

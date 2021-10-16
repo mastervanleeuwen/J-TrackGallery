@@ -110,7 +110,9 @@ class JtgControllerTrack extends JtgController
 			{  
 				echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 			}
-			JFactory::getApplication()->setUserState('com_jtg.newfileid',$id);
+			else {
+				JFactory::getApplication()->setUserState('com_jtg.newfileid',$id);
+			}
 			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=track&layout=form&id=' . $id, false), false);
       }
       else

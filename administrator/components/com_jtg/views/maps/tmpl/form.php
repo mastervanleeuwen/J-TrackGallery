@@ -68,6 +68,12 @@ if (JVERSION >= 3.0)
 	width: auto !important;}";
 	$document->addStyleDeclaration($style);
 }
+
+JFormHelper::addFieldPath(JPATH_COMPONENT . '/models/fields');
+JFormHelper::loadFieldType('MapType', false);
+$maptype = new JFormFieldMapType();
+$maptype->SetValue($map->type);
+$maptype->__set('name','type');
 ?>
 <form action="" method="post" name="adminForm" id="adminForm"
 	class="adminForm" enctype="multipart/form-data">
@@ -100,14 +106,14 @@ if (JVERSION >= 3.0)
 				<td><?php echo $this->list['published']; ?></td>
 			</tr>
 			<tr>
+				<td><?php echo JText::_('COM_JTG_MAP_TYPE'); ?>:*</td>
+				<td><?php echo $maptype->renderField(); ?> </td>
+			</tr>
+			<tr>
 				<td><?php echo JText::_('COM_JTG_OL_PARAMETERS'); ?>:*</td>
 						<?php
-						$replace = array("'",'"');
-						$with = array("'","&quot;");
-
 						if (($id) AND (isset($map->param)))
 						{
-							//$param = str_replace($replace, $with, $map->param);
 							$param = htmlentities($map->param);
 						}
 						else
@@ -119,36 +125,29 @@ if (JVERSION >= 3.0)
 						cols="100" maxlength="500" rows="8"><?php echo $param; ?></textarea>
 				</td>
 			</tr>
-			<tr>
-				<td><?php echo JText::_('COM_JTG_NEEDSCRIPT'); ?>:</td>
-				<td><input id="script" type="text" name="script"
-					value="<?php
-if (($id) AND (isset($map->script)))
-{
-	//$script = str_replace($replace, $with, $map->script);
-	$script = htmlentities($map->script);
-	echo $script;
-}
-?>"
-					size="100" maxlength="300" /></td>
+				<td><?php echo JText::_('API Key'); ?>:</td>
+						<?php
+						if (($id) AND (isset($map->apikey)))
+						{
+							$apikey = htmlentities($map->apikey);
+						}
+						else
+						{
+							$apikey = '';
+						}
+						?>
+				<td><textarea id="apikey" name="apikey"
+						cols="100" maxlength="150"><?php echo $apikey; ?></textarea>
+				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_CODE'); ?>:</td>
-				<td><input id="code" type="text" name="code"
-					value="<?php
-
-if (($id) AND (isset($map->code)))
-{
-	$code = str_replace($replace, $with, $map->code);
-	echo $code;
-}
-?>"
-					size="100" maxlength="300" /></td>
+			</tr>
+			<tr>
 			</tr>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_ORDER'); ?>:*</td>
 				<td><input id="order" type="text" name="order"
-					value="<?php echo $id AND isset($map->ordering)? $map->ordering: '99'; ?>"
+					value="<?php echo (($id AND isset($map->ordering))? $map->ordering: '99'); ?>"
 					size="2" maxlength="2">
 				</td>
 			</tr>

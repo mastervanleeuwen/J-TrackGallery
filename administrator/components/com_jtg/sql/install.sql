@@ -3,13 +3,10 @@ CREATE TABLE IF NOT EXISTS `#__jtg_maps` (
 	`id` int(2) NOT NULL AUTO_INCREMENT,
 	`name` varchar(50) NOT NULL,
 	`ordering` int(2) NOT NULL,
-	`usepace` TINYINT(1) NOT NULL DEFAULT '0', 
 	`published` int(1) NOT NULL,
-	`default_map` INT(2) NULL DEFAULT NULL,
-	`default_overlays` TEXT NULL DEFAULT NULL,
+	`type` int(2) DEFAULT '0',
 	`param` varchar(500),
-	`script` varchar(300),
-	`code` varchar(300),
+	`apikey` varchar(150),
 	`checked_out` int(10) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -152,16 +149,14 @@ PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
-INSERT IGNORE INTO `#__jtg_maps` (`name`, `ordering`, `published`, `param`, `script`, `code`) VALUES
-('COM_JTG_MAP_MAPNIK', 1, 1, 'ol.layer.Tile({ source: new ol.source.OSM(), })', '', ''),
-('COM_JTG_MAP_OSM_HIKE_AND_BIKE', 2, 0, 'ol.layer.Tile( { source: new ol.source.XYZ({name: "{name}", url: "https://{a-c}.tiles.wmflabs.org/hikebike/{z}/{x}/{y}.png", isBaseLayer: true, attributions: [ ol.source.OSM.ATTRIBUTION ] }) })', '', ''),
-('COM_JTG_MAP_CYCLEMAP', 3, 0, 'ol.layer.Tile({ source: new ol.source.OSM({ attributions: [ ol.source.OSM.ATTRIBUTION ], url: "http://{a-c}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=" }) })', '', ''),
-('COM_JTG_MAP_BING_AERIAL', 4, 0, 'ol.layer.Tile({name: "{name}", source: new ol.source.BingMaps({key: BingApiKey, imagerySet: "Aerial" })})', '', 'var BingApiKey = ;'),
-('COM_JTG_MAP_BING_ROAD', 5, 0, 'ol.layer.Tile({name: "{name}", source: new ol.source.BingMaps({key: BingApiKey, imagerySet: "Road" })})', '', 'var BingApiKey = '),
-('COM_JTG_MAP_BING_HYBRID', 6, 0, 'ol.layer.Tile({name: "{name}", source: new ol.source.BingMaps({key: BingApiKey, imagerySet: "AerialWtthLabels" })})', '', 'var BingApiKey = &quot;AgnrTXBLS7KIuV5RyjA13-TlQSvXeEb43C0063AgZrNb6bldYkrH1omznJi5Mq3S&quot;;'),
-('COM_JTG_MAP_FRENCH_IGN_GEOPORTAL', 7, 0, 'ol.layer.Tile({name: "{name}", source: new ol.source.WMTS({ url: "https://wxs.ign.fr/"+IGNapiKey+"/geoportail/wmts", 		layer: "GEOGRAPHICALGRIDSYSTEMS.MAPS", 	matrixSet: "PM",  format: "image/jpeg", projection: "EPSG:3857",   units: "m",  tileGrid: getIGNTileGrid(), style: "normal",  attributions: ["Map base: ©IGN  Terms of Service"] }) })', 'components/com_jtg/assets/js/ign.js', 'var IGNapiKey = "choisirgeoportail";'),
-('COM_JTG_MAP_HIKE_AND_BIKE_HILLSHADE', 8, 0, 'ol.layer.Tile( { name: "{name}", source: new ol.source.XYZ( {  url: "http://{a-c}.tiles.wmflabs.org/hillshading/{z}/{x}/{y}.png",  attributions: "Hillshading: SRTM3 v2 (<a href=http://www2.jpl.nasa.gov/srtm/>NASA</a>)" }) , isBaseLayer: false, visibility: false, transitionEffect: "resize" })', '', '');
-
+INSERT IGNORE INTO `#__jtg_maps` (`name`, `ordering`, `published`, `type`, `param`, `apikey`) VALUES
+('COM_JTG_MAP_MAPNIK', 1, 1, 0, '', ''),
+('COM_JTG_MAP_OSM_HIKE_AND_BIKE', 2, 0, 0, 'https://{a-c}.tiles.wmflabs.org/hikebike/{z}/{x}/{y}.png', ''),
+('COM_JTG_MAP_CYCLEMAP', 3, 0, 0, 'https://{a-c}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', ''),
+('COM_JTG_MAP_BING_AERIAL', 4, 0, 2, 'Aerial', ''),
+('COM_JTG_MAP_BING_ROAD', 5, 0, 2, 'RoadOnDemand', ''),
+('COM_JTG_MAP_BING_HYBRID', 6, 0, 2, 'AerialWithLabelsOnDemand', ''),
+('COM_JTG_MAP_FRENCH_IGN_GEOPORTAL', 7, 0, 1, '' ,'choisirgeoportail');
 
 INSERT IGNORE INTO `#__jtg_cats` (`id`, `parent_id`, `title`, `description`, `image`, `ordering`, `published`, `checked_out`) VALUES
     (1, 0, 'dummy','','',0,1,0),
@@ -174,16 +169,16 @@ INSERT IGNORE INTO `#__jtg_cats` (`id`, `parent_id`, `title`, `description`, `im
     (8, 0, 'dummy','','',0,1,0),
     (9, 0, 'dummy','','',0,1,0),
     (12, 0, 'COM_JTG_CAT_TREKKING', 'COM_JTG_CAT_TREKKING_DESCRIPTION', 'hiking.png', 0, 1, 0),
-    (19, 0, 'COM_JTG_CAT_MOUNTAIN_BIKE', 'COM_JTG_CAT_MOUNTAIN_BIKE_DESCRIPTION', 'mountainbiking-3.png', 0, 1, 0),
-    (17, 0, 'COM_JTG_CAT_HORSE_RIDING', 'COM_JTG_CAT_HORSE_RIDING_DESCRIPTION', 'horseriding.png', 0, 1, 0),
+    (19, 0, 'COM_JTG_CAT_MOUNTAIN_BIKE', 'COM_JTG_CAT_MOUNTAIN_BIKE_DESCRIPTION', 'mountainbiking-3.png', 1, 1, 0),
+    (17, 0, 'COM_JTG_CAT_HORSE_RIDING', 'COM_JTG_CAT_HORSE_RIDING_DESCRIPTION', 'horseriding.png', 2, 1, 0),
     (10, 0, 'COM_JTG_CAT_CAR', 'COM_JTG_CAT_CAR_DESCRIPTION', 'sportscar.png', 7, 1, 0),
-    (11, 0, 'COM_JTG_CAT_CAR_44', 'COM_JTG_CAT_CAR_44_DESCRIPTION', 'fourbyfour.png', 1, 1, 0),
+    (11, 0, 'COM_JTG_CAT_CAR_44', 'COM_JTG_CAT_CAR_44_DESCRIPTION', 'fourbyfour.png', 4, 1, 0),
     (13, 0, 'COM_JTG_CAT_BIKE', 'COM_JTG_CAT_BIKE_DESCRIPTION', 'cycling.png', 5, 1, 0),
     (14, 0, 'COM_JTG_CAT_MOTORBIKE', 'COM_JTG_CAT_MOTORBIKE_DESCRIPTION', 'motorbike.png', 6, 1, 0),
     (15, 0, 'COM_JTG_CAT_PEDESTRIAN', 'COM_JTG_CAT_PEDESTRIAN_DESCRIPTION', 'hiking.png', 3, 1, 0),
-    (16, 0, 'COM_JTG_CAT_GEOCACHE', 'COM_JTG_CAT_GEOCACHE_DESCRIPTION', 'geocachinginternational.png', 4, 1, 0),
-    (20, 0, 'COM_JTG_CAT_SNOWSHOEING', 'COM_JTG_CAT_SNOWSHOEING_DESCRIPTION', 'snowshoeing.png', 0, 1, 0),
-    (21, 0, 'COM_JTG_CAT_TRAIL', 'COM_JTG_CAT_TRAIL_DESCRIPTION', 'hiking.png', 0, 1, 0)
+    (16, 0, 'COM_JTG_CAT_GEOCACHE', 'COM_JTG_CAT_GEOCACHE_DESCRIPTION', 'geocachinginternational.png', 8, 1, 0),
+    (20, 0, 'COM_JTG_CAT_SNOWSHOEING', 'COM_JTG_CAT_SNOWSHOEING_DESCRIPTION', 'snowshoeing.png',9, 1, 0),
+    (21, 0, 'COM_JTG_CAT_TRAIL', 'COM_JTG_CAT_TRAIL_DESCRIPTION', 'hiking.png', 10, 1, 0)
 ;
 
 DELETE FROM `#__jtg_cats` WHERE title = 'dummy';

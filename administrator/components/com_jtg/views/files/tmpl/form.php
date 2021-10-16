@@ -89,8 +89,7 @@ if ($this->id >= 1)
 	}
 	else
 	{
-		$map = $gpsData->writeTrackOL( $track, $params, $imageList );
-		$map.= '<style type="text/css">
+		$map = '<style type="text/css">
 
 .olButton::before{
 	display: none;
@@ -109,8 +108,8 @@ img.olTileImage {
 </style>';
 		$map .= ("\n<div id=\"jtg_map\"  align=\"center\" class=\"olMap\" ");
 		$map .= ("style=\"width: 400px; height: 500px; background-color:#EEE; vertical-align:middle;\" >");
-		$map .= ("\n<script>slippymap_init();</script>");
 		$map .= ("\n</div>");
+		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $this->id, $this->track->default_map, $imageList, false, false );
 	}
 }
 

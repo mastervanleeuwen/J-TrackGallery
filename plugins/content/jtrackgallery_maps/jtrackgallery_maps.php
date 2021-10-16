@@ -178,6 +178,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 
 		// Add jtg_map stylesheet
 		require_once JPATH_SITE . '/components/com_jtg/helpers/helper.php';
+		require_once JPATH_SITE . '/components/com_jtg/helpers/maphelper.php';
 		$cfg = JtgHelper::getConfig();
 		$tmpl = ($cfg->template <> "") ? $cfg->template : 'default';
 		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
@@ -204,7 +205,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
 		$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $track->file;
 		$gpsData = new GpsDataClass($cfg->unit);
-		$gpsData = $cache->get(array ( $gpsData, 'loadFileAndData' ), array ($file, $track->file ), $cfg->unit);
+		$gpsData->loadFileAndData($file, $track->file);
 
 		$plgParams_map_width = $plgParams->get('map_width', false);
 		$plgParams_map_height = $plgParams->get('map_height', false);
@@ -221,7 +222,6 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		}
 		else
 		{
-			$map = $cache->get(array ( $gpsData, 'writeTrackOL' ), array ( $track, $params ));
 			$map.= '<style type="text/css">
 
 .olButton::before{
@@ -250,7 +250,7 @@ img.olTileImage {
 </style>';
 
 		$map .= ("\n<div id=\"jtg_map\"  align=\"center\" class=\"olMap\" >");
-		$map .= ("\n<script>slippymap_init();</script>");
+		$map = JtgMapHelper->parseTrackMapJS( $gpsData, $plg_call_params['id']);
 		$map .= ("\n</div>");
 	}
 

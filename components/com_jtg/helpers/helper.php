@@ -1,7 +1,5 @@
 <?php
 /**
- * test code
- *
  * @component  J!Track Gallery (jtg) for Joomla! 2.5 and 3.x
  *
  *
@@ -19,41 +17,6 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
-
-/**
- * function jtgdebug($val, $die=false)
- *
- * @param   unknown_type  $val  param_description
- * @param   unknown_type  $die  param_description
- *
- * @return void
- */
-
-function jtgdebug($val, $die = false)
-{
-	$r = "<pre>";
-
-	if ( is_array($val) )
-	{
-		foreach ($val AS $k => $v)
-		{
-			$r .= $k . " = " . print_r($v, true) . "<br />\n";
-		}
-	}
-	else
-	{
-		$r .= print_r($val) . "<br />\n";
-	}
-
-	$r .= "</pre>";
-
-	if ( $die !== false )
-	{
-		die($r);
-	}
-
-	echo $r;
-}
 
 /**
  * JtgHelper class for the jtg component
@@ -457,6 +420,18 @@ class JtgHelper
 		}
 
 		return $return;
+	}
+
+	static public function getCatIconName($catid)
+	{
+		$mainframe = JFactory::getApplication();
+
+		$db = JFactory::getDBO();
+
+		$query = "SELECT image FROM #__jtg_cats WHERE id = '".$catid."'";
+
+		$db->setQuery($query);
+		return $db->loadResult();
 	}
 
 	/**

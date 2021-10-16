@@ -18,6 +18,7 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Editor\Editor;
+use Joomla\CMS\Uri\Uri;
 
 //
 // This form has three states or modes:
@@ -82,6 +83,7 @@ $infoIconText = '';
 $version_parts = explode('.',JVERSION);
 if ($version_parts[0]<3 || ($version_parts[0]==3 && $version_parts[1]<10))
 {
+	error_log('joomla < 3.9; use behavior.tooltip');
 	JHtml::_('behavior.modal');
 	JHtml::_('behavior.tooltip');
 }
@@ -111,7 +113,6 @@ $lists['default_map']   = JHtml::_('select.genericlist', $maplist, 'default_map'
 
 $k = 0;
 
-if (isset($this->map)) echo $this->map;
 ?>
 <script type="text/javascript">
 
@@ -161,7 +162,7 @@ else
 </script>
 
 <?php
-if (isset($this->map)) 
+if (isset($this->id)) 
 {
 ?>
 <style type="text/css">
@@ -433,8 +434,5 @@ if ($this->cfg->access == 1)
 
 echo $this->footer;
 
-if (isset($this->map)) {
-	echo "\n<script type=\"text/javascript\">\n
-   var olmap={ title: 'com_jtg_map_object' } \n
-   slippymap_init();</script>\n";
-}
+if (isset($this->mapJS)) echo $this->mapJS;
+?>

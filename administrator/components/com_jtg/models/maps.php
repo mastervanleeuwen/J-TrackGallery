@@ -328,32 +328,30 @@ class JtgModelMaps extends JModelLegacy
 		$name = $input->get('name', '', 'string');
 		$name = htmlentities($name);
 
+		$type = $input->getInt('type');
 		// Raw extraction remove link (attribution need links)
 		// $param = JFactory::getApplication()->input->get('param', '', 'raw');
 		$param = $input->get('param', '', 'array');
-		//$param = str_replace("'", '&#39;', htmlentities($param[0]));
+		$param = str_replace("'", '&#39;', $param[0]);
+		$apikey = $input->get('apikey', '', 'string');
 
 		$checked_out = $input->get('checked_out');
 
-		if ( ( $name == "" ) OR ( $param == "" ) )
+		if ( ( $name == "" ) )
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_MAP_NOT_SAVED'), 'Warning');
 
 			return false;
 		}
 
-		$script = $input->get('script', '', 'raw');
-
-		$script = htmlentities($script);
-		$code = $input->get('code', '', 'raw');
-		$code = htmlentities($code);
 		$query = "INSERT INTO #__jtg_maps SET"
-		. "\n name='" . $name . "',"
+		. "\n name=" . $db->quote($name) . ","
 		. "\n ordering='" . $order . "',"
 		. "\n published='" . $publish . "',"
-		. "\n param='" . $db->quote($param) . "',"
-		. "\n checked_out='" . $checked_out . "',"
-		. "\n code='" . $code . "'";
+		. "\n type=" . $type . ","
+		. "\n param=" . $db->quote($param) . ","
+		. "\n apikey=" . $db->quote($apikey) . ","
+		. "\n checked_out='" . $checked_out . "'";
 
 		if ($script)
 		{
@@ -400,41 +398,35 @@ class JtgModelMaps extends JModelLegacy
 		$id = $input->getInt('id');
 		$name = $input->get('name', '', 'string');
 		$name = htmlentities($name);
-
+		$type = $input->getInt('type','0');
 		// Raw extraction remove link (attribution need links)
 		// $param = JFactory::getApplication()->input->get('param', '', 'raw');
 		$param = $input->get('param', '', 'array');
 		$param = str_replace("'", '&#39;', $param[0]);
 
-		$checked_out = $input->get('checked_out');
-		$code = $input->get('code', '', 'raw');
-		$code = htmlentities($code);
+		$apikey = $input->get('apikey', '', 'string');
 
-		if ( ( $name == "" ) OR ( $param == "" ) )
+		$checked_out = $input->get('checked_out');
+
+		if ( ( $name == "" ) )
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_MAP_NOT_SAVED'), 'Warning');
-
 			return false;
 		}
 
-		$script = $input->get('script', '', 'raw');
-		$script = htmlentities($script);
 		$query = "UPDATE #__jtg_maps SET"
-		. "\n name='" . $name . "',"
+		. "\n name=" . $db->quote($name) . ","
 		. "\n ordering='" . $order . "',"
 		. "\n published='" . $publish . "',"
-		. "\n param='" . $param . "',"
-		. "\n script=" . $db->quote($script) . ","
-		. "\n checked_out='" . $checked_out . "',"
-		. "\n code=" .$db->quote($code) 
+		. "\n type='" . $type . "',"
+		. "\n param=" . $db->quote($param) . ","
+		. "\n apikey=" . $db->quote($apikey) . ","
+		. "\n checked_out='" . $checked_out . "'"
 		. "\n WHERE id=".$id;
 
 		$db->setQuery($query);
 
-		if ($db->execute())
-		{
-			die($db->_errorMsg);
-		}
+		$db->execute();
 
 		return true;
 	}

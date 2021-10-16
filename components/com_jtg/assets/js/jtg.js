@@ -1,9 +1,174 @@
+
+var jtgTemplateUrl = "";
+var jtgBaseUrl = "";
+var jtgView;
+var jtgMap;
+
+// TODO: add waypoint, POI icons?
+
+function jtgMapInit(mapType = 0, mapOpt = '', apiKey = '') {
+	// map types:
+	// 0: OSM - mapopt is tile URL (optional)
+	// 1: IGN - needs APIkey
+	// 2: Bing - needs APIkey; mapopt is imagerySet
+
+	jtgView = new ol.View( {
+		center: [0, 0],
+		units: "m"  // TODO: use units from config
+	} );
+
+	jtgMap = new ol.Map ( { target: "jtg_map",
+		controls:[
+			new ol.control.MousePosition( {coordinateFormat: ol.coordinate.createStringXY(4), projection: 'EPSG:4326' }),
+			new ol.control.ZoomSlider(),
+			new ol.control.Attribution(), 
+			new ol.control.ScaleLine() 
+		],
+		view: jtgView } );
+	var fullscreenToolbar = new ol.control.FullScreen();
+	jtgMap.addControl(fullscreenToolbar);
+	jtgMap.getInteractions().forEach(function(interaction) {   if (interaction instanceof ol.interaction.KeyboardPan) { interaction.setActive(false); } }, this);
+	jtgMap.getInteractions().forEach(function(interaction) {   if (interaction instanceof ol.interaction.KeyboardZoom) { interaction.setActive(false); } }, this);
+	// Need to call mapsource init script
+	switch (mapType) {
+		case 0: // OSM
+			if ( mapOpt.length ) {
+				mapLayer = new ol.layer.Tile({ source: new ol.source.OSM({url: mapOpt}) });
+			}
+			else {
+				mapLayer = new ol.layer.Tile({ source: new ol.source.OSM() });
+			}
+			break;
+		case 1: // IGN
+			mapLayer = new ol.layer.Tile({source: new ol.source.WMTS({
+				url: "https://wxs.ign.fr/"+apiKey+"/geoportail/wmts",
+				layer: "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
+				matrixSet: "PM",
+				format: "image/png", 
+				projection: "EPSG:3857",
+				tileGrid: getIGNTileGrid(),
+				style: "normal",
+				attributions: '<a href="https://www.ign.fr/" target="_blank">' +
+					'<img src="https://wxs.ign.fr/static/logos/IGN/IGN.gif" title="Institut national de l\'' +
+					'information géographique et forestière" alt="IGN"></a>' })
+			});
+			break;	
+		case 2: // Bing
+			mapLayer = new ol.layer.Tile({source: new ol.source.BingMaps({
+				key: apiKey,
+				imagerySet: mapOpt })});
+			break;
+	}
+	jtgMap.addLayer(mapLayer);
+}
+
+function drawTrack(latitudeData, longitudeData) {
+	var gpsTrack = new ol.layer.Vector({ 
+		source: new ol.source.Vector(),
+		style: new ol.style.Style({
+		stroke: new ol.style.Stroke({
+		color: '#ff00ff', width: 5 }) })
+	});
+   jtgMap.addLayer(gpsTrack);
+	var points = [];
+	for (var i = 0; i < longitudeData.length; i++) {
+		 points.push(ol.proj.fromLonLat([longitudeData[i], latitudeData[i]], jtgView.getProjection()));
+	}
+	gpsTrack.getSource().addFeature(new ol.Feature({geometry: new ol.geom.LineString(points)}));
+
+	var startMarker = new ol.Feature( {
+		geometry: new ol.geom.Point(ol.proj.fromLonLat([longitudeData[0], latitudeData[0]], jtgView.getProjection())),
+		name: 'Start'
+	});
+	startMarker.setStyle(new ol.style.Style({
+      image: new ol.style.Icon({ src: jtgTemplateUrl+'/images/trackStart.png',
+		anchorOrigin: 'bottom-left', anchor: [0,0] }) 
+	}) );
+	gpsTrack.getSource().addFeature(startMarker);
+
+	var endMarker = new ol.Feature( {
+		geometry: new ol.geom.Point(ol.proj.fromLonLat([longitudeData[longitudeData.length-1], latitudeData[latitudeData.length-1]], jtgView.getProjection())),
+		name: 'End'
+	});
+	endMarker.setStyle(new ol.style.Style({
+      image: new ol.style.Icon({ src: jtgTemplateUrl+'/images/trackDest.png',
+		anchorOrigin: 'bottom-right', anchor: [0,0] }) 
+	}) );
+	gpsTrack.getSource().addFeature(endMarker);
+
+	jtgView.fit( gpsTrack.getSource().getExtent(), {padding: [50, 50, 50, 75]} );
+	jtgMap.addControl( new ol.control.ZoomToExtent( {extent: jtgView.calculateExtent()} ) );
+
+	animatedCursorLayer = new ol.layer.Vector({
+		source: new ol.source.Vector(),
+		style: animated_cursor_style,
+		visible: false
+	});
+	animatedCursorLineFeature = new ol.Feature({ 
+		geometry: new ol.geom.LineString(points)});
+	animatedCursorLineFeature.setId('cursorTrack');
+	animatedCursorLayer.getSource().addFeature(animatedCursorLineFeature);
+	animatedCursorLayer.gpxPoints = points;
+	jtgMap.addLayer(animatedCursorLayer);
+
+	animatedCursorIcon = new ol.geom.Point( ol.proj.fromLonLat([3.79273,50.29782], jtgView.getProjection()));
+	animatedCursorLayer.getSource().addFeature( new ol.Feature( { geometry: animatedCursorIcon } ) );
+	addPopup(jtgMap);
+}
+
+function addGeoPhotos(imagelist) {
+	photoIcon = new ol.style.Icon({src: jtgTemplateUrl+'/images/foto.png'} ); // TODO: check anchorpoint
+	geoImgLayer = new ol.layer.Vector({title: "Geotagged Images", source: new ol.source.Vector(), style: new ol.style.Style( { image: photoIcon} ) });
+	jtgMap.addLayer(geoImgLayer);
+
+	imagelist.forEach( function (image) {
+		var lonLatImg = new ol.proj.fromLonLat([image.long, image.lat],jtgView.getProjection());
+		photoFeat = new ol.Feature( {geometry: new ol.geom.Point(lonLatImg), name: image.imghtml} );
+		geoImgLayer.getSource().addFeature(photoFeat);
+	} );
+}
+
+function addWPs(wpInfo, wpIcons) {
+	wps = new ol.source.Vector();
+	wpLayer = new ol.layer.Vector({title: "Waypoints", source: wps});
+	jtgMap.addLayer(wpLayer);
+
+	wpInfo.forEach( function(wp) {
+		wpll = ol.proj.fromLonLat([wp.lon, wp.lat], jtgView.getProjection());
+		if (wpIcons.has(wp.icon)) {
+			icon = wpIcons.get(wp.icon);
+		}
+		else {
+			icon = wpIcons.get('unknown');
+		}
+		var wpf = new ol.Feature({ geometry: new ol.geom.Point(wpll), name: wp.html });
+		wpf.setStyle(new ol.style.Style({image: icon}));
+		wps.addFeature(wpf);
+	} );
+}
+
+function addPreviewTrigger() {
+	prevwidth = 1080;
+	prevheight = 640;
+	jtgMap.once('rendercomplete', function () {
+		var origSize = jtgMap.getSize();
+		var origResolution = jtgMap.getView().getResolution();
+		//makePreview(prevwidth, prevheight, origSize, origResolution);
+		makePreview(origSize[0], origSize[1], origSize, origResolution);
+		// Set preview size
+		var printSize = [prevwidth, prevheight];
+		//jtgMap.setSize(printSize); // Changes centering, without changing aspect ratio
+		var scaling = Math.min(printSize[0] / origSize[0], printSize[1] / origSize[1]);
+		//jtgMap.getView().setResolution(origResolution / scaling);
+	} );
+}
+
 function getAvgTime(speed_str, length, decimal_separator)  {
 
 		// Speed format is with decimal separator or . or ,
 		var speed = speed_str.replace(decimal_separator, '.');
 		speed = speed.replace(',', '.');
-		if (speed ==0)
+		if (speed === 0)
 		{
 			// set speed to 1 when null!
 			document.getElementById('speed').value = '1';
@@ -138,18 +303,6 @@ function checkForPermalink() {
 	if (parameters['lon'] != null)
 		lon = parseFloat(parameters['lon']);
 }
-/*
- * Debugging Funktion
- */
-function var_dump(obj) {
-   if (typeof obj == "object") {
-      return "Type: "+typeof(obj)+((obj.constructor) ? "\nConstructor: "+obj.constructor : "")+"\nValue: " + obj;
-   }
-else
-{
-      return "Type: "+typeof(obj)+"\nValue: "+obj;
-   }
-}//end function var_dump
 
 /*
  * Für den Layer-Switcher mit Buttons
@@ -184,39 +337,6 @@ function toggleInfo() {
 }
 
 /*
- * Zeichnet verschiedene Arten von geometrischen Objekten
- * Draws different kinds of geometric objects
- */
-
-function drawLine(coordinates,style) {
-	var linePoints = createPointsArrayFromCoordinates(coordinates);
-
-	var line = new OpenLayers.Geometry.LineString(linePoints);
-	var vector = new OpenLayers.Feature.Vector(line,null,style);
-
-	layer_vectors.addFeatures(vector);
-	return vector;
-}
-function drawPolygon(coordinates,style) {
-	var points = createPointsArrayFromCoordinates(coordinates);
-
-	var linearRing = new OpenLayers.Geometry.LinearRing(points);
-	var polygon = new OpenLayers.Geometry.Polygon([linearRing]);
-	var vector = new OpenLayers.Feature.Vector(polygon,null,style);
-
-	layer_vectors.addFeatures(vector);
-	return vector;
-}
-function createPointsArrayFromCoordinates(coordinates) {
-	var points = new Array();
-	for (var i=0;i<coordinates.length;++i) {
-		var lonlat = new OpenLayers.LonLat(coordinates[i][0],coordinates[i][1]).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
-		points.push(new OpenLayers.Geometry.Point(lonlat.lon,lonlat.lat));
-	}
-	return points;
-}
-
-/*
  * Gibt eine Fehlermeldung aus, wenn die Version der JavaScript Datei nicht mit der erforderlichen übereinstimmt
  * Outputs an error if the version of the JavaScript-File does not match the required one
  */
@@ -229,7 +349,7 @@ function checkUtilVersion(version) {
 }
 
 // MvL: could move this to a separate file ?; similar function used in jtgOverview.js, but no clusterig here?
-function addPopup() {
+function addPopup(olmap) {
     /**
      * Elements that make up the popup.
      */
@@ -330,6 +450,31 @@ function makePreview(width, height, origSize, origResolution) {
 	document.getElementById('mappreview').value=imgdata[2];
 
 	// Reset original map size
-	olmap.setSize(origSize);
-	olmap.getView().setResolution(origResolution);
+	jtgMap.setSize(origSize);
+	jtgMap.getView().setResolution(origResolution);
+}
+
+/*
+ *   Some definitions that used by the for the IGN geoportail maps from
+ *        the French national geographic institute
+ *   Taken from the example code: https://openlayers.org/en/latest/examples/wmts-ign.html
+ *
+ *   For information about apiKeys: https://geoservices.ign.fr/blog/2017/06/28/geoportail_sans_compte.html
+ */
+
+function getIGNTileGrid() {
+  var resolutions = [];
+  var matrixIds = [];
+  var maxResolution = ol.extent.getWidth(ol.proj.get('EPSG:3857').getExtent()) / 256;
+
+  for (var i = 0; i < 18; i++) {
+    matrixIds[i] = i.toString();
+    resolutions[i] = maxResolution / Math.pow(2, i);
+  }
+
+  return new ol.tilegrid.WMTS({
+    origin: [-20037508, 20037508],
+    resolutions: resolutions,
+    matrixIds: matrixIds
+  });
 }

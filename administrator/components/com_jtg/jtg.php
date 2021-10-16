@@ -43,6 +43,7 @@ $model = JPATH_COMPONENT . '/models/install.php';
 
 // Require the base controller
 require_once JPATH_COMPONENT_SITE . '/helpers/helper.php';
+require_once JPATH_COMPONENT_SITE . '/helpers/maphelper.php';
 require_once JPATH_COMPONENT . '/controller.php';
 
 // Load the GpsDataClass

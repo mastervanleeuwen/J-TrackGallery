@@ -8,7 +8,7 @@ function hover_profil_graph(longitude, latitude, originalIdx, autocenter)
 	animatedCursorLayer.setVisible(true); // for opera broken in Firefox
 	//animatedCursorIcon.opacity = 0.7; // for Firefox
         
-        animatedCursorIcon.setCoordinates(ol.proj.fromLonLat([longitude, latitude], olview.getProjection()));
+	animatedCursorIcon.setCoordinates(ol.proj.fromLonLat([longitude, latitude], jtgView.getProjection()));
 	//animatedCursorIcon.redraw();
 
 	// ************************************************
@@ -39,7 +39,7 @@ var animated_cursor_style = function( feature ) {
       var style = {
         'Point': new ol.style.Style({
           image: new ol.style.Icon({
-              src: urlbase + 'components/com_jtg/assets/images/orange-dot.png',
+              src: jtgBaseUrl + 'components/com_jtg/assets/images/orange-dot.png',
               anchorOrigin: 'bottom-left',
               anchor: [0.5,0]
           })

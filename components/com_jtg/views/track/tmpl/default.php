@@ -32,15 +32,9 @@ $maySeeSingleFile = $this->maySeeSingleFile($this);
 
 if ($maySeeSingleFile === true)
 {	
-	if ($this->params->get('jtg_param_disable_map_animated_cursor') == "0") {
-		$document = JFactory::getDocument();
-		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
-	}
-	JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
-	JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
 	$mapimagefile='images/jtrackgallery/maps/track_'.$this->track->id.'.png';
 	if (JFile::exists(JPATH_SITE.'/'.$mapimagefile)) {
-		JFactory::getDocument()->setMetaData('og:image',JUri::base().$mapimagefile,'property');
+		JFactory::getDocument()->setMetaData('og:image',Uri::root().$mapimagefile,'property');
 	}
 
 	$defaultlinecolor = "#000000";
@@ -59,7 +53,7 @@ if ($maySeeSingleFile === true)
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v11.0&appId=180128866079216&autoLogAppEvents=1" nonce="mBqx9YbV"></script>
 
 <?php
-	echo $this->map;
+	//echo $this->map;
 
 	if ( !empty($this->imageList) && 
 		( ( $this->cfg->gallery == "jd2" ) OR ( $this->cfg->gallery == "highslide" ) ) )
@@ -536,38 +530,12 @@ img.olTileImage {
 }
 
 </style>
+<center><div id="jtg_map" class="olMap"></div><br /></center>
+	<div id="popup" class="ol-popup">
+   <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+   <div id="popup-content"></div>
+</div>
 <?php
-
-if ($this->map)
-{
-?>
-	<center><div id="jtg_map" class="olMap"></div><br /></center>
-        <div id="popup" class="ol-popup">
-          <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-          <div id="popup-content"></div>
-      </div>
-
-
-<?php
-}
-?>
-<!--    <div>
-<?php
-/*
-ToDo: inspect GET['subid'] to give the ability single tracks are shown
-if ( $this->clicklist !== false ) {
-	$return = ("<div><ul>\n");
-	foreach ($this->clicklist AS $value => $key ) {
-		$return .= ("<li><a href=\"" . $key['link'] . "\">" . JText::_('COM_JTG_TRACK').$value . ": " . $key['name'] . "</a></li>\n");
-	}
-	$return .= ("</ul></div>\n");
-	echo $return;
-}
-*/
-?>
-    </div>
--->
-	<?php
 	if ($havechart)
 	{
 	?>
@@ -822,7 +790,7 @@ if ($this->canDo->get('jtg.download'))
 	}
 ?>
 <form name="adminForm" id="adminForm" method="post"
-	action="<?php echo JUri::root()."/index.php?option=com_jtg&amp;controller=download&amp;task=download"; ?>">
+	action="<?php echo Uri::root()."/index.php?option=com_jtg&amp;controller=download&amp;task=download"; ?>">
 
 	<div class="block-text"> <label for="format"><?php echo JText::_('COM_JTG_DOWNLOAD_THIS_TRACK'); ?>&nbsp;</label>
     	<?php echo $download_buttons;?>
@@ -884,12 +852,12 @@ if (($this->imageList) AND ( $this->cfg->gallery != "none" ))
 	echo $this->parseTemplate('headline', JText::_('COM_JTG_GALLERY'), 'jtg_param_header_gallery');
 	echo "<div class=\"description\">";
 	
-	$imgurlpath=JUri::base() . "images/jtrackgallery/uploaded_tracks_images/track_" . $this->track->id . "/";
+	$imgurlpath=Uri::root() . "images/jtrackgallery/uploaded_tracks_images/track_" . $this->track->id . "/";
    switch ($this->cfg->gallery)
    {
 		case 'jd2' :
          	JHTML::_('behavior.framework', true); // Load mootools
-$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jd.gallery.js');
+$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/jd.gallery.js');
                echo "<div id=\"myGallery\">";
 
                foreach ($imageList as $image)
@@ -905,8 +873,8 @@ $document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jd.galle
 
             case 'highslide' :
 
-               $document->addScript( JUri::root(true) . '/components/com_jtg/assets/highslide/highslide-with-gallery.packed.js');
-               $document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/highslide/highslide.css');
+               $document->addScript( Uri::root(true) . '/components/com_jtg/assets/highslide/highslide-with-gallery.packed.js');
+               $document->addStyleSheet(Uri::root(true) . '/components/com_jtg/assets/highslide/highslide.css');
 
                // TODO This style sheet is not overridden.
               	echo "\n<div class=\"highslide-gallery\" style=\"width: auto; margin: auto\">\n";
@@ -1121,13 +1089,7 @@ else
 	echo '<p class="error">' . $maySeeSingleFile . '</p>';
 }
 
+echo $this->mapJS;
 echo $this->footer;
 
-if ( isset($this->cfg) )
-{
-	echo "\n<script type=\"text/javascript\">\n
-	var olmap={ title: 'com_jtg_map_object' } \n
-	slippymap_init();\n
-   olmap.addControl(new ShowLocationControl());
-   </script>\n";
-}
+?>

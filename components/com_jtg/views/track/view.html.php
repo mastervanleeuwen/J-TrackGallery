@@ -18,6 +18,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.view');
+require_once JPATH_COMPONENT . '/helpers/maphelper.php';
 
 /**
  * JtgViewTrack class @ see JViewLegacy
@@ -169,11 +170,12 @@ class JtgViewTrack extends JViewLegacy
 
 		$document = JFactory::getDocument();
 
-		// Load Openlayers stylesheet first (for overriding)
-		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/default/ol.css');
-
 		// Then load jtg_map stylesheet
 		$tmpl = ($cfg->template = "") ? $cfg->template : 'default';
+
+		// Load Openlayers stylesheet first (for overriding)
+		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/ol.css');
+
 		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 
 		// Then override style with user templates
@@ -195,6 +197,7 @@ class JtgViewTrack extends JViewLegacy
 			// In the form view, $id would not be available for new files
 			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js');  // Load OpenLayers
 			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
+			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
 			if ($this->params->get('jtg_param_disable_map_animated_cursor') == "0") {
 				$document->addScript(JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 			}
@@ -204,22 +207,24 @@ class JtgViewTrack extends JViewLegacy
 			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($this->track->file);
 			//$gpsData = $cache->call(array ( $gpsData, 'loadFileAndData' ), $file, $this->track->file );
 			$gpsData->loadFileAndData($file, $this->track->file);
-		   $this->imageList = $model->getImages($this->id);
+			$this->imageList = $model->getImages($this->id);
 			$this->distance_float = (float) $this->track->distance;
 			$this->distance = JtgHelper::getLocatedFloat($this->distance_float, 0, $cfg->unit);
 
 			if (!$gpsData->displayErrors())
 			{
 				//$this->map = $cache->call(array ( $gpsData, 'writeTrackOL' ), $this->track, $this->params, $this->imageList );
-				$this->map = $gpsData->writeTrackOL($this->track, $this->params, $this->imageList);
+				$makepreview = false;
+				if ($this->getLayout() == 'form') $makepreview = true;
+				$this->mapJS = JtgMapHelper::parseTrackMapJS($gpsData,$this->track->id, $this->track->default_map, $this->imageList, $makepreview);
 
 				$this->coords = $gpsData->allCoords;
-      		$this->longitudeData = $gpsData->longitudeData;
-      		$this->latitudeData = $gpsData->latitudeData;
+				$this->longitudeData = $gpsData->longitudeData;
+				$this->latitudeData = $gpsData->latitudeData;
 				// Charts
-      		$this->beatdata = $gpsData->beatData;
-      		$this->heighdata = $gpsData->elevationData;
-      		$this->speeddata = $gpsData->speedData;
+				$this->beatdata = $gpsData->beatData;
+				$this->heighdata = $gpsData->elevationData;
+				$this->speeddata = $gpsData->speedData;
 				$this->date = JHtml::_('date', $this->track->date, JText::_('COM_JTG_DATE_FORMAT_LC4'));
 				if ( count($this->imageList) > 0) {
 		         $this->images = true;
