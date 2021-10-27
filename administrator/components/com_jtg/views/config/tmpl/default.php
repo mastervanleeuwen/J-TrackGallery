@@ -22,12 +22,14 @@ JToolBarHelper::back();
 JToolBarHelper::save('saveconfig', $alt = 'COM_JTG_SAVE', 'save.png');
 JToolBarHelper::preferences('com_jtg', 600, 800, $alt = 'COM_JTG_MENU_DEFAULT_SETTINGS');
 JToolBarHelper::help('config/default', true);
-JHtml::_('behavior.tooltip');
+if (JVERSION < 4.0)
+{
+	JHtml::_('behavior.tooltip');
+}
 ?>
 <form action="" method="post" name="adminForm" id="adminForm"
 	class="adminForm">
 	<?php
-	jimport('joomla.html.html.tabs');
 	$document = JFactory::getDocument();
 	$style = '
 	dt.tabs h3
@@ -80,6 +82,7 @@ margin: 1px 0 0 0;
 ';
 	$document->addStyleDeclaration($style);
 	$options = array(
+			'active' => 'mainconfig',
 			'onActive' => 'function(title, description){
 			description.setStyle("display", "block");
 			title.addClass("open").removeClass("closed");
@@ -94,8 +97,8 @@ margin: 1px 0 0 0;
 
 	// Configuration BEGIN
 
-	echo JHtml::_('tabs.start', 'tab_group_id', $options);
-	echo JHtml::_('tabs.panel', JText::_('COM_JTG_MAINCONF'), 'mainconfig');
+	echo JHtmlBootstrap::startTabSet('tabs', $options);
+	echo JHtmlBootstrap::addTab('tabs', 'mainconfig', JText::_('COM_JTG_MAINCONF'));
 	?>
 	<table class="admintable">
 		<tbody>
@@ -176,11 +179,11 @@ margin: 1px 0 0 0;
 	</table>
 	&nbsp;
 	<?php
-
+	echo JHtmlBootstrap::endTab();
 	// Configuration END
 
 	// Level BEGIN
-	echo JHtml::_('tabs.panel', JText::_('COM_JTG_LEVEL'), 'levelconfig');
+	echo JHtmlBootstrap::addTab('tabs', 'levelconfig', JText::_('COM_JTG_LEVEL'));
 	?>
 	<table class="admintable">
 		<tbody>
@@ -199,9 +202,9 @@ margin: 1px 0 0 0;
 	&nbsp;
 	<?php
 	echo '<br /><br />' . JText::_('COM_JTG_LEVELCONF_HELP') . '<br />';
-
+	echo JHtmlBootstrap::endTab();
 	// Level END
-	echo JHtml::_('tabs.panel', JText::_('COM_JTG_MAPS'), 'Maps');
+	echo JHtmlBootstrap::addTab('tabs', 'maps', JText::_('COM_JTG_MAPS'));
 
 	?>
 	<table class="admintable">
@@ -288,8 +291,9 @@ margin: 1px 0 0 0;
 	</table>
 	&nbsp;
 	<?php
+	echo JHtmlBootstrap::endTab();
 	// Viewing options BEGIN
-	echo JHtml::_('tabs.panel', JText::_('COM_JTG_DISPLAY'), 'display');
+	echo JHtmlBootstrap::addTab('tabs', 'display', JText::_('COM_JTG_DISPLAY'));
 
 	?>
 	<table class="admintable">
@@ -355,12 +359,12 @@ margin: 1px 0 0 0;
 	</table>
 	&nbsp;
 	<?php
-
+	echo JHtmlBootstrap::endTab();
 	// Viewing options END
 
 	// Comments BEGIN
 
-	echo JHtml::_('tabs.panel', JText::_('COM_JTG_COMMENTS'), 'comments');
+	echo JHtmlBootstrap::addTab('tabs', 'comments', JText::_('COM_JTG_COMMENTS'));
 	?>
 	<table class="admintable">
 		<tr>
@@ -394,7 +398,7 @@ margin: 1px 0 0 0;
 	</table>
 	&nbsp;
 	<?php
-
+	echo JHtmlBootstrap::endTab();
 	// Comments END
 
 	// Vote BEGIN
@@ -403,7 +407,7 @@ margin: 1px 0 0 0;
 	// Approach BEGIN
 	if ($this->config->approach != "no")
 	{
-		echo JHtml::_('tabs.panel', JText::_('COM_JTG_APPROACH'), 'approach');
+		echo JHtmlBootstrap::addTab('tabs', 'jtg-approach', JText::_('COM_JTG_APPROACH'));
 		?>
 	<table class="admintable">
 		<?php
@@ -468,10 +472,11 @@ margin: 1px 0 0 0;
 	</table>
 	&nbsp;
 	<?php
-	echo JHtml::_('tabs.end');
+		echo JHtmlBootstrap::endTab();
 	}
 	// Approach END
 
+	echo JHtmlBootstrap::endTabSet();
 	echo JHtml::_('form.token');
 	?>
 	<input type="hidden" name="option" value="com_jtg" /> <input

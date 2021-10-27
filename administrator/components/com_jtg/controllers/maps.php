@@ -17,6 +17,7 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+use Joomla\Utilities\ArrayHelper;
 
 jimport('joomla.application.component.controller');
 /**
@@ -120,8 +121,8 @@ class JtgControllerMaps extends JtgController
 
 		$cid 	= JFactory::getApplication()->input->get('cid', array(), 'array');
 		$order 	= JFactory::getApplication()->input->get('order', array(), 'array');
-		JArrayHelper::toInteger($cid);
-		JArrayHelper::toInteger($order);
+		ArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($order);
 
 		$model = $this->getModel('map');
 		$model->saveorder($order, $cid);
@@ -140,7 +141,7 @@ class JtgControllerMaps extends JtgController
 		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
-		JArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
@@ -168,7 +169,7 @@ class JtgControllerMaps extends JtgController
 		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
-		JArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
@@ -196,7 +197,7 @@ class JtgControllerMaps extends JtgController
 		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
-		JArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{

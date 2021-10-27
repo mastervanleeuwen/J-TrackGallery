@@ -17,6 +17,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
+use Joomla\Utilities\ArrayHelper;
 /**
  * JtgModelFiles class for the jtg component
  *
@@ -393,7 +394,7 @@ class JtgModelFiles extends JModelList
 				'name' => JText::_('JNONE'),
 				'image' => ""
 		);
-		$cats[0] = JArrayHelper::toObject($nullcat);
+		$cats[0] = ArrayHelper::toObject($nullcat);
 
 		foreach ($list as $cat)
 		{
@@ -412,7 +413,7 @@ class JtgModelFiles extends JModelList
 					'name' => JText::_($cat->title),
 					'image' => $cat->image
 			);
-			$cats[$cat->id] = JArrayHelper::toObject($arr);
+			$cats[$cat->id] = ArrayHelper::toObject($arr);
 		}
 
 		return $cats;
@@ -804,7 +805,7 @@ class JtgModelFiles extends JModelList
                "published"    => 1,
                "checked_out"  => 0
          );
-         $nullcat = JArrayHelper::toObject($nullcat);
+         $nullcat = ArrayHelper::toObject($nullcat);
    
 	      $sortedrow = array();
 

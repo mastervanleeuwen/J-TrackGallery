@@ -20,6 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
+use Joomla\Utilities\ArrayHelper;
 /**
  * Model Class Terrain
  *
@@ -215,7 +216,7 @@ class JtgModelTerrain extends JModelLegacy
 
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 
 			$query = 'UPDATE #__jtg_terrains'
@@ -248,7 +249,7 @@ class JtgModelTerrain extends JModelLegacy
 
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 
 			// Delete from DB

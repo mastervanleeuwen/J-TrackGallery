@@ -61,7 +61,7 @@ JToolBarHelper::help('terrain', true);
 				$link 	= JRoute::_('index.php?option=com_jtg&task=editterrain&controller=terrain&id=' . $row->id);
 
 				$checked 	= JHtml::_('grid.checkedout', $row, $i);
-				$published 	= JHtml::_('grid.published', $row, $i);
+				$published 	= JHtml::_('jgrid.published', $row->published, $i);
 
 				?>
 			<tr class="<?php echo "row$k ";

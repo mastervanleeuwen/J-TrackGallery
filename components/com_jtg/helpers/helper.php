@@ -77,42 +77,42 @@ class JtgHelper
 	static public function addSubmenu($vName)
 	{
 		// TODO move addSubmenu and GetConfig function to backend code
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_CONFIGURATION'),
 				'index.php?option=com_jtg&task=config&controller=config',
 				$vName == 'config'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_GPS_FILES'),
 				'index.php?option=com_jtg&task=files&controller=files',
 				$vName == 'config'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_MAPS'),
 				'index.php?option=com_jtg&task=maps&controller=maps',
 				$vName == 'config'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_CATEGORIES'),
 				'index.php?option=com_jtg&task=cats&controller=cats',
 				$vName == 'config'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_TERRAIN'),
 				'index.php?option=com_jtg&task=terrain&controller=terrain',
 				$vName == 'config'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_COMMENTS'),
 				'index.php?option=com_jtg&task=comments&controller=comments',
 				$vName == 'config'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_TRANSLATE'),
 				'index.php?option=com_jtg&task=translations&controller=translations',
 				$vName == 'config'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_INFO'),
 				'index.php?option=com_jtg&task=info&controller=info',
 				$vName == 'config'
@@ -594,13 +594,6 @@ class JtgHelper
 		$query = "SELECT * FROM #__jtg_config WHERE id='1'";
 		$db->setQuery($query);
 		$result = $db->loadObject();
-
-		if ($db->getErrorNum())
-		{
-			echo $db->stderr();
-
-			return false;
-		}
 
 		return $result;
 	}

@@ -198,7 +198,7 @@ class JtgModelConfig extends JModelLegacy
 		$db->setQuery($content);
 		$db->execute();
 
-		if ($db->getErrorNum())
+		if ($db->execute())
 		{
 			return( ($db->stderr()));
 		}
@@ -234,13 +234,6 @@ class JtgModelConfig extends JModelLegacy
 
 		$db->setQuery($query);
 		$result = $db->loadObjectList();
-
-		if ($db->getErrorNum())
-		{
-			echo $db->stderr();
-
-			return false;
-		}
 
 		return $result;
 	}

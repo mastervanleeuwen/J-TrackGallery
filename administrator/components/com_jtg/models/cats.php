@@ -180,13 +180,6 @@ class JtgModelCats extends JModelLegacy
 		$db->setQuery($query);
 		$result = $db->loadObject();
 
-		if ($db->getErrorNum())
-		{
-			echo $db->stderr();
-
-			return false;
-		}
-
 		return $result;
 	}
 

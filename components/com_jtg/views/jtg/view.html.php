@@ -50,7 +50,7 @@ class JtgViewjtg extends JViewLegacy
 		// Load Openlayers stylesheet first (for overriding)
 		$tmpl = ($cfg->template = "") ? $cfg->template : 'default';
       $document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/'.$tmpl.'/ol.css');
-
+		if (version_compare(JVERSION, '4.0', 'lt')) $document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/filter_box_j3.css');
 		// Then load jtg_map stylesheet
 		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 

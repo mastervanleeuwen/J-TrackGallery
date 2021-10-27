@@ -20,6 +20,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
+use Joomla\Utilities\ArrayHelper;
 /**
  * JtgModeljtg class for the jtg component
  *
@@ -209,7 +210,7 @@ class JtgModeljtg extends JModelList
 					"published"		=> 1,
 					"checked_out"	=> 0
 			);
-			$nullcat = JArrayHelper::toObject($nullcat);
+			$nullcat = ArrayHelper::toObject($nullcat);
 			$sortedrow = array();
 
 			foreach ( $rows AS $cat )
@@ -254,7 +255,7 @@ class JtgModeljtg extends JModelList
 					"published"		=> 1,
 					"checked_out"	=> 0
 			);
-			$nullter = JArrayHelper::toObject($nullter);
+			$nullter = (object) $nullter;
 			$sortedrow = array();
 
 			foreach ( $rows AS $ter )

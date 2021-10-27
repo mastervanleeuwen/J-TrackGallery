@@ -20,6 +20,8 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.view');
+use Joomla\String\StringHelper;
+
 /**
  * JtgViewMaps class for the jtg component
  *
@@ -79,7 +81,7 @@ class JtgViewMaps extends JViewLegacy
 				'search',
 				'',
 				'string');
-		$search = JString::strtolower($search);
+		$search = StringHelper::strtolower($search);
 		$lists['search'] = $search;
 		$state = $search;
 

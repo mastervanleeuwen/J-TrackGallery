@@ -18,6 +18,7 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+use Joomla\Utilities\ArrayHelper;
 
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
@@ -134,10 +135,10 @@ class JtgModelFiles extends JModelLegacy
 		}
 
 		$query = "UPDATE #__jtg_files SET"
-		. "\n istrack='" . $gpsData->isTrack . "',"
-		. "\n iswp='" . $gpsData->isWaypoint . "',"
-		. "\n isroute='" . $gpsData->isRoute . "',"
-		. "\n iscache='" . $gpsData->isCache . "',"
+		. "\n istrack='" . (int) $gpsData->isTrack . "',"
+		. "\n iswp='" . (int) $gpsData->isWaypoint . "',"
+		. "\n isroute='" . (int) $gpsData->isRoute . "',"
+		. "\n iscache='" . (int) $gpsData->isCache . "',"
 		. "\n start_n='" . $gpsData->start[1] . "',"
 		. "\n start_e='" . $gpsData->start[0] . "',"
 		. "\n distance='" . $gpsData->distance . "',"
@@ -148,18 +149,13 @@ class JtgModelFiles extends JModelLegacy
 
 		$db = JFactory::getDBO();
 		$db->setQuery($query);
-		$db->execute();
-
-		if ($db->getErrorNum())
+		if (! $db->execute())
 		{
 			echo $db->stderr();
-
 			return 'database not saved';
 		}
-		else
-		{
-			return true;
-		}
+
+		return true;
 	}
 
 	/**
@@ -396,14 +392,6 @@ class JtgModelFiles extends JModelLegacy
 		$db->setQuery($query);
 		$result = $db->loadObject();
 
-		// If (!$result) return false;
-		if ($db->getErrorNum())
-		{
-			echo $db->stderr();
-
-			return false;
-		}
-
 		if (!$result)
 		{
 			return JTable::getInstance('jtg_files', 'table');
@@ -422,20 +410,13 @@ class JtgModelFiles extends JModelLegacy
 	function getImages($id)
 	{
 		$mainframe = JFactory::getApplication();
-                $db = JFactory::getDBO();
-                $query = "SELECT * FROM #__jtg_photos"
+		$db = JFactory::getDBO();
+		$query = "SELECT * FROM #__jtg_photos"
                 . "\n WHERE trackID=" . $id . "";
-                $db->setQuery($query);
-                $result = $db->loadObjectList();
+		$db->setQuery($query);
+		$result = $db->loadObjectList();
 
-                if ($db->getErrorNum())
-                {
-                        echo $db->stderr();
-
-                        return false;
-                }
-
-                return $result;
+		return $result;
 	}
 
 	/**
@@ -466,7 +447,7 @@ class JtgModelFiles extends JModelLegacy
 
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 
 			$query = 'UPDATE #__jtg_files'
@@ -500,7 +481,7 @@ class JtgModelFiles extends JModelLegacy
 
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 
 			$query = 'UPDATE #__jtg_files'
@@ -534,7 +515,7 @@ class JtgModelFiles extends JModelLegacy
 
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 
 			$query = 'UPDATE #__jtg_files'
@@ -569,7 +550,7 @@ class JtgModelFiles extends JModelLegacy
 
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 			$query = 'SELECT * FROM #__jtg_files WHERE id IN ( ' . $cids . ' )';
 			$this->_db->setQuery($query);
@@ -755,7 +736,7 @@ class JtgModelFiles extends JModelLegacy
 				"treename" => JText::_($stdtext),
 				"children" => ""
 		);
-		$nullcat = JArrayHelper::toObject($nullcat);
+		$nullcat = (object) $nullcat;
 		array_unshift($rows, $nullcat);
 
 		return $rows;
@@ -1035,20 +1016,14 @@ class JtgModelFiles extends JModelLegacy
 					. "\n ele_desc='" . $totalDescent . "',"
 					. "\n level='" . $level . "',"
 					. "\n access='" . $access . "',"
-					. "\n istrack='" . $isTrack . "',"
-					. "\n iswp='" . $isWaypoint . "',"
-					. "\n isroute='" . $isRoute . "',"
-					. "\n hidden='" . $hidden."'";
+					. "\n istrack='" . (int) $isTrack . "',"
+					. "\n iswp='" . (int) $isWaypoint . "',"
+					. "\n isroute='" . (int) $isRoute . "',"
+					. "\n hidden='" . $hidden."',"
+					. "\n hits='0'";
 
 					$db->setQuery($query);
 					$db->execute();
-
-					if ($db->getErrorNum())
-					{
-						echo $db->stderr();
-
-						return false;
-					}
 				}
 			}
 		}
@@ -1082,35 +1057,6 @@ class JtgModelFiles extends JModelLegacy
 		}
 
 		return $newresult;
-	}
-
-	/**
-	 * get a list for default overlays
-	 *
-	 * @param   unknown_type  $exclusion  param_description
-	 *
-	 * @return unknown
-	 */
-	function getDefaultOverlays()
-	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
-
-		$query = "SELECT id,name FROM #__jtg_maps WHERE published=1
-				AND (param LIKE \"%isBaseLayer: false%\" OR param LIKE \"%isBaseLayer:false%\")";
-		$db->setQuery($query);
-		$result = $db->loadObjectList();
-		$newresult = array();
-
-
-		foreach ($result as $k => $v)
-		{
-			$newresult[$k] = $v;
-			$newresult[$k]->name = JText::_($newresult[$k]->name);
-		}
-
-		return $newresult;
-
 	}
 
 	/**
@@ -1223,53 +1169,41 @@ class JtgModelFiles extends JModelLegacy
 			. "\n ele_desc='" . $track['ele_desc'] . "',"
 			. "\n level='" . $track['level'] . "',"
 			. "\n access='" . $track['access'] . "',"
-			. "\n istrack='" . $isTrack . "',"
-			. "\n iswp='" . $isWaypoint . "',"
-			. "\n isroute='" . $isRoute . "'";
+			. "\n istrack='" . (int) $isTrack . "',"
+			. "\n iswp='" . (int) $isWaypoint . "',"
+			. "\n isroute='" . (int) $isRoute . "'";
 			$db->setQuery($query);
-			$db->execute();
-
-			if ($db->getErrorNum())
+			if (! $db->execute() )
 			{
 				echo $db->stderr();
-
 				return false;
 			}
-			else
-			{
-				// Start picture import
-				$query = "SELECT id FROM #__jtg_files WHERE file='" . $target . "'";
-				$db->setQuery($query);
-				$result = $db->loadObject();
 
-				if ($db->getErrorNum())
+			// Start picture import
+			$query = "SELECT id FROM #__jtg_files WHERE file='" . $target . "'";
+			$db->setQuery($query);
+			$result = $db->loadObject();
+
+			$imagedirsource = JPATH_SITE . "/images/joomgpstracks/" . md5($track['title']) . '/';
+			$imagedirsourcedir = JFolder::files($imagedirsource);
+			$imagedirdestination = JPATH_SITE . "/images/jtrackgallery/" . $result->id . '/';
+
+			if ((!JFolder::exists($imagedirdestination)) AND (count($imagedirsourcedir) > 0) )
+			{
+				JFolder::create($imagedirdestination, 0777);
+			}
+
+			foreach ( $imagedirsourcedir AS $imagetocopy )
+			{
+				if (!JFile::copy($imagedirsource . $imagetocopy, $imagedirdestination . $imagetocopy))
 				{
-					echo $db->stderr();
+					echo "Upload failed:<pre>\"" . $imagedirsource . $imagetocopy . "\"</pre> to <pre>\"" . $imagedirdestination . $imagetocopy . "\"</pre>\n";
 
 					return false;
 				}
-
-				$imagedirsource = JPATH_SITE . "/images/joomgpstracks/" . md5($track['title']) . '/';
-				$imagedirsourcedir = JFolder::files($imagedirsource);
-				$imagedirdestination = JPATH_SITE . "/images/jtrackgallery/" . $result->id . '/';
-
-				if ((!JFolder::exists($imagedirdestination)) AND (count($imagedirsourcedir) > 0) )
-				{
-					JFolder::create($imagedirdestination, 0777);
-				}
-
-				foreach ( $imagedirsourcedir AS $imagetocopy )
-				{
-					if (!JFile::copy($imagedirsource . $imagetocopy, $imagedirdestination . $imagetocopy))
-					{
-						echo "Upload failed:<pre>\"" . $imagedirsource . $imagetocopy . "\"</pre> to <pre>\"" . $imagedirdestination . $imagetocopy . "\"</pre>\n";
-
-						return false;
-					}
-				}
-
-				// End picture import
 			}
+
+			// End picture import
 		}
 
 		return true;
@@ -1307,7 +1241,7 @@ class JtgModelFiles extends JModelLegacy
 			$terrain = "";
 		}
 
-		$default_map = $input->get('default_map');
+		$default_map = (int) $input->get('default_map');
 
 		$desc = $db->escape(implode(' ', $input->get('description', '', 'array')));
 		$file = $input->files->get('file');
@@ -1420,20 +1354,16 @@ class JtgModelFiles extends JModelLegacy
 			. "\n ele_desc=" . $totalDescent . ","
 			. "\n level=" . $level . ","
 			. "\n access=" . $access . ","
-			. "\n istrack=" . $isTrack . ","
-			. "\n iswp=" . $isWaypoint . ","
-			. "\n isroute=" . $isRoute . ","
-			. "\n iscache=" . $isCache . ","
+			. "\n istrack=" . (int) $isTrack . ","
+			. "\n iswp=" . (int) $isWaypoint . ","
+			. "\n isroute=" . (int) $isRoute . ","
+			. "\n iscache=" . (int) $isCache . ","
 			. "\n default_map=" . $default_map . ","
-			. "\n hidden=" . $hidden;
+			. "\n hidden='" . $hidden . "'";
 
 			$db->setQuery($query);
-			$db->execute();
-
-			if ($db->getErrorNum())
-			{
+			if (! $db->execute()) {
 				JFile::delete($file);
-
 				return false;
 			}
 
@@ -1441,13 +1371,6 @@ class JtgModelFiles extends JModelLegacy
 			. "\n WHERE file='" . strtolower($filename) . "'";
 			$db->setQuery($query);
 			$result = $db->loadObject();
-
-			if ($db->getErrorNum())
-			{
-				echo $db->stderr();
-
-				return false;
-			}
 
 			$id = $result->id;
 
@@ -1612,14 +1535,13 @@ class JtgModelFiles extends JModelLegacy
 			. "\n ele_desc='" . $ele[1] . "',"
 			. "\n level='" . $level . "',"
 			. "\n access='" . $access . "',"
-			. "\n istrack='" . $isTrack . "',"
-			. "\n iswp='" . $isWaypoint . "',"
-			. "\n isroute='" . $isRoute . "'";
+			. "\n istrack='" . (int) $isTrack . "',"
+			. "\n iswp='" . (int) $isWaypoint . "',"
+			. "\n isroute='" . (int) $isRoute . "'";
 
 			$db->setQuery($query);
-			$db->execute();
 
-			if ($db->getErrorNum())
+			if (! $db->execute())
 			{
 				echo $db->stderr();
 
@@ -1701,7 +1623,7 @@ class JtgModelFiles extends JModelLegacy
 		$hidden = $input->get('hidden');
 		$published = $input->get('published');
 
-		$default_map = $input->get('default_map');
+		$default_map = (int) $input->get('default_map');
 
 		$imagelist = $this->getImages($id);
 		$imgpath = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/track_' . $id . '/';
@@ -1717,8 +1639,7 @@ class JtgModelFiles extends JModelLegacy
 				JFile::delete($imgpath . 'thumbs/' . 'thumb2_' . $delimage);
 				$query = "DELETE FROM #__jtg_photos\n WHERE id='".$image->id."'";
 				$db->setQuery($query);
-				$db->execute();
-				if ($db->getErrorNum())
+				if (! $db->execute())
 				{
 					echo $db->stderr();
 				}
@@ -1728,9 +1649,8 @@ class JtgModelFiles extends JModelLegacy
 			if ($img_title !== null and $img_title != $image->title) {
 				$query = "UPDATE #__jtg_photos SET title=".$db->quote($img_title)." WHERE id='".$image->id."'";
 				$db->setQuery($query);
-				$db->execute();
 
-				if ($db->getErrorNum())
+				if (! $db->execute())
 				{
 					echo $db->stderr();
 				}
@@ -1791,17 +1711,13 @@ class JtgModelFiles extends JModelLegacy
 		. "\n hidden='" . $hidden . "'"
 		. "\n WHERE id='" . $id . "'";
 		$db->setQuery($query);
-		$db->execute();
 
-		if ($db->getErrorNum())
+		if (! $db->execute())
 		{
 			echo $db->stderr();
 
 			return false;
 		}
-		else
-		{
-			return true;
-		}
+		return true;
 	}
 }

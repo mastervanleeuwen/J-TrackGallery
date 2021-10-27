@@ -202,14 +202,16 @@ class JtgViewTrack extends JViewLegacy
 			$cache = JFactory::getCache('com_jtg');
 			// Cache: $gpsData structure is cached, after LoadFileAndData
 			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($this->track->file);
-			$gpsData = $cache->call(array ( $gpsData, 'loadFileAndData' ), $file, $this->track->file );
+			//$gpsData = $cache->call(array ( $gpsData, 'loadFileAndData' ), $file, $this->track->file );
+			$gpsData->loadFileAndData($file, $this->track->file);
 		   $this->imageList = $model->getImages($this->id);
 			$this->distance_float = (float) $this->track->distance;
 			$this->distance = JtgHelper::getLocatedFloat($this->distance_float, 0, $cfg->unit);
 
 			if (!$gpsData->displayErrors())
 			{
-				$this->map = $cache->call(array ( $gpsData, 'writeTrackOL' ), $this->track, $this->params, $this->imageList );
+				//$this->map = $cache->call(array ( $gpsData, 'writeTrackOL' ), $this->track, $this->params, $this->imageList );
+				$this->map = $gpsData->writeTrackOL($this->track, $this->params, $this->imageList);
 
 				$this->coords = $gpsData->allCoords;
       		$this->longitudeData = $gpsData->longitudeData;
@@ -230,7 +232,7 @@ class JtgViewTrack extends JViewLegacy
 		if (! isset($this->track) )
 		{ // New track; set some defaults
 			$track = array('access' => '0', 'catid' => null, 'terrain' => null, 'published' => '1', 'hidden' => '0', 'level' => '3', 'default_map' => null);
-         $this->track = JArrayHelper::toObject($track);
+         $this->track = (object) $track;
 		}
 
 		if ( $this->params->get("jtg_param_lh") == 1 )

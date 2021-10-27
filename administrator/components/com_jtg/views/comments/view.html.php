@@ -20,6 +20,8 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.view');
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Editor\Editor;
 /**
  * JtgViewComments class for the jtg component
  *
@@ -76,11 +78,18 @@ class JtgViewComments extends JViewLegacy
 	protected function _displayForm($tpl)
 	{
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
-		JArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($cid);
 
 		$model = $this->getModel();
 		$comment = $model->getComment($cid);
-		$editor = JFactory::getEditor();
+		if (JVERSION >= 4.0) {
+			$editor = JFactory::getApplication()->getEditor();
+		}
+		else 
+		{
+			$editor = JFactory::getConfig()->get('editor');
+		}
+		$editor = Editor::getInstance($editor);;
 
 		$this->comment = $comment;
 		$this->editor = $editor;

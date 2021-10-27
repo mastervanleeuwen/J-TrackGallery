@@ -18,6 +18,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
+use Joomla\Utilities\ArrayHelper;
 /**
  * JtgControllerComments class for the jtg component
  *
@@ -39,7 +40,7 @@ class JtgControllerComments extends JtgController
 		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
-		JArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
@@ -67,7 +68,7 @@ class JtgControllerComments extends JtgController
 		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
-		JArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
@@ -95,7 +96,7 @@ class JtgControllerComments extends JtgController
 		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
-		JArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{

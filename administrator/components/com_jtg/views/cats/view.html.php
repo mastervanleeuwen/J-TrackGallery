@@ -188,7 +188,15 @@ class JtgViewCats extends JViewLegacy
 		array_unshift($default_overlays, array('id' => 0, "name" => JText::_('JNONE')) );
 		$size=min(4,count($default_overlays));
 
-		$editor = JFactory::getEditor();
+      if (JVERSION >= 4.0) {
+         $editor = JFactory::getApplication()->getEditor();
+      }
+      else 
+      {
+         $editor = JFactory::getConfig()->get('editor');
+      }
+      $editor = Editor::getInstance($editor);;
+
 		$lists['block'] 	= JHtml::_('select.booleanlist', 'publish', 'class="inputbox" size="1"', 1);
 		$lists['usepace'] 	= JHtml::_('select.booleanlist', 'usepace', 'class="inputbox" size="1"', false);
 		$lists['parent'] 	= JHtml::_('select.genericlist', $parent, 'parent', 'size="1"', 'id', 'name', '');
@@ -225,7 +233,15 @@ class JtgViewCats extends JViewLegacy
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
 		$id = $cid[0];
 
-		$editor = JFactory::getEditor();
+      if (JVERSION >= 4.0) {
+         $editor = JFactory::getApplication()->getEditor();
+      }
+      else 
+      {
+         $editor = JFactory::getConfig()->get('editor');
+      }
+      $editor = Editor::getInstance($editor);;
+
 		$model = $this->getModel();
 		$parent = $model->getParent($id);
 		$nullcat = array('id' => 0, "name" => JText::_('JNONE'), "title" => JText::_('JNONE'));

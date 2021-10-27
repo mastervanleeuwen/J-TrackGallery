@@ -20,6 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
+use Joomla\Utilities\ArrayHelper;
 /**
  * JtgModelMaps class for the jtg component
  *
@@ -129,7 +130,7 @@ class JtgModelMaps extends JModelLegacy
 	{
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 			$query = 'DELETE FROM #__jtg_maps WHERE id IN ( ' . $cids . ' )';
 			$this->_db->setQuery($query);
@@ -160,13 +161,6 @@ class JtgModelMaps extends JModelLegacy
 		. "\n WHERE id=" . $id;
 		$db->setQuery($query);
 		$result = $db->loadObject();
-
-		if ($db->getErrorNum())
-		{
-			echo $db->stderr();
-
-			return false;
-		}
 
 		return $result;
 	}
@@ -297,7 +291,7 @@ class JtgModelMaps extends JModelLegacy
 
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 			$query = 'UPDATE #__jtg_maps'
 			. ' SET published = ' . (int) $publish
@@ -367,9 +361,8 @@ class JtgModelMaps extends JModelLegacy
 		}
 
 		$db->setQuery($query);
-		$db->execute();
 
-		if ($db->getErrorNum())
+		if ($db->execute())
 		{
 			die($db->_errorMsg);
 		}
@@ -437,9 +430,8 @@ class JtgModelMaps extends JModelLegacy
 		. "\n WHERE id=".$id;
 
 		$db->setQuery($query);
-		$db->execute();
 
-		if ($db->getErrorNum())
+		if ($db->execute())
 		{
 			die($db->_errorMsg);
 		}

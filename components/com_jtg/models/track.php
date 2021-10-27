@@ -18,6 +18,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Editor\Editor;
 /**
  * JtgModelTrack class for the jtg component
  *
@@ -27,7 +29,7 @@ jimport('joomla.application.component.model');
  */
 
 
-class JtgModelTrack extends JModelItem
+class JtgModelTrack extends JModelLegacy
 {
 
 	/**
@@ -144,7 +146,7 @@ class JtgModelTrack extends JModelItem
 				'name' => JText::_('JNONE'),
 				'image' => ""
 		);
-		$cats[0] = JArrayHelper::toObject($nullcat);
+		$cats[0] = $nullcat;
 
 		foreach ($list as $cat)
 		{
@@ -163,7 +165,7 @@ class JtgModelTrack extends JModelItem
 					'name' => JText::_($cat->title),
 					'image' => $cat->image
 			);
-			$cats[$cat->id] = JArrayHelper::toObject($arr);
+			$cats[$cat->id] = $arr;
 		}
 
 		return $cats;
@@ -287,20 +289,15 @@ class JtgModelTrack extends JModelItem
 		. "\n level='" . $level . "',"
 		. "\n access='" . $access . "',"
 		. "\n hidden='" . $hidden . "',"
-		. "\n istrack='" . $isTrack . "',"
-		. "\n iswp='" . $isWaypoint . "',"
-		. "\n isroute='" . $isRoute . "',"
-		. "\n iscache='" . $isCache . "'";
+		. "\n istrack='" . (int)$isTrack . "',"
+		. "\n iswp='" . (int)$isWaypoint . "',"
+		. "\n isroute='" . (int)$isRoute . "',"
+		. "\n iscache='" . (int)$isCache . "',"
+		. "\n hits='0',"
+		. "\n checked_out='0'";
 
 		$db->setQuery($query);
-		$db->execute();
-
-		if ($db->getErrorNum())
-		{
-			echo $db->stderr();
-
-			return false;
-		}
+		if (! $db->execute()) echo $db->stderr();
 
 		$query = "SELECT id FROM #__jtg_files WHERE file='" . strtolower($filename) . "'";
 
@@ -604,7 +601,7 @@ class JtgModelTrack extends JModelItem
 		}
 
 		$query = "DELETE FROM #__jtg_photos WHERE trackID='" . $id . "'";
-		if ($db->execute())
+		if (! $db->execute())
 		{
 			return true;
 		}
@@ -614,7 +611,7 @@ class JtgModelTrack extends JModelItem
 		}
 
 		$query = "DELETE FROM #__jtg_comments WHERE tid='" . $id . "'";
-		if ($db->execute())
+		if (! $db->execute())
 		{
 			return true;
 		}
@@ -662,11 +659,6 @@ class JtgModelTrack extends JModelItem
        $db->setQuery($query);
        $result = $db->loadObjectList();
 
-       if ($db->getErrorNum())
-       {
-          echo $db->stderr();
-          return false;
-       }
        return $result;
 	}
 
@@ -750,10 +742,6 @@ class JtgModelTrack extends JModelItem
             $query = "DELETE FROM #__jtg_photos\n WHERE id='".$image->id."'";
             $db->setQuery($query);
             $db->execute();
-            if ($db->getErrorNum())
-            {
-               echo $db->stderr();
-            }
          }
   			// Set image title
          $img_title = $input->get('img_title_' . $image->id, '', 'string');
@@ -762,10 +750,6 @@ class JtgModelTrack extends JModelItem
              $db->setQuery($query);
              $db->execute();
 
-             if ($db->getErrorNum())
-             {
-                 echo $db->stderr();
-             }
 			}
       }
 
@@ -802,16 +786,7 @@ class JtgModelTrack extends JModelItem
 		$db->setQuery($query);
 		$db->execute();
 
-		if ($db->getErrorNum())
-		{
-			echo $db->stderr();
-
-			return "database not saved";
-		}
-		else
-		{
-			return true;
-		}
+		return true;
 	}
 
 	/**
@@ -875,7 +850,14 @@ class JtgModelTrack extends JModelItem
 	function addcomment ($cfg)
 	{
 		JHtml::_('behavior.formvalidation');
-		$editor = JFactory::getEditor('tinymce');
+		if (JVERSION < 4.0)
+		{
+			$editor = JFactory::getConfig()->get('editor');
+		}
+		else {
+			$editor = Factory::getApplication()->getEditor();
+		}
+		$editor = Editor::getInstance($editor);
 		$user = JFactory::getUser();
 		$id = JFactory::getApplication()->input->getInt('id');
 		?>
@@ -1009,7 +991,11 @@ class JtgModelTrack extends JModelItem
 				"\n homepage=" . $db->quote($homepage) . "," . "\n title=" . $db->quote($title) . "," . "\n text=" . $db->quote($text) . "," . "\n published=1";
 
 		$db->setQuery($query);
-		$db->execute();
+		if (!$db->execute())
+		{
+			echo $db->stderr();
+			return false;
+		}
 
 		// Send autor email if set
 		if ($cfg->inform_autor == 1)
@@ -1052,16 +1038,7 @@ class JtgModelTrack extends JModelItem
 			}
 		}
 
-		if ($db->getErrorNum())
-		{
-			echo $db->stderr();
-
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+		return true;
 	}
 
 	/**
@@ -1351,7 +1328,7 @@ class JtgModelTrack extends JModelItem
                "published"    => 1,
                "checked_out"  => 0
          );
-         $nullcat = JArrayHelper::toObject($nullcat);
+         $nullcat = (object) $nullcat;
    
 	      $sortedrow = array();
 

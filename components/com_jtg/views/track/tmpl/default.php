@@ -709,7 +709,6 @@ if (! $this->params->get("jtg_param_disable_terrains"))
 			9 => "nine",
 			10 => "ten"
 			);
-		$stars = JArrayHelper::toObject($stars);
 		$template = "<div id=\"ratingbox\">
 			<ul id=\"1001\" class=\"rating " . $vote['class'] . "\">\n";
 
@@ -718,7 +717,7 @@ if (! $this->params->get("jtg_param_disable_terrains"))
 	{
 		$link = "index.php?option=com_jtg&controller=track&id=" . $this->track->id . "&task=vote&rate=" . $i . "#jtg_param_header_rating";
 		$link = JRoute::_($link, false);
-		$template .= "		<li id=\"" . $i . "\" class=\"rate " . $stars->$i . "\">\n"
+		$template .= "		<li id=\"" . $i . "\" class=\"rate " . $stars[$i] . "\">\n"
 		. "			<a href=\"" . $link . "\" title=\"" . JText::_('COM_JTG_STARS_' . $i) . "\" rel=\"nofollow\">" . $i . "</a>\n"
 		. "		</li>\n";
 	}

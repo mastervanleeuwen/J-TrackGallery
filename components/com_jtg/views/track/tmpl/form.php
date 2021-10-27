@@ -17,6 +17,7 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Editor\Editor;
 
 //
 // This form has three states or modes:
@@ -41,7 +42,7 @@ if (isset($this->id))
 		return;
 	}
 	$description = $this->track->description;
-	$buttonaction = "submitbutton('update')";
+	$buttonaction = "Joomla.submitbutton('update')";
 	if ($this->id == $app->getUserState('com_jtg.newfileid') )
 	{
 		$title = JText::_('COM_JTG_NEW_TRACK');
@@ -68,7 +69,7 @@ else
 	$buttontext = JText::_('COM_JTG_SAVE');
 	$title = JText::_('COM_JTG_NEW_TRACK');
 	// TODO: This should normally not happen, since the file needs to be uploaded first?
-	$buttonaction = "submitbutton('save')";
+	$buttonaction = "Joomla.submitbutton('save')";
 }
 $document = JFactory::getDocument();
 $document->setTitle($title);
@@ -77,13 +78,23 @@ $pathway->addItem($title, '');
 
 $cfg = JtgHelper::getConfig();
 
-JHtml::_('behavior.modal');
-JHtml::_('behavior.tooltip');
+$infoIconText = '';
+$version_parts = explode('.',JVERSION);
+if ($version_parts[0]<3 || ($version_parts[0]==3 && $version_parts[1]<10))
+{
+	JHtml::_('behavior.modal');
+	JHtml::_('behavior.tooltip');
+}
+else
+{
+	JHtmlBootstrap::tooltip('.hasTooltip');
+	if ($version_parts[0] > 3) $infoIconText = '<i class="fas fa-info-circle"></i>';
+}
 $yesnolist = array(
 	array('id' => 0, 'title' => JText::_('JNO')),
 	array('id' => 1, 'title' => JText::_('JYES'))
 );
-$editor = JFactory::getEditor();
+$editor = Editor::getInstance('tinymce');;
 
 // Field list
 $catlist = $this->model->getCats();
@@ -109,11 +120,11 @@ Joomla.submitbutton = function(pressbutton)
 	var form = document.adminForm;
 	if (pressbutton == 'cancel')
 		{
-		submitform( pressbutton );
+		Joomla.submitform( pressbutton );
 		return;
 	}
 	if (pressbutton == 'reset') {
-		submitform( pressbutton );
+		Joomla.submitform( pressbutton );
 		return;
 	}
 	// Do field validation
@@ -132,7 +143,7 @@ if ($this->cfg->terms == 1)
 		}
 		else
 		{
-			submitform( pressbutton );
+			Joomla.submitform( pressbutton );
 		}
 <?php
 }
@@ -140,7 +151,7 @@ else
 {
 ?>
 		 else {
-			submitform( pressbutton);
+			Joomla.submitform( pressbutton);
 		}
 <?php
 }
@@ -203,10 +214,10 @@ if (!isset($this->id))
 					$k = 1 - $k;
 					?>">
 					<td><?php echo JText::_('COM_JTG_GPS_FILE'); ?>*
-					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_FILES'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png');
+					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_FILES'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png',$infoIconText);
 					?>
 					</td>
-					<td><input type="file" name="file" value="" size="30" onchange="submitform('uploadGPX')"></td>
+					<td><input type="file" name="file" value="" size="30" onchange="Joomla.submitform('uploadGPX')"></td>
 				</tr>
 <?php
 }
@@ -258,7 +269,7 @@ else
 				$k = 1 - $k;
 				?>">
 					<td><?php echo JText::_('COM_JTG_LEVEL'); ?>*
-					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_LEVEL'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png'); ?>
+					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_LEVEL'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText); ?>
 					</td>
 					<td><?php echo $this->model->getLevelSelect($this->track->level); ?>
 					</td>
@@ -279,7 +290,7 @@ if ($this->cfg->access == 1)
 					$k = 1 - $k;
 					?>">
 					<td><?php echo JText::_('COM_JTG_ACCESS_LEVEL'); ?>&nbsp;
-					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_ACCESS'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png');?>
+					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_ACCESS'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText);?>
 					</td>
 					<td><?php echo $lists['access']; ?></td>
 				</tr>
@@ -298,7 +309,7 @@ if ($this->cfg->access == 1)
 					$k = 1 - $k;
 					?>">
 					<td><?php echo JText::_('COM_JTG_TERRAIN'); ?>
-					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_TERRAIN'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png'); ?>
+					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_TERRAIN'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText); ?>
 					</td>
 					<td><?php echo $lists['terrain']; ?></td>
 				</tr>
@@ -307,7 +318,7 @@ if ($this->cfg->access == 1)
 					$k = 1 - $k;
 					?>">
 					<td colspan="2"><p><?php echo JText::_('COM_JTG_DESCRIPTION'); ?>*:
-						<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_DESC'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png'); ?>
+						<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_DESC'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText); ?>
 					</p>
 					<?php echo $editor->display('description', $description, '100%', '200', '15', '25', false, null); ?>
 					</td>
@@ -337,7 +348,7 @@ if ($this->cfg->access == 1)
 					?>
 					<td colspan="2"><?php echo JText::_('COM_JTG_IMAGES'); ?> :
 					<?php
-					echo JHtml::tooltip($tt, JText::_('COM_JTG_TT_HEADER'), 'tooltip.png');
+					echo JHtml::tooltip($tt, JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText);
 					?>
 					<input
 					<?php
@@ -392,23 +403,23 @@ if ($this->cfg->access == 1)
 			<button class="button" type="button" onclick="<?php echo $buttonaction; ?>">
 				<?php echo $buttontext; ?>
 			</button>
-			<button class="button" type="button" onclick="submitbutton('reset')">
+			<button class="button" type="button" onclick="Joomla.submitbutton('reset')">
 				<?php echo JText::_('COM_JTG_RESET') ?>
 			</button>
 			<?php
 			if (isset($this->id) && !empty($this->track->title))
 			{
 				$canceltext = JText::_('COM_JTG_CANCEL_TO_FILEVIEW');
-				$cancelaction = "submitbutton('cancel')";
+				$cancelaction = "Joomla.submitbutton('cancel')";
 				if ($app->getUserState('com_jtg.newfileid') == $this->id) {
 					$canceltext = JText::_('JCANCEL');
-					$cancelaction = "submitform('deletenew')";
+					$cancelaction = "Joomla.submitform('deletenew')";
 				}
 			}
 			else
 			{
 				$canceltext = JText::_('JCANCEL');
-				$cancelaction = "submitform('cancel')";	
+				$cancelaction = "Joomla.submitform('cancel')";	
 			}
 			?>
 			<button class="button" type="button"

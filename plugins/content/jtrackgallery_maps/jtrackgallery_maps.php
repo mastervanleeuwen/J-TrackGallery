@@ -17,6 +17,7 @@ jimport ( 'joomla.plugin.plugin' );
 if (version_compare ( JVERSION, '1.6.0', 'ge' )) {
 	jimport ( 'joomla.html.parameter' );
 }
+use Joomla\String\StringHelper;
 class plgContentJtrackgallery_maps extends JPlugin {
 
 	function onContentPrepare($context, &$row, &$params, $page = 0) {
@@ -58,7 +59,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 			return;
 
 			// Simple performance check to determine whether plugin should process further
-		if (JString::strpos ( $row->text, $plg_tag ) === false)
+		if (StringHelper::strpos ( $row->text, $plg_tag ) === false)
 			return;
 
 			// expression to search for

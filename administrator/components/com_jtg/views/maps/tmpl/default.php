@@ -32,7 +32,7 @@ jimport('joomla.html.pane');
 
 if (JVERSION >= 3.0)
 {
-	JHtml::_('bootstrap.tooltip');
+	JHtmlBootstrap::tooltip('.hasTooltip');
 }
 else
 {
@@ -112,7 +112,7 @@ $link = JRoute::_('index.php?option=com_jtg&task=maps&controller=maps&layout=def
 			{
 				// $map->published
 				$map = $this->maps[$i];
-				$published 	= JHtml::_('grid.published', $map, $i);
+				$published 	= JHtml::_('jgrid.published', $map->published, $i);
 				$checked 	= JHtml::_('grid.checkedout', $map, $i);
 				$name		= $this->buildEditKlicks(JText::_($map->name), $i);
 				$map_parameters = JHtml::tooltip($map->param, JText::_('COM_JTG_OL_PARAMETERS'), 'tooltip.png', JText::_('COM_JTG_OL_PARAMETERS'));

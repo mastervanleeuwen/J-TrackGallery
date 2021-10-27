@@ -68,11 +68,6 @@ class JFormFieldTrackcategory extends JFormFieldList
 		}
 		$options = array_merge($options, $optionsdb);
 
-		// Check for a database error.
-		if ($db->getErrorNum()) {
-			JFactory::getApplication()->enqueueMessage($db->getErrorMsg(),"warning");
-		}
-
 		return $options;
 	}
 }

@@ -20,6 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
+use Joomla\Utilities\ArrayHelper;
 /**
  * JtgModelComments class for the jtg component
  *
@@ -134,7 +135,7 @@ class JtgModelComments extends JModelLegacy
 
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 
 			$query = 'UPDATE #__jtg_comments'
@@ -166,7 +167,7 @@ class JtgModelComments extends JModelLegacy
 
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 
 			// Delete from DB

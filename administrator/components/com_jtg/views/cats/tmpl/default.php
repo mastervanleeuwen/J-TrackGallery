@@ -73,7 +73,7 @@ for ($i = 0; $i < $n; $i++)
 {
 	$row = $this->list[$i];
 	$checked 	= JHtml::_('grid.checkedout', $row, $i);
-	$published 	= JHtml::_('grid.published', $row, $i);
+	$published 	= JHtml::_('jgrid.published', $row->published, $i);
 	$temp = unserialize($row->default_overlays);
 	if (is_array($temp))
 	{

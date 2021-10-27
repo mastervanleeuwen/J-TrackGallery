@@ -28,9 +28,9 @@ JToolBarHelper::deleteList();
 JToolBarHelper::help('comments', true);
 
 // Code support for joomla version greater than 3.0
-if (JVERSION >= 3.0)
+if (JVERSION >= 4.0)
 {
-	JHtml::_('bootstrap.tooltip');
+	JHtmlBootstrap::tooltip('.hasTooltip');
 }
 else
 {
@@ -79,7 +79,7 @@ if ($n > 0)
 				// Eh?? terrain??
 				$row->checked_out = null;
 				$checked 	= JHtml::_('grid.checkedout', $row, $i);
-				$published 	= JHtml::_('grid.published', $row, $i);
+				$published 	= JHtml::_('jgrid.published', $row->published, $i);
 
 				?>
 			<tr class="<?php echo "row$k"; ?>">

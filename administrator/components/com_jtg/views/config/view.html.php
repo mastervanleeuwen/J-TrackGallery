@@ -108,7 +108,7 @@ class JtgViewConfig extends JViewLegacy
 			$nopic = "<font color=\"red\"><font size=\"+2\">X</font> (Icon missing) </font>";
 			$string = $files[$i] . "<br />" . JText::_('COM_JTG_PREVIEW') . ":&nbsp;&nbsp;";
 
-			if (is_file($imgdir . $files[$i] . "/car.png"))
+			if (is_file($importdir . $files[$i] . "/car.png"))
 			{
 				$string .= "<img src=\"" . $imgdir . $files[$i] . "/car.png\" alt=\"car.png\" title=\"car.png\" /> ";
 			}
@@ -117,7 +117,7 @@ class JtgViewConfig extends JViewLegacy
 				$string .= $nopic;
 			}
 
-			if (is_file($imgdir . $files[$i] . "/bike.png"))
+			if (is_file($importdir . $files[$i] . "/bike.png"))
 			{
 				$string .= "<img src=\"" . $imgdir . $files[$i] . "/bike.png\" alt=\"bike.png\" title=\"bike.png\" /> ";
 			}
@@ -126,7 +126,7 @@ class JtgViewConfig extends JViewLegacy
 				$string .= $nopic;
 			}
 
-			if (is_file($imgdir . $files[$i] . "/foot.png"))
+			if (is_file($importdir . $files[$i] . "/foot.png"))
 			{
 				$string .= "<img src=\"" . $imgdir . $files[$i] . "/foot.png\" alt=\"foot.png\" title=\"foot.png\" />";
 			}

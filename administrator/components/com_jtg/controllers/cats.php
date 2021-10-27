@@ -19,6 +19,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
+use Joomla\Utilities\ArrayHelper;
 JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jtg/tables');
 
 /**
@@ -144,8 +145,8 @@ class JtgControllerCats extends JtgController
 
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
 		$order = JFactory::getApplication()->input->get('order', array(), 'array');
-		JArrayHelper::toInteger($cid);
-		JArrayHelper::toInteger($order);
+		ArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($order);
 
 		$model = $this->getModel('cat');
 		$model->saveorder($order, $cid);
@@ -164,7 +165,7 @@ class JtgControllerCats extends JtgController
 		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
-		JArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
@@ -192,7 +193,7 @@ class JtgControllerCats extends JtgController
 		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
-		JArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
@@ -247,7 +248,7 @@ class JtgControllerCats extends JtgController
 		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
-		JArrayHelper::toInteger($cid);
+		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{

@@ -18,6 +18,8 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Uri\Uri;
+
 /**
  * Mainclass to write the map
  *
@@ -3128,8 +3130,7 @@ $center .= "           source: new ol.source.Vector(),
 
 			$xml = $this->loadFile();
 			$xml = $xml->trk[$i];
-			$link = JFactory::getURI();
-			$link = $link->_uri;
+			$link = Uri::getInstance()->toString();
 			$link = $link . "&amp;subid=" . $i;
 			$name = (string) $xml->name;
 			$links[$i]['link'] = $link;

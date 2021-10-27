@@ -84,31 +84,61 @@ function jtgBuildRoute(&$query)
  *
  * @return return_description
  */
-function _jtgParseRouteFile($segments)
+function _jtgParseRouteFile(&$segments)
 {
-	switch ($segments[1])
+	array_shift($segments);
+	$layout = $segments[0];
+	array_shift($segments);
+	switch ($layout)
 	{
 		case 'file': // backward compatibility for files/file/<id>
 			$vars['view'] = 'track';
-			$vars['id'] = $segments[2];
+			$vars['id'] = $segments[0];
 			break;
+
+		case 'default':
+			array_shift($segments);
+			$vars['id'] = $segments[0];
+			break;
+
+		case 'default':
+			array_shift($segments);
+			
 
 		case 'form':
 			$vars['view'] = 'track';
 			$vars['layout'] = 'form';
-			$vars['id'] = $segments[2];
+			$vars['id'] = $segments[0];
 			break;
 
 		case 'delete':
 			$vars['controller'] = 'track';
 			$vars['task'] = 'delete';
-			$vars['id'] = $segments[2];
+			$vars['id'] = $segments[0];
 			break;
 
 		case 'vote':
 			$vars['controller'] = 'track'; 
 			$vars['task'] = 'vote';
-			$vars['id'] = $segments[2];
+			$vars['id'] = $segments[0];
+			
+
+		case 'form':
+			$vars['view'] = 'track';
+			$vars['layout'] = 'form';
+			$vars['id'] = $segments[0];
+			break;
+
+		case 'delete':
+			$vars['controller'] = 'track';
+			$vars['task'] = 'delete';
+			$vars['id'] = $segments[0];
+			break;
+
+		case 'vote':
+			$vars['controller'] = 'track'; 
+			$vars['task'] = 'vote';
+			$vars['id'] = $segments[0];
 			break;
 	}
 
@@ -117,6 +147,7 @@ function _jtgParseRouteFile($segments)
 		return false;
 	}
 
+	array_shift($segments);
 	return $vars;
 }
 
@@ -127,17 +158,19 @@ function _jtgParseRouteFile($segments)
  *
  * @return return_description
  */
-function _jtgParseRouteCategory($segments)
+function _jtgParseRouteCategory(&$segments)
 {
 	switch ($segments[0])
 	{
 		case 'files':
 			$vars['view'] = 'files';
 			$vars['layout'] = 'list';
+			array_shift($segments);
 			break;
 		case 'cats':
 			$vars['view'] = 'cats';
 			$vars['layout'] = 'default';
+			array_shift($segments);
 			break;
 		case 'track':
 			$vars['view'] = 'track';
@@ -154,6 +187,7 @@ function _jtgParseRouteCategory($segments)
 	{
 		return false;
 	}
+	array_shift($segments);
 
 	return $vars;
 }
@@ -165,15 +199,17 @@ function _jtgParseRouteCategory($segments)
  *
  * @return return_description
  */
-function _jtgParseRouteSubCategory($segments)
+function _jtgParseRouteSubCategory(&$segments)
 {
 	$vars['view'] = $segments[0];
 	$vars['layout'] = $segments[1];
 	// TODO: could remove the case statements? keep files/map?
-	switch ($segments[0])
+	$view = $segments[0];
+	array_shift($segments);
+	switch ($view)
 	{
 		case 'files':
-			switch ($segments[1])
+			switch ($segments[0])
 			{
 				case 'form':
 					$vars['view'] = 'track';
@@ -188,20 +224,23 @@ function _jtgParseRouteSubCategory($segments)
 					$vars['view'] = 'jtg';
 					$vars['layout'] = 'map';
 					break;
-
 			}
+			array_shift($segments);
 			break;
 		case 'jtg':
-			switch ($segments[1])
+			switch ($segments[0])
 			{
 				case 'geo':
 					$vars['view'] = 'jtg';
 					$vars['layout'] = 'geo';
+					array_shift($segments);
 					break;
+				case 'map':
+					array_shift($segments);
 			}
 			break;
 		case 'track':
-			if ($segments[1] == 'form')
+			if ($segments[0] == 'form')
 			{
 				$vars['view'] = 'track';
 				$vars['layout'] = 'form';
@@ -210,8 +249,9 @@ function _jtgParseRouteSubCategory($segments)
 			{
 				$vars['view'] = 'track';
 				$vars['layout'] = 'default';
-				$vars['id'] = $segments[1];
+				$vars['id'] = $segments[0];
 			}
+			array_shift($segments);
 	}
 
 	if (!isset($vars))
@@ -229,7 +269,7 @@ function _jtgParseRouteSubCategory($segments)
  *
  * @return return_description
  */
-function jtgParseRoute($segments)
+function jtgParseRoute(&$segments)
 {
 	$vars = array();
 

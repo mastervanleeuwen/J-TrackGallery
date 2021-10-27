@@ -61,13 +61,13 @@ class Com_JtgInstallerScript
 		$jversion = new JVersion;
 
 		// Installing component manifest file version
-		$this->release = $parent->get('manifest')->version;
+		$this->release = $parent->getManifest()->version;
 
 		// File version of existing manifest file
 		$this->release_existing = $this->getParam('version');
 
 		// Manifest file minimum Joomla version
-		$this->minimum_joomla_release = $parent->get('manifest')->attributes()->version;
+		$this->minimum_joomla_release = $parent->getManifest()->attributes()->version;
 		echo '<p> -- ' . JText::sprintf('COM_JTG_PREFLIGHT', $this->release) . '</p>';
 
 		if ($this->release_existing)
@@ -88,7 +88,6 @@ class Com_JtgInstallerScript
 
 			return false;
 		}
-
 		// Abort if the component being installed is not newer than the currently installed version
 		if ( $type == 'update' )
 		{
@@ -273,7 +272,7 @@ class Com_JtgInstallerScript
 	// Update tracks user ID to current user id
 	$db = JFactory::getDBO();
 	$application = JFactory::getApplication();
-	$uid = JFactory::getUser();
+	$uid = JFactory::getUser()->id;
 	$query = $db->getQuery(true);
 	$query->update($db->quoteName('#__jtg_files'))->set($db->quoteName('uid').'='.$db->quote($uid))->where('1'); // Todo: check this is done below as well
 	$db->setQuery($query);
@@ -288,6 +287,7 @@ class Com_JtgInstallerScript
 	echo JText::_('COM_JTG_HINTS_DETAILS');
 	echo '</td></tr>';
 	echo '</table>';
+
 
 	return true;
 	}

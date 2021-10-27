@@ -16,6 +16,9 @@
  */
 
 defined('_JEXEC') or die('Restricted access');
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Editor\Editor;
+use Joomla\CMS\Factory;
 
 // Toolbar
 JToolBarHelper::title(JText::_('COM_JTG_ADD_FILES'), 'categories.png');
@@ -61,7 +64,7 @@ $document->addStyleDeclaration($style);
 	}
 
 	$level = array("access" => 0);
-	$level = JArrayHelper::toObject($level);
+	$level = ArrayHelper::toObject($level);
 	$row = 0;
 	$count = 0;
 	$errorposted = false;
@@ -143,7 +146,16 @@ $document->addStyleDeclaration($style);
 					'catid_' . $count . '[]',
 					'multiple="multiple" size="' . $catssize . '"',
 					'id', 'treename' );
-			$editor = JFactory::getEditor();
+			if (JVERSION >= 4.0)
+			{
+				$editor = Factory::getApplication()->get('editor');
+			}
+			else
+			{
+				$editor = JFactory::getConfig()->get('editor');
+			}
+			$editor = Editor::getInstance($editor);
+
 			$buttons = array(
 					"pagebreak",
 					"readmore");

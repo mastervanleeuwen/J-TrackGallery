@@ -18,6 +18,7 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+use Joomla\Utilities\ArrayHelper;
 
 /**
  * Model Class Categorie
@@ -160,7 +161,7 @@ class JtgModelCat extends JModelLegacy
 
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 
 			$query = 'UPDATE #__jtg_cats'
@@ -219,7 +220,7 @@ class JtgModelCat extends JModelLegacy
 
 		if (count($cid))
 		{
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 			$cids = implode(',', $cid);
 
 			// Delete the images
@@ -315,7 +316,7 @@ class JtgModelCat extends JModelLegacy
 		$db->setQuery($query);
 		$db->execute();
 
-		if ($db->getErrorNum())
+		if ($db->execute())
 		{
 			echo $db->stderr();
 
@@ -440,7 +441,7 @@ class JtgModelCat extends JModelLegacy
 		$db->setQuery($query);
 		$db->execute();
 
-		if ($db->getErrorNum())
+		if ($db->execute())
 		{
 			echo $db->stderr();
 

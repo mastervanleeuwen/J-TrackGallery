@@ -20,6 +20,8 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.view');
+use Joomla\String\StringHelper;
+use Joomla\CMS\Editor\Editor;
 
 /**
  * HTML View tracks class for the jtg component
@@ -46,7 +48,6 @@ class JtgViewFiles extends JViewLegacy
 				$access = JText::_('COM_JTG_PUBLIC');
 				$color = "green";
 				break;
-
 			case 1:
 				$access = JText::_('COM_JTG_REGISTERED');
 				$color = "red";
@@ -96,10 +97,17 @@ class JtgViewFiles extends JViewLegacy
 	 *
 	 * @return string
 	 */
-	public function buildEditKlicks($file, $count)
+	public function buildEditKlicks($file, $count, $id)
 	{
-		return "<a href=\"javascript:void(0);\" onclick=\"javascript:return listItemTask('cb" . $count
-		. "','editfile')\">" . $file . "</a>";
+		if (JVERSION < 4.0)
+		{
+			return "<a href=\"javascript:void(0);\" onclick=\"javascript:return listItemTask('cb" . $count
+			. "','editfile')\">" . $file . "</a>";
+		}
+		else
+		{
+			return "<a href=\"".JRoute::_("index.php?option=com_jtg&task=editfile&controller=files&id=$id")."\">". $file."</a>";
+		}
 	}
 
 	/**
@@ -115,14 +123,6 @@ class JtgViewFiles extends JViewLegacy
 	{
 		switch ($hidden)
 		{
-			case null:
-				// Not saved
-				$tt = JText::_('COM_JTG_NOT_SAVED');
-				$item = "<span title=\"" . $tt . "\">-- ? --</span>";
-
-				return $item;
-				break;
-
 			case "0":
 				// Visible
 				$link = "tohide";
@@ -137,6 +137,14 @@ class JtgViewFiles extends JViewLegacy
 				$icon = $iconpath . "icon_hidden.png";
 				$tt = JText::_('COM_JTG_TOSHOW');
 				$item = "<img alt=\"" . $tt . "\" title=\"" . $tt . "\" src=\"" . $icon . "\" />";
+				break;
+
+			default:
+				// Not saved
+				$tt = JText::_('COM_JTG_NOT_SAVED');
+				$item = "<span title=\"" . $tt . "\">-- ? --</span>";
+
+				return $item;
 				break;
 		}
 
@@ -363,7 +371,7 @@ class JtgViewFiles extends JViewLegacy
 
 		$model = $this->getModel();
 		$cats = $model->getCats();
-		$cats = JArrayHelper::toObject($cats);
+		$cats = (object) $cats;
 		$i = 0;
 
 		foreach ($cats AS $cat)
@@ -512,7 +520,7 @@ class JtgViewFiles extends JViewLegacy
 				'search',
 				'',
 				'string');
-		$search				= JString::strtolower($search);
+		$search				= StringHelper::strtolower($search);
 
 		$lists['order']		= $filter_order;
 		$lists['order_Dir']	= $filter_order_Dir;
@@ -541,7 +549,12 @@ class JtgViewFiles extends JViewLegacy
 	 */
 	function _displayUpload($tpl)
 	{
-		if (JVERSION >= 3.0)
+		if (JVERSION >= 4.0)
+		{
+			JHtml::_('jquery.framework');
+			JHtml::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
+		}
+		else if (JVERSION >= 3.0)
 		{
 			JHtml::_('jquery.framework');
 			JHtml::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
@@ -567,7 +580,12 @@ class JtgViewFiles extends JViewLegacy
 	 */
 	protected function _displayForm($tpl)
 	{
-		if (JVERSION >= 3.0)
+		if (JVERSION >= 4.0)
+		{
+			JHtml::_('jquery.framework');
+			JHtml::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
+		}
+		else if (JVERSION >= 3.0)
 		{
 			JHtml::_('jquery.framework');
 			JHtml::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
@@ -582,8 +600,17 @@ class JtgViewFiles extends JViewLegacy
 
 		jimport('joomla.filesystem.folder');
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		if (count($cid))
+		{
+			$id = $cid[0];
+		}
+		else
+		{
+			$id = JFactory::getApplication()->input->getInt('id');
+		}
 		$cfg = JtgHelper::getConfig();
-		$editor = JFactory::getEditor();
+		$editor = JFactory::getConfig()->get('editor');
+		$editor = Editor::getInstance($editor);;
 		$model = $this->getModel();
 		$cats = $model->getCats(0, 'COM_JTG_SELECT', 0, 0);
 		$terrain = $model->getTerrain("*", true, " WHERE published=1 ");
@@ -594,7 +621,7 @@ class JtgViewFiles extends JViewLegacy
 				array('id' => 1, 'title' => JText::_('JYES'))
 		);
 
-		if (count($cid) == 0)
+		if (!isset($id))
 		{
 			echo "deprecated";
 
@@ -607,7 +634,6 @@ class JtgViewFiles extends JViewLegacy
 			$size = min(count($terrain), 6);
 			$lists['terrain']	= JHtml::_('select.genericlist', $terrain, 'terrain[]', 'multiple="multiple" size="' . $size . '"', 'id', 'title', 0);
 			$row->access = $access;
-			$lists['access']	= JHtml::_('list.accesslevel', $row);
 			$lists['uid']		= JHtml::_('list.users', 'uid', $uid, 1, null, 'name', 0);
 			$lists['hidden']	= JHtml::_('select.genericlist', $yesnolist, 'hidden', 'class="inputbox" size="2"', 'id', 'title', 0);
 			$lists['published']	= JHtml::_('select.genericlist', $yesnolist, 'published', 'class="inputbox" size="2"', 'id', 'title', 1);
@@ -621,7 +647,6 @@ class JtgViewFiles extends JViewLegacy
 		else
 		{
 			// 		Edit File
-			$id = $cid[0];
 			$track = $model->getFile($id);
 			$lists['level']	= $model->getLevelList($track->level);
 			$access = $model->getAccess($id);

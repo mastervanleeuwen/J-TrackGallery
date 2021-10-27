@@ -97,11 +97,11 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 				}
 
 				$checked 	= JHtml::_('grid.checkedout', $row, $i);
-				$published 	= JHtml::_('grid.published', $row, $i);
+				$published 	= JHtml::_('jgrid.published', $row->published, $i);
 				$user		= JFactory::getUser($row->uid);
 				$imagelink	= $this->buildImageFiletypes($row->istrack, $row->iswp, $row->isroute, $row->iscache);
 
-				$title		= $this->buildEditKlicks(($row->title? $row->title:JText::_('COM_JTG_NO_TITLE')), $i);
+				$title		= $this->buildEditKlicks(($row->title? $row->title:JText::_('COM_JTG_NO_TITLE')), $i, $row->id);
 				$hidden		= $row->hidden;
 				$hiddenlink	= $this->buildHiddenImage($iconpath, $hidden, $i);
 				$catids		= explode(",", $row->catid);
@@ -260,7 +260,6 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_PUBLISHED'),
 						'published', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>
 				<th class="title"><?php echo JText::_('COM_JTG_DEFAULT_MAP'); ?></th>
-				<th class="title"><?php echo JText::_('COM_JTG_DEFAULT_OVERLAYS'); ?></th>
 				<th class="title"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_HIDDEN'),
 						'hidden', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>

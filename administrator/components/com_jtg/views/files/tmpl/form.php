@@ -57,6 +57,16 @@ $map = "";
 if ($this->id >= 1)
 {
 	// Edit file
+	$infoIconText = 0;
+	if (version_compare(JVERSION, '3.9', 'lt'))
+	{
+		JHtml::_('behavior.tooltip');
+	}
+	else
+	{
+		JHtmlBootstrap::tooltip('.hasTooltip');
+		if (version_compare(JVERSION, '4.0', 'ge')) $infoIconText = '<i class="fas fa-info-circle"></i>';
+	}
 	$cfg = JtgHelper::getConfig();
 	$params = JComponentHelper::getParams('com_jtg');
 	$model = $this->getModel();
@@ -170,9 +180,12 @@ if ($this->id >= 1)
 				<td><?php echo $this->lists['uid']; ?></td>
 			</tr>
 			<tr class="row1 row-odd">
-				<td><?php echo JText::_('COM_JTG_LEVEL'); ?>
-				*
-				<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_LEVEL')); ?>:
+				<td>
+<?php
+		echo JText::_('COM_JTG_LEVEL').':*';
+		echo JHtml::tooltip(JText::_('COM_JTG_TT_LEVEL'),'','tooltip.png',$infoIconText);
+?>
+				</td>
 				<td><?php echo $this->lists['level']; ?></td>
 			</tr>
 			<tr class="row0 row-even">
@@ -190,10 +203,6 @@ if ($this->id >= 1)
 			<tr class="row0 row-odd">
 				<td><?php echo JText::_('COM_JTG_FILE_DEFAULT_MAP'); ?></td>
 				<td><?php echo $this->lists['default_map']; ?></td>
-			</tr>
-			<tr class="row0 row-even">
-				<td><?php echo JText::_('COM_JTG_FILE_DEFAULT_OVERLAYS'); ?></td>
-				<td><?php echo $this->lists['default_overlays']; ?></td>
 			</tr>
 			<tr class="row1 row-odd">
 				<td><?php echo JText::_('COM_JTG_TERRAIN'); ?>:</td>
