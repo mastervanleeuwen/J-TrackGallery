@@ -2,10 +2,11 @@
 
 J!TrackGallery is a Joomla Track Gallery component, which allows to store and display GPS track data and photos.
 
-Our Goal is to provide a non commercial, free, open source, GNU/GPL2 licensed component for Joomla 3.x and future versions (with some backward compatibility for older Joomla versions). 
+Our Goal is to provide a non commercial, free, open source, GNU/GPL2 licensed component for Joomla 3.x and 4.x (with some backward compatibility for older Joomla versions). 
 
 The main features are:
 - Upload and edit GPS tracks (GPX tracks/routes, KML, TCX format) via frontend or backend (administrator view)
+- Support for different maps: Open Street Map + variants (e.g. opencylcemap), Bing maps, and French IGN
 - Basic features for each track are calculated from the GPS track
 - Add a description, category information etc
 - Add photos to each track; geotagged images are shown on the map
@@ -14,12 +15,15 @@ The main features are:
 
 ### Code and downloads
 
+- To see the frontend, please look here for [Joomla 3](https://jtrackgallery.gta-trek.eu/) and [Joomla 4](https://jtrackgalleryj4.gta-trek.eu/)
 - Documentation pages can be found [here](https://mastervanleeuwen.github.io/J-TrackGallery/)
 - The code is hosted on [github](https://github.com/mastervanleeuwen/J-TrackGallery)
 - J-TrackGallery is has also been submitted to the [Joomla extension directory](https://extensions.joomla.org/index.php?option=com_jed&view=extension&layout=default&id=15190&Itemid=145)
 - For bug reports etc to this version, use the [github issues page](https://github.com/mastervanleeuwen/J-TrackGallery/issues)
 
 #### Status of the Project
+
+0.9.22 (7 Nov 2021) Joomla 4 compatibility plus various technical improvements. The User view shows a summary of the user activity.
 
 0.9.30 (12 Dec 2020) various technical fixes, including a fix in the install script and settings for automatic updates
 
