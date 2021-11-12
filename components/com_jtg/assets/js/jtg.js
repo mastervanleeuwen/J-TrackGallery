@@ -82,7 +82,7 @@ function drawTrack(latitudeData, longitudeData) {
 	});
 	startMarker.setStyle(new ol.style.Style({
       image: new ol.style.Icon({ src: jtgTemplateUrl+'/images/trackStart.png',
-		anchorOrigin: 'bottom-left', anchor: [0,0] }) 
+		anchorOrigin: 'bottom-left', anchor: [0.15,0] }) 
 	}) );
 	gpsTrack.getSource().addFeature(startMarker);
 
@@ -92,7 +92,7 @@ function drawTrack(latitudeData, longitudeData) {
 	});
 	endMarker.setStyle(new ol.style.Style({
       image: new ol.style.Icon({ src: jtgTemplateUrl+'/images/trackDest.png',
-		anchorOrigin: 'bottom-right', anchor: [0,0] }) 
+		anchorOrigin: 'bottom-right', anchor: [0.15,0] }) 
 	}) );
 	gpsTrack.getSource().addFeature(endMarker);
 
