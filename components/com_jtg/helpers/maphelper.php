@@ -146,7 +146,7 @@ class JtgMapHelper {
 	 * get track and category info for overview map
 	 *
 	*/
-	private function parseTracksInfoJS($track_array) {
+	static private function parseTracksInfoJS($track_array) {
 		$markersJS = array();
 		$catIdx = array();
 		$curCatId = -1;
