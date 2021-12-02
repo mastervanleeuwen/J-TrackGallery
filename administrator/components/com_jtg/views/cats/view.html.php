@@ -22,6 +22,8 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.view');
+use Joomla\CMS\Editor\Editor;
+
 /**
  * JtgViewCats class for the jtg component
  *
