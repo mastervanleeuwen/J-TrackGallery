@@ -638,7 +638,7 @@ class JtgViewFiles extends JViewLegacy
 	 */
 	protected function parseTemplate($template, $content = null, $linkname = null, $only = null, $printbutton = false)
 	{
-		$tmpl = ($this->cfg->template = "") ? $this->cfg->template : 'default';
+		$tmpl = strlen($this->cfg->template) ? $this->cfg->template : 'default';
 		$templatepath = JPATH_BASE . "/components/com_jtg/assets/template/" . $tmpl . '/';
 
 		if ((!$content)AND($content != ""))

@@ -120,7 +120,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 				// Test if given id or filename correspond to one track in database
 				if ($plg_call_params ['gpxfilename']) {
 					// Determine the id of the filename
-					$query = "SELECT id FROM '#__jtg_files' WHERE file='" . $plg_call_params ['gpxfilename'] . "'";
+					$query = "SELECT id FROM `#__jtg_files` WHERE file='" . $plg_call_params ['gpxfilename'] . "'";
 					if ($plg_call_params ['id'] > 0) {
 						$query .= " or id=" . $plg_call_params ['id'];
 					}
@@ -148,8 +148,8 @@ class plgContentJtrackgallery_maps extends JPlugin {
 					if ($map_count <2)
 					{
 						$plg_html .= $this->rendermap($plgParams, $plg_call_params);
-						if ($plg_call_params['show_link']) { 
-						   $plg_html .= '<a href='.JUri::base().'index.php?option=com_jtg&view=files&layout=file&id='.$plg_call_params['id'].'>GPX track</a>';
+						if (isset($plg_call_params['show_link']) && $plg_call_params['show_link']) { 
+						   $plg_html .= '<a href='.JUri::base().'index.php?option=com_jtg&view=track&id='.$plg_call_params['id'].'>GPX track</a>';
 						}
 					}
 					else
@@ -180,7 +180,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		require_once JPATH_SITE . '/components/com_jtg/helpers/helper.php';
 		require_once JPATH_SITE . '/components/com_jtg/helpers/maphelper.php';
 		$cfg = JtgHelper::getConfig();
-		$tmpl = ($cfg->template <> "") ? $cfg->template : 'default';
+		$tmpl = strlen($cfg->template) ? $cfg->template : 'default';
 		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 		$map = "";
 
@@ -195,14 +195,17 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		$cache = JFactory::getCache('jtrackgallery_maps');
 		$params = JComponentHelper::getParams('com_jtg');
 
-		require_once JPATH_SITE . '/components/com_jtg/models/files.php';
-		$model = JModelLegacy::getInstance( 'Files', 'JtgModel' );
-		$track = $cache->get(array($model, 'getFile'), array($plg_call_params['id']));
+		require_once JPATH_SITE . '/components/com_jtg/models/track.php';
+		$model = JModelLegacy::getInstance( 'Track', 'JtgModel' );
+		$track = $model->getFile($plg_call_params['id']);
+		$trackImages = $model->getImages($plg_call_params['id']);
 		$document = JFactory::getDocument();
 		require_once JPATH_SITE . '/components/com_jtg/helpers/gpsClass.php';
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js');
-		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js.map');
+		//$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js.map');
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
+		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
+		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
 		$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $track->file;
 		$gpsData = new GpsDataClass($cfg->unit);
 		$gpsData->loadFileAndData($file, $track->file);
@@ -215,6 +218,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		$map_width = isset ($plg_call_params ['map_width'])? $plg_call_params ['map_width']: $map_width;
 		$map_height = isset ($plg_call_params ['map_height'])? $plg_call_params ['map_height']: $map_height;
 
+		$mapid = $plgParams->get('mapid', false, 0);
 
 		if ($gpsData->displayErrors())
 		{
@@ -250,7 +254,8 @@ img.olTileImage {
 </style>';
 
 		$map .= ("\n<div id=\"jtg_map\"  align=\"center\" class=\"olMap\" >");
-		$map = JtgMapHelper->parseTrackMapJS( $gpsData, $plg_call_params['id']);
+		// TODO: add images
+		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages);
 		$map .= ("\n</div>");
 	}
 

@@ -19,7 +19,7 @@ defined('_JEXEC') or die('Restricted access');
 $document = JFactory::getDocument();
 $user = JFactory::getUser();
 $userid = (int) $user->id;
-$tmpl = ($this->cfg->template = "") ? $this->cfg->template : 'default';
+$tmpl = strlen($this->cfg->template) ? $this->cfg->template : 'default';
 $iconpath = JUri::root() . "components/com_jtg/assets/template/" . $tmpl . "/images/";
 
 if ( $userid )

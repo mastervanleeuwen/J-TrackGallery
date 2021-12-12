@@ -171,16 +171,12 @@ class JtgViewTrack extends JViewLegacy
 		$document = JFactory::getDocument();
 
 		// Then load jtg_map stylesheet
-		$tmpl = ($cfg->template = "") ? $cfg->template : 'default';
+		$tmpl = strlen($cfg->template) ? $cfg->template : 'default';
 
 		// Load Openlayers stylesheet first (for overriding)
 		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/ol.css');
 
 		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
-
-		// Then override style with user templates
-		$template = $mainframe->getTemplate();
-		$template_jtg_map_style = 'templates/' . $template . '/css/jtg_map_style.css';
 
 		$this->params = JComponentHelper::getParams('com_jtg');
 		$this->id = JFactory::getApplication()->input->getInt('id', null);
@@ -581,7 +577,7 @@ class JtgViewTrack extends JViewLegacy
 	 */
 	protected function parseTemplate($template, $content = null, $linkname = null, $only = null, $printbutton = false)
 	{
-		$tmpl = ($this->cfg->template = "") ? $this->cfg->template : 'default';
+		$tmpl = strlen($this->cfg->template) ? $this->cfg->template : 'default';
 		$templatepath = JPATH_BASE . "/components/com_jtg/assets/template/" . $tmpl . '/';
 
 		if ((!$content)AND($content != ""))

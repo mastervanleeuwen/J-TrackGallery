@@ -49,7 +49,7 @@ JFactory::getLanguage()->load(
 $cfg = JtgHelper::getConfig();
 
 // Set the template
-$tmpl = ($cfg->template = "") ? $cfg->template : 'default';
+$tmpl = strlen($cfg->template) ? $cfg->template : 'default';
 
 $document = JFactory::getDocument();
 $document->addStyleSheet(

@@ -50,7 +50,7 @@ $document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template
 
 // Add jtg_map stylesheet
 $cfg = JtgHelper::getConfig();
-$tmpl = ($cfg->template <> "") ? $cfg->template : 'default';
+$tmpl = strlen($cfg->template) ? $cfg->template : 'default';
 $document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 $map = "";
 
