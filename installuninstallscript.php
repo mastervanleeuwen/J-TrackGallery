@@ -614,8 +614,8 @@ class Com_JtgInstallerScript
 		$db = JFactory::getDbo();
 		$db->setQuery('SELECT manifest_cache FROM #__extensions WHERE name = "com_jtg"');
 		$manifest = json_decode($db->loadResult(), true);
-
-		return $manifest[ $name ];
+		if (!is_null($manifest)) return $manifest[ $name ];
+		return false;
 	}
 
 	/**
