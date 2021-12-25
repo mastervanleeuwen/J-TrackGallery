@@ -790,7 +790,7 @@ if ($this->canDo->get('jtg.download'))
 	}
 ?>
 <form name="adminForm" id="adminForm" method="post"
-	action="<?php echo Uri::root()."/index.php?option=com_jtg&amp;controller=download&amp;task=download"; ?>">
+	action="<?php echo JRoute::_("index.php?option=com_jtg&controller=download&task=download"); ?>">
 
 	<div class="block-text"> <label for="format"><?php echo JText::_('COM_JTG_DOWNLOAD_THIS_TRACK'); ?>&nbsp;</label>
     	<?php echo $download_buttons;?>
@@ -975,7 +975,7 @@ else
 	}
 	if ($this->canDo->get('core.delete')) {
 ?>
-  <a href="index.php?option=com_jtg&controller=track&task=delete&id=<?php echo $this->id; ?>"
+  <a href="<?php echo JRoute::_('index.php?option=com_jtg&controller=track&task=delete&id=').$this->id; ?>"
                onclick="return confirm('<?php echo JText::_('COM_JTG_VALIDATE_DELETE_TRACK')?>')">
   <button class="button" type="button">
     <?php echo JText::_('JACTION_DELETE'); ?>

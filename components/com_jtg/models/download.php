@@ -53,7 +53,7 @@ class JtgModelDownload extends JModelLegacy
 		// First deal with original file download
 		if ($format == 'original')
 		{
-			$content = JFile::read($file);
+			$content = file_get_contents($file);
 
 			if ($content)
 			{

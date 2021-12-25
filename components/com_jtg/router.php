@@ -104,7 +104,6 @@ function _jtgParseRouteFile(&$segments)
 		case 'default':
 			array_shift($segments);
 			
-
 		case 'form':
 			$vars['view'] = 'track';
 			$vars['layout'] = 'form';
@@ -227,6 +226,7 @@ function _jtgParseRouteSubCategory(&$segments)
 			}
 			array_shift($segments);
 			break;
+
 		case 'jtg':
 			switch ($segments[0])
 			{
@@ -239,6 +239,7 @@ function _jtgParseRouteSubCategory(&$segments)
 					array_shift($segments);
 			}
 			break;
+
 		case 'track':
 			if ($segments[0] == 'form')
 			{
@@ -251,6 +252,12 @@ function _jtgParseRouteSubCategory(&$segments)
 				$vars['layout'] = 'default';
 				$vars['id'] = $segments[0];
 			}
+			array_shift($segments);
+			break;
+
+		default:
+			$vars['controller']=$view;
+			$vars['task']=$segments[0];
 			array_shift($segments);
 	}
 
