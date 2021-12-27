@@ -595,31 +595,23 @@ class JtgModelTrack extends JModelLegacy
 		$query = "DELETE FROM #__jtg_files" . "\n WHERE id='" . $id . "'";
 		$db->setQuery($query);
 
-		if (! $db->execute())
+		if (!$db->execute())
 		{
 			return false;
 		}
 
 		$query = "DELETE FROM #__jtg_photos WHERE trackID='" . $id . "'";
-		if (! $db->execute())
-		{
-			return true;
-		}
-		else
+		if (!$db->execute())
 		{
 			return false;
 		}
 
 		$query = "DELETE FROM #__jtg_comments WHERE tid='" . $id . "'";
-		if (! $db->execute())
-		{
-			return true;
-		}
-		else
+		if (!$db->execute())
 		{
 			return false;
 		}
-
+		return true;
 	}
 
 	/**

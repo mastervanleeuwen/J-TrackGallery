@@ -197,10 +197,17 @@ img.olTileImage {
 </div>
 <div>
    <center><div id="jtg_map" class="olMap"></div><br /></center>
+<?php
+if (isset($this->mapJS))
+{
+?>
         <div id="popup" class="ol-popup">
           <a href="#" id="popup-closer" class="ol-popup-closer"></a>
           <div id="popup-content"></div>
 </div>
+<?php
+}
+?>
 <div>
 	<form name="adminForm" id="adminForm" method="post"
 		enctype="multipart/form-data" action="<?php echo JRoute::_('index.php?option=com_jtg&view=track&layout=form', false); ?>">

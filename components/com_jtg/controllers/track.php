@@ -191,6 +191,7 @@ class JtgControllerTrack extends JtgController
 		}
 		else
 		{
+			// TODO: can we return to the page where we came from instead?
 			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=files&layout=user', false), false);
 		}
 	}
