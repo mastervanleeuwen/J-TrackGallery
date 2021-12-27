@@ -289,13 +289,17 @@ class JtgModelFiles extends JModelLegacy
 		$db = JFactory::getDBO();
 		$query = "SELECT * FROM #__gps_tracks";
 
-		if ($db->setQuery($query))
-		{
-			return false;
+		try {
+			if ($db->setQuery($query))
+			{
+				return false;
+			}
+
+			$rows = $db->loadAssocList();
 		}
-
-		$rows = $db->loadAssocList();
-
+		catch (Exception $e) {
+			$rows = false;
+		}
 		return $rows;
 	}
 
