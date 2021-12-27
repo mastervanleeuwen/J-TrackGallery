@@ -1543,10 +1543,14 @@ private function extractCoordsGPX($xmlcontents)
 				$wpcode .= "<br /><b>" . JText::_('COM_JTG_ELEVATION') . " :</b> ca. " . round($ele, 1) . "m<small>";
 			}
 			
-			$wpJSarr[] = "{ lon: $wp->lon, lat: $wp->lat, icon: '$sym', html: '$wpcode' }";
-			if (!$wpJSicons[$sym] && $iconJS = $this->parseOwnIcon($sym)) {
+			if (!$wpJSicons[$sym] && ($iconJS = $this->parseOwnIcon($sym))) {
 				$wpJSicons[$sym] = $iconJS;
+				$iconname = $sym;
 			}
+			else {
+				$iconname = 'unknown';
+			}
+			$wpJSarr[] = "{ lon: $wp->lon, lat: $wp->lat, icon: '$iconname', html: '$wpcode' }";
 		}
 		$wpcode = "   var wpInfo = [ ".implode(',',$wpJSarr)." ];\n";
 		$wpcode .= "   var wpIcons = new Map();\n";
