@@ -179,7 +179,7 @@ class JtgViewTrack extends JViewLegacy
 		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 
 		$this->params = JComponentHelper::getParams('com_jtg');
-		$this->id = JFactory::getApplication()->input->getInt('id', null);
+		$this->id = JFactory::getApplication()->input->getInt('id');
 		$uid = JFactory::getUser()->get('id');
 
 		$this->footer = LayoutHelper::footer();
@@ -221,6 +221,7 @@ class JtgViewTrack extends JViewLegacy
 				$this->beatdata = $gpsData->beatData;
 				$this->heighdata = $gpsData->elevationData;
 				$this->speeddata = $gpsData->speedData;
+				$this->pacedata = $gpsData->paceData;
 				$this->date = JHtml::_('date', $this->track->date, JText::_('COM_JTG_DATE_FORMAT_LC4'));
 				if ( count($this->imageList) > 0) {
 		         $this->images = true;
