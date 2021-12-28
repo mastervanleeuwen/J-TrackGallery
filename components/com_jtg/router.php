@@ -245,6 +245,7 @@ function _jtgParseRouteSubCategory(&$segments)
 			{
 				$vars['view'] = 'track';
 				$vars['layout'] = 'form';
+				$vars['id'] = null; // Unset id in case some other component has set it
 			}
 			else
 			{
