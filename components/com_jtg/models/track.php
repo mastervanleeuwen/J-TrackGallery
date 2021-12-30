@@ -333,7 +333,7 @@ class JtgModelTrack extends JModelLegacy
 			$user = JUser::getInstance((int)  $params->get('upload_notify_uid'));
 			$recipient = $user->email;
 			$mailer->addRecipient($recipient);
-			$link = JRoute::_(JUri::base() . "index.php?option=com_jtg&view=files&layout=file&id=" . $rows->id);
+			$link = JRoute::_(JUri::base() . "index.php?option=com_jtg&view=track&layout=default&id=" . $rows->id);
 			$msg = JText::_('COM_JTG_NEW_TRACK_MAIL_MSG');
 			$config = JFactory::getConfig();
          $sitename = $config->get('sitename');
@@ -1008,7 +1008,7 @@ class JtgModelTrack extends JModelLegacy
 			$recipient = $user->email;
 			$mailer->addRecipient($recipient);
          */
-			$link = JRoute::_(JUri::base() . "index.php?option=com_jtg&view=files&layout=file&id=" . $id);
+			$link = JRoute::_(JUri::base() . "index.php?option=com_jtg&view=track&layout=default&id=" . $id);
 			$msg = JText::_('COM_JTG_CMAIL_MSG');
          $sitename = $config->get('sitename');
 			$body = sprintf($msg, $sitename, $link);
