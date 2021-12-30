@@ -93,17 +93,17 @@ function _jtgParseRouteFile(&$segments)
 	{
 		case 'file': // backward compatibility for files/file/<id>
 			$vars['view'] = 'track';
+			$vars['layout'] = 'default';
 			$vars['id'] = $segments[0];
 			break;
 
 		case 'default':
+			$vars['view'] = 'track';
+			$vars['layout'] = $layout;
 			array_shift($segments);
 			$vars['id'] = $segments[0];
 			break;
 
-		case 'default':
-			array_shift($segments);
-			
 		case 'form':
 			$vars['view'] = 'track';
 			$vars['layout'] = 'form';
@@ -121,24 +121,6 @@ function _jtgParseRouteFile(&$segments)
 			$vars['task'] = 'vote';
 			$vars['id'] = $segments[0];
 			
-
-		case 'form':
-			$vars['view'] = 'track';
-			$vars['layout'] = 'form';
-			$vars['id'] = $segments[0];
-			break;
-
-		case 'delete':
-			$vars['controller'] = 'track';
-			$vars['task'] = 'delete';
-			$vars['id'] = $segments[0];
-			break;
-
-		case 'vote':
-			$vars['controller'] = 'track'; 
-			$vars['task'] = 'vote';
-			$vars['id'] = $segments[0];
-			break;
 	}
 
 	if (!isset($vars))
