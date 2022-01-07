@@ -1,9 +1,9 @@
 ### J!TrackGallery
 
 J!TrackGallery is a Joomla GPS Track Gallery component.  
-Our Goal is to provide a non commercial, free, open source, GNU/GPL3 licensed component for Joomla 3.x (with some backward compatibility), which allows
+Our Goal is to provide a non commercial, free, open source, GNU/GPL3 licensed component for Joomla 4.x and Joomla 3.x (with some backward compatibility), which allows
  to seamlessly upload GPX tracks and display maps and tracks on Joomla based website.
-- J!Track Gallery documentation: https://mastervanleeuwen.github.io/J-TrackGallery/
+- J!Track Gallery documentation: https://mastervanleeuwen.github.io/J-TrackGallery/ and [release notes](https://mastervanleeuwen.github.io/J-TrackGallery/release notes)
 - For bug reports and enhancement requests, please use the [github issues page](https://github.com/mastervanleeuwen/J-TrackGallery/issues)
 
 #### Technical notes
@@ -12,23 +12,6 @@ J!TrackGallery uses:
 - OpenLayers for maps and GPS track drawing
 - Highslide to display (geotagged) photos
 - The 'gd' PHP package to perform image operations like thumbnail creation for photos
-
-#### Status of the Project
-
-0.9.30 (12 Dec 2020) various technical fixes, including a fix in the install script and settings for automatic updates
-0.9.29 (5 Dec 2020) photo information is now stored in the database; the main fields are the geotag information and a title field
-- Image titles can be set/added in the update track forms and are shown in the gallery view as well as the popups on the map
-- Geotag information is extracted from the exif in the image file; plan to add possibility to set this in the edit view in the future
-several tweaks to layout and style of pages
-
-0.9.28 (15 November 2020) is an inofficial release of J!Track Gallery; the main changes with respect to 0.9.27 are:
-- Move to OpenLayers v6. This changes the appearance of maps, and makes future additions easier
-- Switching between maps in the front end (user view) is not supported by the new openlayers, and has been disabled
-- Support for Route information from Garmin Basecamp
-- Google maps support is not present by default; the terms and conditions no longer allow to display Google Maps with the OpenLayers API. There is a workaround for this, but it has not been implemented in Joomla Track Gallery yet.
-
-0.9.27 version of J!Track Gallery have been pushed in March 2017.  
-Last months commits were mostly related to adding new feature and bug fix.
 
 #### History of J!TrackGallery  
 
