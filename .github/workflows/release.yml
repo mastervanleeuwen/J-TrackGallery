@@ -1,0 +1,27 @@
+name: release-jtrackgallery
+on: 
+  release:
+    types: published
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: zip -rp com_jtg.zip components administrator com_jtg.xml installuninstallscript.php
+      - run: cd modules/mod_jtrackgallery_stats && zip -rp ../../mod_jtrackgallery_stats.zip * && cd -
+      - run: cd modules/mod_jtrackgallery_latest && zip -rp ../../mod_jtrackgallery_latest.zip * && cd -
+      - run: cd plugins/content/jtrackgallery_maps && zip -r ../../../plg_jtrackgallery_maps.zip * && cd -
+      - run: zip package_jtg.zip com_jtg.zip mod_jtrackgallery_latest.zip mod_jtrackgallery_stats.zip plg_jtrackgallery_maps.zip pkg_jtrackgallery.xml
+#      - uses: xresloader/upload-to-github-release@v1.3.2
+      - uses: SierraSoftworks/gh-releases@v1.0.4
+        # env:
+        #  GITHUB_TOKEN: ${{ github.token }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          overwrite: true
+          files: |
+            com_jtg.zip
+            plg_jtrackgallery_maps.zip
+            mod_jtrackgallery_stats.zip
+            mod_jtrackgallery_latest.zip
+            package_jtg.zip
