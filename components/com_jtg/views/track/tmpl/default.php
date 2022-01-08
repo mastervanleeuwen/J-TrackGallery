@@ -215,11 +215,12 @@ fixedControls: 'fit',
 <script type="text/javascript">
 	jQuery.noConflict();
 </script>
-<script
-	src="///code.highcharts.com/highcharts.js"></script>
-<script
-	src="///code.highcharts.com/modules/exporting.js"></script>
-
+<?php
+   //$document->addScript("///code.highcharts.com/highcharts.js");
+   //$document->addScript("///code.highcharts.com/modeules/highcharts.js");
+   //$document->addScript(Uri::root(true) . '/components/com_jtg/assets/js/highcharts.js');
+   $document->addScript('https://testing.gta-trek.eu/components/com_jtg/assets/js/highcharts.js');
+?>
 <script type="text/javascript">
 		var isIE=0;
 		if (navigator.appName == 'Microsoft Internet Explorer')
