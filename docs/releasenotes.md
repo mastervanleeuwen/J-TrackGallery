@@ -1,6 +1,8 @@
+---
 layout: page
 title: "Release notes"
 permalink: /releasenotes/
+---
 
 ### J!TrackGallery release notes
 
