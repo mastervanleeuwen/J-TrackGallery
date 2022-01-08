@@ -1,3 +1,7 @@
+layout: page
+title: "Release notes"
+permalink: /releasenotes/
+
 ### J!TrackGallery release notes
 
 More detailed release notes can be found on the [Github Release page](https://github.com/mastervanleeuwen/J-TrackGallery/releases)
