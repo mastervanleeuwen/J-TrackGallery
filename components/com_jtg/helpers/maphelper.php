@@ -42,6 +42,11 @@ class JtgMapHelper {
 		$cfg = JtgHelper::getConfig();
 		$iconurl = JUri::root() . "components/com_jtg/assets/template/" . $cfg->template . "/images/";
 		$iconpath = JPATH_SITE . "/components/com_jtg/assets/template/" . $cfg->template . "/images/";
+		$animCursor = 'false';
+		if (JComponentHelper::getParams('com_jtg')->get('jtg_param_disable_map_animated_cursor') == 0) 
+		{
+			$animCursor = 'true';
+		}
 
 		$map = "\n<script type=\"text/javascript\">\n".
 				"	jtgBaseUrl = \"".Uri::root()."\";\n".
@@ -49,7 +54,7 @@ class JtgMapHelper {
 		$map .= JtgMapHelper::parseMapInitJS($mapid);
 		$map .= "	longitudeData = ".$gpsTrack->longitudeData.";
    latitudeData = ".$gpsTrack->latitudeData.";
-   drawTrack(latitudeData, longitudeData);\n";
+   drawTrack(latitudeData, longitudeData, ".$animCursor.");\n";
 
 		if ($showLocationButton) {
 			JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon

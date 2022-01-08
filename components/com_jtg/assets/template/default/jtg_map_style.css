@@ -83,6 +83,7 @@ img.olTileImage {
     bottom: 12px;
     left: -50px;
     min-width: 280px; 
+    visible: false;
 }
 .ol-popup:after, .ol-popup:before {
     top: 100%;

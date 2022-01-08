@@ -62,7 +62,7 @@ function jtgMapInit(mapType = 0, mapOpt = '', apiKey = '') {
 	jtgMap.addLayer(mapLayer);
 }
 
-function drawTrack(latitudeData, longitudeData) {
+function drawTrack(latitudeData, longitudeData, animatedCursor = false) {
 	var gpsTrack = new ol.layer.Vector({ 
 		source: new ol.source.Vector(),
 		style: new ol.style.Style({
@@ -99,20 +99,22 @@ function drawTrack(latitudeData, longitudeData) {
 	jtgView.fit( gpsTrack.getSource().getExtent(), {padding: [50, 50, 50, 75]} );
 	jtgMap.addControl( new ol.control.ZoomToExtent( {extent: jtgView.calculateExtent()} ) );
 
-	animatedCursorLayer = new ol.layer.Vector({
-		source: new ol.source.Vector(),
-		style: animated_cursor_style,
-		visible: false
-	});
-	animatedCursorLineFeature = new ol.Feature({ 
-		geometry: new ol.geom.LineString(points)});
-	animatedCursorLineFeature.setId('cursorTrack');
-	animatedCursorLayer.getSource().addFeature(animatedCursorLineFeature);
-	animatedCursorLayer.gpxPoints = points;
-	jtgMap.addLayer(animatedCursorLayer);
+	if (animatedCursor) {
+		animatedCursorLayer = new ol.layer.Vector({
+			source: new ol.source.Vector(),
+			style: animated_cursor_style,
+			visible: false
+		});
+		animatedCursorLineFeature = new ol.Feature({ 
+			geometry: new ol.geom.LineString(points)});
+		animatedCursorLineFeature.setId('cursorTrack');
+		animatedCursorLayer.getSource().addFeature(animatedCursorLineFeature);
+		animatedCursorLayer.gpxPoints = points;
+		animatedCursorIcon = new ol.geom.Point( ol.proj.fromLonLat([3.79273,50.29782], jtgView.getProjection()));
+		animatedCursorLayer.getSource().addFeature( new ol.Feature( { geometry: animatedCursorIcon } ) );
 
-	animatedCursorIcon = new ol.geom.Point( ol.proj.fromLonLat([3.79273,50.29782], jtgView.getProjection()));
-	animatedCursorLayer.getSource().addFeature( new ol.Feature( { geometry: animatedCursorIcon } ) );
+		jtgMap.addLayer(animatedCursorLayer);
+	}
 	addPopup(jtgMap);
 }
 
@@ -364,6 +366,7 @@ function addPopup(olmap) {
      */
     var overlay = new ol.Overlay({
         element: container,
+        position: undefined,
         autoPan: true,
         autoPanAnimation: {
             duration: 250
