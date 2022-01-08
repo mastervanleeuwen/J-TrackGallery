@@ -17,9 +17,10 @@ The main features are:
 
 - To see the frontend, please look here for [Joomla 3](https://jtrackgallery.gta-trek.eu/) and [Joomla 4](https://jtrackgalleryj4.gta-trek.eu/)
 - Documentation pages can be found [here](https://mastervanleeuwen.github.io/J-TrackGallery/)
-- The code is hosted on [github](https://github.com/mastervanleeuwen/J-TrackGallery) [releases](https://github.com/mastervanleeuwen/J-TrackGallery/releases) and [release notes](releasenotes)
+- The code is hosted on [github](https://github.com/mastervanleeuwen/J-TrackGallery): [list of releases](https://github.com/mastervanleeuwen/J-TrackGallery/releases) and [release notes](releasenotes)
 - J-TrackGallery is has also been submitted to the [Joomla extension directory](https://extensions.joomla.org/index.php?option=com_jed&view=extension&layout=default&id=15190&Itemid=145)
 - For bug reports etc to this version, use the [github issues page](https://github.com/mastervanleeuwen/J-TrackGallery/issues)
+- The [J!TrackGallery maps plugin](plugin) can be used to show GPS tracks in Joomla articles or other components
 
 ### History of J!TrackGallery  
 

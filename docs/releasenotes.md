@@ -1,8 +1,8 @@
-### Status of the Project
+### J!TrackGallery release notes
 
 More detailed release notes can be found on the [Github Release page](https://github.com/mastervanleeuwen/J-TrackGallery/releases)
 
-0.9.33cc is the [latest pre-release](https://github.com/mastervanleeuwen/J-TrackGallery/releases/tag/0.9.33c) with several minor bugfixes. A new version 0.9.34 will be released when all pending issues are fixed.
+0.9.33c is the [latest pre-release](https://github.com/mastervanleeuwen/J-TrackGallery/releases/tag/0.9.33c) with several minor bugfixes. A new version 0.9.34 will be released when all pending issues are fixed.
 
 0.9.33 (7 Nov 2021) Joomla 4 compatibility plus various technical improvements. The User view shows a summary of the user activity.
 
