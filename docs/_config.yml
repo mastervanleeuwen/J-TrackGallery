@@ -1,5 +1,5 @@
 theme: jekyll-theme-minimal
-show-downloads: true
+show_downloads: true
 header_pages:
   - index.md
   - releasenotes.md
