@@ -1211,7 +1211,7 @@ private function extractCoordsGPX($xmlcontents)
 			$this->totalDescent = (int) $this->totalDescent;
 		}
 
-		if ( ( $this->totalAscent == 0 ) or ($this->totalDescent == 0) )
+		if ( ( $this->totalAscent == 0 ) and ($this->totalDescent == 0) )
 		{
 			$this->elevationDataExists = false;
 		}
