@@ -173,8 +173,8 @@ class plgContentJtrackgallery_maps extends JPlugin {
 	private function rendermap($plgParams, $plg_call_params)
 	{
 		$document = JFactory::getDocument();
-		$document->addStyleSheet(JUri::base(true) . 'components/com_jtg/assets/template/default/ol.css');
-		$document->addStyleSheet(JUri::base(true) . 'components/com_jtg/assets/template/default/ol.css.map');
+		$document->addStyleSheet(JUri::base(true) . 'media/com_jtg/js/openlayers/ol.css');
+		$document->addStyleSheet(JUri::base(true) . 'media/com_jtg/js/openlayers/ol.css.map');
 
 		// Add jtg_map stylesheet
 		require_once JPATH_SITE . '/components/com_jtg/helpers/helper.php';
@@ -201,8 +201,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		$trackImages = $model->getImages($plg_call_params['id']);
 		$document = JFactory::getDocument();
 		require_once JPATH_SITE . '/components/com_jtg/helpers/gpsClass.php';
-		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js');
-		//$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js.map');
+		$document->addScript( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');

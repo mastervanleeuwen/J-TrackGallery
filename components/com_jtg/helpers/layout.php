@@ -233,9 +233,9 @@ class LayoutHelper
 	{
                 // MvL TODO: Used in jtg view, but not in file view?
                 // where is this used? Remove duplication?
-		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js');
+		$document->addScript( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
-                $document->addStyleSheet( JUri::root(true) . '/components/com_jtg/assets/template/default/ol.css');  // Load OpenLayers Stylesheet
+		$document->addStyleSheet( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');  // Load OpenLayers Stylesheet
 	}
 
 	/**

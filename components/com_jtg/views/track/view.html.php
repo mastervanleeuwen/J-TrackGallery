@@ -17,6 +17,8 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+
 jimport('joomla.application.component.view');
 require_once JPATH_COMPONENT . '/helpers/maphelper.php';
 
@@ -60,9 +62,9 @@ class JtgViewTrack extends JViewLegacy
 		2 = special // Ie admin
 		9 = private
 		*/
-		$uid = JFactory::getUser()->id;
+		$uid = Factory::getUser()->id;
 
-		if (JFactory::getUser()->get('isRoot'))
+		if (Factory::getUser()->get('isRoot'))
 		{
 			$admin = true;
 		}
@@ -149,7 +151,7 @@ class JtgViewTrack extends JViewLegacy
 		$file = JPATH_SITE . "/components/com_jtg/models/jtg.php";
 		require_once $file;
 
-		$mainframe = JFactory::getApplication();
+		$mainframe = Factory::getApplication();
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 
@@ -168,19 +170,20 @@ class JtgViewTrack extends JViewLegacy
 		$cfg = JtgHelper::getConfig();
 		$this->cfg = $cfg;
 
-		$document = JFactory::getDocument();
+		$document = $mainframe->getDocument();
 
 		// Then load jtg_map stylesheet
 		$tmpl = strlen($cfg->template) ? $cfg->template : 'default';
 
 		// Load Openlayers stylesheet first (for overriding)
-		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/ol.css');
+		$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
 
 		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 
 		$this->params = JComponentHelper::getParams('com_jtg');
-		$this->id = JFactory::getApplication()->input->getInt('id');
-		$uid = JFactory::getUser()->get('id');
+		//$this->id = $mainframe->getInput()->getInt('id');
+		$this->id = $mainframe->input->getInt('id');
+		$uid = Factory::getUser()->id;
 
 		$this->footer = LayoutHelper::footer();
 
@@ -191,17 +194,14 @@ class JtgViewTrack extends JViewLegacy
 		if (isset ($this->id))
 		{
 			// In the form view, $id would not be available for new files
-			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js');  // Load OpenLayers
+			$document->addScript( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.js');  // Load OpenLayers
 			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
 			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
 			if ($this->params->get('jtg_param_disable_map_animated_cursor') == 0) {
 				$document->addScript(JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 			}
 			$this->track = $model->getFile( $this->id );
-			$cache = JFactory::getCache('com_jtg');
-			// Cache: $gpsData structure is cached, after LoadFileAndData
 			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($this->track->file);
-			//$gpsData = $cache->call(array ( $gpsData, 'loadFileAndData' ), $file, $this->track->file );
 			$gpsData->loadFileAndData($file, $this->track->file);
 			$this->imageList = $model->getImages($this->id);
 			$this->distance_float = (float) $this->track->distance;
@@ -209,7 +209,6 @@ class JtgViewTrack extends JViewLegacy
 
 			if (!$gpsData->displayErrors())
 			{
-				//$this->map = $cache->call(array ( $gpsData, 'writeTrackOL' ), $this->track, $this->params, $this->imageList );
 				$makepreview = false;
 				if ($this->getLayout() == 'form') $makepreview = true;
 				$this->mapJS = JtgMapHelper::parseTrackMapJS($gpsData,$this->track->id, $this->track->default_map, $this->imageList, $makepreview);
@@ -265,18 +264,19 @@ class JtgViewTrack extends JViewLegacy
 	function approach($service)
 	{
 		// 	$userparams = explode("\n", $this->user->params);
-		$lang = JFactory::getLanguage();
-		$user = JFactory::getUser();
+		$app = Factory::getApplication();
+		$lang = $app->getLanguage();
+		$user = Factory::getUser();
 
 		/*
 		 if ($user->id == 0) // User is public
 		{
-		$config = JFactory::getConfig();
+		$config = Factory::getConfig();
 		$lang = $config->getValue('language');
 		}
 		else
 		{
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$lang = $user->getParam('language', 'the default');
 		}
 		*/

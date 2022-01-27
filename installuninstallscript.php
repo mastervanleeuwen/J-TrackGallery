@@ -344,6 +344,11 @@ class Com_JtgInstallerScript
 		JFile::delete($folder.'/user.php');
 		JFile::delete($folder.'/user.xml');
 		JFile::delete(JPATH_SITE.'/components/com_jtg/controllers/files.php');
+		// openlayers code moved from assets to media
+		JFile::delete(JPATH_SITE.'components/com_jtg/assets/js/ol.js');
+		JFile::delete(JPATH_SITE.'components/com_jtg/assets/js/ol.js.map');
+		JFile::delete(JPATH_SITE.'components/com_jtg/assets/template/default/ol.css');
+		JFile::delete(JPATH_SITE.'components/com_jtg/assets/template/default/ol.css.map');
 		/*
 		 * Move existing old image gallery
 		 * from /images/jtrackgallery/track_xx (version<= 0.9.9)

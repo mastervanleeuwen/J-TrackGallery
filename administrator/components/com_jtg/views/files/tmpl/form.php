@@ -45,8 +45,8 @@ JToolBarHelper::help('files/form', true);
 $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 $document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/default/jtg_style.css');
-$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/default/ol.css');
-$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/default/ol.css.map');
+$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
+$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css.map');
 
 // Add jtg_map stylesheet
 $cfg = JtgHelper::getConfig();
@@ -73,7 +73,7 @@ if ($this->id >= 1)
 	$track = $model->getFile($this->id);
 	$document = JFactory::getDocument();
 	require_once '../components/com_jtg/helpers/gpsClass.php';
-	$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/ol.js');
+	$document->addScript( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
 	$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
 	if ($params->get('jtg_param_disable_map_animated_cursor') == "0") {
 		$document->addScript(JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
