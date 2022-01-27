@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: zip -rp com_jtg.zip components administrator com_jtg.xml installuninstallscript.php
+      - run: zip -rp com_jtg.zip administrator components media com_jtg.xml installuninstallscript.php
       - run: cd modules/mod_jtrackgallery_stats && zip -rp ../../mod_jtrackgallery_stats.zip * && cd -
       - run: cd modules/mod_jtrackgallery_latest && zip -rp ../../mod_jtrackgallery_latest.zip * && cd -
       - run: cd plugins/content/jtrackgallery_maps && zip -r ../../../plg_jtrackgallery_maps.zip * && cd -
