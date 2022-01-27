@@ -216,10 +216,8 @@ fixedControls: 'fit',
 	jQuery.noConflict();
 </script>
 <?php
-   //$document->addScript("///code.highcharts.com/highcharts.js");
-   //$document->addScript("///code.highcharts.com/modeules/highcharts.js");
-   //$document->addScript(Uri::root(true) . '/components/com_jtg/assets/js/highcharts.js');
-   $document->addScript('https://testing.gta-trek.eu/components/com_jtg/assets/js/highcharts.js');
+   $document->addScript("///code.highcharts.com/highcharts.js");
+	$comma = '';
 ?>
 <script type="text/javascript">
 		var isIE=0;
@@ -288,12 +286,14 @@ fixedControls: 'fit',
 				,opposite: <?php echo  $heightchartopposite; ?>
 			}
 <?php
+	$comma = ',';
 }
 
 if ($pacechart)
 {
+	echo '			'.$comma."\n";
 ?>
-			, { // Pace data
+			  { // Pace data
 				gridLineWidth: 0,
 				title: {
 				text: '<?php echo JText::_('COM_JTG_PACE') . '(' . JText::_('COM_JTG_PACE_UNIT_' . strtoupper($this->cfg->unit)); ?>)',
@@ -312,12 +312,14 @@ if ($pacechart)
 				,opposite: <?php echo $pacechartopposite; ?>
 			}
 <?php
+	$comma = ',';
 }
 
 if ($speedchart)
 {
+	echo '			'.$comma."\n";
 ?>
-			, { // Speed data
+			 { // Speed data
 				gridLineWidth: 0,
 				title: {
 				text: '<?php echo JText::_('COM_JTG_SPEED') . '(' . JText::_('COM_JTG_SPEED_UNIT_' . strtoupper($this->cfg->unit)); ?>)',
@@ -336,12 +338,14 @@ if ($speedchart)
 				,opposite: <?php echo $speedchartopposite; ?>
 			}
 <?php
+	$comma = ',';
 }
 
 if ($beatchart)
 {
+	echo '			'.$comma."\n";
 ?>
-				,{ // Heart beat data
+				{ // Heart beat data
 				gridLineWidth: 0,
 				title: {
 				text: '<?php echo JText::_('COM_JTG_HEARTFREQU') . '(' . JText::_('COM_JTG_HEARTFREQU_UNIT'); ?>)',
@@ -417,6 +421,7 @@ if (! (bool) $this->params->get("jtg_param_disable_map_animated_cursor", false))
 			},
 			series: [
 <?php
+$comma = '';
 if ($heightchart)
 {
 ?>
@@ -435,12 +440,14 @@ if ($heightchart)
 
 			}
 <?php
+	$comma = ',';
 }
 
 if ($pacechart)
 {
+	echo '			'.$comma."\n";
 	?>
-				, {
+				{
 				name: '<?php echo JText::_('COM_JTG_PACE'); ?>',
 				unit:'<?php echo JText::_('COM_JTG_PACE_UNIT_' . strtoupper($this->cfg->unit)); ?>',
 				color: '<?php echo $charts_linec_pace; ?>',
@@ -455,12 +462,14 @@ if ($pacechart)
 
 			}
 <?php
+	$comma = ',';
 }
 
 if ($speedchart)
 {
+	echo '			'.$comma."\n";
 ?>
-				, {
+				{
 				name: '<?php echo JText::_('COM_JTG_SPEED'); ?>',
 				unit:'<?php echo JText::_('COM_JTG_SPEED_UNIT_' . strtoupper($this->cfg->unit)); ?>',
 				color: '<?php echo $charts_linec_speed; ?>',
@@ -476,12 +485,14 @@ if ($speedchart)
 
 			}
 <?php
+	$comma = ',';
 }
 
 if ($beatchart)
-{
+{ 
+	echo '			'.$comma."\n";
 ?>
-				, {
+			{
 				name: '<?php echo JText::_('COM_JTG_HEARTFREQU'); ?>',
 				unit: '<?php echo JText::_('COM_JTG_HEARTFREQU_UNIT'); ?>',
 				color: '<?php echo $charts_linec_heartbeart; ?>',
