@@ -1,4 +1,5 @@
-remote_theme: poole/lanyon
+remote_theme: pmarsceill/just-the-docs
+# remote_theme: poole/lanyon
 # theme: jekyll-theme-minimal
 plugins:
   - jekyll-gist
