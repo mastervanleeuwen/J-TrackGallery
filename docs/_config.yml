@@ -1,4 +1,4 @@
-theme: jekyll-theme-minimal
+remote-theme: poole/lanyon
 show_downloads: true
 header_pages:
   - index.md
