@@ -1,4 +1,4 @@
-remote-theme: poole/lanyon
+remote_theme: poole/lanyon
 show_downloads: true
 header_pages:
   - index.md
