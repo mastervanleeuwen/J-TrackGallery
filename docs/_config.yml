@@ -1,7 +1,11 @@
-# remote_theme: poole/lanyon
-theme: jekyll-theme-minimal
-show_downloads: true
-header_pages:
-  - index.md
-  - releasenotes.md
-  - plugin.md
+remote_theme: poole/lanyon
+# theme: jekyll-theme-minimal
+plugins:
+  - jekyll-gist
+  - jekyll-paginate
+  - jekyll-seo-tag
+# show_downloads: true
+# header_pages:
+#  - index.md
+#  - releasenotes.md
+#  - plugin.md
