@@ -1,13 +1,13 @@
-# remote_theme: pmarsceill/just-the-docs
+remote_theme: pmarsceill/just-the-docs
 # remote_theme: tomjoht/documentation-theme-jekyll
-remote_theme: poole/lanyon
+# remote_theme: poole/lanyon
 # theme: jekyll-theme-minimal
 include: ["public/"]
 plugins:
   - jekyll-gist
   - jekyll-paginate
   - jekyll-seo-tag
-# show_downloads: true
+show_downloads: true
 # header_pages:
 #  - index.md
 #  - releasenotes.md
