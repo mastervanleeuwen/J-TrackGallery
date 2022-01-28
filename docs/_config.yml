@@ -3,7 +3,7 @@
 remote_theme: poole/lanyon
 # theme: jekyll-theme-minimal
 include:
-  - public
+  - public/
 plugins:
   - jekyll-gist
   - jekyll-paginate
