@@ -8,6 +8,11 @@ plugins:
   - jekyll-paginate
   - jekyll-seo-tag
 show_downloads: true
+
+# Aux links for the upper right navigation (just-the-docs theme)
+aux_links:
+  "J!TrackGallery GitHub":
+    - "//github.com/mastervanleeuwen/J-TrackGallery"
 # header_pages:
 #  - index.md
 #  - releasenotes.md
