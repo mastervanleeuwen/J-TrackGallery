@@ -61,22 +61,22 @@ $version = (string) $manifest['version'];
 				</tr>
 				<tr>
 					<td><?php echo JText::_('COM_JTG_CHANGELOG_PAGE');?>:</td>
-					<td><a href="http://jtrackgallery.net/wiki/install/changelog" target="_blank">http://jtrackgallery.net/wiki/install/changelog</a>
+					<td><a href="https://mastervanleeuwen.github.io/J-TrackGallery/releasenotes/" target="_blank">https://mastervanleeuwen.github.io/J-TrackGallery/releasenotes</a>
 					</td>
 				</tr>
 				<tr>
 					<td><?php echo JText::_('COM_JTG_DEMO_PAGE');?>:</td>
-					<td><a href="http://jtrackgallery.net" target="_blank">http://jtrackgallery.net/demo</a>
+					<td><a href="https://jtrackgalleryj4.gta-trek.eu/" target="_blank">https://jtrackgalleryj4.gta-trek.eu/</a>
 					</td>
 				</tr>
 				<tr>
 					<td><?php echo JText::_('COM_JTG_PROJECT_PAGE');?>:</td>
-					<td><a href="http://jtrackgallery.net" target="_blank">http://jtrackgallery.net</a>
+					<td><a href="https://mastervanleeuwen.github.io/J-TrackGallery/" target="_blank">https://mastervanleeuwen.github.io/J-TrackGallery/</a>
 					</td>
 				</tr>
 				<tr>
 					<td><?php echo JText::_('COM_JTG_SUPPORT');?>:</td>
-					<td><a href="http://jtrackgallery.net/forum" target="_blank">http://jtrackgallery.net/forum</a>
+					<td><a href="https://github.com/mastervanleeuwen/J-TrackGallery/issues" target="_blank">https://github.com/mastervanleeuwen/J-TrackGallery/issues</a>
 					</td>
 				</tr>
 				<tr>
