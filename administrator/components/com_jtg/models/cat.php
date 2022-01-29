@@ -295,33 +295,18 @@ class JtgModelCat extends JModelLegacy
 		$image = $input->get('catpic');
 		$usepace = $input->get('usepace');
 		$default_map = $input->get('default_map');
-		$default_overlays = $input->get('default_overlays',null,'array');
-		if ($default_overlays[0]==0)
-		{
-			// None has been selected: deselect all other selection (multiple selection)
-			$default_overlays=array(0);
-		}
-		$default_overlays = serialize($default_overlays);
 
 		$query = "INSERT INTO #__jtg_cats SET"
 		. "\n parent_id='" . $parent . "',"
 		. "\n title='" . $title . "',"
 		. "\n image='" . $image . "',"
 		. "\n usepace='" . $usepace . "',"
-		. "\n default_map='" . $default_map . "',"
-		. "\n default_overlays='" . $default_overlays . "',"
+		. "\n default_map=" . $default_map . ","
 		. "\n description='" . $desc . "',"
 		. "\n published='" . $published . "'";
 
 		$db->setQuery($query);
 		$db->execute();
-
-		if ($db->execute())
-		{
-			echo $db->stderr();
-
-			return false;
-		}
 
 		return true;
 	}
@@ -402,13 +387,6 @@ class JtgModelCat extends JModelLegacy
 		$image = $input->get('catpic');
 		$usepace = $input->get('usepace');
 		$default_map = $input->get('default_map');
-		$default_overlays = $input->get('default_overlays',null,'array');
-		if ($default_overlays[0]==0)
-		{
-			// None has been selected: deselect all other selection (multiple selection)
-			$default_overlays=array(0);
-		}
-		$default_overlays = serialize($default_overlays);
 
 		if ( $title == "" )
 		{
@@ -432,21 +410,13 @@ class JtgModelCat extends JModelLegacy
 		. "\n title='" . $title . "',"
 		. "\n image='" . $image . "',"
 		. "\n usepace='" . $usepace . "',"
-		. "\n default_map='" . $default_map . "',"
-		. "\n default_overlays='" . $default_overlays . "',"
+		. "\n default_map=" . $default_map . ","
 		. "\n description='" . $desc . "',"
 		. "\n published='" . $published . "'"
 		. "\n WHERE id='" . $id . "'";
 
 		$db->setQuery($query);
 		$db->execute();
-
-		if ($db->execute())
-		{
-			echo $db->stderr();
-
-			return false;
-		}
 
 		return true;
 	}

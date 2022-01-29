@@ -31,7 +31,7 @@ $image = $this->data->image;
 	<table class="adminlist">
 		<thead>
 			<tr>
-				<th colspan="2" align="center"><?php echo JText::_('COM_JTG_ADD_CAT'); ?>
+				<th colspan="2" align="center"><?php echo JText::_('COM_JTG_EDIT_CAT'); ?>
 				</th>
 			</tr>
 		</thead>
@@ -54,10 +54,6 @@ $image = $this->data->image;
 			<tr>
 				<td width="150px"><?php echo JText::_('COM_JTG_CATS_DEFAULT_MAP'); ?></td>
 				<td><?php echo $this->lists['default_map']; ?></td>
-			</tr>
-			<tr>
-				<td width="150px"><?php echo JText::_('COM_JTG_CATS_DEFAULT_OVERLAYS'); ?></td>
-				<td><?php echo $this->lists['default_overlays']; ?></td>
 			</tr>
 			<tr>
 				<td width="150px"><?php echo JText::_('COM_JTG_USEPACE'); ?></td>

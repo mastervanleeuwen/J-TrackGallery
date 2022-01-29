@@ -186,12 +186,9 @@ class JtgViewCats extends JViewLegacy
 
 		$default_map = $model->getDefaultMaps();
 		array_unshift($default_map, array('id' => 0, "name" => JText::_('JNONE')) );
-		$default_overlays = $model->getDefaultOverlays();
-		array_unshift($default_overlays, array('id' => 0, "name" => JText::_('JNONE')) );
-		$size=min(4,count($default_overlays));
 
       if (JVERSION >= 4.0) {
-         $editor = JFactory::getApplication()->getEditor();
+         $editor = JFactory::getApplication()->getConfig()->get('editor');
       }
       else 
       {
@@ -236,7 +233,7 @@ class JtgViewCats extends JViewLegacy
 		$id = $cid[0];
 
       if (JVERSION >= 4.0) {
-         $editor = JFactory::getApplication()->getEditor();
+         $editor = JFactory::getApplication()->getConfig()->get('editor');
       }
       else 
       {
@@ -251,10 +248,6 @@ class JtgViewCats extends JViewLegacy
 
 		$default_map=$model->getDefaultMaps();
 		array_unshift($default_map, array('id' => 'null', "name" => JText::_('JNONE')) );
-
-		$default_overlays = $model->getDefaultOverlays();
-		array_unshift($default_overlays, array('id' => 'null', "name" => JText::_('JNONE')) );
-		$size=min(4,count($default_overlays));
 
 		$data = $model->getCat($id);
 

@@ -52,10 +52,6 @@ JToolBarHelper::help('cats/form', true);
 				<td><?php echo $this->lists['default_map']; ?></td>
 			</tr>
 			<tr>
-				<td width="150px"><?php echo JText::_('COM_JTG_CATS_DEFAULT_OVERLAYS'); ?></td>
-				<td><?php echo $this->lists['default_overlays']; ?></td>
-			</tr>
-			<tr>
 				<td width="150px"><?php echo JText::_('COM_JTG_USEPACE'); ?></td>
 				<td><?php echo $this->lists['usepace']; ?></td>
 			</tr>

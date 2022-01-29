@@ -83,7 +83,7 @@ class JtgViewComments extends JViewLegacy
 		$model = $this->getModel();
 		$comment = $model->getComment($cid);
 		if (JVERSION >= 4.0) {
-			$editor = JFactory::getApplication()->getEditor();
+			$editor = JFactory::getApplication()->getConfig()->get('editor');
 		}
 		else 
 		{

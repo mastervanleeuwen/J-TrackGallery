@@ -44,7 +44,6 @@ $ordering = ($this->lists['order'] == 'ordering');
 				<th class="title"><?php echo JText::_('COM_JTG_CAT'); ?></th>
 				<th class="title"><?php echo JText::_('COM_JTG_DESCRIPTION'); ?></th>
 				<th class="title"><?php echo JText::_('COM_JTG_DEFAULT_MAP'); ?></th>
-				<th class="title"><?php echo JText::_('COM_JTG_DEFAULT_OVERLAYS'); ?></th>
 				<th class="title"><?php echo JText::_('COM_JTG_USEPACE'); ?></th>
 				<?php
 if ( $ordering !== false )
@@ -74,23 +73,6 @@ for ($i = 0; $i < $n; $i++)
 	$row = $this->list[$i];
 	$checked 	= JHtml::_('grid.checkedout', $row, $i);
 	$published 	= JHtml::_('jgrid.published', $row->published, $i);
-	$temp = unserialize($row->default_overlays);
-	if (is_array($temp))
-	{
-		if ($temp[0]<>0)
-		{
-			$default_overlays_string = implode(",", $temp);
-		}
-		else
-		{
-			$default_overlays_string='';
-		}
-	}
-	else
-	{
-		$default_overlays_string='';
-	}
-
 ?>
 			<tr class="<?php echo $k? "row$k row-odd":"row$k row-even"; ?>">
 				<td align="center"><?php echo $this->pagination->getRowOffset($i); ?>
@@ -105,13 +87,11 @@ if ((isset($this->catpic[$this->list[$i]->id])) AND ( $this->catpic[$this->list[
 }
 ?>
 				</td>
-				<td align="left"><a href="javascript:void(0);"
-					onclick="javascript:return listItemTask('cb<?php echo $i; ?>','editcat')">
+				<td align="left"><a href="/administrator/index.php?option=com_jtg&amp;controller=cats&amp;task=editcat&amp;cid=<?php echo $row->id; ?>">
 						<?php echo JText::_($row->treename); ?>
 				</a></td>
 				<td><?php echo JText::_($row->description); ?></td>
 				<td><?php echo $row->default_map? $row->default_map: ''; ?></td>
-				<td><?php echo $default_overlays_string; ?></td>
 				<td><?php echo $row->usepace? JText::_('JYES'): JText::_('JNO'); ?></td>
 	<?php
 	if ( $ordering !== false )

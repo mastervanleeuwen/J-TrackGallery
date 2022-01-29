@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS `#__jtg_cats` (
 	`usepace` TINYINT(1) NOT NULL DEFAULT '0', 
 	`published` int(10) NOT NULL,
 	`default_map` INT(2) NULL DEFAULT NULL,
-	`default_overlays` TEXT NULL DEFAULT NULL, 
 	`checked_out` int(10) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM	 DEFAULT CHARSET=utf8;

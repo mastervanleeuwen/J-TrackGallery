@@ -240,32 +240,4 @@ class JtgModelCats extends JModelLegacy
 		return $newresult;
 	}
 
-	/**
-	 * get a list for default overlays
-	 *
-	 * @param   unknown_type  $exclusion  param_description
-	 *
-	 * @return unknown
-	 */
-	function getDefaultOverlays()
-	{
-		$db = $this->getDbo();
-
-		$query = "SELECT id,name FROM #__jtg_maps WHERE published=1
-				AND (param LIKE \"%isBaseLayer: false%\" OR param LIKE \"%isBaseLayer:false%\")";
-		$db->setQuery($query);
-		$result = $db->loadObjectList();
-		$newresult = array();
-
-
-		foreach ($result as $k => $v)
-		{
-			$newresult[$k] = $v;
-			$newresult[$k]->name = JText::_($newresult[$k]->name);
-		}
-
-		return $newresult;
-
-	}
-
 }
