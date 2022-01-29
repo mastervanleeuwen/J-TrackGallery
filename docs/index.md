@@ -1,3 +1,7 @@
+---
+title: Overview
+nav_order: 1
+---
 ### J!TrackGallery
 
 J!TrackGallery is a Joomla Track Gallery component, which allows to store and display GPS track data and photos.

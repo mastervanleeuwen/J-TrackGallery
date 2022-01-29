@@ -1,3 +1,7 @@
+---
+title: Language support
+nav_order: 4
+---
 ## Language support
 
 J!TrackGallery currently supports the following languages:

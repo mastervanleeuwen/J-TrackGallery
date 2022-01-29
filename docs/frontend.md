@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Track view
+nav_order: 2
 ---
 
 # Front-end options
