@@ -20,6 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Editor\Editor;
+use Joomla\CMS\MVC\Model\ItemModel;
 /**
  * JtgModelTrack class for the jtg component
  *
@@ -29,7 +30,8 @@ use Joomla\CMS\Editor\Editor;
  */
 
 
-class JtgModelTrack extends JModelLegacy
+//class JtgModelTrack extends JModelLegacy
+class JtgModelTrack extends ItemModel
 {
 
 	/**
@@ -119,7 +121,7 @@ class JtgModelTrack extends JModelLegacy
 	function getCats ()
 	{
 		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT * FROM #__jtg_cats WHERE published=1 ORDER BY ordering ASC";
 
@@ -178,8 +180,8 @@ class JtgModelTrack extends JModelLegacy
 	 */
 	function saveFile ()
 	{
-		$app = JFactory::getApplication();
-		$user = JFactory::getUser();
+		$app = Factory::getApplication();
+		$user = Factory::getUser();
 
 		if (!$user->authorise('core.create', 'com_jtg')) {
 			$app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
@@ -190,7 +192,7 @@ class JtgModelTrack extends JModelLegacy
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		// Get the post data
 		$input = JFactory::getApplication()->input;
@@ -200,9 +202,9 @@ class JtgModelTrack extends JModelLegacy
 		$title = $input->get('title', '', 'string');
 		$terrain = $input->get('terrain', null, 'array');
 		$terrain = $terrain ? implode(', ', $terrain) : '';
-		$desc = $db->escape(implode(' ', JFactory::getApplication()->input->get('description', '', 'array')));
+		$desc = $db->escape(implode(' ', $input->get('description', '', 'array')));
 		$file = $input->files->get('file');
-		$uid = $user->get('id');
+		$uid = $user->id;
 		$date = date("Y-m-d");
 		$images = $input->files->get('images');
 		$access = $input->getInt('access', 0);
@@ -381,9 +383,7 @@ class JtgModelTrack extends JModelLegacy
 	 */
 	function getFile ($id)
 	{
-		$mainframe = JFactory::getApplication();
-
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT a.*, b.title AS cat, b.image AS image, c.name AS user" . "\n FROM #__jtg_files AS a" .
 				"\n LEFT JOIN #__jtg_cats AS b ON a.catid=b.id" . "\n LEFT JOIN #__users AS c ON a.uid=c.id" . "\n WHERE a.id=" . $id;
@@ -400,6 +400,11 @@ class JtgModelTrack extends JModelLegacy
 		return $result;
 	}
 
+	// TODO: rename getFile above to getItem
+	function getItem($id = NULL) {
+		return $this->getFile($id);
+	}
+
 	/**
 	 * function_description
 	 *
@@ -409,8 +414,6 @@ class JtgModelTrack extends JModelLegacy
 	 */
 	function getVotes ($id)
 	{
-		$mainframe = JFactory::getApplication();
-
 		$class = array(
 				'nostar',
 				'onestar',
@@ -425,7 +428,7 @@ class JtgModelTrack extends JModelLegacy
 				'tenstar'
 		);
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		// Count votings
 		$query = "SELECT COUNT(*) FROM #__jtg_votes" . "\n WHERE trackid='" . $id . "'";
@@ -503,9 +506,7 @@ class JtgModelTrack extends JModelLegacy
 		{
 			$givevotes = $this->getVotes($id);
 
-			$mainframe = JFactory::getApplication();
-
-			$db = JFactory::getDBO();
+			$db = $this->getDbo();
 
 			$query = "INSERT INTO #__jtg_votes SET" . "\n trackid='" . $id . "'," . "\n rating='" . $rate . "'";
 			$db->setQuery($query);
@@ -548,13 +549,12 @@ class JtgModelTrack extends JModelLegacy
 	 */
 	function deleteFile ($id)
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
       if ( !$user->authorise('core.delete', 'com_jtg') ) 
 		{
-        	$app=JFactory::getApplication();
 			if (!isset($this->track) || $this->track->id != $id) $this->getFile($id);
 			if (!($user->authorise('core.edit.own') && $this->track->uid == $user->id) &&
 				!($app->getUserState('com_jtg.newfileid') == $id))
@@ -565,7 +565,7 @@ class JtgModelTrack extends JModelLegacy
 			}
       }
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT * FROM #__jtg_files WHERE id='" . $id . "'";
 		$this->_db->setQuery($query);
 		$file = $this->_db->loadObject();
@@ -644,8 +644,7 @@ class JtgModelTrack extends JModelLegacy
     */
    function getImages($id)
    {
-       $mainframe = JFactory::getApplication(); // TODO: remove this line?
-       $db = JFactory::getDBO();
+       $db = $this->getDbo();
        $query = "SELECT * FROM #__jtg_photos"
          . "\n WHERE trackID='" . $id . "'";
        $db->setQuery($query);
@@ -664,8 +663,8 @@ class JtgModelTrack extends JModelLegacy
 	 */
 	function updateFile ($id)
 	{
-		$app = JFactory::getApplication();
-		$user = JFactory::getUser();
+		$app = Factory::getApplication();
+		$user = Factory::getUser();
 		if (!$user->authorise('core.edit', 'com_jtg') &&
           !($user->authorise('core.create', 'com_jtg') && $app->getUserState('com_jtg.newfileid') == $id))
 		{
@@ -681,7 +680,7 @@ class JtgModelTrack extends JModelLegacy
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$user = JFactory::getUser();
 
 		// Get the post data
@@ -705,7 +704,7 @@ class JtgModelTrack extends JModelLegacy
 		/* Joomla Jinput strips html tags!!
 		 http://stackoverflow.com/questions/19426943/joomlas-jinput-strips-html-with-every-filter
 		*/
-		$desc = $db->escape(implode(' ', JFactory::getApplication()->input->get('description', '', 'array')));
+		$desc = $db->escape(implode(' ', $input->get('description', '', 'array')));
 
 		$access = $input->getInt('access', 0);
 		$hidden = $input->getInt('hidden', 0);
@@ -790,8 +789,7 @@ class JtgModelTrack extends JModelLegacy
 	 */
 	function getTerrain ($where = null)
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		// $query = "SELECT * FROM #__jtg_terrains ORDER BY ordering,title ASC";
 		$query = "SELECT * FROM #__jtg_terrains " . $where . " ORDER BY title ASC";
@@ -822,9 +820,7 @@ class JtgModelTrack extends JModelLegacy
 	 */
 	function getComments ($id, $order)
 	{
-		$mainframe = JFactory::getApplication();
-
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT * FROM #__jtg_comments WHERE" . "\n tid=" . $id . "\n AND published=1" . "\n ORDER BY date " . $order;
 		$db->setQuery($query);
 		$result = $db->loadObjectList();
@@ -851,7 +847,7 @@ class JtgModelTrack extends JModelLegacy
 		}
 		$editor = Editor::getInstance($editor);
 		$user = JFactory::getUser();
-		$id = JFactory::getApplication()->input->getInt('id');
+		$id = JFactory::getApplication()->input->getInt('id'); // Check whether getComment works here
 		?>
 
 		<script type="text/javascript">
@@ -957,33 +953,34 @@ class JtgModelTrack extends JModelLegacy
 	 */
 	function savecomment ($id, $cfg)
 	{
-		$mainframe = JFactory::getApplication();
+		$app = JFactory::getApplication();
 
-		$uid = JFactory::getUser()->id;
-		if (!JFactory::getUser()->authorise('jtg.comment','com_jtg')) {
-			$app = JFactory::getApplication();
+		$user = Factory::getUser();
+		$uid = $user->id;
+		if (!$user->authorise('jtg.comment','com_jtg')) {
          $app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
 			return false;
 		}
-		$name = JFactory::getApplication()->input->get('name', '', 'string');
-		$email = JFactory::getApplication()->input->get('email', '', 'Raw');
-		$homepage = JFactory::getApplication()->input->get('homepage', '', 'raw');
-		$title = JFactory::getApplication()->input->get('title', '', 'string');
-		$text = JFactory::getApplication()->input->get('text', '', 'raw');
+		$input = $app->input;
+		$name = $input->get('name', '', 'string');
+		$email = $input->get('email', '', 'Raw');
+		$homepage = $input->get('homepage', '', 'raw');
+		$title = $input->get('title', '', 'string');
+		$text = $input->get('text', '', 'raw');
 
 		if ($text == "")
 		{
 			return false;
 		}
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "INSERT INTO #__jtg_comments SET" . "\n tid='" . $id . "'," . 
 				"\n uid=" . $uid . "," .
 				"\n user=" . $db->quote($name) . "," . "\n email=" . $db->quote($email) . "," .
 				"\n homepage=" . $db->quote($homepage) . "," . "\n title=" . $db->quote($title) . "," . "\n text=" . $db->quote($text) . "," . "\n published=1";
 
 		$db->setQuery($query);
-		if (!$db->execute())
+		if (!$db->execute())  // TODO: change to try -- catch
 		{
 			echo $db->stderr();
 			return false;
@@ -994,20 +991,6 @@ class JtgModelTrack extends JModelLegacy
 		{
 			$mailer = JFactory::getMailer();
 			$config = JFactory::getConfig();
-         /*
-         // Not needed?
-			$sender = array(
-				$mainframe->get('config.mailfrom'),
-				$mainframe->get('config.fromname')
-			);
-			$mailer->setSender($sender);
-         */
-			/* This gets the information of the user that is leaving the comment
-         // Consider as additional option?
-			$user = JFactory::getUser();
-			$recipient = $user->email;
-			$mailer->addRecipient($recipient);
-         */
 			$link = JRoute::_(JUri::base() . "index.php?option=com_jtg&view=track&layout=default&id=" . $id);
 			$msg = JText::_('COM_JTG_CMAIL_MSG');
          $sitename = $config->get('sitename');
@@ -1042,9 +1025,7 @@ class JtgModelTrack extends JModelLegacy
 	 */
 	function getAuthorData ($id)
 	{
-		$mainframe = JFactory::getApplication();
-
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT a.uid, b.name, b.email FROM #__jtg_files AS a" . "\n LEFT JOIN #__users AS b ON a.uid=b.id" . "\n WHERE a.id=" . $id;
 
 		$db->setQuery($query);
@@ -1234,8 +1215,7 @@ class JtgModelTrack extends JModelLegacy
 	 */
 	function getDefaultMaps()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT id,name FROM #__jtg_maps WHERE published=1
 				AND NOT (param LIKE \"%isBaseLayer: false%\" OR param LIKE \"%isBaseLayer:false%\")";
@@ -1262,8 +1242,7 @@ class JtgModelTrack extends JModelLegacy
 	 */
 	function getDefaultOverlays()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT id,name FROM #__jtg_maps WHERE published=1
 				AND (param LIKE \"%isBaseLayer: false%\" OR param LIKE \"%isBaseLayer:false%\")";
@@ -1293,8 +1272,7 @@ class JtgModelTrack extends JModelLegacy
 	// TODO: this is now a static function in JtgModelFiles and JtgModelJtg; decide where it goes
    static public function getCatsData($sort=false, $catid=null)
    {
-      $mainframe = JFactory::getApplication();
-      $db = JFactory::getDBO();
+      $db = $this->getDbo();
 
       $query = "SELECT * FROM #__jtg_cats WHERE published = 1";
       if ( !is_null($catid) )

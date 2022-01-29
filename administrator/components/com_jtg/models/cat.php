@@ -271,7 +271,7 @@ class JtgModelCat extends JModelLegacy
 		JSession::checkToken() or die( 'JINVALID_TOKEN' );
 		jimport('joomla.filesystem.file');
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$title = JFactory::getApplication()->input->get('title', '', 'string');
 
 		if ( $title == "" )
@@ -393,7 +393,7 @@ class JtgModelCat extends JModelLegacy
 		JSession::checkToken() or die( 'JINVALID_TOKEN' );
 		jimport('joomla.filesystem.file');
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$input = JFactory::getApplication()->input;
 		$id = $input->getInt('id');

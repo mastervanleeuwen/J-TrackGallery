@@ -129,7 +129,7 @@ class JtgModelTerrain extends JModelLegacy
 	{
 		$mainframe = JFactory::getApplication();
 		$orderby	= $this->_buildContentOrderBy();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT * FROM #__jtg_terrains"
 		. $orderby;
 

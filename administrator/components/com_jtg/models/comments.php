@@ -110,10 +110,6 @@ class JtgModelComments extends JModelLegacy
 
 	protected function _buildQuery()
 	{
-		$mainframe = JFactory::getApplication();
-
-		$db = JFactory::getDBO();
-
 		$query = "SELECT a.*, b.title AS track FROM #__jtg_comments AS a"
 		. "\n LEFT JOIN #__jtg_files AS b ON b.id=a.tid"
 		. "\n ORDER BY date DESC";
@@ -195,9 +191,7 @@ class JtgModelComments extends JModelLegacy
 	 */
 	function getComment($cid)
 	{
-		$mainframe = JFactory::getApplication();
-
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$cids = implode(',', $cid);
 
 		$query = "SELECT * FROM #__jtg_comments WHERE id IN( " . $cids . " )";
@@ -221,7 +215,7 @@ class JtgModelComments extends JModelLegacy
 		$title  = $input->get('title', '', 'string');
 		$text   = $input->get('text', '', 'raw');
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "UPDATE #__jtg_comments SET"
 		. "\n title='" . $title . "',"

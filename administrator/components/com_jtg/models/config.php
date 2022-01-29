@@ -90,7 +90,7 @@ class JtgModelConfig extends JModelLegacy
 		echo "deprecated: JtgModelConfig::createColumns";
 
 		// Find out exists columns
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$sql = 'Select * from #__jtg_' . $tablekey;
 		$db->setQuery($sql);
 		$existobj = $db->loadObject();
@@ -194,7 +194,7 @@ class JtgModelConfig extends JModelLegacy
 			}
 		}
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$db->setQuery($content);
 		$db->execute();
 
@@ -213,7 +213,7 @@ class JtgModelConfig extends JModelLegacy
 	 */
 	function getContent()
 	{
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$sql = 'Select id from #__categories where title=\'term\'';
 		$db->setQuery($sql);
 		$catid = $db->loadResult();

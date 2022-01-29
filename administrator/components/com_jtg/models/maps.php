@@ -156,7 +156,7 @@ class JtgModelMaps extends JModelLegacy
 	function getMap($id)
 	{
 		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT * FROM #__jtg_maps"
 		. "\n WHERE id=" . $id;
 		$db->setQuery($query);
@@ -203,7 +203,7 @@ class JtgModelMaps extends JModelLegacy
 
 		$search = JFactory::getApplication()->input->get('search');
 		$where = array();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		if ($search)
 		{
@@ -242,7 +242,7 @@ class JtgModelMaps extends JModelLegacy
 	 */
 	function getMaps($order=false)
 	{
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$sql = 'Select * from #__jtg_maps ';
 
 		if ($order)
@@ -319,7 +319,7 @@ class JtgModelMaps extends JModelLegacy
 		$mainframe = JFactory::getApplication();
 		jimport('joomla.filesystem.file');
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		// Get the post data
 		$input = JFactory::getApplication()->input;
@@ -389,7 +389,7 @@ class JtgModelMaps extends JModelLegacy
 	 */
 	function updateMap()
 	{
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		// Get the post data
 		$input = JFactory::getApplication()->input;

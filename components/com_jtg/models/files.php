@@ -17,6 +17,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
+use Joomla\CMS\Factory;
 use Joomla\Utilities\ArrayHelper;
 /**
  * JtgModelFiles class for the jtg component
@@ -69,11 +70,12 @@ class JtgModelFiles extends JModelList
 		// TODO: remove _buildquery below
 		// TODO: add accesslevel logic, or remove completely? replace by per-track access using native Joomla! logic?
 		
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$uid = $user->id;
 		
+		$input = Factory::getApplication()->input;
 		$query->select('a.*, c.name AS user')
 		->from('#__jtg_files as a')
 		->join('LEFT','#__users AS c ON a.uid=c.id');
@@ -85,7 +87,7 @@ class JtgModelFiles extends JModelList
 			$query->where('a.catid LIKE '.$db->quote('%'.$trackcat.'%'));
 		}
 		else {
-		    $trackcat = JFactory::getApplication()->input->get('cat');
+		    $trackcat = $input->get('cat');
 		    //error_log('Got category from url '.$trackcat);
 		    if ($trackcat !== null) {
 		        $this->setState('filter.trackcat', $trackcat);
@@ -97,11 +99,16 @@ class JtgModelFiles extends JModelList
 			$query->where('a.level = '.$db->quote($tracklevel));
 		}
 		// Filter by state (published, trashed, etc.) OR user tracks
-		if (JFactory::getApplication()->input->get('layout') == 'user') {
+		if ($input->get('layout') == 'user') {
 			$query->where("a.uid=$uid");
-      }
+		}
 		else {
-			$query->where("(( a.published = 1 AND a.hidden = 0 ) OR ( a.uid=$uid))");
+			if (is_null($uid)) {
+				$query->where("( a.published = 1 AND a.hidden = 0 )");
+			}
+			else {
+				$query->where("(( a.published = 1 AND a.hidden = 0 ) OR ( a.uid=$uid))");
+			}
 		}
 	
 		// Filter: like / search
@@ -216,8 +223,7 @@ class JtgModelFiles extends JModelList
 	 */
 	protected function _buildContentOrderBy (bool $addorder=true)
 	{
-		$mainframe = JFactory::getApplication();
-
+		$mainframe = Factory::getApplication();
 		$params = $mainframe->getParams();
 		$ordering = '';
 
@@ -304,16 +310,17 @@ class JtgModelFiles extends JModelList
 	 */
 	protected function _buildContentWhere()
 	{
-		$mainframe = JFactory::getApplication();
+		$mainframe = Factory::getApplication();
 
-		$search = JFactory::getApplication()->input->get('search');
-		$cat = JFactory::getApplication()->input->get('cat');
-		$terrain = JFactory::getApplication()->input->get('terrain');
-		$user = JFactory::getUser();
+		$input = $mainframe->input;
+		$search = $input->get('search');
+		$cat = $input->get('cat');
+		$terrain = $input->get('terrain');
+		$user = Factory::getUser();
 		$uid = $user->id;
 		$index = "a";
 		$where = array();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		if ($search)
 		{
@@ -366,8 +373,7 @@ class JtgModelFiles extends JModelList
 	 */
 	function getCats ()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT * FROM #__jtg_cats WHERE published=1 ORDER BY ordering ASC";
 
@@ -428,8 +434,6 @@ class JtgModelFiles extends JModelList
 	 */
 	function getVotes ($id)
 	{
-		$mainframe = JFactory::getApplication();
-
 		$class = array(
 				'nostar',
 				'onestar',
@@ -444,7 +448,7 @@ class JtgModelFiles extends JModelList
 				'tenstar'
 		);
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		// Count votings
 		$query = "SELECT COUNT(*) FROM #__jtg_votes" . "\n WHERE trackid='" . $id . "'";
@@ -517,8 +521,7 @@ class JtgModelFiles extends JModelList
 	 */
 	function getTerrain ($where = null)
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		// $query = "SELECT * FROM #__jtg_terrains ORDER BY ordering,title ASC";
 		$query = "SELECT * FROM #__jtg_terrains " . $where . " ORDER BY title ASC";
@@ -540,26 +543,6 @@ class JtgModelFiles extends JModelList
 	}
 
 	/**
-	 * function_description
-	 *
-	 * @param   integer  $id     param_description
-	 * @param   string   $order  param_description
-	 *
-	 * @return array
-	 */
-	function getComments ($id, $order)
-	{
-		$mainframe = JFactory::getApplication();
-
-		$db = JFactory::getDBO();
-		$query = "SELECT * FROM #__jtg_comments WHERE" . "\n tid='" . $id . "'" . "\n AND published='1'" . "\n ORDER BY date " . $order;
-		$db->setQuery($query);
-		$result = $db->loadObjectList();
-
-		return $result;
-	}
-
-	/**
 	 * Retrieve name, e-mail address of track author
 	 *
 	 * @param   int  $id track id
@@ -568,9 +551,9 @@ class JtgModelFiles extends JModelList
 	 */
 	function getAuthorData ($id)
 	{
-		$mainframe = JFactory::getApplication();
+		$mainframe = Factory::getApplication();
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT a.uid, b.name, b.email FROM #__jtg_files AS a" . "\n LEFT JOIN #__users AS b ON a.uid=b.id" . "\n WHERE a.id='" . $id . "'";
 
 		$db->setQuery($query);
@@ -593,7 +576,7 @@ class JtgModelFiles extends JModelList
 	 */
 	function approachors ($to_lat, $to_lon, $lang)
 	{
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$latlon = JtgHelper::getLatLon($user->id);
 		$link = "http://openrouteservice.org/?";
 
@@ -627,7 +610,7 @@ class JtgModelFiles extends JModelList
 	function approachcm ($to_lat, $to_lon, $lang)
 	{
 		$link = "http://maps.cloudmade.com/?";
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$latlon = JtgHelper::getLatLon($user->id);
 
 		if (isset($latlon[0]))
@@ -679,7 +662,7 @@ class JtgModelFiles extends JModelList
 	{
 		$key = "651006379c18424d8b5104ed4b7dc210";
 		$link = "http://navigation.cloudmade.com/" . $key . "/api/0.3/";
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$latlon = JtgHelper::getLatLon($user->id);
 
 		if (isset($latlon[0]))
@@ -719,8 +702,7 @@ class JtgModelFiles extends JModelList
 	 */
 	function getDefaultMaps()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT id,name FROM #__jtg_maps WHERE published=1
 				AND NOT (param LIKE \"%isBaseLayer: false%\" OR param LIKE \"%isBaseLayer:false%\")";
@@ -747,8 +729,7 @@ class JtgModelFiles extends JModelList
 	 */
 	function getDefaultOverlays()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT id,name FROM #__jtg_maps WHERE published=1
 				AND (param LIKE \"%isBaseLayer: false%\" OR param LIKE \"%isBaseLayer:false%\")";
@@ -778,8 +759,7 @@ class JtgModelFiles extends JModelList
 	// TODO: this is now a static function in JtgModelFiles and JtgModelJtg; decide where it goes
    static public function getCatsData($sort=false, $catid=null)
    {
-      $mainframe = JFactory::getApplication();
-      $db = JFactory::getDBO();
+      $db = $this->getDbo();
 
       $query = "SELECT * FROM #__jtg_cats WHERE published = 1";
       if ( !is_null($catid) )
@@ -852,9 +832,8 @@ class JtgModelFiles extends JModelList
          $where .= " AND a.access <= " . $access;
       }
 
-      $mainframe = JFactory::getApplication();
-      $db = JFactory::getDBO();
-      $user = JFactory::getUser();
+      $db = $this->getDbo();
+      $user = Factory::getUser();
       $uid = $user->id;
       $query = "SELECT a.*, b.title AS cat FROM #__jtg_files AS a"
       . "\n LEFT JOIN #__jtg_cats AS b"

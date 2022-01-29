@@ -155,8 +155,7 @@ class JtgModelCats extends JModelLegacy
 	 */
 	protected function _buildQuery()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT * FROM #__jtg_cats ORDER BY ordering";
 
 		return $query;
@@ -171,8 +170,7 @@ class JtgModelCats extends JModelLegacy
 	 */
 	function getCat($id)
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT * FROM #__jtg_cats"
 		. "\n WHERE id='" . $id . "'";
@@ -192,8 +190,7 @@ class JtgModelCats extends JModelLegacy
 	 */
 	function getParent($exclusion=null)
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT id,title FROM #__jtg_cats WHERE published=1";
 
@@ -226,15 +223,13 @@ class JtgModelCats extends JModelLegacy
 	 */
 	function getDefaultMaps()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT id,name FROM #__jtg_maps WHERE published=1
 				AND NOT (param LIKE \"%isBaseLayer: false%\" OR param LIKE \"%isBaseLayer:false%\")";
 		$db->setQuery($query);
 		$result = $db->loadObjectList();
 		$newresult = array();
-
 
 		foreach ($result as $k => $v)
 		{
@@ -254,8 +249,7 @@ class JtgModelCats extends JModelLegacy
 	 */
 	function getDefaultOverlays()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT id,name FROM #__jtg_maps WHERE published=1
 				AND (param LIKE \"%isBaseLayer: false%\" OR param LIKE \"%isBaseLayer:false%\")";

@@ -110,7 +110,7 @@ class JtgModelFiles extends JModelLegacy
 			return false;
 		}
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		// Count votings
 		$query = "SELECT COUNT(*) FROM #__jtg_votes"
@@ -147,7 +147,7 @@ class JtgModelFiles extends JModelLegacy
 		. "\n vote='" . $vote . "'"
 		. "\n WHERE id=" . $id;
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$db->setQuery($query);
 		if (! $db->execute())
 		{
@@ -285,8 +285,7 @@ class JtgModelFiles extends JModelLegacy
 	 */
 	function _fetchJPTfiles()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT * FROM #__gps_tracks";
 
 		try {
@@ -314,8 +313,6 @@ class JtgModelFiles extends JModelLegacy
 
 		$orderby = $this->_buildContentOrderBy();
 		$where = $this->_buildContentWhere();
-
-		//        $db = JFactory::getDBO();
 
 		$query = "SELECT a.*, b.title AS cat FROM"
 		. "\n #__jtg_files AS a"
@@ -364,9 +361,9 @@ class JtgModelFiles extends JModelLegacy
 	{
 		$mainframe = JFactory::getApplication();
 
-		$search = JFactory::getApplication()->input->get('search');
+		$search = $mainframe->input->get('search');
 		$where = array();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		if ($search)
 		{
@@ -389,8 +386,7 @@ class JtgModelFiles extends JModelLegacy
 	 */
 	function getFile($id)
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT * FROM #__jtg_files"
 		. "\n WHERE id=" . $id;
 		$db->setQuery($query);
@@ -413,8 +409,7 @@ class JtgModelFiles extends JModelLegacy
 	 */
 	function getImages($id)
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT * FROM #__jtg_photos"
                 . "\n WHERE trackID=" . $id . "";
 		$db->setQuery($query);
@@ -702,8 +697,7 @@ class JtgModelFiles extends JModelLegacy
 	 */
 	function getCats($nosubcats = false, $stdtext = 'COM_JTG_SELECT', $stdid = 0, $type = 1)
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT * FROM #__jtg_cats WHERE published=1 ORDER BY ordering,id ASC";
 		$db->setQuery($query);
@@ -759,7 +753,7 @@ class JtgModelFiles extends JModelLegacy
 	 */
 	function getUsers($nullter = false, $where = "WHERE block = 0" )
 	{
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$rows = null;
 		$query = "SELECT id, name as title FROM #__users " . $where . " ORDER BY name";
 		$db->setQuery($query);
@@ -797,7 +791,7 @@ class JtgModelFiles extends JModelLegacy
 	 */
 	function getTerrain($select = "*", $nullter = false, $where = null )
 	{
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$rows = null;
 
 		if ($where !== "WHERE id = ")
@@ -839,8 +833,7 @@ class JtgModelFiles extends JModelLegacy
 	 */
 	function getAccess($id)
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT access FROM #__jtg_files WHERE id=" . $id ;
 		$db->setQuery($query);
 		$row = $db->loadResult();
@@ -860,7 +853,7 @@ class JtgModelFiles extends JModelLegacy
 		jimport('joomla.filesystem.folder');
 		require_once '../components/com_jtg/helpers/gpsClass.php';
 		$fileokay = true;
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$user = JFactory::getUser();
 		$targetdir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
 		$input = JFactory::getApplication()->input;
@@ -1044,8 +1037,7 @@ class JtgModelFiles extends JModelLegacy
 	 */
 	function getDefaultMaps()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT id,name FROM #__jtg_maps WHERE published=1
 				AND NOT (param LIKE \"%isBaseLayer: false%\" OR param LIKE \"%isBaseLayer:false%\")";
@@ -1077,7 +1069,7 @@ class JtgModelFiles extends JModelLegacy
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 		require_once '../components/com_jtg/helpers/gpsClass.php';
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$fileokay = false;
 		$targetdir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
 		$sourcedir = JPATH_SITE . '/components/com_joomgpstracks/uploaded_tracks/';
@@ -1225,7 +1217,7 @@ class JtgModelFiles extends JModelLegacy
 		jimport('joomla.filesystem.folder');
 		require_once '../components/com_jtg/helpers/gpsClass.php';
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$user = JFactory::getUser();
 
 		// Get the post data
@@ -1421,7 +1413,7 @@ class JtgModelFiles extends JModelLegacy
 		$mainframe = JFactory::getApplication();
 		require_once '../components/com_jtg/helpers/gpsClass.php';
 		$fileokay = true;
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$user = JFactory::getUser();
 		$targetdir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
 
@@ -1614,7 +1606,7 @@ class JtgModelFiles extends JModelLegacy
 		jimport('joomla.filesystem.folder');
 		require_once '../components/com_jtg/helpers/gpsClass.php';
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$user = JFactory::getUser();
 
 		// Get the post data

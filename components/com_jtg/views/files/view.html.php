@@ -222,10 +222,9 @@ class JtgViewFiles extends JViewLegacy
 	function _displayList($tpl)
 	{
 		$mainframe = JFactory::getApplication();
-		$option = JFactory::getApplication()->input->get('option');
+		$option = $mainframe->input->get('option');
 
 		$model = $this->getModel();
-		$cache = JFactory::getCache('com_jtg');
 		$sortedcats = JtgModeljtg::getCatsData(true);
 		$sortedter = JtgModeljtg::getTerrainData(true);
 		$user = JFactory::getUser();
@@ -238,7 +237,7 @@ class JtgViewFiles extends JViewLegacy
 		$pathway = $mainframe->getPathway();
 		$pathway->addItem(JText::_('COM_JTG_GPS_FILES'), '');
 		$sitename = $mainframe->getCfg('sitename');
-		$document = JFactory::getDocument();
+		$document = $mainframe->getDocument();
 		$document->setTitle(JText::_('COM_JTG_GPS_FILES') . " - " . $sitename);
 		$params = $mainframe->getParams();
 
@@ -279,8 +278,7 @@ class JtgViewFiles extends JViewLegacy
 	function _displayUserTracks($tpl)
 	{
 		$mainframe = JFactory::getApplication();
-		$option = JFactory::getApplication()->input->get('option');
-		$cache = JFactory::getCache('com_jtg');
+		$option = $mainframe->input->get('option');
 		$lh = LayoutHelper::navigation();
 		$footer = LayoutHelper::footer();
 		$model = $this->getModel();
@@ -288,10 +286,10 @@ class JtgViewFiles extends JViewLegacy
 		$pathway = $mainframe->getPathway();
 		$pathway->addItem(JText::_('COM_JTG_MY_FILES'), '');
 		$sitename = $mainframe->getCfg('sitename');
-		$document = JFactory::getDocument();
+		$document = $mainframe->getDocument();
 		$document->setTitle(JText::_('COM_JTG_MY_FILES') . " - " . $sitename);
 
-		$order = JFactory::getApplication()->input->getWord('order', 'order');
+		$order = $mainframe->input->getWord('order', 'order');
 
 		$filter_order = $mainframe->getUserStateFromRequest("$option.filter_order", 'filter_order', '', 'word');
 		$filter_order_Dir = $mainframe->getUserStateFromRequest("$option.filter_order_Dir", 'filter_order_Dir', '', 'word');
@@ -325,8 +323,9 @@ class JtgViewFiles extends JViewLegacy
 	function approach($service)
 	{
 		// 	$userparams = explode("\n", $this->user->params);
-		$lang = JFactory::getLanguage();
-		$user = JFactory::getUser();
+		$app = JFactory::getApplication();
+		$lang = $app->getLanguage();
+		$user = Factory::getUser();
 
 		/*
 		 if ($user->id == 0) // User is public
