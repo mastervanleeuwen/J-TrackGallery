@@ -1,3 +1,7 @@
+---
+title: map plugin
+nav_order: 3
+---
 ### J!TrackGallery maps plugin
 
 The J!TrackGallery maps plugin provides a simple way to show GPS tracks in Joomla articles or in other Joomla components. The basic syntax to show a track is to insert the following in your page:
