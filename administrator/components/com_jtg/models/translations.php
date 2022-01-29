@@ -20,6 +20,9 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Language\LanguageHelper;
+
 /**
  * Model Class Terrain
  *
@@ -72,8 +75,7 @@ class JtgModelTranslations extends JModelLegacy
 	 */
 	function getRawLanguages()
 	{
-		$language = JFactory::getLanguage();
-		$languages = $language->getKnownLanguages();
+		$languages = LanguageHelper::getKnownLanguages();
 
 		return $languages;
 	}

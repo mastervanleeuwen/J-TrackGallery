@@ -19,6 +19,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 JToolBarHelper::title(JText::_('COM_JTG_TRANSLATIONS'), 'categories.png');
+JToolBarHelper::back();
 JToolBarHelper::save('saveLanguages', $alt = 'COM_JTG_SAVE', 'save.png');
 JToolBarHelper::help('translations', true);
 
@@ -99,11 +100,12 @@ if (JVERSION >= 3.0)
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<?php
-	echo JHtml::_('tabs.start', 'tab_group_id', $options);
+	$options = array('active' => current($this->languages)['tag']);
+	echo JHtmlBootstrap::startTabSet('tabs', $options);
 
 	foreach ($this->languages as $lang)
 	{
-		echo JHtml::_('tabs.panel', $lang['tag'], $lang['tag']);
+		echo JHtmlBootstrap::addTab('tabs', $lang['tag'], $lang['tag']);
 		echo '<table><tr><td>' . $lang['header'] . '<br />';
 		?>
 	<textarea name="<?php echo $lang['tag']; ?>" cols="100"
@@ -113,9 +115,11 @@ if (JVERSION >= 3.0)
 	<br />&nbsp;
 	<?php
 	echo '</td></tr></table>';
+	echo JHtmlBootstrap::endTab();
 	}
 
-	echo JHtml::_('tabs.end');
+	echo JHtmlBootstrap::endTabSet();
+
 	?>
 
 
