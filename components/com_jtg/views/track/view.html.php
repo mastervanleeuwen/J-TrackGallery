@@ -204,8 +204,6 @@ class JtgViewTrack extends JViewLegacy
 			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($this->track->file);
 			$gpsData->loadFileAndData($file, $this->track->file);
 			$this->imageList = $model->getImages($this->id);
-			$this->distance_float = (float) $this->track->distance;
-			$this->distance = JtgHelper::getLocatedFloat($this->distance_float, 0, $cfg->unit);
 
 			if (!$gpsData->displayErrors())
 			{

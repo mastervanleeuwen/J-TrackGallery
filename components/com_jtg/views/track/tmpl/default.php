@@ -571,7 +571,7 @@ if ( ($this->track->distance != "") AND ((float) $this->track->distance != 0) )
 ?>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_DISTANCE'); ?>:</td>
-				<td><?php echo JtgHelper::getFormattedDistance($this->distance, $this->cfg->unit); ?></td>
+				<td><?php echo JtgHelper::getFormattedDistance($this->track->distance, $this->cfg->unit); ?></td>
 			</tr>
 <?php
 }
@@ -834,7 +834,7 @@ if ( ($durationbox) AND ($this->track->distance != "") AND ((float) $this->track
 								<?php echo '(' . JText::_('COM_JTG_PACE_UNIT_' . strtoupper($this->cfg->unit)) . ')'; ?>
 							    <input type="button" name="button" class="button"
 									value="<?php echo JText::_('JSUBMIT'); ?>"
-									onclick="getAvgTimeFromPace(document.getElementById('pace').value,<?php echo $this->distance_float; ?>,
+									onclick="getAvgTimeFromPace(document.getElementById('pace').value,<?php echo $this->track->distance; ?>,
 									<?php echo '\'' . JText::_('COM_JTG_SEPARATOR_DEC') . '\''; ?>);" /> 
 								</div>
 						<?php } ?>
@@ -846,7 +846,7 @@ if ( ($durationbox) AND ($this->track->distance != "") AND ((float) $this->track
 							
 								<input type="button" name="button" class="button"
 									value="<?php echo JText::_('JSUBMIT'); ?>"
-									onclick="getAvgTime(document.getElementById('speed').value,<?php echo $this->distance_float; ?>,
+									onclick="getAvgTime(document.getElementById('speed').value,<?php echo $this->track->distance; ?>,
 									<?php echo '\'' . JText::_('COM_JTG_SEPARATOR_DEC') . '\''; ?>);" />
 								</div>
 									
