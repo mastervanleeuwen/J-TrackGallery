@@ -360,7 +360,7 @@ class JtgModelMaps extends JModelLegacy
 
 		$db->setQuery($query);
 
-		if ($db->execute())
+		if (!$db->execute())
 		{
 			die($db->_errorMsg);
 		}
