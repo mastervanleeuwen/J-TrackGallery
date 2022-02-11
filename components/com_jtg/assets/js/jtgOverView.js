@@ -164,7 +164,13 @@ function addTracksOverviewLayer(tracks, catIcons){
 	var source = new ol.source.Vector({
 		features: markers
 	});
-	jtgView.fit( source.getExtent(), {padding: [50, 50, 50, 75]} );
+	if (markers.length > 1) {
+		jtgView.fit( source.getExtent(), {padding: [50, 50, 50, 75]} );
+	}
+	else {
+		jtgView.setCenter(ol.proj.fromLonLat([tracks[0].lon, tracks[0].lat], jtgView.getProjection()));
+		jtgView.setZoom(8); 
+	}
 	var styleCache = {};
 	var layerVectorForMarkers = new ol.layer.Vector({name: "Features",
 		source: new ol.source.Cluster({ source: source }),
