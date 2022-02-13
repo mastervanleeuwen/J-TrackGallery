@@ -583,7 +583,7 @@ if ($this->track->ele_asc)
 				<td><?php echo JText::_('COM_JTG_ELEVATION_UP'); ?>:</td>
 				<td><?php
 					echo $this->track->ele_asc;
-					echo ' ' . JText::_('COM_JTG_METERS');
+					echo ' ' . JText::_('COM_JTG_UNIT_METER');
 					?>
 				</td>
 			</tr>
@@ -596,7 +596,7 @@ if ($this->track->ele_desc)
 			<tr>
 				<td><?php echo JText::_('COM_JTG_ELEVATION_DOWN'); ?>:</td>	
 				<td><?php echo $this->track->ele_desc; ?>
-			    	<?php echo ' ' . JText::_('COM_JTG_METERS'); ?>
+			    	<?php echo ' ' . JText::_('COM_JTG_UNIT_METER'); ?>
 					</td>
 			</tr>
 <?php

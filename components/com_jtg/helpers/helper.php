@@ -319,8 +319,7 @@ class JtgHelper
 							if ( $allcats[$catid]->image != "")
 							{
 								$return[] = "<a href=\"" . $url . "\">" .
-										"<img $height title=\"" . JText::_($allcats[$catid]->title) . "\" alt=\"" . JText::_($allcats[$catid]->title) . "\" src=\"" . $image . $allcats[$catid]->image . "\" />&nbsp;" .
-										"</a>";
+										"<img $height title=\"" . JText::_($allcats[$catid]->title) . "\" alt=\"" . JText::_($allcats[$catid]->title) . "\" src=\"" . $image . $allcats[$catid]->image . "\" /></a>";
 							}
 							else
 							{
@@ -1123,14 +1122,14 @@ static public function autoRotateImage($image) {
 		if ( strtolower($unit) == "miles" || strtolower($unit) == "mi")
 		{
 			$dist = self::getMiles($dist);
-			$unit = JText::_('COM_JTG_MILES');
+			$unit = JText::_('COM_JTG_DISTANCE_UNIT_MILES');
 		}
 		else {
-			$unit = JText::_('COM_JTG_KILOMETER');
+			$unit = JText::_('COM_JTG_DISTANCE_UNIT_KILOMETER');
 			if ( $dist < 1 )
 			{
 				$dist = $dist * 1000;
-				$unit = JText::_('COM_JTG_METERS');
+				$unit = JText::_('COM_JTG_UNIT_METER');
 			}
 		}
 

@@ -32,13 +32,7 @@ $hide_icon_isgeocache = (bool) $this->params->get('jtg_param_tracks_list_hide_ic
 $height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px;" ' : ' ');
 $levelMin = $this->params->get('jtg_param_level_from');
 $levelMax = $this->params->get('jtg_param_level_to');
-$catcolumnwidth = 0;
-//TODO: this does not enough when there are tracks with more than one category
-$catcolumnwidth = $catcolumnwidth + ($hide_icon_category? 0: 2 + $iconheight) ;
-$catcolumnwidth = $catcolumnwidth + ($hide_icon_istrack? 0: 2 + $iconheight) ;
-$catcolumnwidth = $catcolumnwidth + ($hide_icon_isroundtrip? 0: 2 + $iconheight) ;
-$catcolumnwidth = $catcolumnwidth + ($hide_icon_is_wp? 0: 2 + $iconheight) ;
-$catcolumnwidth = $catcolumnwidth + ($hide_icon_isgeocache? 0: 2 + $iconheight) ;
+$showcatcolumn = !$hide_icon_category or !$hide_icon_istrack or !$hide_icon_isroundtrip or !$hide_icon_is_wp or !$hide_icon_isgeocache;
 $cfg = JtgHelper::getConfig();
 $iconpath = JUri::root() . "components/com_jtg/assets/template/" . $cfg->template . "/images/";
 
@@ -98,7 +92,7 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				<th>#</th>
 				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TITLE'), 'title', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
-				<?php if ($catcolumnwidth > 0) {?>
+				<?php if ($showcatcolumn) {?>
 				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_CAT'), 'catid', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
 				<?php } ?>
@@ -179,7 +173,7 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				$terrain = JtgHelper::parseMoreTerrains($this->sortedter, $row->terrain, "list", true);
 				$hits = JtgHelper::getLocatedFloat($row->hits, 0);
 				$layoutHelper = new LayoutHelper;
-				$votes = $layoutHelper->parseVoteFloat($row->vote, true);
+				$votes = $layoutHelper->parseVoteFloat($row->vote, false);
 				$links = null;
 				$imagelink = $this->buildImageFiletypes($row->istrack, $row->iswp, $row->isroute, $row->iscache, $row->isroundtrip, $iconheight,
 						$hide_icon_istrack, $hide_icon_is_wp, 0, $hide_icon_isgeocache, $hide_icon_isroundtrip);
@@ -226,8 +220,8 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				<td><?php echo $this->pagination->getRowOffset($i) . $links; ?></td>
 				<td><a href="<?php echo $link; ?>">
 					<?php echo $row->title; ?> </a><?php echo $link_only?></td>
-				<?php if ($catcolumnwidth > 0) {?>
-					<td  width="<?php echo $catcolumnwidth . 'px'; ?>">
+				<?php if ($showcatcolumn) {?>
+					<td>
 				<?php echo '<span class="fileis">' . $cat . ' ' . $imagelink . '</span>'; ?></td>
 				<?php }?>
 				<td><?php echo $level; ?></td>
