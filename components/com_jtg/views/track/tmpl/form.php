@@ -408,10 +408,10 @@ if ($this->cfg->access == 1)
 		<input type="hidden" name="task" value="" />
 		<div>
 			<br />
-			<button class="button" type="button" onclick="<?php echo $buttonaction; ?>">
+			<button class="btn btn-primary" type="button" onclick="<?php echo $buttonaction; ?>">
 				<?php echo $buttontext; ?>
 			</button>
-			<button class="button" type="button" onclick="Joomla.submitbutton('reset')">
+			<button class="btn btn-danger" type="button" onclick="Joomla.submitbutton('reset')">
 				<?php echo JText::_('COM_JTG_RESET') ?>
 			</button>
 			<?php
@@ -430,7 +430,7 @@ if ($this->cfg->access == 1)
 				$cancelaction = "Joomla.submitform('cancel')";	
 			}
 			?>
-			<button class="button" type="button"
+			<button class="btn btn-secondary" type="button"
 				onclick="<?php echo $cancelaction;?>">
 				<?php echo $canceltext; ?>
 			</button>
