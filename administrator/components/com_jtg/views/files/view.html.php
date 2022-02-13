@@ -101,7 +101,7 @@ class JtgViewFiles extends JViewLegacy
 	{
 		if (JVERSION < 4.0)
 		{
-			return "<a href=\"javascript:void(0);\" onclick=\"javascript:return listItemTask('cb" . $count
+			return "<a href=\"javascript:void(0);\" onclick=\"javascript:return Joomla.listItemTask('cb" . $count
 			. "','editfile')\">" . $file . "</a>";
 		}
 		else
@@ -148,7 +148,7 @@ class JtgViewFiles extends JViewLegacy
 				break;
 		}
 
-		return "<a href=\"javascript:void(0);\" onclick=\"javascript:return listItemTask('cb" . $count .
+		return "<a href=\"javascript:void(0);\" onclick=\"javascript:return Joomla.listItemTask('cb" . $count .
 		"','" . $link . "')\">" . $item . "</a>";
 	}
 

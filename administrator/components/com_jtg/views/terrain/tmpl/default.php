@@ -70,11 +70,11 @@ JToolBarHelper::help('terrain', true);
 				</td>
 				<td align="center"><?php echo $checked; ?></td>
 				<td align="center"><a href="javascript:void(0);"
-					onclick="javascript:return listItemTask('cb<?php echo $i; ?>','editterrain')">
+					onclick="javascript:return Joomla.listItemTask('cb<?php echo $i; ?>','editterrain')">
 					<?php echo $row->title; ?>
 				</a></td>
 				<td align="center"><a href="javascript:void(0);"
-					onclick="javascript:return listItemTask('cb<?php echo $i; ?>','editterrain')">
+					onclick="javascript:return Joomla.listItemTask('cb<?php echo $i; ?>','editterrain')">
 					<?php echo JText::_($row->title); ?></a></td>
 				<td align="center"><?php echo $published;?></td>
 				<td><?php echo $row->id; ?></td>

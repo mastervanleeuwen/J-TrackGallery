@@ -125,12 +125,12 @@ $link = JRoute::_('index.php?option=com_jtg&task=maps&controller=maps&layout=def
 if ($ordering)
 {
 ?>
-				<td colspan="2" class="order"><span><?php echo $this->pagination->orderUpIcon($i, true, 'orderup', 'Move Up', $map->ordering);
-				?> </span> <span><?php echo $this->pagination->orderDownIcon($i, $n, true, 'orderdown', 'Move Down', $map->ordering);
-				?> </span> <input type="text" name="order[]" size="2" maxlength="2"
+				<td colspan="2" class="order"><?php echo $this->pagination->orderUpIcon($i, true, 'orderup', 'Move Up', $map->ordering);
+				?> <?php echo $this->pagination->orderDownIcon($i, $n, true, 'orderdown', 'Move Down', $map->ordering);
+				?> <input type="text" name="order[]" size="2" maxlength="2"
 					value="<?php echo $map->ordering;
 				?>" class="text_area"
-					style="text-align: center; width: 3em; display: inline" />
+					style="text-align: center; width: 2em; display: inline" />
 				</td>
 <?php
 }

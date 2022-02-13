@@ -107,7 +107,7 @@ class JtgViewMaps extends JViewLegacy
 	{
 		if (JVERSION < 4.0)
 		{
-			return "<a href=\"javascript:void(0);\" onclick=\"javascript:return listItemTask('cb" . $count . "','editmap')\">" . $map . "</a>";
+			return "<a href=\"javascript:void(0);\" onclick=\"javascript:return Joomla.listItemTask('cb" . $count . "','editmap')\">" . $map . "</a>";
 		}
 		else
 		{
