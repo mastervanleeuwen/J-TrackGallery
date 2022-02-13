@@ -2,19 +2,20 @@
 // Animated cursor on track
 // Design and javascript Code inspired from http://www.utagawavtt.com/
 
-function hover_profil_graph(longitude, latitude, originalIdx, autocenter)
+function hover_profil_graph(coord, originalIdx, autocenter)
 {
 	// enable moving cursor
 	animatedCursorLayer.setVisible(true); // for opera broken in Firefox
 	//animatedCursorIcon.opacity = 0.7; // for Firefox
         
-	animatedCursorIcon.setCoordinates(ol.proj.fromLonLat([longitude, latitude], jtgView.getProjection()));
+	animatedCursorIcon.setCoordinates(ol.proj.fromLonLat(coord, jtgView.getProjection()));
 	//animatedCursorIcon.redraw();
 
 	// ************************************************
 	// highlight the track depending on the position
 	// create the gpxHover feature if it doesn't exist yet
-        animatedCursorLayer.getSource().getFeatureById('cursorTrack').getGeometry().setCoordinates(animatedCursorLayer.gpxPoints.slice(1,originalIdx));
+	animatedCursorLayer.getSource().getFeatureById('cursorTrack').getGeometry().setCoordinates(allpoints.slice(0,originalIdx));
+	animatedCursorLayer.getSource().getFeatureById('cursorTrack').getGeometry().transform('EPSG:4326',jtgView.getProjection()); // TODO: transform points before storing them?
 	// ************************************************
 
 	// if the point is out of the map, center on it

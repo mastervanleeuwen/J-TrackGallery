@@ -33,6 +33,7 @@ $height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px;" ' : ' ')
 $levelMin = $this->params->get('jtg_param_level_from');
 $levelMax = $this->params->get('jtg_param_level_to');
 $catcolumnwidth = 0;
+//TODO: this does not enough when there are tracks with more than one category
 $catcolumnwidth = $catcolumnwidth + ($hide_icon_category? 0: 2 + $iconheight) ;
 $catcolumnwidth = $catcolumnwidth + ($hide_icon_istrack? 0: 2 + $iconheight) ;
 $catcolumnwidth = $catcolumnwidth + ($hide_icon_isroundtrip? 0: 2 + $iconheight) ;

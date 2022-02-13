@@ -240,7 +240,7 @@ class JtgModelTrack extends ItemModel
 		$gpsData = new GpsDataClass("kilometer");
 		$gpsData = $gpsData->loadFileAndData( $newfile, $filename );
 		if (strlen($title)==0) {
-			$title = $gpsData->trackname;
+			$title = trim($gpsData->trackname);
 		}
 		if (strlen($title)==0) {
 			$title = JFile::stripExt($file['name']);
@@ -931,7 +931,7 @@ class JtgModelTrack extends ItemModel
 			<tr>
 				<td colspan='2' align='right'><input type='submit'
 					value='<?php echo JText::_('COM_JTG_SEND')?>' name='submit'
-					class='button' /></td>
+					class='btn btn-primary' /></td>
 			</tr>
 		</tbody>
 	</table>

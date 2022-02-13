@@ -211,13 +211,15 @@ ul.rating li.ten a:hover {
 
 /* form fields */
 #speed {
-    width: 15%;
-    max-width: 5em;
+	width: 15%;
+	max-width: 5em;
+	margin-bottom: 0;
 }
 
 #time {
-    width: 20%;
-    max-width: 6em;
+	width: 20%;
+	max-width: 6em;
+	margin-bottom: 0;
 }
 
 .jtg-photo-title {
@@ -865,6 +867,10 @@ span label {
 
 #downloadbox {
 	float: left;
+}
+
+.btn.jtg-download {
+	margin: 4px;
 }
 
 .profile-img {

@@ -1,8 +1,8 @@
-
 var jtgTemplateUrl = "";
 var jtgBaseUrl = "";
 var jtgView;
 var jtgMap;
+var allpoints = [];
 
 // TODO: add waypoint, POI icons?
 
@@ -62,41 +62,46 @@ function jtgMapInit(mapType = 0, mapOpt = '', apiKey = '') {
 	jtgMap.addLayer(mapLayer);
 }
 
-function drawTrack(latitudeData, longitudeData, animatedCursor = false) {
-	var gpsTrack = new ol.layer.Vector({ 
+function drawTrack(trackData, animatedCursor = false) {
+	allpoints = [];
+	var gpsTracks = new ol.layer.Vector({ 
 		source: new ol.source.Vector(),
 		style: new ol.style.Style({
 		stroke: new ol.style.Stroke({
 		color: '#ff00ff', width: 5 }) })
 	});
-   jtgMap.addLayer(gpsTrack);
-	var points = [];
-	for (var i = 0; i < longitudeData.length; i++) {
-		 points.push(ol.proj.fromLonLat([longitudeData[i], latitudeData[i]], jtgView.getProjection()));
+  	jtgMap.addLayer(gpsTracks);
+	var startMarkerStyle = new ol.style.Style({
+     	image: new ol.style.Icon({ src: jtgTemplateUrl+'/images/trackStart.png',
+			anchorOrigin: 'bottom-left', anchor: [0.15,0] }) 
+	}); 
+	var endMarkerStyle = new ol.style.Style({
+     	image: new ol.style.Icon({ src: jtgTemplateUrl+'/images/trackDest.png',
+			anchorOrigin: 'bottom-right', anchor: [0.15,0] }) 
+	});
+	for (var itrk = 0; itrk < trackData.length; itrk++) {
+		nseg = trackData[itrk].coords.length;
+		for (var iseg = 0; iseg < nseg; iseg++) {
+			allpoints.push(...trackData[itrk].coords[iseg]);
+			trkGeom = new ol.geom.LineString(trackData[itrk].coords[iseg]);
+			trkGeom.transform('EPSG:4326',jtgView.getProjection());
+			gpsTracks.getSource().addFeature(new ol.Feature({geometry: trkGeom, name: trackData[itrk].name}));
+		}
+		var startMarker = new ol.Feature( {
+			geometry: new ol.geom.Point(ol.proj.fromLonLat(trackData[itrk].coords[0][0], jtgView.getProjection())),
+			name: 'Start: '+trackData[itrk].name
+		});
+		startMarker.setStyle(startMarkerStyle);
+		gpsTracks.getSource().addFeature(startMarker);
+
+		var endMarker = new ol.Feature( {
+			geometry: new ol.geom.Point(ol.proj.fromLonLat(trackData[itrk].coords[nseg-1][trackData[itrk].coords[nseg-1].length-1], jtgView.getProjection())),
+			name: 'End: '+trackData[itrk].name
+		});
+		endMarker.setStyle(endMarkerStyle);
+		gpsTracks.getSource().addFeature(endMarker);
 	}
-	gpsTrack.getSource().addFeature(new ol.Feature({geometry: new ol.geom.LineString(points)}));
-
-	var startMarker = new ol.Feature( {
-		geometry: new ol.geom.Point(ol.proj.fromLonLat([longitudeData[0], latitudeData[0]], jtgView.getProjection())),
-		name: 'Start'
-	});
-	startMarker.setStyle(new ol.style.Style({
-      image: new ol.style.Icon({ src: jtgTemplateUrl+'/images/trackStart.png',
-		anchorOrigin: 'bottom-left', anchor: [0.15,0] }) 
-	}) );
-	gpsTrack.getSource().addFeature(startMarker);
-
-	var endMarker = new ol.Feature( {
-		geometry: new ol.geom.Point(ol.proj.fromLonLat([longitudeData[longitudeData.length-1], latitudeData[latitudeData.length-1]], jtgView.getProjection())),
-		name: 'End'
-	});
-	endMarker.setStyle(new ol.style.Style({
-      image: new ol.style.Icon({ src: jtgTemplateUrl+'/images/trackDest.png',
-		anchorOrigin: 'bottom-right', anchor: [0.15,0] }) 
-	}) );
-	gpsTrack.getSource().addFeature(endMarker);
-
-	jtgView.fit( gpsTrack.getSource().getExtent(), {padding: [50, 50, 50, 75]} );
+	jtgView.fit( gpsTracks.getSource().getExtent(), {padding: [50, 50, 50, 75]} );
 	jtgMap.addControl( new ol.control.ZoomToExtent( {extent: jtgView.calculateExtent()} ) );
 
 	if (animatedCursor) {
@@ -105,11 +110,12 @@ function drawTrack(latitudeData, longitudeData, animatedCursor = false) {
 			style: animated_cursor_style,
 			visible: false
 		});
+		cursGeom = new ol.geom.LineString(allpoints);
+		cursGeom.transform('EPSG:4326',jtgView.getProjection());
 		animatedCursorLineFeature = new ol.Feature({ 
-			geometry: new ol.geom.LineString(points)});
+			geometry: cursGeom });
 		animatedCursorLineFeature.setId('cursorTrack');
 		animatedCursorLayer.getSource().addFeature(animatedCursorLineFeature);
-		animatedCursorLayer.gpxPoints = points;
 		animatedCursorIcon = new ol.geom.Point( ol.proj.fromLonLat([3.79273,50.29782], jtgView.getProjection()));
 		animatedCursorLayer.getSource().addFeature( new ol.Feature( { geometry: animatedCursorIcon } ) );
 

@@ -78,14 +78,6 @@ class GpsDataClass
 
 	var $description = "";
 
-	var $bbox_lat_max = -90;
-
-	var $bbox_lat_min = 90;
-
-	var $bbox_lon_max = -180;
-
-	var $bbox_lon_min = 180;
-
 	/**
 	 * function_description
 	 *
@@ -181,7 +173,7 @@ class GpsDataClass
 		}
 
 		// Calculate start,
-		$this->start = $this->track[0]->coords[0];
+		$this->start = $this->track[0]->coords[0][0];
 		$this->speedDataExists = ( ( isset ($this->start[3])  && $this->start[3] > 0) ? true: false);
 		$this->elevationDataExists = ( isset ($this->start[2])? true: false);
 		$this->beatDataExists = ( (isset ($this->start[4]) && $this->start[4] > 0)? true: false);
@@ -372,9 +364,8 @@ class GpsDataClass
 								{
 									$coordinatesCount = count($coordinates);
 									$this->track[$this->trackCount] = new stdClass;
-									$this->track[$this->trackCount]->coords = $coordinates;
-									$this->track[$this->trackCount]->start = ($coordinates[0][0] . "," . $coordinates[0][1]);
-									$this->track[$this->trackCount]->stop = ($coordinates[$coordinatesCount - 1][0] . "," . $coordinates[$coordinatesCount - 1][1]);
+									$this->track[$this->trackCount]->coords[] = $coordinates;
+									$this->track[$this->trackCount]->segCount = 1;
 									$this->trackCount++;
 								}
 							}
@@ -556,26 +547,6 @@ private function extractCoordsGPX($xmlcontents)
 						$this->wps[$i_wpt]->lat = $lat;
 						$this->wps[$i_wpt]->lon = $lon;
 
-						if ( $lat > $this->bbox_lat_max )
-						{
-							$this->bbox_lat_max = $lat;
-						}
-
-						if ( $lat < $this->bbox_lat_min )
-						{
-							$this->bbox_lat_min = $lat;
-						}
-
-						if ( $lon > $this->bbox_lon_max )
-						{
-							$this->bbox_lon_max = $lon;
-						}
-
-						if ( $lon < $this->bbox_lon_min )
-						{
-							$this->bbox_lon_min = $lon;
-						}
-
 						$endWptElement = false;
 
 						while ( !$endWptElement )
@@ -605,9 +576,11 @@ private function extractCoordsGPX($xmlcontents)
 
 					case 'trk':
 						// Track
-						$trackname = '';
 						$i_trk++;
 
+						$curTrack = new stdClass;
+						$curTrack->description = '';
+						$curTrack->segCount = 0;
 						while ( ('trk' !== $endElement) )
 						{
 							$xmlcontents->read();
@@ -625,7 +598,7 @@ private function extractCoordsGPX($xmlcontents)
 							if ( ($xmlcontents->name == 'name') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
 							{
 								$xmlcontents->read();
-								$trackname = $xmlcontents->value;
+								$curTrack->trackname = $xmlcontents->value;
 
 								// Read end tag
 								$xmlcontents->read();
@@ -661,28 +634,6 @@ private function extractCoordsGPX($xmlcontents)
 										$i_trkpt++;
 										$lat = (float) $xmlcontents->getAttribute('lat');
 										$lon = (float) $xmlcontents->getAttribute('lon');
-
-										if ( $lat > $this->bbox_lat_max )
-										{
-											$this->bbox_lat_max = $lat;
-										}
-
-										if ( $lat < $this->bbox_lat_min )
-										{
-											$this->bbox_lat_min = $lat;
-										}
-
-										if ( $lon > $this->bbox_lon_max )
-										{
-											$this->bbox_lon_max = $lon;
-										}
-
-										if ( $lon < $this->bbox_lon_min )
-										{
-											$this->bbox_lon_min = $lon;
-										}
-										// Read end tag
-										// $xmlcontents->read();
 									}
 
 									if ( ($xmlcontents->name == 'ele') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
@@ -725,32 +676,19 @@ private function extractCoordsGPX($xmlcontents)
 								{
 									// This is a track with more than 2 points
 									$this->isTrack = true;
-									$this->track[$this->trackCount] = new stdClass;
-									$this->track[$this->trackCount]->description = '';
 
-									if ($tracksegname != '')
-									{
-										$this->track[$this->trackCount]->trackname = $tracksegname;
-									}
-									elseif ($trackname != '')
-									{
-										$this->track[$this->trackCount]->trackname = $trackname;
-									}
-									else
-									{
-										$this->track[$this->trackCount]->trackname = $this->trackfilename . '-' . (string) $this->trackCount;
-									}
-
-									$this->track[$this->trackCount]->coords = $coords;
-									$this->track[$this->trackCount]->start = ($coords[0][0] . "," . $coords[0][1]);
-									$this->track[$this->trackCount]->stop = ($coords[$coordinatesCount - 1][0] . "," . $coords[$coordinatesCount - 1][1]);
-									$this->trackCount++;
+									$curTrack->coords[] = $coords;
+									$curTrack->segCount++;
 								}
 							}
 							else
 							{
 								// Tag is not trk, trkseg, nor Name: proceed
 							}
+						}
+						if ($curTrack->segCount != 0) {
+							$this->track[] = $curTrack;
+							$this->trackCount++;
 						}
 						break;
 					case 'rte':
@@ -801,25 +739,6 @@ private function extractCoordsGPX($xmlcontents)
 								$lat = (float) $xmlcontents->getAttribute('lat');
 								$lon = (float) $xmlcontents->getAttribute('lon');
 
-								if ( $lat > $this->bbox_lat_max )
-								{
-									$this->bbox_lat_max = $lat;
-								}
-
-								if ( $lat < $this->bbox_lat_min )
-								{
-									$this->bbox_lat_min = $lat;
-								}
-
-								if ( $lon > $this->bbox_lon_max )
-								{
-									$this->bbox_lon_max = $lon;
-								}
-
-								if ( $lon < $this->bbox_lon_min )
-								{
-									$this->bbox_lon_min = $lon;
-								}
 								// Read end tag
 								$xmlcontents->read();
 
@@ -851,13 +770,13 @@ private function extractCoordsGPX($xmlcontents)
 								      $extensionsFound = true;
 								      while ( !(($xmlcontents->name == 'extensions') AND ($xmlcontents->nodeType == XMLReader::END_ELEMENT))) {
 								      if ( ($xmlcontents->name == 'gpxx:rpt') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
-								        {
-								          $latsub = (float) $xmlcontents->getAttribute('lat');
-								          $lonsub = (float) $xmlcontents->getAttribute('lon');
-                                                                          $coords[] = array((string) $lonsub, (string) $latsub, (string) 0, (string) 0, 0);
+										{	
+											$latsub = (float) $xmlcontents->getAttribute('lat');
+											$lonsub = (float) $xmlcontents->getAttribute('lon');
+											$coords[] = array((string) $lonsub, (string) $latsub, (string) 0, (string) 0, 0);
 								        }
 								        $xmlcontents->read();
-							              }
+										}
 								   }	
 
 								   if ( ($xmlcontents->name != 'time') AND ($xmlcontents->name != 'ele') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) ) {
@@ -876,7 +795,7 @@ private function extractCoordsGPX($xmlcontents)
 								   }
 								   if ( !$endRoutePoint )
 								      $xmlcontents->read();
-						             }
+									}
 						       }
 					 	}
 						$coordinatesCount = count($coords);
@@ -896,9 +815,8 @@ private function extractCoordsGPX($xmlcontents)
 								$this->track[$this->trackCount]->trackname = $this->trackfilename . '-' . (string) $this->trackCount;
 							}
 
-							$this->track[$this->trackCount]->coords = $coords;
-							$this->track[$this->trackCount]->start = ($coords[0][0] . "," . $coords[0][1]);
-							$this->track[$this->trackCount]->stop = ($coords[$coordinatesCount - 1][0] . "," . $coords[$coordinatesCount - 1][1]);
+							$this->track[$this->trackCount]->coords[] = $coords;
+							$this->track[$this->trackCount]->segCount = 1;
 							$this->trackCount++;
 						}
 					
@@ -1051,154 +969,116 @@ private function extractCoordsGPX($xmlcontents)
 
 		for ($t = 0; $t < $this->trackCount; $t++)
 		{
-			$this->allCoords = array_merge($this->allCoords, $this->track[$t]->coords);
-
-			// Calculate distances
-			$next_coord = $this->track[$t]->coords[0];
-			$next_lat_rad = deg2rad($next_coord[1]);
-			$next_lon_rad = deg2rad($next_coord[0]);
-
-			if ( $next_coord[1] > $this->bbox_lat_max )
+			for ($s = 0; $s < $this->track[$t]->segCount; $s++)
 			{
-				$this->bbox_lat_max = $next_coord[1];
-			}
+				$this->allCoords = array_merge($this->allCoords, $this->track[$t]->coords[$s]);
 
-			if ( $next_coord[1] < $this->bbox_lat_min )
-			{
-				$this->bbox_lat_min = $next_coord[1];
-			}
+				// Calculate distances
+				$next_coord = $this->track[$t]->coords[$s][0];
+				$next_lat_rad = deg2rad($next_coord[1]);
+				$next_lon_rad = deg2rad($next_coord[0]);
 
-			if ( $next_coord[0] > $this->bbox_lon_max )
-			{
-				$this->bbox_lon_max = $next_coord[0];
-			}
-
-			if ( $next_coord[0] < $this->bbox_lon_min )
-			{
-				$this->bbox_lon_min = $next_coord[0];
-			}
-
-			if ($this->elevationDataExists)
-			{
-				$current_elv = $next_coord[2];
-				$this->allElevation[$d] = (int) $current_elv;
-			}
-
-			if ($this->speedDataExists)
-			{
-				$next_time = $this->giveTimestamp($next_coord[3]);
-			}
-
-			$datacount = count($this->track[$t]->coords);
-
-			for ($i = 0; $i < $datacount - 1; $i++)
-			{
-				$next_coord = $this->track[$t]->coords[$i + 1];
-
-				if (isset($next_coord))
+				if ($this->elevationDataExists)
 				{
-					$current_lat_rad = $next_lat_rad;
-					$current_lon_rad = $next_lon_rad;
+					$current_elv = $next_coord[2];
+					$this->allElevation[$d] = (int) $current_elv;
+				}
 
-					$next_lat_rad = deg2rad($next_coord[1]);
-					$next_lon_rad = deg2rad($next_coord[0]);
+				if ($this->speedDataExists)
+				{
+					$next_time = $this->giveTimestamp($next_coord[3]);
+				}
 
-					if ( $next_coord[1] > $this->bbox_lat_max )
+				$datacount = count($this->track[$t]->coords[$s]);
+
+				for ($i = 0; $i < $datacount - 1; $i++)
+				{
+					$next_coord = $this->track[$t]->coords[$s][$i + 1];
+
+					if (isset($next_coord))
 					{
-						$this->bbox_lat_max = $next_coord[1];
-					}
+						$current_lat_rad = $next_lat_rad;
+						$current_lon_rad = $next_lon_rad;
 
-					if ( $next_coord[1] < $this->bbox_lat_min )
-					{
-						$this->bbox_lat_min = $next_coord[1];
-					}
+						$next_lat_rad = deg2rad($next_coord[1]);
+						$next_lon_rad = deg2rad($next_coord[0]);
 
-					if ( $next_coord[0] > $this->bbox_lon_max )
-					{
-						$this->bbox_lon_max = $next_coord[0];
-					}
+						// Distance in kilometer
 
-					if ( $next_coord[0] < $this->bbox_lon_min )
-					{
-						$this->bbox_lon_min = $next_coord[0];
-					}
-
-					// Distance in kilometer
-
-					$dis = acos(
+						$dis = acos(
 							(sin($current_lat_rad) * sin($next_lat_rad)) +
 							(cos($current_lat_rad) * cos($next_lat_rad) *
 									cos($next_lon_rad - $current_lon_rad))
-					) * $earthRadius;
+							) * $earthRadius;
 
-					if (is_nan($dis))
-					{
-						$dis = 0;
-					}
-
-					$this->allDistances[$d + 1] = $this->allDistances[$d] + $dis;
-
-					if ($this->elevationDataExists)
-					{
-						$next_elv = $next_coord[2];
-						$this->allElevation[$d + 1] = (int) $next_elv;
-						$ascent = $next_elv - $current_elv;
-
-						/* elevationFilterOK is true when
-						 * $filterMinAscent = 0 (no filtering)
-						 * abs(ascent) is more then filterMinAscent
-						 * the data point is the last of the given track
-						 */
-						$elevationFilterOK = ( ($filterMinAscent == 0) OR (abs($ascent) > $filterMinAscent) OR ($i == $datacount - 2) );
-
-						if ($elevationFilterOK)
+						if (is_nan($dis))
 						{
-							// Elevation data can be added to total ascent and descent
-							$current_elv = $next_elv;
+							$dis = 0;
+						}
 
-							if ($ascent >= 0)
+						$this->allDistances[$d + 1] = $this->allDistances[$d] + $dis;
+
+						if ($this->elevationDataExists)
+						{
+							$next_elv = $next_coord[2];
+							$this->allElevation[$d + 1] = (int) $next_elv;
+							$ascent = $next_elv - $current_elv;
+
+							/* elevationFilterOK is true when
+							 * $filterMinAscent = 0 (no filtering)
+							 * abs(ascent) is more then filterMinAscent
+							 * the data point is the last of the given track
+							 */
+							$elevationFilterOK = ( ($filterMinAscent == 0) OR (abs($ascent) > $filterMinAscent) OR ($i == $datacount - 2) );
+
+							if ($elevationFilterOK)
 							{
-								$this->totalAscent = $this->totalAscent + $ascent;
-							}
-							else
-							{
-								$this->totalDescent = $this->totalDescent - $ascent;
+								// Elevation data can be added to total ascent and descent
+								$current_elv = $next_elv;
+
+								if ($ascent >= 0)
+								{
+									$this->totalAscent = $this->totalAscent + $ascent;
+								}
+								else
+								{
+									$this->totalDescent = $this->totalDescent - $ascent;
+								}
 							}
 						}
-					}
 
-					// Speed
-					if ($this->speedDataExists)
-					{
-						$current_time  = $next_time;
-						$next_time = $this->giveTimestamp($next_coord[3]);
-
-						if ($current_time and $next_time)
+						// Speed
+						if ($this->speedDataExists)
 						{
-							$elapsedTime = $next_time - $current_time;
+							$current_time  = $next_time;
+							$next_time = $this->giveTimestamp($next_coord[3]);
 
-							if ($elapsedTime > 0)
+							if ($current_time and $next_time)
 							{
-								$this->allSpeed[$d + 1] = $dis / $elapsedTime * 3600;
+								$elapsedTime = $next_time - $current_time;
+
+								if ($elapsedTime > 0)
+								{
+									$this->allSpeed[$d + 1] = $dis / $elapsedTime * 3600;
+								}
+								else
+								{
+									$this->allSpeed[$d + 1] = 0;
+								}
 							}
 							else
 							{
 								$this->allSpeed[$d + 1] = 0;
 							}
 						}
-						else
+
+						// Heart Beat
+						if ($this->beatDataExists)
 						{
-							$this->allSpeed[$d + 1] = 0;
+							$this->allBeat[$d + 1] = $next_coord[4];
 						}
+						$d++;
 					}
-
-					// Heart Beat
-					if ($this->beatDataExists)
-					{
-						$this->allBeat[$d + 1] = $next_coord[4];
-					}
-
-					$d++;
 				}
 			}
 		}
@@ -1218,11 +1098,12 @@ private function extractCoordsGPX($xmlcontents)
 
 		// Is this track a roundtrip ?
 		$t = $this->trackCount-1;
-		$n = count($this->track[$t]->coords);
-		$first_coord = $this->track[0]->coords[0];
+		$first_coord = $this->track[0]->coords[0][0];
 		$first_lat_rad = deg2rad($first_coord[1]);
 		$first_lon_rad = deg2rad($first_coord[0]);
-		$last_coord = $this->track[$t]->coords[$n-1];
+		$s = $this->track[$t]->segCount-1;
+		$n = count($this->track[$t]->coords[$s]);
+		$last_coord = $this->track[$t]->coords[$s][$n-1];
 		$last_lat_rad = deg2rad($last_coord[1]);
 		$last_lon_rad = deg2rad($last_coord[0]);
 
@@ -1234,7 +1115,7 @@ private function extractCoordsGPX($xmlcontents)
 						cos($first_lon_rad - $last_lon_rad))
 				) * $earthRadius;
 
-				if (is_nan($dis_first_to_last))
+		if (is_nan($dis_first_to_last))
 		{
 			$dis_first_to_last = 0;
 		}

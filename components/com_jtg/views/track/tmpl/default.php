@@ -380,7 +380,7 @@ if (! (bool) $this->params->get("jtg_param_disable_map_animated_cursor", false))
 						events: {
 							mouseOver: function () {
 								var index = this.series.processedXData.indexOf(this.x);
-								hover_profil_graph(longitudeData[index],latitudeData[index], index, <?php echo $autocenter ?>);
+								hover_profil_graph(allpoints[index], index, <?php echo $autocenter ?>);
 							}
 						}
 					},
@@ -769,34 +769,31 @@ if ($this->canDo->get('jtg.download'))
 	$download_buttons ='';
 	echo "<div class=\"gps-info\"> <div class=\"block-header\">".
           JText::_('COM_JTG_DOWNLOAD')."</div>";
-	// Registered users only
-	// TODO: print text if download only authorised for some users?
-	//echo $this->parseTemplate("description", JText::_('COM_JTG_NOT_DOWNLOAD'));
 	if ( (bool) $this->params->get("jtg_param_offer_download_original") )
 	{
 		$ext = JFile::getExt($this->track->file);
-		$download_buttons .= "<button class=\"button\" type=\"button\"
+		$download_buttons .= "<button class=\"btn btn-secondary jtg-download\" type=\"button\"
 		onclick=\"document.getElementById('format').value = 'original';Joomla.submitbutton('download')\">
 		$ext ". JText::_('COM_JTG_ORIGINAL_FILE') ."</button>";
 	}
 
 	if ( (bool) $this->params->get("jtg_param_offer_download_gpx") )
 	{
-		$download_buttons .= "<button class=\"button\" type=\"button\"
+		$download_buttons .= "<button class=\"btn btn-secondary jtg-download\" type=\"button\"
 		onclick=\"document.getElementById('format').value = 'gpx';Joomla.submitbutton('download')\">
 		GPX " . JText::_('COM_JTG_CONVERTED_FILE') ."</button>";
 	}
 
 	if ( (bool) $this->params->get("jtg_param_offer_download_kml") )
 	{
-		$download_buttons .= "<button class=\"button\" type=\"button\"
+		$download_buttons .= "<button class=\"btn btn-secondary jtg-download\" type=\"button\"
 		onclick=\"document.getElementById('format').value = 'kml';Joomla.submitbutton('download')\">
 		KML " . JText::_('COM_JTG_CONVERTED_FILE') . "</button>";
 	}
 
 	if ( (bool) $this->params->get("jtg_param_offer_download_tcx") )
 	{
-		$download_buttons .= "<button class=\"button\" type=\"button\"
+		$download_buttons .= "<button class=\"btn btn-secondary jtg-download\" type=\"button\"
 		onclick=\"document.getElementById('format').value = 'tcx';Joomla.submitbutton('download')\">
 		TCX " . JText::_('COM_JTG_CONVERTED_FILE') . "</button>";
 	}
@@ -832,7 +829,7 @@ if ( ($durationbox) AND ($this->track->distance != "") AND ((float) $this->track
 								</label> <input type="text" name="pace" id="pace" value=""
 									size="4" />
 								<?php echo '(' . JText::_('COM_JTG_PACE_UNIT_' . strtoupper($this->cfg->unit)) . ')'; ?>
-							    <input type="button" name="button" class="button"
+							    <input type="button" name="button" class="btn btn-secondary"
 									value="<?php echo JText::_('JSUBMIT'); ?>"
 									onclick="getAvgTimeFromPace(document.getElementById('pace').value,<?php echo $this->track->distance; ?>,
 									<?php echo '\'' . JText::_('COM_JTG_SEPARATOR_DEC') . '\''; ?>);" /> 
@@ -844,7 +841,7 @@ if ( ($durationbox) AND ($this->track->distance != "") AND ((float) $this->track
 									size="4" />
 								<?php echo '(' . JText::_('COM_JTG_SPEED_UNIT_' . strtoupper($this->cfg->unit)) . ')'; ?>
 							
-								<input type="button" name="button" class="button"
+								<input type="button" name="button" class="btn btn-secondary"
 									value="<?php echo JText::_('JSUBMIT'); ?>"
 									onclick="getAvgTime(document.getElementById('speed').value,<?php echo $this->track->distance; ?>,
 									<?php echo '\'' . JText::_('COM_JTG_SEPARATOR_DEC') . '\''; ?>);" />
@@ -980,7 +977,7 @@ else
 <div>
 <?php
 	if ($this->canDo->get('core.edit') || ($this->canDo->get('core.edit.own') && $this->track->uid == $user->id)) { ?>
-  <button class="button" type="button" onclick="location = '<?php echo JRoute::_("index.php?option=com_jtg&view=track&layout=form&id=$this->id"); ?>'">
+  <button class="btn btn-primary" type="button" onclick="location = '<?php echo JRoute::_("index.php?option=com_jtg&view=track&layout=form&id=$this->id"); ?>'">
     <?php echo JText::_('JACTION_EDIT'); ?>
   </button>
 <?php
@@ -989,7 +986,7 @@ else
 ?>
   <a href="<?php echo JRoute::_('index.php?option=com_jtg&controller=track&task=delete&id=').$this->id; ?>"
                onclick="return confirm('<?php echo JText::_('COM_JTG_VALIDATE_DELETE_TRACK')?>')">
-  <button class="button" type="button">
+  <button class="btn btn-danger" type="button">
     <?php echo JText::_('JACTION_DELETE'); ?>
   </button></a>
 <?php

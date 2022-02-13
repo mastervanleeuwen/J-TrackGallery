@@ -131,22 +131,22 @@ class JtgModelDownload extends JModelLegacy
 				$header .= "version=\"1.1\" ";
 				$header .= "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\" ";
 				$header .= "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
-				$header .= ">";
-				$metadata = "<metadata>";
-				$metadata .= "<name>" . $track->title . "</name>";
-				$metadata .= "<copyright author=\"" . $mainframe->getCfg('sitename') . "\" />";
-				$metadata .= "<link href=\"" . JUri::base() . "index.php?option=com_jtg&amp;view=track&amp;layout=track&amp;id=" . $id . "\">";
+				$header .= ">\n";
+				$metadata = "<metadata>\n";
+				$metadata .= "<name>" . $track->title . "</name>\n";
+				$metadata .= "<copyright author=\"" . $mainframe->getCfg('sitename') . "\" />\n";
+				$metadata .= "<link href=\"" . JUri::base() . "index.php?option=com_jtg&amp;view=track&amp;id=" . $id . "\">\n";
 				$metadata .= "<text>" . $track->title . " on " . $mainframe->getCfg('sitename') . "</text>";
-				$metadata .= "</link>";
+				$metadata .= "</link>\n";
 
 				// Coordinated Universal Time (UTC)
 				$date = gmdate("Y-m-d");
 				$time = gmdate("H:i:s");
-				$metadata .= "<time>" . $date . "T" . $time . "Z</time>";
-				$trk = "<trk>";
-				$trk .= "<name>" . $track->title . "</name>";
-				$trk .= "<link href=\"" . JUri::base() . "index.php?option=com_jtg&amp;view=track&amp;layout=track&amp;id=" . $id . "\" />";
-				$trk .= "<trkseg>";
+				$metadata .= "<time>" . $date . "T" . $time . "Z</time>\n";
+				$trk = "<trk>\n";
+				$trk .= "<name>" . $track->title . "</name>\n";
+				$trk .= "<link href=\"" . JUri::base() . "index.php?option=com_jtg&amp;view=track&amp;id=" . $id . "\" />\n";
+				$trk .= "<trkseg>\n";
 				$minlat = 180;
 				$maxlat = -180;
 				$minlon = 90;
@@ -176,7 +176,7 @@ class JtgModelDownload extends JModelLegacy
 						$maxlon = $coord[1];
 					}
 
-					$trk .= "<trkpt lat=\"" . $coord[1] . "\" lon=\"" . $coord[0] . "\">";
+					$trk .= "<trkpt lat=\"" . $coord[1] . "\" lon=\"" . $coord[0] . "\">\n";
 
 					if ($coord[2] != null)
 					{
@@ -188,14 +188,14 @@ class JtgModelDownload extends JModelLegacy
 						$trk .= "<time>" . $coord[3] . "</time>";
 					}
 
-					$trk .= "</trkpt>";
+					$trk .= "</trkpt>\n";
 				}
 
-				$metadata .= "<bounds minlat=\"" . $minlat . "\" minlon=\"" . $minlon . "\" maxlat=\"" . $maxlat . "\" maxlon=\"" . $maxlon . "\"/>";
-				$metadata .= "</metadata>";
-				$trk .= "</trkseg>";
-				$trk .= "</trk>";
-				$footer = "</gpx>";
+				$metadata .= "<bounds minlat=\"" . $minlat . "\" minlon=\"" . $minlon . "\" maxlat=\"" . $maxlat . "\" maxlon=\"" . $maxlon . "\"/>\n";
+				$metadata .= "</metadata>\n";
+				$trk .= "</trkseg>\n";
+				$trk .= "</trk>\n";
+				$footer = "</gpx>\n";
 
 				return $header . $metadata . $trk . $footer;
 				break;
