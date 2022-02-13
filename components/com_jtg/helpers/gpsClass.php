@@ -531,9 +531,10 @@ private function extractCoordsGPX($xmlcontents)
 						// GPS file Time
 						$xmlcontents->read();
 						$time = $xmlcontents->value;
-						$dt = new DateTime($time);
-						$this->Date = $dt->format('Y-m-d');
-
+						if ($time) {
+							$dt = new DateTime($time);
+							$this->Date = $dt->format('Y-m-d');
+						}
 						// Read end tag
 						$xmlcontents->read();
 						break;
@@ -651,7 +652,7 @@ private function extractCoordsGPX($xmlcontents)
 										// Trkpt time found
 										$xmlcontents->read();
 										$time = (string) $xmlcontents->value;
-										if ($this->Date === false) {
+										if ($this->Date === false && $time) {
 											$dt = new DateTime($time);
 											$this->Date = $dt->format('Y-m-d');
 										}

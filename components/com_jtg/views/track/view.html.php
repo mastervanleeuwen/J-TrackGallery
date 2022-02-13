@@ -219,7 +219,7 @@ class JtgViewTrack extends JViewLegacy
 				$this->heighdata = $gpsData->elevationData;
 				$this->speeddata = $gpsData->speedData;
 				$this->pacedata = $gpsData->paceData;
-				$this->date = JHtml::_('date', $this->track->date, JText::_('COM_JTG_DATE_FORMAT_LC4'));
+				$this->date = $this->track->date?JHtml::_('date', $this->track->date, JText::_('COM_JTG_DATE_FORMAT_LC4')):'';
 				if ( count($this->imageList) > 0) {
 		         $this->images = true;
 				}
