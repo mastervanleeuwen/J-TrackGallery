@@ -150,8 +150,9 @@ PRIMARY KEY (`user_id`)
 
 INSERT IGNORE INTO `#__jtg_maps` (`name`, `ordering`, `published`, `type`, `param`, `apikey`) VALUES
 ('COM_JTG_MAP_MAPNIK', 1, 1, 0, '', ''),
-('COM_JTG_MAP_OSM_HIKE_AND_BIKE', 2, 0, 0, 'https://{a-c}.tiles.wmflabs.org/hikebike/{z}/{x}/{y}.png', ''),
-('COM_JTG_MAP_CYCLEMAP', 3, 0, 0, 'https://{a-c}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', ''),
+('Open Topomap', 2, 1, 0, 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png', ''),
+('COM_JTG_MAP_OSM_HIKE_AND_BIKE', 99, 0, 0, 'https://{a-c}.tiles.wmflabs.org/hikebike/{z}/{x}/{y}.png', ''),
+('COM_JTG_MAP_CYCLEMAP', 3, 1, 0, 'https://{a-c}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', ''),
 ('COM_JTG_MAP_BING_AERIAL', 4, 0, 2, 'Aerial', ''),
 ('COM_JTG_MAP_BING_ROAD', 5, 0, 2, 'RoadOnDemand', ''),
 ('COM_JTG_MAP_BING_HYBRID', 6, 0, 2, 'AerialWithLabelsOnDemand', ''),
