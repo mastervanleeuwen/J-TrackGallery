@@ -23,7 +23,12 @@ JToolBarHelper::back();
 JToolBarHelper::spacer();
 JToolBarHelper::help('cats/managecatpicsform', true);
 
-if (JVERSION >= 3.0)
+if (version_compare('JVERSION','4.0','ge'))
+{
+	JHtml::_('jquery.framework');
+	JHtml::script(Juri::base() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
+}
+else if (version_compare('JVERSION','3.0','ge'))
 {
 	JHtml::_('jquery.framework');
 	JHtml::script(Juri::base() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
@@ -42,7 +47,7 @@ echo JText::sprintf('COM_JTG_ALLOWED_FILETYPES', $this->types);
 	name="adminForm" id="adminForm">
 	<input type="file" name="files" accept="image/*" /><br /> <input
 		type='submit' value='<?php echo JText::_('COM_JTG_UPLOAD'); ?>'
-		class='submit' onclick="javascript: submitbutton('uploadcatimages')" />
+		class='submit' onclick="javascript: Joomla.submitbutton('uploadcatimages')" />
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="task"
 		value="<?php echo JFactory::getApplication()->input->get('task'); ?>" />

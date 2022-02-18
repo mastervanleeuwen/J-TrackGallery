@@ -549,12 +549,12 @@ class JtgViewFiles extends JViewLegacy
 	 */
 	function _displayUpload($tpl)
 	{
-		if (JVERSION >= 4.0)
+		if (version_compare(JVERSION,'4.0','ge'))
 		{
 			JHtml::_('jquery.framework');
 			JHtml::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
 		}
-		else if (JVERSION >= 3.0)
+		else if (version_compare(JVERSION,'3.0','ge'))
 		{
 			JHtml::_('jquery.framework');
 			JHtml::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');

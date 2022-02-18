@@ -37,12 +37,12 @@ class JtgModelCat extends JModelLegacy
 	{
 		parent::__construct();
 
-		$array = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cids = JFactory::getApplication()->input->get('cid', array(), 'array');
 		$edit	= JFactory::getApplication()->input->get('edit', true);
 
-		if ($edit)
+		if ($edit && isset($cids[0]))
 		{
-			$this->setId((int) $array[0]);
+			$this->setId((int) $cids[0]);
 		}
 	}
 

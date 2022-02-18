@@ -200,7 +200,7 @@ fixedControls: 'fit',
 		}
 
 		// Code support for joomla version greater than 3.0
-		if (JVERSION >= 3.0)
+		if (version_compare(JVERSION,'3.0','ge'))
 		{
 			JHtml::_('jquery.framework');
 		}

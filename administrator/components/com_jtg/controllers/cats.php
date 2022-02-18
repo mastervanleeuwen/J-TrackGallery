@@ -61,7 +61,7 @@ class JtgControllerCats extends JtgController
 		$success = $model->saveCatImage();
 
 		// Redirect to cats overview
-		$link = JRoute::_("index.php?option=com_jtg&task=cats&controller=cats&task=managecatpics", false);
+		$link = JRoute::_("index.php?option=com_jtg&controller=cats&task=managecatpics", false);
 
 		if ($success)
 		{

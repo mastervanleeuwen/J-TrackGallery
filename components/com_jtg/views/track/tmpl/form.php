@@ -81,9 +81,8 @@ $cfg = JtgHelper::getConfig();
 
 $infoIconText = '';
 $version_parts = explode('.',JVERSION);
-if ($version_parts[0]<3 || ($version_parts[0]==3 && $version_parts[1]<10))
+if (version_compare(JVERSION,'4.0','lt'))
 {
-	error_log('joomla < 3.9; use behavior.tooltip');
 	JHtml::_('behavior.modal');
 	JHtml::_('behavior.tooltip');
 }
