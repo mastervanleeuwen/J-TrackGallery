@@ -23,12 +23,12 @@ JToolBarHelper::back();
 JToolBarHelper::spacer();
 JToolBarHelper::help('cats/managecatpicsform', true);
 
-if (version_compare('JVERSION','4.0','ge'))
+if (version_compare(JVERSION,'4.0') >= 0)
 {
 	JHtml::_('jquery.framework');
 	JHtml::script(Juri::base() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
 }
-else if (version_compare('JVERSION','3.0','ge'))
+else if (version_compare(JVERSION,'3.0') >= 0)
 {
 	JHtml::_('jquery.framework');
 	JHtml::script(Juri::base() . 'components/com_jtg/assets/js/jquery.MultiFile.js');

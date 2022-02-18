@@ -105,7 +105,7 @@ class JtgViewMaps extends JViewLegacy
 	 */
 	function buildEditKlicks($map, $count, $id)
 	{
-		if (JVERSION < 4.0)
+		if (version_compare(JVERSION, '4.0', 'lt'))
 		{
 			return "<a href=\"javascript:void(0);\" onclick=\"javascript:return Joomla.listItemTask('cb" . $count . "','editmap')\">" . $map . "</a>";
 		}
