@@ -1422,10 +1422,13 @@ private function extractCoordsGPX($xmlcontents)
 			if ($ele)
 			{
 				// TODO unit in elevation !!
-				$wpcode .= "<br /><b>" . JText::_('COM_JTG_ELEVATION') . " :</b> ca. " . round($ele, 1) . "m<small>";
+				$wpcode .= "<br /><b>" . JText::_('COM_JTG_ELEVATION') . " :</b> " . round($ele, 1) . "m<small>";
 			}
 			
-			if (!$wpJSicons[$sym] && ($iconJS = $this->parseOwnIcon($sym))) {
+			if ($wpJSicons[$sym]) {
+				$iconname = $sym;
+			}
+			else if (($iconJS = $this->parseOwnIcon($sym))) {
 				$wpJSicons[$sym] = $iconJS;
 				$iconname = $sym;
 			}
