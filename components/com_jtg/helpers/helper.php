@@ -148,7 +148,7 @@ class JtgHelper
 		{
 			$km = self::getFormattedDistance($distance,null,'kilometers');
 			$miles = self::getFormattedDistance($distance,null,'miles');
-			$distance = $km . " km (" . $miles . " mi)";
+			$distance = $km . " (" . $miles . ")";
 		}
 		else
 		{
@@ -156,8 +156,8 @@ class JtgHelper
 		}
 
 		$distance = JText::_('COM_JTG_DISTANCE') . ": " . $distance;
-		$ele_asc = JText::_('COM_JTG_ELEVATION_UP') . ": " . (float) $track->ele_asc;
-		$ele_desc = JText::_('COM_JTG_ELEVATION_DOWN') . ": " . (float) $track->ele_desc;
+		$ele_asc = JText::_('COM_JTG_ELEVATION_UP') . ": " . (float) $track->ele_asc." ".JText::_('COM_JTG_UNIT_METER');
+		$ele_desc = JText::_('COM_JTG_ELEVATION_DOWN') . ": " . (float) $track->ele_desc." ".JText::_('COM_JTG_UNIT_METER');
 		$voted = self::howMuchVote($track->id);
 
 		if ( ( $voted != 0 ) AND ( (float) $track->vote == 0 ) )
