@@ -1425,7 +1425,7 @@ private function extractCoordsGPX($xmlcontents)
 				$wpcode .= "<br /><b>" . JText::_('COM_JTG_ELEVATION') . " :</b> " . round($ele, 1) . "m<small>";
 			}
 			
-			if ($wpJSicons[$sym]) {
+			if (isset($wpJSicons[$sym])) {
 				$iconname = $sym;
 			}
 			else if (($iconJS = $this->parseOwnIcon($sym))) {
