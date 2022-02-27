@@ -18,8 +18,8 @@
                 sql_where="published=1"
                 key_field="id"
                 value_field="title"
-                translate="true">
-	        </field>
+                translate="true"
+                />
 	   </fieldset>
     </fields>
 

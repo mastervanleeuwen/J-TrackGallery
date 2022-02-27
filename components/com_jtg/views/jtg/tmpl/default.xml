@@ -18,9 +18,9 @@
                 sql_where="published=1"
                 key_field="id"
                 value_field="title"
-                translate="true">
-	        </field>
-	   </fieldset>
+                translate="true"
+                />
+       </fieldset>
     </fields>
 
 </metadata>
