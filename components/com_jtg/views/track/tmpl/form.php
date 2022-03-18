@@ -224,7 +224,7 @@ if (!isset($this->id))
 					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_FILES'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png',$infoIconText);
 					?>
 					</td>
-					<td><input type="file" name="file" value="" size="30" onchange="Joomla.submitform('uploadGPX')"></td>
+					<td><input type="file" name="file" value="" onchange="Joomla.submitform('uploadGPX')" style="width:100%;"></td>
 				</tr>
 <?php
 }
@@ -320,69 +320,62 @@ if ($this->cfg->access == 1)
 					</td>
 					<td><?php echo $lists['terrain']; ?></td>
 				</tr>
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k;
-					?>">
-					<td colspan="2"><p><?php echo JText::_('COM_JTG_DESCRIPTION'); ?>*:
-						<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_DESC'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText); ?>
-					</p>
-					<?php echo $editor->display('description', $description, '100%', '200', '15', '25', false, null); ?>
-					</td>
-				</tr>
-				<input id="mappreview" type="hidden" name="mappreview">
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k;
-					?>">
-					<?php
-					$max_images = $this->cfg->max_images;
+			</tbody>
+		</table>
+		<p><?php echo JText::_('COM_JTG_DESCRIPTION'); ?>*:
+			<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_DESC'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText); ?>
+		</p>
+		<?php echo $editor->display('description', $description, '100%', '200px', null, null, false, null); ?>
 
-					if (!empty($this->imageList))
+		<?php
+			$max_images = $this->cfg->max_images;
+
+			if (!empty($this->imageList))
+			{
+				$max_images = ( $max_images - count($this->imageList) );
+
+				if ($max_images <= 0)
 					{
-						$max_images = ( $max_images - count($this->imageList) );
-
-						if ($max_images <= 0)
-						{
-							$max_images = 0;
-						}
+						$max_images = 0;
 					}
+			}
 
-					// Accept  jpg,png,gif
-					$accept = $this->cfg->type;
-					$accept = explode(",", $accept);
-					$tt = JText::sprintf('COM_JTG_ALLOWED_FILETYPES', implode(", ", $accept)) . '  ' . JText::_('COM_JTG_MAXIMAL') . ' ' . $max_images;
-					?>
-					<td colspan="2"><?php echo JText::_('COM_JTG_IMAGES'); ?> :
-					<?php
-					echo JHtml::tooltip($tt, JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText);
-					?>
-					<input
-					<?php
-					echo $max_images <= 0 ? 'disabled="disabled" ': ''; ?>
-						type="file" name="images[]" class="multi"
-						maxlength="<?php echo $max_images; ?>"
-						accept="<?php echo implode("|", $accept) ?>">
-					<br clear="all" />
-					<?php
-						if (!empty($this->imageList)) {
+			// Accept  jpg,png,gif
+			$accept = $this->cfg->type;
+			$accept = explode(",", $accept);
+			$tt = JText::sprintf('COM_JTG_ALLOWED_FILETYPES', implode(", ", $accept)) . '  ' . JText::_('COM_JTG_MAXIMAL') . ' ' . $max_images;
+		?>
+		<?php echo JText::_('COM_JTG_IMAGES'); ?> :
+		<?php
+			echo JHtml::tooltip($tt, JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText);
+		?>
+			<input
+			<?php
+				echo $max_images <= 0 ? 'disabled="disabled" ': ''; ?>
+					type="file" name="images[]" class="multi"
+					maxlength="<?php echo $max_images; ?>"
+					accept="<?php echo implode("|", $accept) ?>">
+				<br clear="all" />
+				<?php
+					if (!empty($this->imageList)) {
 						$imgurlpath=JUri::base() . "images/jtrackgallery/uploaded_tracks_images/track_" . $this->track->id . "/";
-         			echo "<div class=\"jtg-photo-grid\">";
-         			foreach ($this->imageList as $image) {
-            			$thumb_name = 'thumb1_' . $image->filename;
-           				echo "<div class=\"jtg-photo-item\"><input type=\"checkbox\" name=\"deleteimage_" . $image->id . "\" value=\""
-                  	. $image->filename . "\">" . JText::_('COM_JTG_DELETE_IMAGE') . " (" . $image->filename . ")<br />" .
-                  	"<img src=\"" . $imgurlpath . 'thumbs/' . $thumb_name . "\" alt=\"" . $image->filename . "\" title=\"" . $image->filename . " (thumbnail)\" /><br />".
-                  	"<input type=\"text\" class=\"jtg-photo-title\" name=\"img_title_".$image->id . "\" value = \"".$image->title."\" placeholder=\"Title\" maxlength=\"256\"> <br /></div>\n";
+						echo "<div class=\"jtg-photo-grid\">";
+						foreach ($this->imageList as $image) {
+							$thumb_name = 'thumb1_' . $image->filename;
+							echo "<div class=\"jtg-photo-item\"><input type=\"checkbox\" name=\"deleteimage_" . $image->id . "\" value=\"" .
+								$image->filename . "\">" . JText::_('COM_JTG_DELETE_IMAGE') . " (" . $image->filename . ")<br />" .
+								"<img src=\"" . $imgurlpath . 'thumbs/' . $thumb_name . "\" alt=\"" . $image->filename . "\" title=\"" . $image->filename . " (thumbnail)\" /><br />".
+								"<input type=\"text\" class=\"jtg-photo-title\" name=\"img_title_".$image->id . "\" value = \"".$image->title."\" placeholder=\"Title\" maxlength=\"256\"> <br /></div>\n";
 						}
-		         	echo "</div>";
-						}
+						echo "</div>";
+				}
 				?>
-				</tr>
 				<?php
 				if ($this->cfg->terms == 1)
 				{
 				?>
+				<table style="width:100%">
+				<tbody>
 				<tr class="sectiontableentry<?php
 					echo $k;
 					$k = 1 - $k;
@@ -392,11 +385,12 @@ if ($this->cfg->access == 1)
 						<a class="modal" href="<?php echo $this->terms; ?>"
 						target="_blank"><?php echo JText::_('COM_JTG_TERMS'); ?> </a></td>
 				</tr>
+				</tbody>
+				</table>
 				<?php
 				}
-				?>
-			</tbody>
-		</table>
+			?>
+		<input id="mappreview" type="hidden" name="mappreview">
 		<?php
 		echo JHtml::_('form.token') . "\n"; ?>
 		<input type="hidden" name="option" value="com_jtg" /> <input
