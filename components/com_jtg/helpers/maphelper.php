@@ -31,12 +31,13 @@ class JtgMapHelper {
 	/**
 	 * generate JavaScript for a map with this gps track
 	 *
-	 * @param   unknown_type  $track   param_description
-	 * @param   unknown_type  $params  param_description
+	 * @param   gpsClass $gpsTrack  parsed GPS file
+	 * @param   integer  $trackid   track ID in database
+	 * @param   integer  $mapid  map ID
 	 *
-	 * @return return_description
+	 * @return string with JavaSript to set up map
 	 */
-	static public function parseTrackMapJS($gpsTrack, $trackid, $mapid, $imageList, $makepreview = false, $showLocationButton = true)
+	static public function parseTrackMapJS($gpsTrack, $trackid, $mapid, $imageList, $makepreview = false, $showLocationButton = true, $layerSwitcher = false)
 	{
 		$mainframe = JFactory::getApplication();
 		$cfg = JtgHelper::getConfig();
@@ -63,8 +64,9 @@ class JtgMapHelper {
 
 		$map = "\n<script type=\"text/javascript\">\n".
 				"	jtgBaseUrl = \"".Uri::root()."\";\n".
-   			"	jtgTemplateUrl = \"".Uri::root()."components/com_jtg/assets/template/".$cfg->template."\";\n";
-		$map .= JtgMapHelper::parseMapInitJS($mapid);
+   			"	jtgTemplateUrl = \"".Uri::root()."components/com_jtg/assets/template/".$cfg->template."\";\n".
+				"	jtgMapInit('".JText::_("COM_JTG_MAP_LAYERS")."');\n";
+		$map .= JtgMapHelper::parseMapLayersJS($mapid,$layerSwitcher);
 		$trkArrJS = array();
 		for ($itrk = 0; $itrk < $gpsTrack->trackCount; $itrk++) {
 			$segCoordsArrJS = array();
@@ -82,6 +84,11 @@ class JtgMapHelper {
    		$map .= "	jtgMap.addControl(new ShowLocationControl());\n";
 		}
       
+		if ($layerSwitcher) {
+			JFactory::getDocument()->addStyleSheet(Uri::root().'media/com_jtg/js/ol-layerswitcher/ol-layerswitcher.css');
+			JFactory::getDocument()->addScript(Uri::root().'media/com_jtg/js/ol-layerswitcher/ol-layerswitcher.js');
+   		$map .= "	jtgMap.addControl(new ol.control.LayerSwitcher());\n";
+		}
       $geoImgsArrayJS = JtgMapHelper::parseGeotaggedImgs($trackid, $cfg->max_geoim_height, $iconpath, $iconurl, $imageList);
 		if (strlen($geoImgsArrayJS) != 0) {
 			$map .= $geoImgsArrayJS;	
@@ -98,10 +105,13 @@ class JtgMapHelper {
 	}
 
 	/**
+	 * generate JavaScript for map layers
 	 *
+	 * @param  integer $mapid default map ID (from database)
+	 * @param  boolean $layerSwitcher  flag to show layer switcher
 	 *
 	 */
-	static function parseMapInitJS($mapid=0)
+	static function parseMapLayersJS($mapid=0,$layerSwitcher=false)
 	{
 		$db = JFactory::getDBO();
 		if ($mapid != 0) {
@@ -111,17 +121,36 @@ class JtgMapHelper {
 				->where($db->quoteName('id')." = ".$db->quote($mapid));
 			$db->setQuery($query);
 			$result = $db->loadAssoc();
+			$mapLayersJS = "	jtgAddMapLayer(".$result['type'].",'".$result['param']."','".$result['apikey']."','".JText::_($result['name'])."');\n";
+			if ($layerSwitcher) {
+				$query = $db->getQuery(true);
+				$query->select('*')
+					->from('#__jtg_maps')
+					->where($db->quoteName('id').' != '.$db->quote($mapid).' AND published=1');
+				$db->setQuery($query);
+				$results = $db->loadAssocList();
+				foreach ($results as $result) {
+					$mapLayersJS .= "	jtgAddMapLayer(".$result['type'].",'".$result['param']."','".$result['apikey']."','".JText::_($result['name'])."', false);\n";
+				}
+			}
 		}
 		if ($mapid == 0 || $result == null) {
 			$query = $db->getQuery(true);
 			$query->select('*')
 				->from('#__jtg_maps')
 				->order($db->quoteName('ordering'))
-				->setLimit('1');
+				->where('published=1');
+			if (!$layerSwitcher) $query->setLimit('1');
 			$db->setQuery($query);
-			$result = $db->loadAssoc();
+			$results = $db->loadAssocList();
+			$visible = true;
+			$mapLayersJS = '';
+			foreach ($results as $result) {
+				$mapLayersJS .= "	jtgAddMapLayer(".$result['type'].",'".$result['param']."','".$result['apikey']."','".JText::_($result['name'])."', ".($visible?'true':'false').");\n";
+				if ($visible) $visible = false;
+			}
 		}
-		return " jtgMapInit(".$result['type'].",'".$result['param']."','".$result['apikey']."');\n";
+		return $mapLayersJS;
 	}
 
 	/**
@@ -140,8 +169,9 @@ class JtgMapHelper {
 		// Need to set up map here
 		$map = "\n<script type=\"text/javascript\">\n".
             "  jtgBaseUrl = \"".Uri::root()."\";\n".
-            "  jtgTemplateUrl = \"".Uri::root()."components/com_jtg/assets/template/".$cfg->template."\";\n";
-		$map .= JtgMapHelper::parseMapInitJS();
+            "  jtgTemplateUrl = \"".Uri::root()."components/com_jtg/assets/template/".$cfg->template."\";\n".
+				"	jtgMapInit();\n";
+		$map .= JtgMapHelper::parseMapLayersJS();
 		if ($showLocationButton) {
 			JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
    		$map .= "	jtgMap.addControl(new ShowLocationControl());\n";
@@ -249,8 +279,6 @@ class JtgMapHelper {
 
 		$color = JtgMapHelper::calculateAllColors(count($rows));
 		$string = "// <!-- parseOLTracks BEGIN -->\n";
-		// MvL: TODO see whether we can keep the name and other options \"" . JText::_('COM_JTG_TRACKS') . "\", { displayInLayerSwitcher: true } );\n";
-		//$string .= "olmap.addLayer(layer_vectors);\n";
 		$i = 0;
 
 		// TODO: the vectors are now added one by one instead of as layers with many vectors.

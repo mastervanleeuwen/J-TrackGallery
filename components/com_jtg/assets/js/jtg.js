@@ -6,12 +6,7 @@ var allpoints = [];
 
 // TODO: add waypoint, POI icons?
 
-function jtgMapInit(mapType = 0, mapOpt = '', apiKey = '') {
-	// map types:
-	// 0: OSM - mapopt is tile URL (optional)
-	// 1: IGN - needs APIkey
-	// 2: Bing - needs APIkey; mapopt is imagerySet
-
+function jtgMapInit(mapLayersTitle='Map layers') {
 	jtgView = new ol.View( {
 		center: [0, 0],
 		units: "m"  // TODO: use units from config
@@ -29,37 +24,54 @@ function jtgMapInit(mapType = 0, mapOpt = '', apiKey = '') {
 	jtgMap.addControl(fullscreenToolbar);
 	jtgMap.getInteractions().forEach(function(interaction) {   if (interaction instanceof ol.interaction.KeyboardPan) { interaction.setActive(false); } }, this);
 	jtgMap.getInteractions().forEach(function(interaction) {   if (interaction instanceof ol.interaction.KeyboardZoom) { interaction.setActive(false); } }, this);
+	mapLayerGroup = new ol.layer.Group({ title: mapLayersTitle });
+	jtgMap.addLayer(mapLayerGroup);
+}
+
+function jtgAddMapLayer(mapType = 0, mapOpt = '', apiKey = '', mapName = '', isVisible = true) {
+	// map types:
+	// 0: OSM - mapopt is tile URL (optional)
+	// 1: IGN - needs APIkey
+	// 2: Bing - needs APIkey; mapopt is imagerySet
 	// Need to call mapsource init script
 	switch (mapType) {
 		case 0: // OSM
 			if ( mapOpt.length ) {
-				mapLayer = new ol.layer.Tile({ source: new ol.source.OSM({url: mapOpt}) });
+				mapLayer = new ol.layer.Tile({ source: new ol.source.OSM({url: mapOpt}), title: mapName, type: 'base', visible: isVisible });
 			}
 			else {
-				mapLayer = new ol.layer.Tile({ source: new ol.source.OSM() });
+				mapLayer = new ol.layer.Tile({ source: new ol.source.OSM(), title: mapName, type: 'base', visible: isVisible });
 			}
 			break;
 		case 1: // IGN
 			mapLayer = new ol.layer.Tile({source: new ol.source.WMTS({
-				url: "https://wxs.ign.fr/"+apiKey+"/geoportail/wmts",
-				layer: "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
-				matrixSet: "PM",
-				format: "image/png", 
-				projection: "EPSG:3857",
-				tileGrid: getIGNTileGrid(),
-				style: "normal",
-				attributions: '<a href="https://www.ign.fr/" target="_blank">' +
+					url: "https://wxs.ign.fr/"+apiKey+"/geoportail/wmts",
+					layer: "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
+					matrixSet: "PM",
+					format: "image/png", 
+					projection: "EPSG:3857",
+					tileGrid: getIGNTileGrid(),
+					style: 'normal',
+					attributions: '<a href="https://www.ign.fr/" target="_blank">' +
 					'<img src="https://wxs.ign.fr/static/logos/IGN/IGN.gif" title="Institut national de l\'' +
-					'information géographique et forestière" alt="IGN"></a>' })
-			});
+						'information géographique et forestière" alt="IGN"></a>' 
+					}),
+				title: mapName,
+				type: 'base',
+				visible: isVisible
+				});
 			break;	
 		case 2: // Bing
 			mapLayer = new ol.layer.Tile({source: new ol.source.BingMaps({
-				key: apiKey,
-				imagerySet: mapOpt })});
+					key: apiKey,
+					imagerySet: mapOpt }),
+				title: mapName,
+				type: 'base',
+				visible: isVisible,
+				});
 			break;
 	}
-	jtgMap.addLayer(mapLayer);
+	mapLayerGroup.getLayers().push(mapLayer);
 }
 
 function drawTrack(trackData, addStartMarker = true, animatedCursor = false) {

@@ -45,14 +45,6 @@
 			addfieldpath="/administrator/components/com_jtg/elements" default="10"
 			size="3" label="COM_JTG_MENU_ELEVATION_FILTER_MIN_ASCENT" description="COM_JTG_TT_MENU_ELEVATION_FILTER_MIN_ASCENT">
 		</field>
-<!-- Layer switcher not available in new version of openlayers
-		<field name="jtg_param_show_layerswitcher" type="radio"
-			addfieldpath="/administrator/components/com_jtg/elements" default="1"
-			label="COM_JTG_MENU_SHOW_LAYER_SWITCHER" description="COM_JTG_TT_MENU_SHOW_LAYER_SWITCHER">
-			<option value="0">JHIDE</option>
-			<option value="1">JSHOW</option>
-		</field>
--->
 		<field name="jtg_param_show_panzoombar" type="radio"
 			addfieldpath="/administrator/components/com_jtg/elements" default="1"
 			label="COM_JTG_MENU_SHOW_PANZOOMBAR" description="COM_JTG_TT_MENU_SHOW_PANZOOMBAR">
@@ -89,6 +81,12 @@
 			label="COM_JTG_UPLOAD_NOTIFY_UID" default="0" />
 	</fieldset>
 	<fieldset name="TRACKVIEW" label="COM_JTG_TRACK_VIEW">
+		<field name="jtg_param_show_layerswitcher" type="radio"
+			addfieldpath="/administrator/components/com_jtg/elements" default="1"
+			label="COM_JTG_MENU_SHOW_LAYER_SWITCHER" description="COM_JTG_TT_MENU_SHOW_LAYER_SWITCHER">
+			<option value="0">JHIDE</option>
+			<option value="1">JSHOW</option>
+		</field>
 		<field name="jtg_param_show_speedchart" addfieldpath="/administrator/components/com_jtg/elements"
 			type="radio" default="1" label="COM_JTG_MENU_SHOW_SPEEDCHART"
 			description="COM_JTG_TT_MENU_SHOW_SPEEDCHART">

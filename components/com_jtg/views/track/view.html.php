@@ -209,7 +209,8 @@ class JtgViewTrack extends JViewLegacy
 			{
 				$makepreview = false;
 				if ($this->getLayout() == 'form') $makepreview = true;
-				$this->mapJS = JtgMapHelper::parseTrackMapJS($gpsData,$this->track->id, $this->track->default_map, $this->imageList, $makepreview);
+				$mapids = [$this->track->default_map];
+				$this->mapJS = JtgMapHelper::parseTrackMapJS($gpsData,$this->track->id, $this->track->default_map, $this->imageList, $makepreview, true, JComponentHelper::getParams('com_jtg')->get('jtg_param_show_layerswitcher'));
 
 				$this->coords = $gpsData->allCoords;
 				$this->longitudeData = $gpsData->longitudeData;
