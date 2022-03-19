@@ -62,7 +62,7 @@ function jtgMapInit(mapType = 0, mapOpt = '', apiKey = '') {
 	jtgMap.addLayer(mapLayer);
 }
 
-function drawTrack(trackData, animatedCursor = false) {
+function drawTrack(trackData, addStartMarker = true, animatedCursor = false) {
 	allpoints = [];
 	var gpsTracks = new ol.layer.Vector({ 
 		source: new ol.source.Vector(),
@@ -87,19 +87,21 @@ function drawTrack(trackData, animatedCursor = false) {
 			trkGeom.transform('EPSG:4326',jtgView.getProjection());
 			gpsTracks.getSource().addFeature(new ol.Feature({geometry: trkGeom, name: trackData[itrk].name}));
 		}
-		var startMarker = new ol.Feature( {
-			geometry: new ol.geom.Point(ol.proj.fromLonLat(trackData[itrk].coords[0][0], jtgView.getProjection())),
-			name: 'Start: '+trackData[itrk].name
-		});
-		startMarker.setStyle(startMarkerStyle);
-		gpsTracks.getSource().addFeature(startMarker);
+		if (addStartMarker) {
+			var startMarker = new ol.Feature( {
+				geometry: new ol.geom.Point(ol.proj.fromLonLat(trackData[itrk].coords[0][0], jtgView.getProjection())),
+				name: 'Start: '+trackData[itrk].name
+			});
+			startMarker.setStyle(startMarkerStyle);
+			gpsTracks.getSource().addFeature(startMarker);
 
-		var endMarker = new ol.Feature( {
-			geometry: new ol.geom.Point(ol.proj.fromLonLat(trackData[itrk].coords[nseg-1][trackData[itrk].coords[nseg-1].length-1], jtgView.getProjection())),
-			name: 'End: '+trackData[itrk].name
-		});
-		endMarker.setStyle(endMarkerStyle);
-		gpsTracks.getSource().addFeature(endMarker);
+			var endMarker = new ol.Feature( {
+				geometry: new ol.geom.Point(ol.proj.fromLonLat(trackData[itrk].coords[nseg-1][trackData[itrk].coords[nseg-1].length-1], jtgView.getProjection())),
+				name: 'End: '+trackData[itrk].name
+			});
+			endMarker.setStyle(endMarkerStyle);
+			gpsTracks.getSource().addFeature(endMarker);
+		}
 	}
 	jtgView.fit( gpsTracks.getSource().getExtent(), {padding: [50, 50, 50, 75]} );
 	jtgMap.addControl( new ol.control.ZoomToExtent( {extent: jtgView.calculateExtent()} ) );

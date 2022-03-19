@@ -42,10 +42,23 @@ class JtgMapHelper {
 		$cfg = JtgHelper::getConfig();
 		$iconurl = JUri::root() . "components/com_jtg/assets/template/" . $cfg->template . "/images/";
 		$iconpath = JPATH_SITE . "/components/com_jtg/assets/template/" . $cfg->template . "/images/";
-		$animCursor = 'false';
-		if (JComponentHelper::getParams('com_jtg')->get('jtg_param_disable_map_animated_cursor') == 0) 
+		
+		if (JComponentHelper::getParams('com_jtg')->get('jtg_param_add_startmarker')) 
 		{
-			$animCursor = 'true';
+			$trackDrawOptions = 'true'; 
+		}
+		else
+		{
+			$trackDrawOptions = 'false'; 
+		}
+		$animCursor = 'false';
+		if (JComponentHelper::getParams('com_jtg')->get('jtg_param_disable_map_animated_cursor')) 
+		{
+			$trackDrawOptions = $trackDrawOptions.', false'; 
+		}
+		else
+		{
+			$trackDrawOptions = $trackDrawOptions.', true'; 
 		}
 
 		$map = "\n<script type=\"text/javascript\">\n".
@@ -62,7 +75,7 @@ class JtgMapHelper {
 				"coords : [ ".implode(",\n",$segCoordsArrJS)." ]}";
 		}
 		$map .= "	trackData = [".implode(",\n",$trkArrJS)."];\n";
-		$map .= "	drawTrack(trackData, ".$animCursor.");\n";
+		$map .= "	drawTrack(trackData, ".$trackDrawOptions.");\n";
 
 		if ($showLocationButton) {
 			JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon

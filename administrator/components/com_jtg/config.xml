@@ -9,18 +9,12 @@
 		</field>
 		<field type="spacer" name="myspacer1" class="text"
 			label="COM_JTG_MENUSPACER_APPEARANCE" />
-		<field name="jtg_param_newest" type="text"
-			addfieldpath="/administrator/components/com_jtg/elements" default="10"
-			size="3" label="COM_JTG_MENU_NEWEST" description="COM_JTG_TT_MENU_NEWEST" />
-		<field name="jtg_param_mostklicks" type="text"
-			addfieldpath="/administrator/components/com_jtg/elements" default="10"
-			size="3" label="COM_JTG_MENU_HITS" description="COM_JTG_TT_MENU_HITS" />
-		<field name="jtg_param_best" type="text"
-			addfieldpath="/administrator/components/com_jtg/elements" default="0"
-			size="3" label="COM_JTG_MENU_BEST" description="COM_JTG_TT_MENU_BEST" />
-		<field name="jtg_param_rand" type="text"
-			addfieldpath="/administrator/components/com_jtg/elements" default="0"
-			size="3" label="COM_JTG_MENU_RANDOM" description="COM_JTG_TT_MENU_RANDOM" />
+		<field name="jtg_param_lh" type="radio"
+			addfieldpath="/administrator/components/com_jtg/elements" default="1"
+			label="COM_JTG_MENU_LH" description="COM_JTG_TT_MENU_LH">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 		<field name="map_zoom" type="number"
 			default="6" min="0" max="28"
 			label="COM_JTG_MENU_DEFAULT_ZOOM" />
@@ -35,45 +29,9 @@
 			<option value="1">COM_JTG_REGISTERED</option>
 			<option value="2">COM_JTG_PRIVATE</option>
 		</field>
-		<field name="jtg_param_lh" type="radio"
-			addfieldpath="/administrator/components/com_jtg/elements" default="1"
-			label="COM_JTG_MENU_LH" description="COM_JTG_TT_MENU_LH">
-			<option value="1">JYES</option>
-			<option value="0">JNO</option>
-		</field>
-		<field name="jtg_param_vote_show_stars" addfieldpath="/administrator/components/com_jtg/elements"
-			type="radio" default="0" label="COM_JTG_MENU_VOTE_SHOW_STARS"
-			description="COM_JTG_TT_MENU_SHOW_STARS">
-			<option value="1">JSHOW</option>
-			<option value="0">JHIDE</option>
-		</field>
 		<field name="jtg_param_disable_terrains" addfieldpath="/administrator/components/com_jtg/elements"
 			type="radio" default="O" label="COM_JTG_MENU_DISABLE_TERRAINS"
 			description="COM_JTG_TT_MENU_DISABLE_TERRAINS">
-			<option value="1">JYES</option>
-			<option value="0">JNO</option>
-		</field>
-		<field name="jtg_param_show_speedchart" addfieldpath="/administrator/components/com_jtg/elements"
-			type="radio" default="1" label="COM_JTG_MENU_SHOW_SPEEDCHART"
-			description="COM_JTG_TT_MENU_SHOW_SPEEDCHART">
-			<option value="1">COM_JTG_AUTOMATIC</option>
-			<option value="0">JHIDE</option>
-		</field>
-		<field name="jtg_param_show_heightchart" type="radio"
-			addfieldpath="/administrator/components/com_jtg/elements" default="1"
-			label="COM_JTG_MENU_SHOW_HEIGHTCHART" description="COM_JTG_TT_MENU_SHOW_HEIGHTCHART">
-			<option value="1">COM_JTG_AUTOMATIC</option>
-			<option value="0">JHIDE</option>
-		</field>
-		<field name="jtg_param_hide_track_info" type="radio"
-			addfieldpath="/administrator/components/com_jtg/elements" default="0"
-			label="COM_JTG_MENU_HIDE_TRACKINFO" description="COM_JTG_TT_MENU_HIDE_TRACKINFO">
-			<option value="1">JYES</option>
-			<option value="0">JNO</option>
-		</field>
-		<field name="jtg_param_disable_map_animated_cursor" addfieldpath="/administrator/components/com_jtg/elements"
-			type="radio" default="O" label="COM_JTG_MENU_DISABLE_MAP_ANIMATED_CURSOR"
-			description="COM_JTG_TT_MENU_DISABLE_MAP_ANIMATED_CURSOR">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
@@ -87,12 +45,6 @@
 			addfieldpath="/administrator/components/com_jtg/elements" default="10"
 			size="3" label="COM_JTG_MENU_ELEVATION_FILTER_MIN_ASCENT" description="COM_JTG_TT_MENU_ELEVATION_FILTER_MIN_ASCENT">
 		</field>
-		<field name="jtg_param_show_durationcalc" type="radio"
-			addfieldpath="/administrator/components/com_jtg/elements" default="1"
-			label="COM_JTG_MENU_SHOW_DURATIONCALC" description="COM_JTG_TT_MENU_SHOW_DURATIONCALC">
-			<option value="1">COM_JTG_AUTOMATIC</option>
-			<option value="0">JHIDE</option>
-		</field>
 <!-- Layer switcher not available in new version of openlayers
 		<field name="jtg_param_show_layerswitcher" type="radio"
 			addfieldpath="/administrator/components/com_jtg/elements" default="1"
@@ -104,12 +56,6 @@
 		<field name="jtg_param_show_panzoombar" type="radio"
 			addfieldpath="/administrator/components/com_jtg/elements" default="1"
 			label="COM_JTG_MENU_SHOW_PANZOOMBAR" description="COM_JTG_TT_MENU_SHOW_PANZOOMBAR">
-			<option value="0">JHIDE</option>
-			<option value="1">JSHOW</option>
-		</field>
-		<field name="jtg_param_show_attribution" type="radio"
-			addfieldpath="/administrator/components/com_jtg/elements" default="1"
-			label="COM_JTG_MENU_SHOW_ATTRIBUTION" description="COM_JTG_TT_MENU_SHOW_ATTRIBUTION">
 			<option value="0">JHIDE</option>
 			<option value="1">JSHOW</option>
 		</field>
@@ -141,6 +87,44 @@
 			label="COM_JTG_MENUSPACER_UPLOAD_NOTIFY" />
 		<field name="upload_notify_uid" type="user"
 			label="COM_JTG_UPLOAD_NOTIFY_UID" default="0" />
+	</fieldset>
+	<fieldset name="TRACKVIEW" label="COM_JTG_TRACK_VIEW">
+		<field name="jtg_param_show_speedchart" addfieldpath="/administrator/components/com_jtg/elements"
+			type="radio" default="1" label="COM_JTG_MENU_SHOW_SPEEDCHART"
+			description="COM_JTG_TT_MENU_SHOW_SPEEDCHART">
+			<option value="1">COM_JTG_AUTOMATIC</option>
+			<option value="0">JHIDE</option>
+		</field>
+		<field name="jtg_param_show_heightchart" type="radio"
+			addfieldpath="/administrator/components/com_jtg/elements" default="1"
+			label="COM_JTG_MENU_SHOW_HEIGHTCHART" description="COM_JTG_TT_MENU_SHOW_HEIGHTCHART">
+			<option value="1">COM_JTG_AUTOMATIC</option>
+			<option value="0">JHIDE</option>
+		</field>
+		<field name="jtg_param_add_startmarker" addfieldpath="/administrator/components/com_jtg/elements"
+			type="radio" default="1" label="COM_JTG_CONF_ADD_STARTMARKER"
+			description="COM_JTG_CONF_ADD_STARTMARKER_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="jtg_param_disable_map_animated_cursor" addfieldpath="/administrator/components/com_jtg/elements"
+			type="radio" default="O" label="COM_JTG_MENU_DISABLE_MAP_ANIMATED_CURSOR"
+			description="COM_JTG_TT_MENU_DISABLE_MAP_ANIMATED_CURSOR">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="jtg_param_hide_track_info" type="radio"
+			addfieldpath="/administrator/components/com_jtg/elements" default="0"
+			label="COM_JTG_MENU_HIDE_TRACKINFO" description="COM_JTG_TT_MENU_HIDE_TRACKINFO">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="jtg_param_show_durationcalc" type="radio"
+			addfieldpath="/administrator/components/com_jtg/elements" default="1"
+			label="COM_JTG_MENU_SHOW_DURATIONCALC" description="COM_JTG_TT_MENU_SHOW_DURATIONCALC">
+			<option value="1">COM_JTG_AUTOMATIC</option>
+			<option value="0">JHIDE</option>
+		</field>
 		<field type="spacer" name="myspacer2" class="text"
 			label="COM_JTG_MENUSPACER_DOWNLOAD" />
 		<field name="jtg_param_offer_download_original" type="radio"
@@ -167,6 +151,26 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+	</fieldset>
+	<fieldset name="OVERVIEW" label="COM_JTG_OVERVIEW">
+		<field name="jtg_param_newest" type="text"
+			addfieldpath="/administrator/components/com_jtg/elements" default="10"
+			size="3" label="COM_JTG_MENU_NEWEST" description="COM_JTG_TT_MENU_NEWEST" />
+		<field name="jtg_param_mostklicks" type="text"
+			addfieldpath="/administrator/components/com_jtg/elements" default="10"
+			size="3" label="COM_JTG_MENU_HITS" description="COM_JTG_TT_MENU_HITS" />
+		<field name="jtg_param_best" type="text"
+			addfieldpath="/administrator/components/com_jtg/elements" default="0"
+			size="3" label="COM_JTG_MENU_BEST" description="COM_JTG_TT_MENU_BEST" />
+		<field name="jtg_param_rand" type="text"
+			addfieldpath="/administrator/components/com_jtg/elements" default="0"
+			size="3" label="COM_JTG_MENU_RANDOM" description="COM_JTG_TT_MENU_RANDOM" />
+		<field name="jtg_param_vote_show_stars" addfieldpath="/administrator/components/com_jtg/elements"
+			type="radio" default="0" label="COM_JTG_MENU_VOTE_SHOW_STARS"
+			description="COM_JTG_TT_MENU_SHOW_STARS">
+			<option value="1">JSHOW</option>
+			<option value="0">JHIDE</option>
+		</field>
 		<field type="spacer" name="myspacer3" class="text"
 			label="COM_JTG_MENUSPACER_PERFORMANCE" />
 		<field name="jtg_param_tracks" type="radio"
@@ -182,6 +186,7 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
+		<field name="intro_text_overview" type="editor" label="COM_JTG_TT_INTRO_TEXT_OVERVIEW" description="COM_JTG_TT_INTRO_TEXT_OVERVIEW_DESCRIPTION" width="300" filter="safehtml" />
 	</fieldset>
 	<fieldset name="ORDERING" label="COM_JTG_TT_TRACKS_LIST">
 		<field name="jtg_param_track_ordering" type="list"
@@ -246,9 +251,6 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
-	</fieldset>
-	<fieldset name="INTRO_TEXT" label="COM_JTG_TT_MENU_INTRO_TEXT">
-		<field name="intro_text_overview" type="editor" label="COM_JTG_TT_INTRO_TEXT_OVERVIEW" description="COM_JTG_TT_INTRO_TEXT_OVERVIEW_DESCRIPTION" width="300" filter="safehtml" />
 	</fieldset>
 	<fieldset name="LIMIT" label="COM_JTG_TT_MENU_LIMIT">
 		<field type="spacer" addfieldpath="/administrator/components/com_jtg/elements" />
