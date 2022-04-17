@@ -509,6 +509,7 @@ class Com_JtgInstallerScript
 			"jtg_param_disable_terrains":"0",
 			"jtg_param_disable_map_animated_cursor":"0",
 			"jtg_param_vote_show_stars":"0",
+			"jtg_param_show_layerswitcher":"1",
 			"jtg_param_show_speedchart":"1",
 			"jtg_param_elevation_filter_min_ascent":"10",
 			"jtg_param_show_heightchart":"1",
