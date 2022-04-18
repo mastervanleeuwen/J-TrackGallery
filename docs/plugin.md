@@ -1,6 +1,6 @@
 ---
-title: map plugin
-nav_order: 3
+title: Map plugin
+nav_order: 5
 ---
 ### J!TrackGallery maps plugin
 
