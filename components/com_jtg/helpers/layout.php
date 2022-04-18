@@ -82,8 +82,10 @@ class LayoutHelper
 		$view = $input->get('view');
 		$navi = '';
 		$navi .= '<div class="gps-navi">';
+		$geoloc = '';
+		if (JFactory::getApplication()->getParams()->get('jtg_overview_geoloc')) $geoloc = '&geoloc=1';
 		$navi .= '<div class="navi-part"><a href="' .
-				JRoute::_("index.php?option=com_jtg&view=jtg") .
+				JRoute::_("index.php?option=com_jtg&view=jtg&introtext=1".$geoloc) .
 				'">' . JText::_('COM_JTG_OVERVIEW') . '</a></div>';
 		$navi .= '<div class="navi-part"><a href="' .
 				JRoute::_("index.php?option=com_jtg&view=cats&layout=default") . '">' . JText::_('COM_JTG_CATS') . '</a></div>';

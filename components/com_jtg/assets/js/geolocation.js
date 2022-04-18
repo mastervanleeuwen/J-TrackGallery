@@ -1,21 +1,20 @@
 
-
 function displayGeolocError(error) {
 	// Show error/status message on page when geolocation failed
 	// TODO: Use language settings/translations here
   var msgElement = document.getElementById('geo-msg');
   switch(error.code) {
     case error.PERMISSION_DENIED:
-      msgElement.innerHTML = "User denied the request for Geolocation."
+      msgElement.innerHTML = "User denied the request for Geolocation.";
       break;
     case error.POSITION_UNAVAILABLE:
-      msgElement.innerHTML = "Location information is unavailable."
+      msgElement.innerHTML = "Location information is unavailable.";
       break;
     case error.TIMEOUT:
-      msgElement.innerHTML = "The request to get user location timed out."
+      msgElement.innerHTML = "The request to get user location timed out.";
       break;
     case error.UNKNOWN_ERROR:
-      msgElement.innerHTML = "An unknown error occurred."
+      msgElement.innerHTML = "An unknown error occurred.";
       break;
   }
 }
@@ -45,8 +44,8 @@ class CenterOnGeoControl extends ol.control.Control {
   }
 
   centerOnLocation(position) {
-	olview.setCenter(ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude], olview.getProjection()));
-	olview.setZoom(jtgMapZoomLevel); // jtgMapZoomLevel is set in the html page
+	jtgView.setCenter(ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude], jtgView.getProjection()));
+	jtgView.setZoom(jtgMapZoomLevel); // jtgMapZoomLevel is set in the html page
   }
   
   handleCenterOnGeo () {
@@ -57,7 +56,6 @@ class CenterOnGeoControl extends ol.control.Control {
     }
   }
 }
-
 
 var geoPosLayer;
 
@@ -85,7 +83,7 @@ class ShowLocationControl extends ol.control.Control {
   }
 
   showCurrentPosition(position) {
-    var ll = ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude], olview.getProjection());
+    var ll = ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude], jtgView.getProjection());
     if (!geoPosLayer.getSource().getFeatureById('geopos')) {
       var marker = new ol.Feature({
           geometry: new ol.geom.Point(ll)});
@@ -108,22 +106,21 @@ class ShowLocationControl extends ol.control.Control {
     }
   }
 
-  handleShowPosition () {
-    if ( ! ("geolocation" in navigator && "watchPosition" in navigator.geolocation) ) {
-       document.getElementById('geo-msg').innerHTML = "Geolocation is not supported by this browser.";  // TODO: change to popup?
-       return;
-    }
+	handleShowPosition () {
+		if ( ! ("geolocation" in navigator && "watchPosition" in navigator.geolocation) ) {
+   	    document.getElementById('geo-msg').innerHTML = "Geolocation is not supported by this browser.";  // TODO: change to popup?
+      	 return;
+    	}
 
-    if (!this.geoWatch) { // start showing location
-       if (!geoPosLayer) geoPosLayer = new ol.layer.Vector({source: new ol.source.Vector()});
-       this.geoWatch = navigator.geolocation.watchPosition( this.showCurrentPosition.bind(), displayGeolocError, { 
-                                enableHighAccuracy: false, timeout: 15000, maximumAge: 0 
-            } ); 
-        olmap.addLayer(geoPosLayer);
-    } else { // stop showing location
-      navigator.geolocation.clearWatch( this.geoWatch ); 
-      olmap.removeLayer(geoPosLayer);
-      this.geoWatch = undefined;
-    }
-  }
+		if (!this.geoWatch) { // start showing location
+			if (!geoPosLayer) geoPosLayer = new ol.layer.Vector({source: new ol.source.Vector()});
+			this.geoWatch = navigator.geolocation.watchPosition( this.showCurrentPosition.bind(), displayGeolocError, 
+				{ enableHighAccuracy: false, timeout: 15000, maximumAge: 0 } ); 
+			jtgMap.addLayer(geoPosLayer);
+		} else { // stop showing location
+			navigator.geolocation.clearWatch( this.geoWatch ); 
+			jtgMap.removeLayer(geoPosLayer);
+			this.geoWatch = undefined;
+		}
+	}
 }

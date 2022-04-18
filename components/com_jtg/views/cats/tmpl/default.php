@@ -51,7 +51,7 @@
 				$cat->img = "&nbsp;<img title=\"" . JText::_($cat->title) . "\" alt=\"" . JText::_($cat->title) . "\" src=\"" . $imgdir . $cat->image . "\" />";
 			}
 			if ((int)JFactory::getApplication()->getParams()->get('cat_link_view')==0) {
-				$link = JRoute::_('index.php?option=com_jtg&view=jtg&layout=map&cat=' . $cat->id);
+				$link = JRoute::_('index.php?option=com_jtg&view=jtg&layout=default&introtext=0&cat=' . $cat->id);
 			}
 			else {
 				$link = JRoute::_('index.php?option=com_jtg&view=files&layout=list&cat=' . $cat->id);

@@ -50,7 +50,7 @@ class JtgViewjtg extends JViewLegacy
 
 		// Load Openlayers stylesheet first (for overriding)
 		$tmpl = strlen($cfg->template) ? $cfg->template : 'default';
-      $document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
+		$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
 		if (version_compare(JVERSION, '4.0', 'lt')) $document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/filter_box_j3.css');
 		// Then load jtg_map stylesheet
 		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
@@ -102,19 +102,16 @@ class JtgViewjtg extends JViewLegacy
 		{
 			$lh = null;
 		}
-
-		$intro_text = $params->get('intro_text_overview');
-		if ($intro_text && $this->getLayout() != 'map')
+		if (JFactory::getApplication()->input->getBool('introtext'))
 		{
-			$lh .= '<div class="intro_text_overview">';
-			$lh .= $intro_text;
-			$lh .= '</div>';
+			$intro_text = $params->get('intro_text_overview');
+			if (strlen($intro_text))
+			{
+				$lh .= '<div class="intro_text_overview">';
+				$lh .= $intro_text;
+				$lh .= '</div>';
+			}
 		}
-		if ($this->getLayout() == 'map') {
-			// Map layout is default layout without intro text
-			$tpl = null;
-		}
-
 		$footer = LayoutHelper::footer();
 		$disclaimericons = LayoutHelper::disclaimericons();
 		$rows = $model->getTracksData(null, null, $where);
@@ -176,6 +173,8 @@ class JtgViewjtg extends JViewLegacy
 		}
 		else $this->dpcallocs = array();
 
+		$zoomlevel = $mainframe->input->getInt('map_zoom',$mainframe->getParams()->get('map_zoom'));
+		if (empty($zoomlevel)) $zoomlevel = 6;
 		$this->lh = $lh;
 		$this->boxlinktext = $boxlinktext;
 		$this->footer = $footer;
@@ -190,8 +189,7 @@ class JtgViewjtg extends JViewLegacy
 		$this->toptracks = $toptracks;
 		$this->showtracks = $showtracks;
 		$this->params = $params;
-		$this->default_zoom = $mainframe->getParams()->get('map_zoom');
-		if (empty($this->default_zoom)) $this->default_zoom = 6; // for backward compatibility
+		$this->zoomlevel = $zoomlevel;
 
 		parent::display($tpl);
 	}

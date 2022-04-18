@@ -162,7 +162,7 @@ class JtgMapHelper {
 	 *
 	 * @return return_description
 	 */
-	static public function parseOverviewMapJS($items,$showtracks=false,$showLocationButton=true)
+	static public function parseOverviewMapJS($items,$showtracks=false,$zoomlevel=6,$lon=null,$lat=null,$centerOnGeo=false)
 	{
 		$cfg = JtgHelper::getConfig();
 
@@ -170,12 +170,9 @@ class JtgMapHelper {
 		$map = "\n<script type=\"text/javascript\">\n".
             "  jtgBaseUrl = \"".Uri::root()."\";\n".
             "  jtgTemplateUrl = \"".Uri::root()."components/com_jtg/assets/template/".$cfg->template."\";\n".
+            "  jtgMapZoomLevel = $zoomlevel;\n".
 				"	jtgMapInit();\n";
 		$map .= JtgMapHelper::parseMapLayersJS();
-		if ($showLocationButton) {
-			JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
-   		$map .= "	jtgMap.addControl(new ShowLocationControl());\n";
-		}
 
 		if ($showtracks)
 		{
@@ -183,17 +180,26 @@ class JtgMapHelper {
 			$map .= JtgMapHelper::parseTracksJS($items);
 		}
 
-		/*
-		$file = JPATH_SITE . "/components/com_jtg/models/jtg.php";
-		require_once $file;
-		$this->sortedcats = JtgModeljtg::getCatsData(true);
-		*/
 		$retval = JtgMapHelper::parseTracksInfoJS($items);
 		$tracksJS = $retval[0];
 		$catIcons = $retval[1];
 		$map .= "	tracks = [".implode(',',$retval[0])."];\n";
 		$map .= "	catIcons = [".implode(',',$retval[1])."];\n";
 		$map .= "	addTracksOverviewLayer(tracks, catIcons);\n";
+		if (!is_null($lat) && !is_null($lon))
+		{
+			$map .= "	jtgView.setCenter(ol.proj.fromLonLat([ $lon, $lat ], jtgView.getProjection()));\n";
+			$map .= "	jtgView.setZoom(jtgMapZoomLevel);\n";
+		}
+		if ($centerOnGeo)
+		{
+			$map .= "	geoControl = new CenterOnGeoControl();\n";
+			$map .= "	geoControl.handleCenterOnGeo();\n";
+		}
+		else { // Show button
+			JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
+			$map .= "	jtgMap.addControl(new CenterOnGeoControl);\n";
+		}
 		$map .= "</script>\n";
 		return $map;
 	}

@@ -15,9 +15,6 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
-		<field name="map_zoom" type="number"
-			default="6" min="0" max="28"
-			label="COM_JTG_MENU_DEFAULT_ZOOM" />
 		<field name="cat_link_view" type="list" default="0" label="COM_JTG_CAT_LINK_VIEW">
 			<option value="0">COM_JTG_MENU_DEFAULT_LAYOUT</option>
 			<option value="1">COM_JTG_MENU_FILE_LIST</option>
@@ -151,6 +148,11 @@
 		</field>
 	</fieldset>
 	<fieldset name="OVERVIEW" label="COM_JTG_OVERVIEW">
+		<field name="jtg_overview_geoloc" type="checkbox"
+			label="COM_JTG_CENTER_GEOLOC" description="COM_JTG_CENTER_GEOLOC_DESC" />
+		<field name="map_zoom" type="number"
+			default="6" min="0" max="28"
+			label="COM_JTG_MENU_DEFAULT_ZOOM" />
 		<field name="jtg_param_newest" type="text"
 			addfieldpath="/administrator/components/com_jtg/elements" default="10"
 			size="3" label="COM_JTG_MENU_NEWEST" description="COM_JTG_TT_MENU_NEWEST" />

@@ -125,7 +125,7 @@ if ($this->newest != 0)
 			{
 				foreach ($this->newest as $new)
 				{
-					$link = JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $new->id);
+					$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $new->id);
 					?>
 			<li>
 				<div class="list-left">
@@ -191,7 +191,7 @@ if ($this->hits != 0)
 			{
 				foreach ($this->hits as $hits)
 				{
-					$link = JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $hits->id);
+					$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $hits->id);
 					?>
 			<li>
 				<div class="list-left">
@@ -259,7 +259,7 @@ if ($this->best != 0)
 			{
 				foreach ($this->best[1] as $best)
 				{
-					$link = JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $best->id);
+					$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $best->id);
 					?>
 			<li>
 				<div class="list-left">
@@ -353,7 +353,7 @@ if ($this->rand != 0)
 			{
 				foreach ($this->rand as $rand)
 				{
-					$link = JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $rand->id);
+					$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $rand->id);
 					?>
 			<li>
 				<div class="list-left">
@@ -392,7 +392,7 @@ if ($this->rand != 0)
 ?>
 <div class="no-float">
 	<?php
-		echo JtgMapHelper::parseOverviewMapJS($this->items,$this->showtracks);
+		echo JtgMapHelper::parseOverviewMapJS($this->items,$this->showtracks,$this->zoomlevel,JFactory::getApplication()->input->get('lon'),JFactory::getApplication()->input->get('lat'),JFactory::getApplication()->input->getBool('geoloc'));
 		echo $this->footer;
 	?>
 </div>

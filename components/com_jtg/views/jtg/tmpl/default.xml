@@ -19,7 +19,30 @@
                 key_field="id"
                 value_field="title"
                 translate="true"
-                />
+				/>
+				<field name="introtext"
+					type="checkbox"
+					checked="1"
+					label="COM_JTG_SHOW_WELCOME"
+					description="COM_JTG_SHOW_WELCOME_DESC"
+				/>
+				<field name="geoloc"
+					type="checkbox"
+					label="COM_JTG_CENTER_GEOLOC"
+					description="COM_JTG_CENTER_GEOLOC_DESC"
+				/>
+				<field name="lon"
+					type="float"
+					label="COM_JTG_LON"
+				/>
+				<field name="lat"
+					type="float"
+					label="COM_JTG_LAT"
+				/>
+				<field name="map_zoom"
+					type="number" min="0" max="28"
+					label="COM_JTG_ZOOM_LEVEL" 
+				/>
        </fieldset>
     </fields>
 
