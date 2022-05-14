@@ -30,7 +30,7 @@ A menu bar is shown at the top of the track view and other J!TrackGallery pages.
 ## Download buttons
 
 To enable front-end downloads, you have to set permissions in the configuration menu in the administator view. 
-Download permissions can be given to a specifi user group (e.g. anyone with an account), or to everyone, by setting permissions for 'Public'.
+Download permissions can be given to a specific user group (e.g. anyone with an account), or to everyone, by setting permissions for 'Public'.
 Different formats can be offered for download:
   - Original GPX file
   - Generated GPX file

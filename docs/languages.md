@@ -8,8 +8,10 @@ J!TrackGallery currently supports the following languages:
    - English
    - French
    - German
+	- Italian (thanks to @mambanero)
    - Polish
    - Spanish (partial)
+	- Russian (thanks to @sergpnm)
 
 If you are interested in adding another language, please contact the authors via the [issues page](https://github.com/mastervanleeuwen/J-TrackGallery/issues).
 
