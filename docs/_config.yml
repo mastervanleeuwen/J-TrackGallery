@@ -1,5 +1,19 @@
-theme: jekyll-theme-minimal
-header_pages:
-  - index.md
-  - releasenotes.md
-  - plugin.md
+remote_theme: pmarsceill/just-the-docs
+# remote_theme: tomjoht/documentation-theme-jekyll
+# remote_theme: poole/lanyon
+# theme: jekyll-theme-minimal
+include: ["public/"]
+plugins:
+  - jekyll-gist
+  - jekyll-paginate
+  - jekyll-seo-tag
+show_downloads: true
+
+# Aux links for the upper right navigation (just-the-docs theme)
+aux_links:
+  "J!TrackGallery GitHub":
+    - "//github.com/mastervanleeuwen/J-TrackGallery"
+# header_pages:
+#  - index.md
+#  - releasenotes.md
+#  - plugin.md

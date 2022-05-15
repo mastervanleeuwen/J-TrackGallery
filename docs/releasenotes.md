@@ -2,6 +2,7 @@
 layout: page
 title: "Release notes"
 permalink: /releasenotes/
+nav_order: 10 
 ---
 
 ### J!TrackGallery release notes
