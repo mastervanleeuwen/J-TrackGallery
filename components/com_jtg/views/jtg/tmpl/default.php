@@ -28,8 +28,8 @@ echo "  DPCalLocs = ".JtgMapHelper::parseDPCalLocations($this->dpcallocs);
 echo "\n  DPCalIconFile = '/components/com_jtg/assets/images/orange-dot.png';\n";
 echo "</script>\n";
 
-JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
-JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/jtgOverView.js');
+JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js',array('version'=>'auto'));
+JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/jtgOverView.js',array('version'=>'auto'));
 JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
 ?>
 

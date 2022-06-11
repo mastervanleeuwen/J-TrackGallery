@@ -195,8 +195,8 @@ class JtgViewTrack extends JViewLegacy
 		{
 			// In the form view, $id would not be available for new files
 			$document->addScript( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.js');  // Load OpenLayers
-			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
-			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
+			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js',array('version'=>'auto'));
+			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js',array('version'=>'auto'));
 			if ($this->params->get('jtg_param_disable_map_animated_cursor') == 0) {
 				$document->addScript(JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 			}
