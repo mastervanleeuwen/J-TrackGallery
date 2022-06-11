@@ -145,11 +145,11 @@ class plgContentJtrackgallery_maps extends JPlugin {
 				{
 					// Generate the html code for the map
 					$map_count += 1;
-					if ($map_count <2)
+					if ($map_count < 10)
 					{
-						$plg_html .= $this->rendermap($plgParams, $plg_call_params);
+						$plg_html .= $this->rendermap($plgParams, $plg_call_params, $map_count);
 						if (isset($plg_call_params['show_link']) && $plg_call_params['show_link']) { 
-						   $plg_html .= '<a href='.JUri::base().'index.php?option=com_jtg&view=track&id='.$plg_call_params['id'].'>GPX track</a>';
+						   $plg_html .= '<div class="jtg-gpx-link"><a href='.JUri::base().'index.php?option=com_jtg&view=track&id='.$plg_call_params['id'].'>GPX track</a></div>';
 						}
 					}
 					else
@@ -170,7 +170,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		}
 	}
 
-	private function rendermap($plgParams, $plg_call_params)
+	private function rendermap($plgParams, $plg_call_params, $imap)
 	{
 		$document = JFactory::getDocument();
 		$document->addStyleSheet(JUri::base(true) . 'media/com_jtg/js/openlayers/ol.css');
@@ -230,15 +230,15 @@ class plgContentJtrackgallery_maps extends JPlugin {
 .olButton::before{
 	display: none;
 }
-#jtg_map img{
+#jtg_map_'.${imap}.' img{
 	max-width: none; /* joomla3 max-width=100% breaks popups*/
 }
-#jtg_map.olMap {
+#jtg_map_'.${imap}.'.olMap {
 	height: ' . $map_height . ';
 	width: ' . $map_width . ';
 	z-index: 0;
 }
-#jtg_map.fullscreen {
+#jtg_map_'.${imap}.'.fullscreen {
 	height: 800px;
 	width: 100%;
 	z-index: 10000;
@@ -252,9 +252,9 @@ img.olTileImage {
 }
 </style>';
 
-		$map .= ("\n<div id=\"jtg_map\"  align=\"center\" class=\"olMap\" >");
+		$map .= ("\n<div id=\"jtg_map_${imap}\"  align=\"center\" class=\"olMap\" >");
 		// TODO: add images
-		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages);
+		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages, false, true, false, 'jtg_map_'.$imap);
 		$map .= ("\n</div>");
 	}
 

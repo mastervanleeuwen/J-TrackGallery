@@ -37,7 +37,7 @@ class JtgMapHelper {
 	 *
 	 * @return string with JavaSript to set up map
 	 */
-	static public function parseTrackMapJS($gpsTrack, $trackid, $mapid, $imageList, $makepreview = false, $showLocationButton = true, $layerSwitcher = false)
+	static public function parseTrackMapJS($gpsTrack, $trackid, $mapid, $imageList, $makepreview = false, $showLocationButton = true, $layerSwitcher = false, $targetid = 'jtg_map')
 	{
 		$mainframe = JFactory::getApplication();
 		$cfg = JtgHelper::getConfig();
@@ -65,7 +65,7 @@ class JtgMapHelper {
 		$map = "\n<script type=\"text/javascript\">\n".
 				"	jtgBaseUrl = \"".Uri::root()."\";\n".
    			"	jtgTemplateUrl = \"".Uri::root()."components/com_jtg/assets/template/".$cfg->template."\";\n".
-				"	jtgMapInit('".JText::_("COM_JTG_MAP_LAYERS")."');\n";
+				"	jtgMapInit('".JText::_("COM_JTG_MAP_LAYERS")."','".$targetid."');\n";
 		$map .= JtgMapHelper::parseMapLayersJS($mapid,$layerSwitcher);
 		$trkArrJS = array();
 		for ($itrk = 0; $itrk < $gpsTrack->trackCount; $itrk++) {

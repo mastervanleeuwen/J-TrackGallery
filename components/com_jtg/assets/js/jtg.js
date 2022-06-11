@@ -6,13 +6,13 @@ var allpoints = [];
 
 // TODO: add waypoint, POI icons?
 
-function jtgMapInit(mapLayersTitle='Map layers') {
+function jtgMapInit(mapLayersTitle='Map layers', targetid='jtg_map') {
 	jtgView = new ol.View( {
 		center: [0, 0],
 		units: "m"  // TODO: use units from config
 	} );
 
-	jtgMap = new ol.Map ( { target: "jtg_map",
+	jtgMap = new ol.Map ( { target: targetid,
 		controls:[
 			new ol.control.MousePosition( {coordinateFormat: ol.coordinate.createStringXY(4), projection: 'EPSG:4326' }),
 			new ol.control.ZoomSlider(),

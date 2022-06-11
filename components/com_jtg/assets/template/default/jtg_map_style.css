@@ -23,6 +23,11 @@
 	margin-top: 0px;
 }
 
+.jtg-gpx-link {
+	text-align: center;
+	padding: 2px;
+}
+
 .olMap input,.olMap button,#jtg_map.olButton,.olMap select,.olMap textarea
 	{
 	font-size: 12px;
