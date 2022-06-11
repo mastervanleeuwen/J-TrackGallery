@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="2.5" method="upgrade">
+<extension type="module" client="site" method="upgrade">
 <name>MOD_JTG_STATS</name>
 <author>Modified for JtrackGallery by Christophe Seguinot - Modded By Jason Oxley - Original Author Michael Pfister</author>
 <creationDate>September 2010</creationDate>
@@ -9,6 +9,7 @@
 <authorUrl>http://jtrackgallery.net/</authorUrl>
 <version>0.9.27</version>
 <description>MOD_JTG_STATS_DESCRIPTION</description>
+<namespace path="src">Joomla\Module\JTrackGalleryStats</namespace>
 <files>
 	<filename module="mod_jtrackgallery_stats">mod_jtrackgallery_stats.php</filename>
 	<filename>index.html</filename>
