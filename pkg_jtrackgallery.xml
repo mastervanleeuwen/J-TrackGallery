@@ -7,7 +7,7 @@
  <authorEmail>mastervanleeuwen@gmail.com</authorEmail>
  <authorUrl>https://mastervanleeuwen.github.io/J-TrackGallery/</authorUrl>
  <packagename>jtrackgallery</packagename>
- <version>0.9.30</version>
+ <version>0.9.34</version>
  <url>https://mastervanleeuwen.github.io/J-TrackGallery/</url>
  <description>J!Track Gallery integrates your GPS tracks (GPX, KML) in Joomla. It shows Tracks and Waypoints on various Maps. Registered Users can upload their own tracks.</description>
  <files folder="">
