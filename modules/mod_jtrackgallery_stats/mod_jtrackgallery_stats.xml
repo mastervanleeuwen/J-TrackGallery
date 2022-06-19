@@ -5,7 +5,7 @@
 <creationDate>September 2010</creationDate>
 <copyright>(C) 2010 All rights reserved.</copyright>
 <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
-<authorEmail>christophe@jtrackgallery.net</authorEmail>
+<authorEmail>mastervanleeuwen@gmail.com</authorEmail>
 <authorUrl>http://jtrackgallery.net/</authorUrl>
 <version>0.9.27</version>
 <description>MOD_JTG_STATS_DESCRIPTION</description>
@@ -96,5 +96,10 @@
 		<option value="1">JYES</option>
 		<option value="0">JNO</option>
 	</field>
-</fieldset></fields></config>
+</fieldset>
+</fields>
+</config>
+<updateservers>
+	<server type="extension" priority="1" name="J!TrackGallery github update">https://raw.githubusercontent.com/mastervanleeuwen/J-TrackGallery/master/autoupdate.xml</server>
+</updateservers>
 </extension>

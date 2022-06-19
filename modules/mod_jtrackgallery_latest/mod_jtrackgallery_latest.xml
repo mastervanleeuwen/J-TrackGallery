@@ -90,5 +90,9 @@
 		<option value=".">MOD_JTG_LATEST_DOT</option>
 	</field>
 </fieldset>
-</fields></config>
+</fields>
+</config>
+<updateservers>
+      <server type="extension" priority="1" name="J!TrackGallery github update">https://raw.githubusercontent.com/mastervanleeuwen/J-TrackGallery/master/autoupdate.xml</server>
+</updateservers>
 </extension>

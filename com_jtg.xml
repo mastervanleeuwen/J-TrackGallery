@@ -72,6 +72,9 @@
 			<folder>views</folder>
 		</files>
 	</administration>
+	<updateservers>
+		<server type="extension" priority="1" name="J!TrackGallery github update">https://raw.githubusercontent.com/mastervanleeuwen/J-TrackGallery/master/autoupdate.xml</server>
+	</updateservers>
 	<params />
 	<modules />
 </extension>

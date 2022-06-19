@@ -8,7 +8,45 @@
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/mastervanleeuwen/J-TrackGallery/releases/download/0.9.34/com_jtg.zip</downloadurl>
 		</downloads>
-		<targetplatform name="joomla" version="3.[23456789]" />
+		<targetplatform name="joomla" version="3.[23456789]|10" />
+		<php_minimum>7.1</php_minimum>
+	</update>
+	<update>
+		<name>J!TrackGallery map</name>
+		<description>J!TrackGallery map plugin</description>
+		<element>jtrackgallery_maps</element>
+		<type>plugin</type>
+		<version>0.9.28</version>
+		<downloads>
+			<downloadurl type="full" format="zip">https://github.com/mastervanleeuwen/J-TrackGallery/releases/download/0.9.34/plg_jtrackgallery_maps.zip</downloadurl>
+		</downloads>
+		<targetplatform name="joomla" version="3.[23456789]|10" />
+		<php_minimum>7.1</php_minimum>
+	</update>
+	<update>
+		<name>J!TrackGallery recent tracks</name>
+		<description>J!TrackGallery module latest</description>
+		<element>mod_jtrackgallery_latest</element>
+		<type>module</type>
+		<client>site</client>
+		<version>0.9.27</version>
+		<downloads>
+			<downloadurl type="full" format="zip">https://github.com/mastervanleeuwen/J-TrackGallery/releases/download/0.9.34/mod_jtrackgallery_latest.zip</downloadurl>
+		</downloads>
+		<targetplatform name="joomla" version="3.[23456789]|10" />
+		<php_minimum>7.1</php_minimum>
+	</update>
+	<update>
+		<name>MOD_JTG_STATS</name>
+		<description>J!TrackGallery module stats</description>
+		<element>mod_jtrackgallery_stats</element>
+		<type>module</type>
+		<client>site</client>
+		<version>0.9.27</version>
+		<downloads>
+			<downloadurl type="full" format="zip">https://github.com/mastervanleeuwen/J-TrackGallery/releases/download/0.9.34/mod_jtrackgallery_stats.zip</downloadurl>
+		</downloads>
+		<targetplatform name="joomla" version="3.[23456789]|10" />
 		<php_minimum>7.1</php_minimum>
 	</update>
 </updates>
