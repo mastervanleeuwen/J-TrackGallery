@@ -230,15 +230,15 @@ class plgContentJtrackgallery_maps extends JPlugin {
 .olButton::before{
 	display: none;
 }
-#jtg_map_'.${imap}.' img{
+#jtg_map_'.$imap.' img{
 	max-width: none; /* joomla3 max-width=100% breaks popups*/
 }
-#jtg_map_'.${imap}.'.olMap {
+#jtg_map_'.$imap.'.olMap {
 	height: ' . $map_height . ';
 	width: ' . $map_width . ';
 	z-index: 0;
 }
-#jtg_map_'.${imap}.'.fullscreen {
+#jtg_map_'.$imap.'.fullscreen {
 	height: 800px;
 	width: 100%;
 	z-index: 10000;
