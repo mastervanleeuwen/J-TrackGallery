@@ -446,39 +446,6 @@ class LayoutHelper
 	*/
 
 	/**
-	 *  parse Param of a user(s)
-	 *
-	 * @param   array  $val  array of user(s) ID
-	 *
-	 * @return sql where statement to select user(s)
-	 */
-	static private function parseParam_User($val)
-	{
-		$where = null;
-
-		if (is_array($val))
-		{
-			if ($val[0] != 0)
-			{
-				$subwhere = array();
-
-				foreach ($val as $user)
-				{
-					$subwhere[] = "a.uid = " . $user;
-				}
-
-				$where .= "( " . implode(' OR ', $subwhere) . " )";
-			}
-		}
-		elseif ($val != 0)
-		{
-			$where .= "a.uid = " . $val;
-		}
-
-		return $where;
-	}
-
-	/**
 	 * function_description
 	 *
 	 * @param   unknown_type  $val  param_description
@@ -547,41 +514,6 @@ class LayoutHelper
 		}
 
 		return $catswhere;
-	}
-
-	/**
-	 * function_description
-	 *
-	 * @param   unknown_type  $val  param_description
-	 *
-	 * @return return_description
-	 */
-	static private function parseParam_Usergroup($val)
-	{
-		$where = null;
-
-		if (is_array($val))
-		{
-			$subwhere = array();
-
-			foreach ($val as $grp)
-			{
-				if ($grp == -1)
-				{
-					return null;
-				}
-
-				$subwhere[] = "a.access = " . $grp;
-			}
-
-			$where .= "( " . implode(' OR ', $subwhere) . " )";
-		}
-		elseif ( ($val != -1) AND (!is_null($val) ) )
-		{
-			$where .= "a.access = " . $val;
-		}
-
-		return $where;
 	}
 
 	/**
@@ -714,12 +646,6 @@ class LayoutHelper
 		$access = $params->get('jtg_param_otherfiles');
 		$where = array();
 		$catswhere = array();
-		$layout = self::parseParam_User($params->get('jtg_param_user'));
-
-		if ($layout !== null)
-		{
-			$where[] = $layout;
-		}
 
 		$catsel = self::parseCats($cats);
 		if ($catsel !== null)
@@ -733,13 +659,6 @@ class LayoutHelper
 			{
 				$catswhere[] = $layout;
 			}
-		}
-
-		$layout = self::parseParam_Usergroup($params->get('jtg_param_usergroup'));
-
-		if ($layout !== null)
-		{
-			$where[] = $layout;
 		}
 
 		$layout = self::parseParam_Terrain($params->get('jtg_param_terrain'));
