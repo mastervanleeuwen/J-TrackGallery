@@ -282,6 +282,7 @@ function jtgParseRoute(&$segments)
 			OR  ( ( $segments[0] == "files" ) AND ( $segments[1] == "list" ) ))
 		{
 			$vars = _jtgParseRouteCategory($segments);
+			array_shift($segments);
 		}
 		else
 		{
