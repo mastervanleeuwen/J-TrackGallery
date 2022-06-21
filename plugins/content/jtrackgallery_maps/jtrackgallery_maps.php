@@ -77,6 +77,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 
 			// Load the plugin language file
 		JFactory::getLanguage()->load('plg_content_jtrackgallery_maps', JPATH_SITE . '/plugins/content/jtrackgallery_maps',	null, true);
+		JFactory::getLanguage()->load('com_jtg', JPATH_SITE . '/components/com_jtg',	null, true);
 
 		// Check for basic requirements
 		$db = JFactory::getDBO ();
@@ -173,8 +174,8 @@ class plgContentJtrackgallery_maps extends JPlugin {
 	private function rendermap($plgParams, $plg_call_params, $imap)
 	{
 		$document = JFactory::getDocument();
-		$document->addStyleSheet(JUri::base(true) . 'media/com_jtg/js/openlayers/ol.css');
-		$document->addStyleSheet(JUri::base(true) . 'media/com_jtg/js/openlayers/ol.css.map');
+		$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
+		$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css.map');
 
 		// Add jtg_map stylesheet
 		require_once JPATH_SITE . '/components/com_jtg/helpers/helper.php';
