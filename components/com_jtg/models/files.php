@@ -812,7 +812,7 @@ class JtgModelFiles extends JModelList
     *
     * Used for most popular tracks etc in map view 
     */
-   static public function getTracksData($order, $limit, $where = "",$access = null)
+   public function getTracksData($order, $limit, $where = "",$access = null)
    {
       if ( $where != "" )
       {

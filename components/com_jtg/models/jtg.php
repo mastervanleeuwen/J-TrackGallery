@@ -51,7 +51,7 @@ class JtgModeljtg extends JModelList
    protected function getListQuery(){
       // TODO: add accesslevel logic, or remove completely? replace by per-track access using native Joomla! logic?
 
-      $db = JFactory::getDBO();
+      $db = $this->getDbo();
       $query = $db->getQuery(true);
       $user = JFactory::getUser();
       $uid = $user->id;
@@ -113,7 +113,7 @@ class JtgModeljtg extends JModelList
 	{
 		$mainframe = JFactory::getApplication();
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT * FROM #__jtg_files WHERE id='" . $id . "'";
 
@@ -138,7 +138,7 @@ class JtgModeljtg extends JModelList
 	 *
 	 * @return Loadobjeclist() track lists extracted from #__jtg_files
 	 */
-	static public function getTracksData($order, $limit, $where = "",$access = null)
+	public function getTracksData($order, $limit, $where = "",$access = null)
 	{
 		if ( $where != "" )
 		{
@@ -159,12 +159,11 @@ class JtgModeljtg extends JModelList
 		}
 
 		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDBO();
 		$user = JFactory::getUser();
 		$uid = $user->id;
-		$query = "SELECT a.*, b.title AS cat FROM #__jtg_files AS a"
-		. "\n LEFT JOIN #__jtg_cats AS b"
-		. "\n ON a.catid=b.id WHERE (a.published = 1 OR a.uid='$uid') " . $where
+		$query = "SELECT a.* FROM #__jtg_files AS a"
+		. "\n WHERE (a.published = 1 OR a.uid='$uid') " . $where
 		. "\n" . $order
 		. "\n" . $limit;
 		$db->setQuery($query);
