@@ -296,12 +296,18 @@ class JtgModelCat extends JModelLegacy
 		$usepace = $input->get('usepace');
 		$default_map = $input->get('default_map');
 
+		$db->setQuery("SELECT MAX(ordering) FROM #__jtg_cats");
+		$maxordering = $db->loadResult();
+		$maxordering++;
+
 		$query = "INSERT INTO #__jtg_cats SET"
 		. "\n parent_id='" . $parent . "',"
 		. "\n title='" . $title . "',"
 		. "\n image='" . $image . "',"
 		. "\n usepace='" . $usepace . "',"
 		. "\n default_map=" . $default_map . ","
+		. "\n ordering=" . $maxordering . ","
+		. "\n checked_out=0,"
 		. "\n description='" . $desc . "',"
 		. "\n published='" . $published . "'";
 
