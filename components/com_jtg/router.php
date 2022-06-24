@@ -147,6 +147,7 @@ function _jtgParseRouteCategory(&$segments)
 			$vars['view'] = 'files';
 			$vars['layout'] = 'list';
 			array_shift($segments);
+			error_log('jtgParseRouteCategory: routing files/list, '.count($segments).' segments left');
 			break;
 		case 'cats':
 			$vars['view'] = 'cats';
@@ -207,6 +208,7 @@ function _jtgParseRouteSubCategory(&$segments)
 					break;
 			}
 			array_shift($segments);
+			error_log('jtgParseRouteSubCategory: routing files/'.$segments[0].', '.count($segments).' segments left');
 			break;
 
 		case 'jtg':
@@ -270,6 +272,7 @@ function jtgParseRoute(&$segments)
 
 	// Count route segments
 	$count = count($segments);
+	error_log("jtgParseRoute $count segments: ".implode(',',$segments));
 
 	if ( $count == 1 )
 	{
