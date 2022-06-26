@@ -15,4 +15,4 @@ The plugin accepts the following optional parameters (comma-separated):
 
 | `map_width`  | Width of map (default is set in plugin options) |
 | `map_height` | Height of map (default is set in plugin otptions) |
-| `show_link`  | (true or false): show link to J!TrackGallery page with track details |
+| `show_link`  | (1 or 0): show link to J!TrackGallery page with track details |
