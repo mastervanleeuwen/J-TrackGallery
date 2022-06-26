@@ -193,7 +193,6 @@ class plgContentJtrackgallery_maps extends JPlugin {
 
 
 		// Edit file
-		$cache = JFactory::getCache('jtrackgallery_maps');
 		$params = JComponentHelper::getParams('com_jtg');
 
 		require_once JPATH_SITE . '/components/com_jtg/models/track.php';

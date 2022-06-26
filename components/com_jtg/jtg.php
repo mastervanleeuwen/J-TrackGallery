@@ -32,18 +32,19 @@ JLoader::register('gpsCLass',
 );
 JLoader::import('components.com_jtg.helpers.gpsClass', JPATH_SITE, 'gpsClass');
 
-JFactory::getLanguage()->load('com_jtg', JPATH_SITE . '/components/com_jtg', 'en-GB', true);
-JFactory::getLanguage()->load('com_jtg', JPATH_SITE . '/components/com_jtg', null, true);
-JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg', 'en-GB', true);
-JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg', null, true);
+$mainframe = JFactory::getApplication();
+$mainframe->getLanguage()->load('com_jtg', JPATH_SITE . '/components/com_jtg', 'en-GB', true);
+$mainframe->getLanguage()->load('com_jtg', JPATH_SITE . '/components/com_jtg', null, true);
+$mainframe->getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg', 'en-GB', true);
+$mainframe->getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg', null, true);
 
 // Com_jtg_additional language files are in /images/jtrackgallery/language
 // folder
-JFactory::getLanguage()->load(
+$mainframe->getLanguage()->load(
 		'com_jtg_additional/', JPATH_SITE . '/images/jtrackgallery', 'en-GB',
 		true
 		);
-JFactory::getLanguage()->load(
+$mainframe->getLanguage()->load(
 		'com_jtg_additional/', JPATH_SITE . '/images/jtrackgallery', null, true
 );
 $cfg = JtgHelper::getConfig();
@@ -57,7 +58,6 @@ $document->addStyleSheet(
 );
 
 // Override style with user templates
-$mainframe = JFactory::getApplication();
 jimport('joomla.filesystem.file');
 $template_css = 'templates/' . $mainframe->getTemplate() . '/css/jtg_style.css';
 

@@ -183,7 +183,7 @@ class JtgModeljtg extends JModelList
 	static public function getCatsData($sort=false, $catid=null)
 	{
 		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = JtgHelper::getDbo();
 
 		$query = "SELECT * FROM #__jtg_cats WHERE published = 1";
 		if ( !is_null($catid) )
@@ -233,7 +233,7 @@ class JtgModeljtg extends JModelList
 	static public function getTerrainData($sort=false)
 	{
 		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = JtgHelper::getDbo();
 
 		$query = "SELECT * FROM #__jtg_terrains"
 		. "\n ORDER BY title ASC";
@@ -277,7 +277,7 @@ class JtgModeljtg extends JModelList
 	{
 		$mainframe = JFactory::getApplication();
 
-		$db = JFactory::getDBO();
+		$db = JtgHelper::getDbo();
 
 		$query = "SELECT trackid AS id ,rating FROM #__jtg_votes"
 		. "\n ORDER BY trackid ASC";

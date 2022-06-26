@@ -94,7 +94,7 @@ class JtgHelper
 	 */
 	static public function howMuchVote($tid)
 	{
-		$db = JFactory::getDBO();
+		$db = JtgHelper::getDbo();
 		$query = "SELECT COUNT(id) FROM #__jtg_votes"
 		. "\n WHERE trackid='" . $tid . "'";
 		$db->setQuery($query);
@@ -421,11 +421,21 @@ class JtgHelper
 		return $return;
 	}
 
+	static public function getDbo()
+	{
+		if (version_compare(JVERSION,'4.0','lt')) {
+			return JFactory::getDbo();
+		}
+		else {
+			return \Joomla\CMS\Factory::getContainer()->get('DatabaseDriver');
+		}
+	}
+
 	static public function getCatIconName($catid)
 	{
 		$mainframe = JFactory::getApplication();
 
-		$db = JFactory::getDBO();
+		$db = JtgHelper::getDbo();
 
 		$query = "SELECT image FROM #__jtg_cats WHERE id = '".$catid."'";
 
@@ -563,7 +573,7 @@ class JtgHelper
 	static public function getConfig()
 	{
 		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = JtgHelper::getDbo();
 
 		$query = "SELECT * FROM #__jtg_config WHERE id='1'";
 		$db->setQuery($query);
@@ -580,7 +590,7 @@ class JtgHelper
 	static public function checkCaptcha()
 	{
 		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = JtgHelper::getDbo();
 
 		$query = "SELECT extension_id FROM #__extensions WHERE element='captcha'";
 		$db->setQuery($query);
@@ -600,7 +610,7 @@ class JtgHelper
 	static public function getLatLon($uid = false, $exclude = false)
 	{
 		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = JtgHelper::getDbo();
 		$query = "SELECT u.id,u.name,u.username,u2.jtglat,u2.jtglon,u2.jtgvisible FROM #__users as u left join #__jtg_users as u2 ON u.id=u2.user_id";
 
 		if ($uid !== false)
@@ -697,9 +707,9 @@ static public function autoRotateImage($image) {
          */
         static public function getGpsFromExif($exifCoord, $hemi)
         {
-                $degrees = count($exifCoord) > 0 ? jtgHelper::gps2Num($exifCoord[0]) : 0;
-                $minutes = count($exifCoord) > 1 ? jtgHelper::gps2Num($exifCoord[1]) : 0;
-		$seconds = count($exifCoord) > 2 ? jtgHelper::gps2Num($exifCoord[2]) : 0;
+                $degrees = count($exifCoord) > 0 ? JtgHelper::gps2Num($exifCoord[0]) : 0;
+                $minutes = count($exifCoord) > 1 ? JtgHelper::gps2Num($exifCoord[1]) : 0;
+		$seconds = count($exifCoord) > 2 ? JtgHelper::gps2Num($exifCoord[2]) : 0;
                 $flip = ($hemi == 'W' or $hemi == 'S') ? -1 : 1;
 
                 return $flip * ($degrees + $minutes / 60 + $seconds / 3600);
@@ -825,7 +835,7 @@ static public function autoRotateImage($image) {
 			return false;
 		}
 		$image = new Imagick($file_tmp_name);
-		jtgHelper::autoRotateImage($image);
+		JtgHelper::autoRotateImage($image);
 		$height = $image->getImageHeight();
 		$width = $image->getImageWidth();
 		$cfg = self::getConfig();
@@ -899,10 +909,10 @@ static public function autoRotateImage($image) {
 			return false;
 		}
 		if (phpversion('imagick')) {
-		   $statusupload = jtgHelper::resizeConvertImk($file_tmp_name, $image_dir, $outfname);
+		   $statusupload = JtgHelper::resizeConvertImk($file_tmp_name, $image_dir, $outfname);
 		}
 		else if (phpversion('gd')) {
-		   $statusupload = jtgHelper::resizeConvertGd($file_tmp_name, $ext, $image_dir, $outfname);
+		   $statusupload = JtgHelper::resizeConvertGd($file_tmp_name, $ext, $image_dir, $outfname);
 		}
 		else JFactory::getApplication()->enqueueMessage('ERROR: need ImageMagick or gd extension to handle images','warning');
 
@@ -918,12 +928,12 @@ static public function autoRotateImage($image) {
 		$exif = exif_read_data($file_tmp_name);
 		if ( isset($exif['GPSLatitude']))
 		{
-			$lon = jtgHelper::getGpsFromExif($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
-			$lat = jtgHelper::getGpsFromExif($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
+			$lon = JtgHelper::getGpsFromExif($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
+			$lat = JtgHelper::getGpsFromExif($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
 			$query .= ",\n lon='".$lon."',\n lat='".$lat."'";
 		}
 		
-		$db = JFactory::getDBO();
+		$db = JtgHelper::getDbo();
 		$db->setQuery($query);    
 		if (! $db->execute())
 		{

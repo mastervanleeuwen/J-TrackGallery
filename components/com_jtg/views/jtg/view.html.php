@@ -43,7 +43,7 @@ class JtgViewjtg extends JViewLegacy
 		$mainframe = JFactory::getApplication();
 		$cfg = JtgHelper::getConfig();
 		$gpsData = new GpsDataClass($cfg->unit);
-		$document = JFactory::getDocument();
+		$document = $mainframe->getDocument();
 		$user = JFactory::getUser();
 		$uid = $user->id;
 		jimport('joomla.filesystem.file');
