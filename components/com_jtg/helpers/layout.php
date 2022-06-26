@@ -489,77 +489,6 @@ class LayoutHelper
 	/**
 	 * function_description
 	 *
-	 * @param   unknown_type  $val   param_description
-	 * @param   unknown_type  $cats  param_description
-	 *
-	 * @return return_description
-	 */
-	static private function parseParam_Subcats($val, $cats)
-	{
-		$catswhere = null;
-
-		if (is_array($val))
-		{
-			$subwhere = array();
-
-			foreach ($val as $cat)
-			{
-				if ($cat == -1)
-				{
-					return null;
-				}
-
-				$subwhere[] = "( " . self::getParentcats($cat, $cats, true) . " )";
-			}
-
-			$catswhere .= "( " . implode(' OR ', $subwhere) . " )";
-		}
-		elseif ($val != -1)
-		{
-			$catswhere .= "( " . self::getParentcats($val, $cats, true) . " )";
-		}
-
-		return $catswhere;
-	}
-
-	/**
-	 * function_description
-	 *
-	 * @param   unknown_type  $val  param_description
-	 *
-	 * @return NULL|Ambigous <NULL, string>
-	 */
-	static private function parseParam_Terrain($val)
-	{
-		$where = null;
-
-		if (is_array($val))
-		{
-			$subwhere = array();
-
-			foreach ($val as $terrain)
-			{
-				if ($terrain == -1)
-				{
-					return null;
-				}
-
-				$subwhere[] = "a.terrain LIKE '%" . $terrain . "%'";
-			}
-
-			$where .= "( " . implode(' ) OR ( ', $subwhere) . " )";
-		}
-		elseif ($val != -1)
-		{
-			$where = "a.terrain LIKE '%" . $val . "%'";
-		}
-
-		return $where;
-	}
-
-	/**
-	 * function_description
-	 *
 	 * @param   unknown_type  $val  param_description
 	 *
 	 * @return return_description
@@ -657,21 +586,6 @@ class LayoutHelper
 		if ($catsel !== null)
 		{
 			$catswhere[] = $catsel;
-		}
-		else {
-			$layout = self::parseParam_Cats($params->get('jtg_param_cats'));
-
-			if ($layout !== null)
-			{
-				$catswhere[] = $layout;
-			}
-		}
-
-		$layout = self::parseParam_Terrain($params->get('jtg_param_terrain'));
-
-		if ($layout !== null)
-		{
-			$where[] = $layout;
 		}
 
 		$layout = self::parseParam_LevelFrom($params->get('jtg_param_level_from'));

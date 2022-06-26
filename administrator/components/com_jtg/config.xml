@@ -256,20 +256,6 @@
 		<field type="spacer" addfieldpath="/administrator/components/com_jtg/elements" />
 		<field type="spacer" name="myspacer5" class="text"
 			label="COM_JTG_MENUSPACER_LIMITS" />
-		<field name="jtg_param_cats" type="ownlist"
-			addfieldpath="/administrator/components/com_jtg/elements" label="COM_JTG_LIMIT_CATS"
-			description="COM_JTG_TT_MENU_LIMIT_CATS" />
-		<!-- <field name="jtg_param_subcats" type="ownlist" label="COM_JTG_CATS_WITH_SUBCATS" 
-			description="COM_JTG_TT_MENU_LIMIT_SUBCATS" /> -->
-		<field name="jtg_param_user" type="ownlist"
-			addfieldpath="/administrator/components/com_jtg/elements" label="COM_JTG_LIMIT_USER"
-			description="COM_JTG_TT_MENU_LIMIT_USER" />
-		<field name="jtg_param_usergroup" type="ownlist"
-			addfieldpath="/administrator/components/com_jtg/elements" label="COM_JTG_LIMIT_GROUP"
-			description="COM_JTG_TT_MENU_LIMIT_USERGROUP" />
-		<field name="jtg_param_terrain" type="ownlist"
-			addfieldpath="/administrator/components/com_jtg/elements" label="COM_JTG_LIMIT_TERRAIN"
-			description="COM_JTG_TT_MENU_LIMIT_TERRAIN" />
 		<field name="jtg_param_level_from" type="ownlist"
 			addfieldpath="/administrator/components/com_jtg/elements" label="COM_JTG_MENU_LEVEL_FROM"
 			description="COM_JTG_TT_MENU_LIMIT_LEVEL" />
