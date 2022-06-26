@@ -34,19 +34,21 @@ function jtgBuildRoute(&$query)
 	$app = JFactory::getApplication();
 	$menu = $app->getMenu();
 
-	if (empty($query['Itemid']))
+	if (empty($query['itemId']))
 	{
 		$menuItem = $menu->getActive();
 	}
 	else
 	{
-		$menuItem = $menu->getItem($query['Itemid']);
+		$menuItem = $menu->getItem($query['itemId']);
 	}
 	// $menuid = $menuItem->id;
 
+	$view = '';
 	if (isset($query['view']))
 	{
-		$segments[] = $query['view'];
+		$view = $query['view'];
+		$segments[] = $view;
 		unset($query['view']);
 	}
 
@@ -68,7 +70,7 @@ function jtgBuildRoute(&$query)
 		unset($query['task']);
 	}
 
-	if (isset($query['id']))
+	if (($view == 'track' || $view == 'cat') && isset($query['id']))
 	{
 		$segments[] = $query['id'];
 		unset($query['id']);
