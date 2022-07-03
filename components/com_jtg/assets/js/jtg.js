@@ -37,7 +37,11 @@ function jtgAddMapLayer(mapType = 0, mapOpt = '', apiKey = '', mapName = '', isV
 	switch (mapType) {
 		case 0: // OSM
 			if ( mapOpt.length ) {
-				mapLayer = new ol.layer.Tile({ source: new ol.source.OSM({url: mapOpt}), title: mapName, type: 'base', visible: isVisible });
+				mapUrl = mapOpt;
+				if (apiKey.length) {
+					mapUrl += '?apikey='+apiKey;
+				}
+				mapLayer = new ol.layer.Tile({ source: new ol.source.OSM({url: mapUrl}), title: mapName, type: 'base', visible: isVisible });
 			}
 			else {
 				mapLayer = new ol.layer.Tile({ source: new ol.source.OSM(), title: mapName, type: 'base', visible: isVisible });
