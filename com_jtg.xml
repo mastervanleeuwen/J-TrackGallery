@@ -26,7 +26,7 @@
 		</sql>
 	</uninstall>
 
-	<scriptfile>installuninstallscript.php</scriptfile>
+<scriptfile>installuninstallscript.php</scriptfile>
 	<files folder="components/com_jtg">
 		<file>controller.php</file>
 		<file>index.html</file>
@@ -36,13 +36,31 @@
 		<folder>controllers</folder>
 		<folder>docs</folder>
 		<folder>helpers</folder>
-		<folder>language</folder>
 		<folder>models</folder>
 		<folder>views</folder>
 	</files>
 	<media folder="media">
 		<folder>com_jtg</folder>
 	</media>
+	<languages folder="components/com_jtg/language">
+		<language tag="de-DE">de-DE/de-DE.com_jtg.ini</language>
+		<language tag="en-GB">en-GB/en-GB.com_jtg.ini</language>
+		<language tag="es-ES">es-ES/es-ES.com_jtg.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.com_jtg.ini</language>
+		<language tag="it-IT">it-IT/it-IT.com_jtg.ini</language>
+		<language tag="nl-NL">nl-NL/nl-NL.com_jtg.ini</language>
+		<language tag="pl-PL">pl-PL/pl-PL.com_jtg.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.com_jtg.ini</language>
+
+		<language tag="de-DE">de-DE/de-DE.com_jtg_common.ini</language>
+		<language tag="en-GB">en-GB/en-GB.com_jtg_common.ini</language>
+		<language tag="es-ES">es-ES/es-ES.com_jtg_common.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.com_jtg_common.ini</language>
+		<language tag="it-IT">it-IT/it-IT.com_jtg_common.ini</language>
+		<language tag="nl-NL">nl-NL/nl-NL.com_jtg_common.ini</language>
+		<language tag="pl-PL">pl-PL/pl-PL.com_jtg_common.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.com_jtg_common.ini</language>
+	</languages>
 	<administration>
 		<menu img="../components/com_jtg/assets/images/icon-16-jtg.png">J!Track Gallery</menu>
 		<submenu>
@@ -65,12 +83,30 @@
 			<folder>controllers</folder>
 			<folder>help</folder>
 			<folder>helpers</folder>
-			<folder>language</folder>
 			<folder>models</folder>
 			<folder>sql</folder>
 			<folder>tables</folder>
 			<folder>views</folder>
 		</files>
+		<languages folder="administrator/components/com_jtg/language">
+			<language tag="de-DE">de-DE/de-DE.com_jtg.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_jtg.ini</language>
+			<language tag="es-ES">es-ES/es-ES.com_jtg.ini</language>
+			<language tag="fr-FR">fr-FR/fr-FR.com_jtg.ini</language>
+			<language tag="it-IT">it-IT/it-IT.com_jtg.ini</language>
+			<language tag="nl-NL">nl-NL/nl-NL.com_jtg.ini</language>
+			<language tag="pl-PL">pl-PL/pl-PL.com_jtg.ini</language>
+			<language tag="ru-RU">ru-RU/ru-RU.com_jtg.ini</language>
+
+			<language tag="de-DE">de-DE/de-DE.com_jtg.sys.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_jtg.sys.ini</language>
+			<language tag="es-ES">es-ES/es-ES.com_jtg.sys.ini</language>
+			<language tag="fr-FR">fr-FR/fr-FR.com_jtg.sys.ini</language>
+			<language tag="it-IT">it-IT/it-IT.com_jtg.sys.ini</language>
+			<language tag="nl-NL">nl-NL/nl-NL.com_jtg.sys.ini</language>
+			<language tag="pl-PL">pl-PL/pl-PL.com_jtg.sys.ini</language>
+			<language tag="ru-RU">ru-RU/ru-RU.com_jtg.sys.ini</language>
+		</languages>
 	</administration>
 	<updateservers>
 		<server type="extension" priority="1" name="J!TrackGallery github update">https://raw.githubusercontent.com/mastervanleeuwen/J-TrackGallery/master/autoupdate.xml</server>
