@@ -214,7 +214,7 @@ class JtgModelConfig extends JModelLegacy
 	function getContent()
 	{
 		$db = $this->getDbo();
-		$sql = 'Select id from #__categories where title=\'term\'';
+		$sql = 'Select id from #__categories where title=\'terms\'';
 		$db->setQuery($sql);
 		$catid = $db->loadResult();
 		$sql = 'Select id from #__categories where title=\'jtg\'';

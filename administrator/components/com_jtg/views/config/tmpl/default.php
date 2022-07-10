@@ -214,11 +214,6 @@ margin: 1px 0 0 0;
 				<td>&nbsp;&nbsp;<?php echo $this->lists['unit']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_SORT'); ?></td>
-				<td>&nbsp;&nbsp;<input type="text" name="sort"
-					value="<?php echo $this->config->sort; ?>" size="20" /></td>
-			</tr>
-			<tr>
 				<td><?php echo JText::_('COM_JTG_MAPWIDTH'); ?></td>
 				<td>&nbsp;&nbsp;<input type="text" name="map_width"
 					value="<?php echo $this->config->map_width; ?>" size="20" />

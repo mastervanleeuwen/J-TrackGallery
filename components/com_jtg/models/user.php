@@ -66,7 +66,7 @@ class JtgModelUser extends JModelList
 	protected function getListQuery(){
 		// TODO: add accesslevel logic, or remove completely? replace by per-track access using native Joomla! logic?
 		
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 		$user = JFactory::getUser();
 		$uid = $user->id;
@@ -125,7 +125,7 @@ class JtgModelUser extends JModelList
 	**/
 	public function getComments()
 	{
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 		$uid = JFactory::getUser()->id;
 		
@@ -145,7 +145,7 @@ class JtgModelUser extends JModelList
 	**/
 	public function getCommentsToTracks()
 	{
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 		$uid = JFactory::getUser()->id;
 		
@@ -167,7 +167,7 @@ class JtgModelUser extends JModelList
 	 */
 	function getTotals($uid)
 	{
-		$db = JFactory::getDBO();
+		$db = $htis->getDbo();
 		$query = $db->getQuery(true);
 		$query->select('count(a.id) as ntrk, sum(a.distance) as distance, sum(a.ele_asc) as ele_asc, sum(a.ele_desc) as ele_desc')
 		->from('#__jtg_files as a')
@@ -324,7 +324,7 @@ class JtgModelUser extends JModelList
 				'tenstar'
 		);
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		// Count votings
 		$query = "SELECT COUNT(*) FROM #__jtg_votes" . "\n WHERE trackid='" . $id . "'";
@@ -398,7 +398,7 @@ class JtgModelUser extends JModelList
 	function getTerrain ($where = null)
 	{
 		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT * FROM #__jtg_terrains " . $where . " ORDER BY title ASC";
 
@@ -429,7 +429,7 @@ class JtgModelUser extends JModelList
 	{
 		$mainframe = JFactory::getApplication();
 
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = "SELECT a.uid, b.name, b.email FROM #__jtg_files AS a" . "\n LEFT JOIN #__users AS b ON a.uid=b.id" . "\n WHERE a.id='" . $id . "'";
 
 		$db->setQuery($query);

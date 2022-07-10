@@ -282,7 +282,7 @@ class JtgModelDownload extends JModelLegacy
 	function getFile($id)
 	{
 		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 
 		$query = "SELECT a.*, b.title AS cat, b.image AS image, c.name AS user"
 		. "\n FROM #__jtg_files AS a"

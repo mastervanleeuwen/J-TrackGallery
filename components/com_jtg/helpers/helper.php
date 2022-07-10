@@ -56,7 +56,7 @@ class JtgHelper
 				$vName == 'config'
 		);
 		JHtmlSidebar::addEntry(
-				JText::_('COM_JTG_CATEGORIES'),
+				JText::_('COM_JTG_CATS'),
 				'index.php?option=com_jtg&task=cats&controller=cats',
 				$vName == 'config'
 		);

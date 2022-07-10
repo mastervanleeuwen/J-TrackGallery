@@ -272,11 +272,6 @@ $document->addStyleDeclaration($style);
 						// No longer used !!
 						$tt = JText::_('COM_JTG_TT_ERR_NOPOINTINTRACK');
 						$color = "lightgrey";
-					} elseif ( $check == 8 )
-					{
-						// No longer used !!
-						$tt = JText::_('COM_JTG_TT_ERR_MORETRACKS');
-						$color = "blue";
 					}
 
 					$table .= "			<tr class=\"row$row " . ($row? "row-odd":"row-even") . "\">\n<td colspan=\"9\">" . JText::_('COM_JTG_GPS_FILE') . ':<b> ' . $filename . '</b>: <b><font color=\"red\">' . $tt . "</font></b><br /></tr>\n";

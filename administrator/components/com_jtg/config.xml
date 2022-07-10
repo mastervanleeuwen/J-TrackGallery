@@ -27,8 +27,7 @@
 			<option value="2">COM_JTG_PRIVATE</option>
 		</field>
 		<field name="jtg_param_disable_terrains" addfieldpath="/administrator/components/com_jtg/elements"
-			type="radio" default="O" label="COM_JTG_MENU_DISABLE_TERRAINS"
-			description="COM_JTG_TT_MENU_DISABLE_TERRAINS">
+			type="radio" default="O" label="COM_JTG_MENU_DISABLE_TERRAINS">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
@@ -268,12 +267,6 @@
 		<field name="jtg_param_vote_to" type="ownlist"
 			addfieldpath="/administrator/components/com_jtg/elements" label="COM_JTG_MENU_VOTE_TO"
 			description="COM_JTG_TT_MENU_LIMIT_VOTE" />
-		<field type="spacer" name="myspacer5" class="text" label=" " />
-		<field name="jtg_param_limittext" type="ownlist"
-			addfieldpath="/administrator/components/com_jtg/elements" label="COM_JTG_FILTER" />
-		<field type="spacer" name="myspacer7" class="text" label=" " />
-		<field name="jtg_param_helpbutton" type="ownlist"
-			addfieldpath="/administrator/components/com_jtg/elements" label="COM_JTG_LIMIT_HELP" />
 	</fieldset>
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL"
 		description="JCONFIG_PERMISSIONS_DESC">

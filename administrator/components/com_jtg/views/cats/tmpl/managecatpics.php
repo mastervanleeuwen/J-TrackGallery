@@ -38,7 +38,6 @@ JToolBarHelper::help('cats/managecatpics', true);
 					name="checkall-toggle"></th>
 				<th width="10%" class="title"><?php echo JText::_('COM_JTG_NAME'); ?>
 				</th>
-				<!--			<th width="10%" class="title"><?php echo JText::_('COM_JTG_EXTENSION'); ?></th>-->
 				<th width="5%" class="title"><?php echo JText::_('COM_JTG_IMAGE'); ?>
 				</th>
 				<th class="title"></th>

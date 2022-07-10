@@ -1551,60 +1551,6 @@ private function extractCoordsGPX($xmlcontents)
 	}
 
 	/**
-	 * function_description
-	 *
-	 * @return array
-	 */
-	function getMapNates()
-	{
-		$mainframe = JFactory::getApplication();
-
-		$db = JFactory::getDBO();
-
-		$query = "SELECT start_n FROM #__jtg_files"
-		. "\n ORDER BY start_n ASC"
-		. "\n LIMIT 1";
-
-		$db->setQuery($query);
-		$north = $db->loadResult();
-
-		$query = "SELECT start_e FROM #__jtg_files"
-		. "\n ORDER BY start_e DESC"
-		. "\n LIMIT 1";
-
-		$db->setQuery($query);
-		$east = $db->loadResult();
-
-		$cnates = array();
-		$cnates[] = $north;
-		$cnates[] = $east;
-
-		return $cnates;
-	}
-
-	/**
-	 * function_description
-	 *
-	 * @param   sstring  $where  where query string
-	 *
-	 * @return array
-	 */
-	function getTracks($where="")
-	{
-		$mainframe = JFactory::getApplication();
-
-		$db = JFactory::getDBO();
-
-		$query = "\nSELECT a.*, b.title AS cat FROM #__jtg_files AS a"
-		. "\n LEFT JOIN #__jtg_cats AS b"
-		. "\n ON a.catid=b.id" . $where;
-		$db->setQuery($query);
-		$rows = $db->loadObjectList();
-
-		return $rows;
-	}
-
-	/**
 	 * Pass in GPS.GPSLatitude or GPS.GPSLongitude or something in that format
 	 *
 	 * http://stackoverflow.com/questions/2526304/php-extract-gps-exif-data/2572991#2572991
