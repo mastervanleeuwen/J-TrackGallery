@@ -293,10 +293,7 @@ class LayoutHelper
 
 		$limit = "LIMIT 0," . $newest;
 
-		$result = $model->getTracksData("ORDER BY a.id DESC", $limit, null);
-		error_log(count($result)." rows in result; without access selection; limit ".$limit);
 		$result = $model->getTracksData("ORDER BY a.id DESC", $limit, $access);
-		error_log(count($result)." rows in result; access selection: ".$access);
         
 		return $result;
 		//return $model->getTracksData("ORDER BY a.id DESC", $limit, $access);
