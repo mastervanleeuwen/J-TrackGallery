@@ -22,6 +22,7 @@
 	<language tag="en-GB">en-GB/en-GB.mod_jtrackgallery_stats.ini</language>
 	<language tag="es-ES">es-ES/es-ES.mod_jtrackgallery_stats.ini</language>
 	<language tag="fr-FR">fr-FR/fr-FR.mod_jtrackgallery_stats.ini</language>
+	<language tag="it-IT">it-IT/it-IT.mod_jtrackgallery_stats.ini</language>
 	<language tag="nl-NL">nl-NL/nl-NL.mod_jtrackgallery_stats.ini</language>
 	<language tag="pl-PL">pl-PL/pl-PL.mod_jtrackgallery_stats.ini</language>
 	
@@ -29,6 +30,7 @@
 	<language tag="en-GB">en-GB/en-GB.mod_jtrackgallery_stats.sys.ini</language>
 	<language tag="es-ES">es-ES/es-ES.mod_jtrackgallery_stats.sys.ini</language>
 	<language tag="fr-FR">fr-FR/fr-FR.mod_jtrackgallery_stats.sys.ini</language>
+	<language tag="it-IT">it-IT/it-IT.mod_jtrackgallery_stats.sys.ini</language>
 	<language tag="nl-NL">nl-NL/nl-NL.mod_jtrackgallery_stats.sys.ini</language>
 	<language tag="pl-PL">pl-PL/pl-PL.mod_jtrackgallery_stats.sys.ini</language>
 </languages>
@@ -40,7 +42,7 @@
 		<option value="0">JNo</option>
 	</field>
 
-	<field name="tcustom" type="textarea" rows="10" cols="40" label="MOD_JTG_STATS_CUSTOM_TEXT" size="40" default="our Database have $cats categories and $tracks tracks representing a total distance of $distance km ($distance_mi Mi) and a total elevation of $ascent km (descent $descent km). Tracks have been viewed $views times and rated $votes times" description="MOD_JTG_STATS_CUSTOM_TEXT_DESCRIPTION" />
+	<field name="tcustom" type="textarea" rows="10" cols="40" label="MOD_JTG_STATS_CUSTOM_TEXT" size="40" default="This website has $cats track categories and $tracks tracks representing a total distance of $distance km ($distance_mi mi) and a total elevation gain of $ascent km (descent $descent km). Tracks have been viewed $views times and rated $votes times" description="MOD_JTG_STATS_CUSTOM_TEXT_DESCRIPTION" />
 	<field name="thead" type="text" label="MOD_JTG_STATS_HEADER_TEXT" size="40" default="GPS Track Stats" description="MOD_JTG_STATS_HEADER_TEXT_DESCRIPTION" />
 	<field name="theado" type="radio" label="MOD_JTG_STATS_HEADER_TEXT_ENABLE" default="1">
 		<option value="1">JYES</option>
@@ -53,7 +55,7 @@
 		<option value="0">JNO</option>
 	</field>
 	<field type="spacer" name="myspacer2" hr="true" />
-	<field name="ttrack" type="text" label="MOD_JTG_STATS_TRACKS_TEXT" size="40" default="Total Of %s Tracks" description="MOD_JTG_STATS_TRACKS_TEXT_DESCRIPTION" />
+	<field name="ttrack" type="text" label="MOD_JTG_STATS_TRACKS_TEXT" size="40" default="Total: %s tracks" description="MOD_JTG_STATS_TRACKS_TEXT_DESCRIPTION" />
 	<field name="ttracko" type="radio" label="MOD_JTG_STATS_TRACKS_TEXT_ENABLE" default="1">
 		<option value="1">JYES</option>
 		<option value="0">JNO</option>
@@ -73,25 +75,25 @@
 		<option value=".">MOD_JTG_STATS_DOT</option>
 	</field>
 	<field type="spacer" name="myspacer4" hr="true" />
-	<field name="tasc" type="text" label="MOD_JTG_STATS_ASCENT_TEXT" size="40" default="%s Km's Of Ascent" description="MOD_JTG_STATS_ASCENT_TEXT_DESCRIPTION" />
+	<field name="tasc" type="text" label="MOD_JTG_STATS_ASCENT_TEXT" size="40" default="Total ascent: %s km" description="MOD_JTG_STATS_ASCENT_TEXT_DESCRIPTION" />
 	<field name="tasco" type="radio" label="MOD_JTG_STATS_ASCENT_TEXT_ENABLE" default="1">
 		<option value="1">JYES</option>
 		<option value="0">JNO</option>
 	</field>
 	<field type="spacer" name="myspacer5" hr="true" />
-	<field name="tdec" type="text" label="MOD_JTG_STATS_DESCENT_TEXT" size="40" default="%s Km's Of Descent" description="MOD_JTG_STATS_DESCENT_TEXT_DESCRIPTION" />
+	<field name="tdec" type="text" label="MOD_JTG_STATS_DESCENT_TEXT" size="40" default="Total descent: %s km" description="MOD_JTG_STATS_DESCENT_TEXT_DESCRIPTION" />
 	<field name="tdeco" type="radio" label="MOD_JTG_STATS_DESCENT_TEXT_ENABLE" default="1">
 		<option value="1">JYES</option>
 		<option value="0">JNO</option>
 	</field>
 	<field type="spacer" name="myspacer6" hr="true" />
-	<field name="tview" type="text" label="MOD_JTG_STATS_VIEWED_TEXT" size="40" default="Times Tracks Viewed: %s" description="MOD_JTG_STATS_VIEWED_DESCRIPTION" />
+	<field name="tview" type="text" label="MOD_JTG_STATS_VIEWED_TEXT" size="40" default="Track views: %s" description="MOD_JTG_STATS_VIEWED_DESCRIPTION" />
 	<field name="tviewo" type="radio" label="MOD_JTG_STATS_VIEWED_TEXT_ENABLE" default="1">
 		<option value="1">JYES</option>
 		<option value="0">JNO</option>
 	</field>
 	<field type="spacer" name="myspacer7" hr="true" />
-	<field name="tvote" type="text" label="MOD_JTG_STATS_RATING_TEXT" size="40" default="Total Ratings Given: %s" description="MOD_JTG_STATS_RATING_DESCRIPTION" />
+	<field name="tvote" type="text" label="MOD_JTG_STATS_RATING_TEXT" size="40" default="Total number of ratings given: %s" description="MOD_JTG_STATS_RATING_DESCRIPTION" />
 	<field name="tvoteo" type="radio" label="MOD_JTG_STATS_RATING_TEXT_ENABLE" default="1">
 		<option value="1">JYES</option>
 		<option value="0">JNO</option>

@@ -22,6 +22,7 @@
 	<language tag="en-GB">en-GB/en-GB.mod_jtrackgallery_latest.ini</language>
 	<language tag="es-ES">es-ES/es-ES.mod_jtrackgallery_latest.ini</language>
 	<language tag="fr-FR">fr-FR/fr-FR.mod_jtrackgallery_latest.ini</language>
+	<language tag="it-IT">it-IT/it-IT.mod_jtrackgallery_latest.ini</language>
 	<language tag="nl-NL">nl-NL/nl-NL.mod_jtrackgallery_latest.ini</language>
 	<language tag="pl-PL">pl-PL/pl-PL.mod_jtrackgallery_latest.ini</language>
 	
@@ -29,6 +30,7 @@
 	<language tag="es-ES">es-ES/es-ES.mod_jtrackgallery_latest.sys.ini</language>
 	<language tag="en-GB">en-GB/en-GB.mod_jtrackgallery_latest.sys.ini</language>
 	<language tag="fr-FR">fr-FR/fr-FR.mod_jtrackgallery_latest.sys.ini</language>
+	<language tag="it-IT">it-IT/it-IT.mod_jtrackgallery_latest.sys.ini</language>
 	<language tag="nl-NL">nl-NL/nl-NL.mod_jtrackgallery_latest.sys.ini</language>
 	<language tag="pl-PL">pl-PL/pl-PL.mod_jtrackgallery_latest.sys.ini</language>
 </languages>
