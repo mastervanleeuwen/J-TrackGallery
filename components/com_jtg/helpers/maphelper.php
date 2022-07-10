@@ -334,16 +334,17 @@ class JtgMapHelper {
 					// Retrieve thumbnail path
 					if ( JFile::exists($folder . 'thumbs/thumb1_' . $image->filename))
 					{
+						$imginfo = getimagesize($folder.'thumbs/thumb1_'.$image->filename);
 						$imagepath = $httppath . 'thumbs/thumb1_' . $image->filename;
 					}
 					else
 					{
 						// TODO recreate thumbnail if it does not exists (case direct FTP upload of images)
+						$imginfo = getimagesize($folder.$image->filename);
 						$imagepath = $httppath . $image->filename;
 					}
 
 					$foundpics = true;
-					$imginfo = getimagesize($folder.'/thumbs/thumb1_'.$image->filename);
 					$width = $imginfo[0];
 					$height = $imginfo[1];
 
