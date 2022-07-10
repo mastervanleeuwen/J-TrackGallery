@@ -33,10 +33,8 @@ JLoader::register('gpsCLass',
 JLoader::import('components.com_jtg.helpers.gpsClass', JPATH_SITE, 'gpsClass');
 
 $mainframe = JFactory::getApplication();
-$mainframe->getLanguage()->load('com_jtg', JPATH_SITE . '/components/com_jtg', 'en-GB', true);
-$mainframe->getLanguage()->load('com_jtg', JPATH_SITE . '/components/com_jtg', null, true);
-$mainframe->getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg', 'en-GB', true);
-$mainframe->getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg', null, true);
+$mainframe->getLanguage()->load('com_jtg');
+$mainframe->getLanguage()->load('com_jtg_common');
 
 // Com_jtg_additional language files are in /images/jtrackgallery/language
 // folder

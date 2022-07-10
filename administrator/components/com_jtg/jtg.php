@@ -29,10 +29,8 @@ define('COM_JTG_BASEURL', JUri::root() . '/' . COM_JTG_DIR);
 jimport('joomla.filesystem.file');
 
 // Load english language file for 'com_jtg' component then override with current language file
-JFactory::getLanguage()->load('com_jtg',   JPATH_ADMINISTRATOR . '/components/com_jtg', 'en-GB', true);
-JFactory::getLanguage()->load('com_jtg',   JPATH_ADMINISTRATOR . '/components/com_jtg', null, true);
-JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg', 'en-GB', true);
-JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg', null, true);
+JFactory::getLanguage()->load('com_jtg');
+JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE);
 
 // Com_jtg_additional language files are in /images/jtrackgallery/language folder
 JFactory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery', 'en-GB', true);
