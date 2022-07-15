@@ -21,6 +21,8 @@ jimport('joomla.application.component.model');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\CMS\HTML\HTMLHelper;
+
 /**
  * JtgModelTrack class for the jtg component
  *
@@ -837,13 +839,14 @@ class JtgModelTrack extends ItemModel
 	 */
 	function addcomment ($cfg)
 	{
-		JHtml::_('behavior.formvalidation');
-		if (JVERSION < 4.0)
+		if (version_compare(JVERSION,'4.0','lt'))
 		{
+			JHtml::_('behavior.formvalidation');
 			$editor = JFactory::getConfig()->get('editor');
 		}
 		else {
-			$editor = Factory::getApplication()->getEditor();
+			HTMLHelper::_('behavior.formvalidator');
+			$editor = Factory::getApplication()->getConfig()->get('editor');
 		}
 		$editor = Editor::getInstance($editor);
 		$user = JFactory::getUser();
@@ -875,43 +878,43 @@ class JtgModelTrack extends ItemModel
 		</thead>
 		<tbody>
 			<tr>
-				<td><label for='name'><?php echo JText::_('COM_JTG_NAME'); ?>*</label>
+				<td><label class='form-label' for='name'><?php echo JText::_('COM_JTG_NAME'); ?>*</label>
 				</td>
 				<td><input type='text' name='name' id='name' size='20'
-					value='<?php echo $user->get('username'); ?>' class='required'
+					value='<?php echo $user->get('username'); ?>' class='required form-text'
 					maxlength='50' /></td>
 			</tr>
 			<tr>
 				<td>
-					<label for='show-email'><?php echo JText::_('COM_JTG_SHOW_EMAIL'); ?></label>
+					<label class='form-label' for='show-email'><?php echo JText::_('COM_JTG_SHOW_EMAIL'); ?></label>
 				</td>
 				<td>
 					<input type='checkbox' name='show-email' onchange="document.getElementById('email').disabled=!this.checked;">
 				</td>
 			</tr>
 			<tr>
-				<td><label for='email'><?php echo JText::_('COM_JTG_EMAIL'); ?></label>
+				<td><label class='form-label' for='email'><?php echo JText::_('COM_JTG_EMAIL'); ?></label>
 				</td>
 				<td>
 					<input type='text' name='email' id='email' size='30' disabled 
 					value='<?php echo $user->get('email'); ?>'
-					class='validate-email' maxlength='50' /></td>
+					class='validate-email form-text' maxlength='50' /></td>
 			</tr>
 			<tr>
-				<td><label for='homepage'><?php echo JText::_('COM_JTG_INFO_AUTHOR_WWW'); ?>
+				<td><label class='form-label' for='homepage'><?php echo JText::_('COM_JTG_INFO_AUTHOR_WWW'); ?>
 				</label></td>
-				<td><input type='text' name='homepage' id='homepage' size='30'
+				<td><input type='text' name='homepage' id='homepage' class='form-text' size='30'
 					maxlength='50' /></td>
 			</tr>
 			<tr>
-				<td><label for='title'><?php echo JText::_('COM_JTG_COMMENT_TITLE'); ?>*</label>
+				<td><label class='form-label' for='title'><?php echo JText::_('COM_JTG_COMMENT_TITLE'); ?>*</label>
 				</td>
 				<td><input type='text' name='title' id='title' size='40' value=''
-					class='required' maxlength='80' /></td>
+					class='required form-text' maxlength='80' /></td>
 			</tr>
 			<tr>
-				<td colspan='2'><label for='text'><?php echo JText::_('COM_JTG_COMMENT_TEXT'); ?>*</label>
-					<?php echo $editor->display('text', '', '100%', '50', '80', '8', false, null, null);?>
+				<td colspan='2'><label class='form-label' for='text'><?php echo JText::_('COM_JTG_COMMENT_TEXT'); ?>*</label>
+					<?php echo $editor->display('text', '', '100%', '200', '80', '8', false, null, null);?>
 				</td>
 			</tr>
 <?php if ($cfg->captcha == 1)
@@ -1000,7 +1003,8 @@ class JtgModelTrack extends ItemModel
 			$mailer->isHtml(true);
 
 			// Optional file attached
-			$mailer->addAttachment(JPATH_COMPONENT . '/assets/document.pdf');
+			$attachfile = JPATH_COMPONENT . '/assets/document.pdf';
+			if (JFile::exists($attachfile)) $mailer->addAttachment($attachfile);
 
 			$author = $this->getAuthorData($id); 
 			$email = $author->email; 

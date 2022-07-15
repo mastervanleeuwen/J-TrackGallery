@@ -187,7 +187,7 @@ class JtgViewCats extends JViewLegacy
 		$default_map = $model->getDefaultMaps();
 		array_unshift($default_map, array('id' => 0, "name" => JText::_('JNONE')) );
 
-      if (JVERSION >= 4.0) {
+      if (version_compare(JVERSION,'4.0','ge') {
          $editor = JFactory::getApplication()->getConfig()->get('editor');
       }
       else 
