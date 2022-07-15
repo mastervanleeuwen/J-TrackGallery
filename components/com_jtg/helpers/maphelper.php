@@ -73,7 +73,7 @@ class JtgMapHelper {
 			for ($iseg = 0; $iseg < $gpsTrack->track[$itrk]->segCount; $iseg++) {
 				$segCoordsArrJS[] = '[ '.implode(', ',array_map(function($coord) { return "[ $coord[0], $coord[1] ]"; }, $gpsTrack->track[$itrk]->coords[$iseg])).' ]';
 			}
-			$trkArrJS[] = "{name : '".htmlentities(trim($gpsTrack->track[$itrk]->trackname))."', ".
+			$trkArrJS[] = "{name : '".htmlentities(trim($gpsTrack->track[$itrk]->trackname),ENT_QUOTES)."', ".
 				"coords : [ ".implode(",\n",$segCoordsArrJS)." ]}";
 		}
 		$map .= "	trackData = [".implode(",\n",$trkArrJS)."];\n";
@@ -394,7 +394,7 @@ class JtgMapHelper {
 		{
 			$DPCalItem = "  \n{\n    'lon' : $item->longitude,\n";
 			$DPCalItem .= "    'lat' : $item->latitude,\n";
-			$DPCalItem .= "    'title' : '".htmlentities($item->title)."',\n";
+			$DPCalItem .= "    'title' : '".htmlentities($item->title,ENT_QUOTES)."',\n";
 			$DPCalItem .= "    'url' : '".JRoute::_("index.php?option=com_dpcalendar&view=location&id=$item->id")."',\n";
 			$DPCalItem .= "    'color' : '".$item->color."'\n";
 			$DPCalItem .= "  }";
