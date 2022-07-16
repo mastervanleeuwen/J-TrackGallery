@@ -771,7 +771,7 @@ if ($this->canDo->get('jtg.download'))
           JText::_('COM_JTG_DOWNLOAD')."</div>";
 	if ( (bool) $this->params->get("jtg_param_offer_download_original") )
 	{
-		$ext = JFile::getExt($this->track->file);
+		$ext = strtoupper(JFile::getExt($this->track->file));
 		$download_buttons .= "<button class=\"btn btn-secondary jtg-download\" type=\"button\"
 		onclick=\"document.getElementById('format').value = 'original';Joomla.submitbutton('download')\">
 		$ext ". JText::_('COM_JTG_ORIGINAL_FILE') ."</button>";
