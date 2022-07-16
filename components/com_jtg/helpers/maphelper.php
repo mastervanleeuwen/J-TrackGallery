@@ -369,9 +369,9 @@ class JtgMapHelper {
 					}
 
 					$size = "width=\"" . (int) $width . "\" height=\"" . (int) $height . "\"";
-					$imagehttp = "<img " . $size . " src=\"" . $imagepath . "\" alt=\"" . $image->filename . "\" title=\"" . $image->title . "\">";
-					if (strlen($image->title)) $imagehttp .= "<p>".$image->title."</p>";
-					$imgsJS[] = "{long: $image->lon, lat: $image->lat, imghtml : '$imagehttp' }";
+					$imagehtml = "<img " . $size . " src=\"" . $imagepath . "\" alt=\"" . $image->filename . "\" title=\"" . htmlentities($image->title, ENT_QUOTES) . "\">";
+					if (strlen($image->title)) $imagehtml .= "<p>".htmlentities($image->title,ENT_QUOTES)."</p>";
+					$imgsJS[] = "{long: $image->lon, lat: $image->lat, imghtml : '$imagehtml' }";
             }
 			}
 			$imgJSarr = "geoImages = [".implode(',',$imgsJS)."];";
