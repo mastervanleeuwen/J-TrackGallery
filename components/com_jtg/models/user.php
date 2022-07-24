@@ -167,7 +167,7 @@ class JtgModelUser extends JModelList
 	 */
 	function getTotals($uid)
 	{
-		$db = $htis->getDbo();
+		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 		$query->select('count(a.id) as ntrk, sum(a.distance) as distance, sum(a.ele_asc) as ele_asc, sum(a.ele_desc) as ele_desc')
 		->from('#__jtg_files as a')
