@@ -53,14 +53,13 @@
 
 #jtg_map.fullscreen { /* this is for fullscreen map */
 	position: fixed;
-	padding: 0 !important;
-	margin: 0 !important;
+	padding: 0;
+	margin: 0;
 	cursor: default;
 	top: 0;
 	bottom: 0;
 	right: 0;
 	left: 0;
-	margin: 0;
 	z-index: 20;
 }
 
@@ -81,7 +80,6 @@
     bottom: 12px;
     left: -50px;
     min-width: 280px; 
-    visibility: false;
 }
 .ol-popup:after, .ol-popup:before {
     top: 100%;

@@ -404,7 +404,7 @@ function addPopup(olmap) {
     closer.onclick = function() {
         overlay.setPosition(undefined);
         closer.blur();
-       popupActive = false;
+        popupActive = false;
         return false;
     };
 
@@ -417,20 +417,20 @@ function addPopup(olmap) {
             if (feature.getGeometry().getType() == 'Point') { 
                point = feature;
             }
-        });
+       });
        if (point) {
-       // Set content of popup
-       var content = document.getElementById('popup-content');
-       content.innerHTML = point.get('name');
-       // show image if available?
-       // and position
-       var coordinate = event.coordinate; // MvL TODO: change to point.getGeometry().getCoordinate; converted to pixels
-       overlay.setPosition(coordinate);
-       popupActive = true;
+          // Set content of popup
+          var content = document.getElementById('popup-content');
+          content.innerHTML = point.get('name');
+          // show image if available?
+          // and position
+          var coordinate = event.coordinate;
+          overlay.setPosition(coordinate);
+          popupActive = true;
        }
        else {
-           overlay.setPosition(undefined);
-           popupActive = false;
+          overlay.setPosition(undefined);
+          popupActive = false;
        }
     }
  
