@@ -28,15 +28,22 @@ JToolBarHelper::deleteList();
 JToolBarHelper::help('comments', true);
 
 // Code support for joomla version greater than 3.0
-if (JVERSION >= 4.0)
+if (version_compare(JVERSION,'4.0','ge'))
 {
 	JHtmlBootstrap::tooltip('.hasTooltip');
 }
 else
 {
 	JHtml::_('behavior.tooltip');
-}
+?>
 
+<div id="j-sidebar-container" class="span2">
+<?php echo JHtmlSidebar::render(); ?>
+</div>
+<div id="j-main-container" class="span10">
+
+<?php
+}
 $n = count($this->rows);
 
 if ($n > 0)
@@ -115,3 +122,9 @@ else
 {
 	echo '<br /><br /><b>' . JText::_('COM_JTG_NO_COMMENTS') . '</b>';
 }
+
+if (version_compare(JVERSION,'4.0','lt'))
+{
+	echo "</div>\n";
+}
+?>

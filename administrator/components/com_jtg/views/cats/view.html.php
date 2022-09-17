@@ -249,7 +249,6 @@ class JtgViewCats extends JViewLegacy
 		$lists['usepace'] 	= JHtml::_('select.booleanlist', 'usepace', 'class="inputbox" size="1"', $data->usepace);
 		$lists['parent'] 	= JHtml::_('select.genericlist', $parent, 'parent', 'size="1"', 'id', 'name', $data->parent_id);
 		$lists['default_map'] 	= JHtml::_('select.genericlist', $default_map, 'default_map', 'size="1"', 'id', 'name', $data->default_map);
-		$lists['default_overlays'] 	= JHtml::_('select.genericlist', $default_overlays, 'default_overlays[]', 'class="inputbox" multiple="true" size="' . $size . '"', 'id', 'name', unserialize($data->default_overlays));
 		$config = JtgHelper::getConfig();
 		$images = $model->getPics();
 		$this->images = $images;

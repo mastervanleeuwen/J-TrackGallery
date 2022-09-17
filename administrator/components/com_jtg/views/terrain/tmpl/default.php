@@ -27,7 +27,20 @@ JToolBarHelper::publish();
 JToolBarHelper::unpublish();
 JToolBarHelper::deleteList();
 JToolBarHelper::help('terrain', true);
+
+if (version_compare(JVERSION,'4.0','lt'))
+{
 ?>
+
+<div id="j-sidebar-container" class="span2">
+<?php echo JHtmlSidebar::render(); ?>
+</div>
+<div id="j-main-container" class="span10">
+
+<?php
+}
+?>
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<table class="adminlist">
 		<thead>
@@ -94,3 +107,9 @@ JToolBarHelper::help('terrain', true);
 		value="terrain" />
 	<?php echo JHtml::_('form.token'); ?>
 </form>
+<?php
+if (version_compare(JVERSION,'4.0','lt'))
+{
+	echo "</div>\n";
+}
+?>

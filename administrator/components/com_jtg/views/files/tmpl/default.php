@@ -39,18 +39,29 @@ $ordering = ($this->lists['order'] == 'ordering');
 $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 
+if (version_compare(JVERSION,'4.0','lt'))
+{
+?>
+
+<div id="j-sidebar-container" class="span2">
+<?php echo JHtmlSidebar::render(); ?>
+</div>
+<div id="j-main-container" class="span10">
+
+<?php
+}
 ?>
 <form action="" method="post" name="adminForm" id="adminForm">
 	<table>
 		<tr>
 			<td align="left" style="width:100%;"><?php echo JText::_('COM_JTG_FILTER'); ?>:
-				<input type="text" name="search" id="search"
+				<input type="text" class="form-text" name="search" id="search"
 				value="<?php echo $this->lists['search'];?>" class="text_area"
 				onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();">
+				<button class="btn btn-primary" onclick="this.form.submit();">
 					<?php echo JText::_('COM_JTG_APPLY'); ?>
 				</button>
-				<button
+				<button class="btn btn-secondary"
 					onclick="document.getElementById('search').value='';this.form.getElementById('filter_state').value='';this.form.submit();">
 					<?php echo JText::_('COM_JTG_RESET'); ?>
 				</button>
@@ -58,7 +69,7 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 			<td nowrap="nowrap"></td>
 		</tr>
 	</table>
-	<table class="adminlist">
+	<table class="table table-striped">
 		<tfoot>
 			<tr>
 				<td colspan="14"><?php echo $this->pagination->getListFooter(); ?></td>
@@ -191,7 +202,7 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 				<td align="center"><?php echo $row->level; ?></td>
 				<td align="center"><?php echo $row->date; ?></td>
 				<td align="center"><?php echo $published;?></td>
-				<td><?php echo $row->default_map? $row->default_map: ''; ?></td>
+				<td align="center"><?php echo $row->default_map? $row->default_map: ''; ?></td>
 				<td align="center"><?php echo $hiddenlink;?></td>
 				<td align="center"><?php echo $access; ?></td>
 				<td align="center"><?php echo $user->username;?></td>
@@ -234,41 +245,41 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 				echo JHtml::_('grid.sort',
 						JText::_('COM_JTG_ID'), 'id', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>
 				<th class="title"><?php echo $checkall; ?></th>
-				<th class="title"><?php
+				<th class=class="text-center" style="white-space:normal;"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_TITLE') . "<small> (" . JText::_('COM_JTG_GPS_FILE') . ")</small> ",
-						'title', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>
-				<th class="title"><?php
+						'title', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
+				<th class="text-center" style="white-space:normal;"><?php
 				echo JText::_('COM_JTG_GPS_FILETYPE');
 				?>:</th>
 				<th class="title"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_CAT'),
-	'cat', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:
+	'cat', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 					<?php echo $missingcat; ?>
 				</th>
 				<th class="title"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_TERRAIN'),
-	'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:
+	'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 					<?php echo $missingterrain; ?>
 				</th>
-				<th class="title"><?php
+				<th class="text-center" style="white-space:normal;"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_LEVEL'),
-						'level', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>
+						'level', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
 				<th class="title"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_DATE'),
-						'date', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>
+						'date', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
 				<th class="title"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_PUBLISHED'),
-						'published', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>
-				<th class="title"><?php echo JText::_('COM_JTG_DEFAULT_MAP'); ?></th>
+						'published', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
+				<th class="text-center" style="white-space:normal;"><?php echo JText::_('COM_JTG_DEFAULT_MAP'); ?></th>
 				<th class="title"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_HIDDEN'),
-						'hidden', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>
+						'hidden', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
 				<th class="title"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_ACCESS_LEVEL'),
-						'access', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>
+						'access', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
 				<th class="title"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_INFO_AUTHOR'),
-						'uid', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>
+						'uid', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
 			</tr>
 		</thead>
 	</table>
@@ -282,3 +293,9 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 	<?php echo JHtml::_('form.token'); ?>
 	&nbsp;
 </form>
+<?php
+if (version_compare(JVERSION,'4.0','lt'))
+{
+	echo "</div>\n";
+}
+?>

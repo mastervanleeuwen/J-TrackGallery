@@ -37,48 +37,50 @@ class JtgHelper
 	 * @since   1.6
 	 */
 
-	static public function addSubmenu($vName)
+	static public function addSubmenu($tName)
 	{
 		// TODO move addSubmenu and GetConfig function to backend code
+		//$active = ($vName == 'config') || ($vName == 'cats');
+		$active = false;
 		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_CONFIGURATION'),
 				'index.php?option=com_jtg&task=config&controller=config',
-				$vName == 'config'
+				$tName == 'config'
 		);
 		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_GPS_FILES'),
 				'index.php?option=com_jtg&task=files&controller=files',
-				$vName == 'config'
+				$tName == 'files'
 		);
 		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_MAPS'),
 				'index.php?option=com_jtg&task=maps&controller=maps',
-				$vName == 'config'
+				$tName == 'maps'
 		);
 		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_CATS'),
 				'index.php?option=com_jtg&task=cats&controller=cats',
-				$vName == 'config'
+				$tName == 'cats'
 		);
 		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_TERRAIN'),
 				'index.php?option=com_jtg&task=terrain&controller=terrain',
-				$vName == 'config'
+				$tName == 'terrain'
 		);
 		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_COMMENTS'),
 				'index.php?option=com_jtg&task=comments&controller=comments',
-				$vName == 'config'
+				$tName == 'comments'
 		);
 		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_TRANSLATE'),
 				'index.php?option=com_jtg&task=translations&controller=translations',
-				$vName == 'config'
+				$tName == 'translations'
 		);
 		JHtmlSidebar::addEntry(
 				JText::_('COM_JTG_INFO'),
 				'index.php?option=com_jtg&task=info&controller=info',
-				$vName == 'config'
+				$tName == 'info'
 		);
 
 		// Groups and Levels are restricted to core.admin

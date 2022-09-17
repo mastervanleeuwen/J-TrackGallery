@@ -56,7 +56,7 @@ class JtgController extends JControllerLegacy
 		// JtgHelper::updateReset();
 
 		// Load the submenu.
-		JtgHelper::addSubmenu(JFactory::getApplication()->input->get('view', 'jtg'));
+		JtgHelper::addSubmenu($this->getTask());
 
 		$input = Factory::getApplication()->input;
 		switch ($this->getTask())

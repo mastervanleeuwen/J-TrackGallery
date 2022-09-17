@@ -27,24 +27,38 @@ JToolBarHelper::publish();
 JToolBarHelper::unpublish();
 JToolBarHelper::deleteList('COM_JTG_DELETE_IMAGES');
 JToolBarHelper::help('cats', true);
+
 $ordering = ($this->lists['order'] == 'ordering');
+
+if (version_compare(JVERSION,'4.0','lt'))
+{
 ?>
+
+<div id="j-sidebar-container" class="span2">
+<?php echo JHtmlSidebar::render(); ?>
+</div>
+<div id="j-main-container" class="span10">
+
+<?php
+}
+?>
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 
-	<table class="adminlist">
+	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th class="title"><?php echo JText::_('COM_JTG_NUM'); ?></th>
-				<th class="title" nowrap="nowrap"><?php echo JText::_('COM_JTG_ID'); ?></th>
-				<th class="title"><input type="checkbox"
+				<th class="center"><?php echo JText::_('COM_JTG_NUM'); ?></th>
+				<th class="center" nowrap="nowrap"><?php echo JText::_('COM_JTG_ID'); ?></th>
+				<th class="center"><input type="checkbox"
 					onclick="Joomla.checkAll(this)"
 					title="<?php echo JText::_('JGLOBAL_CHECK_ALL');?>" value=""
 					name="checkall-toggle"></th>
-				<th class="title"><?php echo JText::_('COM_JTG_IMAGE'); ?></th>
+				<th class="center"><?php echo JText::_('COM_JTG_IMAGE'); ?></th>
 				<th class="title"><?php echo JText::_('COM_JTG_CAT'); ?></th>
 				<th class="title"><?php echo JText::_('COM_JTG_DESCRIPTION'); ?></th>
-				<th class="title"><?php echo JText::_('COM_JTG_DEFAULT_MAP'); ?></th>
-				<th class="title"><?php echo JText::_('COM_JTG_USEPACE'); ?></th>
+				<th class="center"><?php echo JText::_('COM_JTG_DEFAULT_MAP'); ?></th>
+				<th class="center"><?php echo JText::_('COM_JTG_USEPACE'); ?></th>
 				<?php
 if ( $ordering !== false )
 {
@@ -75,11 +89,11 @@ for ($i = 0; $i < $n; $i++)
 	$published 	= JHtml::_('jgrid.published', $row->published, $i);
 ?>
 			<tr class="<?php echo $k? "row$k row-odd":"row$k row-even"; ?>">
-				<td align="center"><?php echo $this->pagination->getRowOffset($i); ?>
+				<td class="center"><?php echo $this->pagination->getRowOffset($i); ?>
 				</td>
 				<td><?php echo $row->id; ?></td>
-				<td align="center"><?php echo $checked; ?></td>
-				<td align="center">
+				<td class="center"><?php echo $checked; ?></td>
+				<td class="center">
 <?php
 if ((isset($this->catpic[$this->list[$i]->id])) AND ( $this->catpic[$this->list[$i]->id] != "" ))
 {
@@ -87,12 +101,12 @@ if ((isset($this->catpic[$this->list[$i]->id])) AND ( $this->catpic[$this->list[
 }
 ?>
 				</td>
-				<td align="left"><a href="/administrator/index.php?option=com_jtg&amp;controller=cats&amp;task=editcat&amp;cid=<?php echo $row->id; ?>">
+				<td class="break-word"><a href="<?php echo JRoute::_("index.php?option=com_jtg&amp;controller=cats&amp;task=editcat&amp;cid=".$row->id); ?>">
 						<?php echo JText::_($row->treename); ?>
 				</a></td>
-				<td><?php echo JText::_($row->description); ?></td>
-				<td><?php echo $row->default_map? $row->default_map: ''; ?></td>
-				<td><?php echo $row->usepace? JText::_('JYES'): JText::_('JNO'); ?></td>
+				<td class="break-word"><?php echo JText::_($row->description); ?></td>
+				<td class="center"><?php echo $row->default_map? $row->default_map: JText::_('COM_JTG_NONE'); ?></td>
+				<td class="center"><?php echo $row->usepace? JText::_('JYES'): JText::_('JNO'); ?></td>
 	<?php
 	if ( $ordering !== false )
 	{
@@ -123,3 +137,9 @@ if ((isset($this->catpic[$this->list[$i]->id])) AND ( $this->catpic[$this->list[
 	<?php echo JHtml::_('form.token'); ?>
 	&nbsp;
 </form>
+<?php
+if (version_compare(JVERSION,'4.0','lt'))
+{
+	echo "</div>\n";
+}
+?>

@@ -22,9 +22,21 @@ JToolBarHelper::back();
 JToolBarHelper::save('saveconfig', $alt = 'COM_JTG_SAVE', 'save.png');
 JToolBarHelper::preferences('com_jtg', 600, 800, $alt = 'COM_JTG_MENU_DEFAULT_SETTINGS');
 JToolBarHelper::help('config/default', true);
-if (JVERSION < 4.0)
+if (version_compare(JVERSION, '4.0', 'ge'))
+{
+   JHtmlBootstrap::tooltip('.hasTooltip');
+}
+else
 {
 	JHtml::_('behavior.tooltip');
+?>
+
+<div id="j-sidebar-container" class="span2">
+<?php echo JHtmlSidebar::render(); ?>
+</div>
+<div id="j-main-container" class="span10">
+
+<?php
 }
 ?>
 <form action="" method="post" name="adminForm" id="adminForm"
@@ -478,3 +490,4 @@ margin: 1px 0 0 0;
 		type="hidden" name="id" value="1" /> <input type="hidden" name="task"
 		value="" />
 </form>
+</id>

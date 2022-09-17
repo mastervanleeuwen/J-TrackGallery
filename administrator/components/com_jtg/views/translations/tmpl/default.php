@@ -90,13 +90,23 @@ $options = array(
 		'useCookie' => true,
 		);
 
-if (JVERSION >= 3.0)
+if (version_compare(JVERSION,'3.0','ge'))
 {
 	$style = "	select, textarea, input{
 	width: auto !important;}";
 	$document->addStyleDeclaration($style);
 }
+if (version_compare(JVERSION,'4.0','lt'))
+{
+?>
 
+<div id="j-sidebar-container" class="span2">
+<?php echo JHtmlSidebar::render(); ?>
+</div>
+<div id="j-main-container" class="span10">
+
+<?php
+}
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<?php
@@ -129,3 +139,9 @@ if (JVERSION >= 3.0)
 		value="translations" />
 	<?php echo JHtml::_('form.token'); ?>
 </form>
+<?php
+if (version_compare(JVERSION,'4.0','lt'))
+{
+   echo "</div>\n";
+}
+?>

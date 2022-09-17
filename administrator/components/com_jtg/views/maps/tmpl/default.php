@@ -30,7 +30,7 @@ JToolBarHelper::help("maps", true);
 
 jimport('joomla.html.pane');
 
-if (JVERSION >= 3.0)
+if (version_compare(JVERSION,'3.0','ge'))
 {
 	JHtmlBootstrap::tooltip('.hasTooltip');
 }
@@ -42,7 +42,19 @@ else
 $ordering = ($this->lists['order'] == 'ordering' );
 
 $link = JRoute::_('index.php?option=com_jtg&task=maps&controller=maps&layout=default');
+if (version_compare(JVERSION,'4.0','lt'))
+{
 ?>
+
+<div id="j-sidebar-container" class="span2">
+<?php echo JHtmlSidebar::render(); ?>
+</div>
+
+<?php
+}
+?>
+
+<div id="j-main-container" class="span10">
 <form action="<?php echo $link ?>" method="post"
 	name="adminForm" id="adminForm" class="adminForm">
 	<!-- <table>
@@ -60,7 +72,7 @@ $link = JRoute::_('index.php?option=com_jtg&task=maps&controller=maps&layout=def
 		</td>
 	</tr>
 </table>-->
-	<table class="adminlist">
+	<table class="table table-striped adminlist">
 		<thead>
 			<tr>
 				<th class="title" nowrap="nowrap"><?php
@@ -118,9 +130,9 @@ $link = JRoute::_('index.php?option=com_jtg&task=maps&controller=maps&layout=def
 					echo $k? 'row-odd':'row-even';
 					$k = 1 - $k;
 					?>">
-				<td align="center"><?php echo $map->id;									?></td>
-				<td align="center"><?php echo $checked;									?></td>
-				<td align="center"><?php echo $name;	?></td>
+				<td class="center"><?php echo $map->id;									?></td>
+				<td class="center"><?php echo $checked;									?></td>
+				<td class="center"><?php echo $name;	?></td>
 <?php
 if ($ordering)
 {
@@ -135,10 +147,10 @@ if ($ordering)
 <?php
 }
 ?>
-				<td align="center"><?php echo $published; ?></td>
-				<td align="center"><?php echo $map_type; ?></td>
-				<td align="center"><?php echo $map->param; ?></td>
-				<td align="center"><?php echo $map->apikey; ?></td>
+				<td class="center"><?php echo $published; ?></td>
+				<td class="center"><?php echo $map_type; ?></td>
+				<td class="center"><?php echo $map->param; ?></td>
+				<td class="center"><?php echo $map->apikey; ?></td>
 			</tr>
 			<?php
 			}
@@ -165,3 +177,9 @@ if ($ordering)
 	<?php echo JHtml::_('form.token'); ?>
 	&nbsp;
 </form>
+<?php
+if (version_compare(JVERSION,'4.0','lt'))
+{
+	echo "</div>;";
+}
+?>

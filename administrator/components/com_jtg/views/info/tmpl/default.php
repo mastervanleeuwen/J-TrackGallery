@@ -32,7 +32,19 @@ $db->setQuery($query);
 $manifest = json_decode($db->loadResult(), true);
 $version = (string) $manifest['version'];
 
+if (version_compare(JVERSION,'4.0','lt'))
+{
 ?>
+
+<div id="j-sidebar-container" class="span2">
+<?php echo JHtmlSidebar::render(); ?>
+</div>
+<div id="j-main-container" class="span10">
+
+<?php
+}
+?>
+
 <div style="margin: auto">
 	<div style="float: left; margin-left: 30px">
 		<table>
@@ -99,3 +111,4 @@ echo JHtml::_('form.token');
 <input type="hidden" name="task" value="" />
 &nbsp;
 </form>
+</div>
