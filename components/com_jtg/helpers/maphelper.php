@@ -91,7 +91,7 @@ class JtgMapHelper {
 		}
       $geoImgsArrayJS = JtgMapHelper::parseGeotaggedImgs($trackid, $cfg->max_geoim_height, $iconpath, $iconurl, $imageList);
 		if (strlen($geoImgsArrayJS) != 0) {
-			$map .= $geoImgsArrayJS;	
+			$map .= "\t".$geoImgsArrayJS;	
 			$map .= "\n	addGeoPhotos(geoImages);\n";
    	}
 		$map .= $gpsTrack->parseWPs();

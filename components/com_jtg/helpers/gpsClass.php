@@ -366,18 +366,14 @@ class GpsDataClass
 									$this->track[$this->trackCount] = new stdClass;
 									$this->track[$this->trackCount]->coords[] = $coordinates;
 									$this->track[$this->trackCount]->segCount = 1;
+									$this->track[$this->trackCount]->trackname = ($name? $name : $description);
+									$this->track[$this->trackCount]->description = $description;
 									$this->trackCount++;
 								}
 							}
 							break;
 					}
 				}
-			}
-
-			if ($this->trackCount AND $coordinates)
-			{
-				$this->track[$this->trackCount-1]->trackname = ($name? $name : $description);
-				$this->track[$this->trackCount-1]->description = $description;
 			}
 
 			// Use description and name for file description
@@ -581,6 +577,7 @@ private function extractCoordsGPX($xmlcontents)
 
 						$curTrack = new stdClass;
 						$curTrack->description = '';
+						$curTrack->trackname = '';
 						$curTrack->segCount = 0;
 						while ( ('trk' !== $endElement) )
 						{
