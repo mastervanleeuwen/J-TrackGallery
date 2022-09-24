@@ -264,21 +264,8 @@ class JtgViewTrack extends JViewLegacy
 	{
 		// 	$userparams = explode("\n", $this->user->params);
 		$app = Factory::getApplication();
-		$lang = $app->getLanguage();
+		$lang = $app->getLanguage()->getTag();
 		$user = Factory::getUser();
-
-		/*
-		 if ($user->id == 0) // User is public
-		{
-		$config = Factory::getConfig();
-		$lang = $config->getValue('language');
-		}
-		else
-		{
-		$user = Factory::getUser();
-		$lang = $user->getParam('language', 'the default');
-		}
-		*/
 
 		$lang = explode("-", $lang);
 		$userlang = $lang[0];
