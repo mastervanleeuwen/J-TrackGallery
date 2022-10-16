@@ -77,7 +77,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 
 			// Load the plugin language file
 		JFactory::getLanguage()->load('plg_content_jtrackgallery_maps', JPATH_SITE . '/plugins/content/jtrackgallery_maps',	null, true);
-		JFactory::getLanguage()->load('com_jtg', JPATH_SITE . '/components/com_jtg',	null, true);
+		JFactory::getLanguage()->load('com_jtg', JPATH_SITE, null, true);
 
 		// Check for basic requirements
 		$db = JFactory::getDBO ();
@@ -146,6 +146,12 @@ class plgContentJtrackgallery_maps extends JPlugin {
 				{
 					// Generate the html code for the map
 					$map_count += 1;
+					if ($map_count == 1)
+					{
+						$plg_html .= '<div id="popup" class="ol-popup">'.
+							' <a href="#" id="popup-closer" class="ol-popup-closer"></a>'.
+							' <div id="popup-content"></div> </div>'."\n";
+					}
 					if ($map_count < 10)
 					{
 						$plg_html .= $this->rendermap($plgParams, $plg_call_params, $map_count);
