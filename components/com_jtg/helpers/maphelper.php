@@ -76,6 +76,14 @@ class JtgMapHelper {
 			$trkArrJS[] = "{name : '".htmlentities(trim($gpsTrack->track[$itrk]->trackname),ENT_QUOTES)."', ".
 				"coords : [ ".implode(",\n",$segCoordsArrJS)." ]}";
 		}
+		if ($gpsTrack->trackCount == 0) {
+			for ($irte = 0; $irte < $gpsTrack->routeCount; $irte++) {
+				$segCoordsArrJS = array();
+				$segCoordsArrJS[] = '[ '.implode(', ',array_map(function($coord) { return "[ $coord[0], $coord[1] ]"; }, $gpsTrack->route[$irte]->coords)).' ]';
+				$trkArrJS[] = "{name : '".htmlentities(trim($gpsTrack->route[$irte]->trackname),ENT_QUOTES)."', ".
+					"coords : [ ".implode(",\n",$segCoordsArrJS)." ]}";
+			}
+		}
 		$map .= "	trackData = [".implode(",\n",$trkArrJS)."];\n";
 		$map .= "	drawTrack(trackData, ".$trackDrawOptions.");\n";
 
