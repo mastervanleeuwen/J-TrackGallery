@@ -38,7 +38,7 @@ JToolBarHelper::help('files/import', true);
 $document = JFactory::getDocument();
 $style = "   .row00 {background-color: #FFFF99;}\n";
 
-if (JVERSION >= 3.0)
+if (version_compare(JVERSION, '3.0', 'ge'))
 {
 	$style .= "	select, textarea, input{
 	width: auto !important;\n}";
@@ -146,7 +146,7 @@ $document->addStyleDeclaration($style);
 					'catid_' . $count . '[]',
 					'multiple="multiple" size="' . $catssize . '"',
 					'id', 'treename' );
-			if (JVERSION >= 4.0)
+			if (version_compare(JVERSION, '4.0', 'ge'))
 			{
 				$editor = Factory::getApplication()->get('editor');
 			}
