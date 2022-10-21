@@ -522,7 +522,6 @@ class GpsDataClass
 			{
 				// Start element found
 				$currentElement = $xmlcontents->localName;
-				$endElement = '';
 				$countElements++;
 
 				switch ($currentElement)
@@ -591,18 +590,15 @@ class GpsDataClass
 						$curTrack->description = '';
 						$curTrack->trackname = '';
 						$curTrack->segCount = 0;
-						while ( ('trk' !== $endElement) )
+						$readok = true;
+						$endTrkElement = false;
+						while ( $readok && !$endTrkElement )
 						{
 							$xmlcontents->read();
 
-							if ($xmlcontents->nodeType == XMLReader::END_ELEMENT)
+							if ($xmlcontents->nodeType == XMLReader::END_ELEMENT && $xmlcontents->localName == 'trk')
 							{
-								// </xxx> found
-								$endElement = $xmlcontents->localName;
-							}
-							else
-							{
-								$endElement = '';
+								$endTrkElement = true;
 							}
 							// Extract trk data
 							if ( ($xmlcontents->name == 'name') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
@@ -616,7 +612,7 @@ class GpsDataClass
 							elseif ( ($xmlcontents->name == 'trkseg') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
 							{
 								// Trkseg found
-								$endTrksegElement = false;
+								$endTrksegElement = $xmlcontents->isEmptyElement;
 								$coords = array();
 								$tracksegname = '';
 								$i_trkpt = 0;
@@ -707,19 +703,16 @@ class GpsDataClass
 						$time = '0';
 
 						$readok = true;
-						while ( $readok && ('rte' !== $endElement) )
+						$endRtElement = false;
+						while ( $readok && !$endRtElement )
 						{
 							$readok = $xmlcontents->read();
 
-							if ($xmlcontents->nodeType == XMLReader::END_ELEMENT)
+							if ($xmlcontents->nodeType == XMLReader::END_ELEMENT && $xmlcontents->localName == 'rte')
 							{
-								// </xxx> found
-								$endElement = $xmlcontents->localName;
+								$endRtElement = true;
 							}
-							else
-							{
-								$endElement = '';
-							}
+
 							// Extract rte data
 							if ( ($xmlcontents->name == 'name') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
 							{
