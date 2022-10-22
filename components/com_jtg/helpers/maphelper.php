@@ -29,6 +29,28 @@ use Joomla\CMS\Uri\Uri;
 class JtgMapHelper {
 	
 	/**
+	 * generate JavaScript initialisation part for maps 
+	 *     (common for overview and track map) 
+	 * @param  $targetid  string name of html div in which the map is displayed
+	 *
+	 * @return string with JavaSript to set up map
+	 */
+	static public function parseMapInitJS($targetid='jtg_map') {
+		$mapUnits = 'metric';
+		$cfg = JtgHelper::getConfig();
+		if ($cfg->unit == 'miles') $mapUnits = 'imperial';
+		$map = "\n<script type=\"text/javascript\">\n".
+				"	jtgBaseUrl = \"".Uri::root()."\";\n".
+   			"	jtgTemplateUrl = \"".Uri::root()."components/com_jtg/assets/template/".$cfg->template."\";\n".
+				"	jtgMapInit('".JText::_("COM_JTG_MAP_LAYERS")."','".$targetid."');\n";
+		$params = JComponentHelper::getParams('com_jtg');
+		if ($params->get('jtg_param_show_scale')) $map .= "	jtgMap.addControl(new ol.control.ScaleLine({units: '$mapUnits'}));\n";
+		if ($params->get('jtg_param_show_mouselocation')) $map .= "	jtgMap.addControl(new ol.control.MousePosition( {coordinateFormat: ol.coordinate.createStringXY(4), projection: 'EPSG:4326' } ));\n";
+		if ($params->get('jtg_param_show_panzoombar')) $map .= "	jtgMap.addControl(new ol.control.ZoomSlider());\n";
+		return $map;
+	}
+
+	/**
 	 * generate JavaScript for a map with this gps track
 	 *
 	 * @param   gpsClass $gpsTrack  parsed GPS file
@@ -43,6 +65,9 @@ class JtgMapHelper {
 		$cfg = JtgHelper::getConfig();
 		$iconurl = JUri::root() . "components/com_jtg/assets/template/" . $cfg->template . "/images/";
 		$iconpath = JPATH_SITE . "/components/com_jtg/assets/template/" . $cfg->template . "/images/";
+
+		$map = JtgMapHelper::parseMapInitJS($targetid);
+		$map .= JtgMapHelper::parseMapLayersJS($mapid,$layerSwitcher);
 		
 		if (JComponentHelper::getParams('com_jtg')->get('jtg_param_add_startmarker')) 
 		{
@@ -62,11 +87,8 @@ class JtgMapHelper {
 			$trackDrawOptions = $trackDrawOptions.', true'; 
 		}
 
-		$map = "\n<script type=\"text/javascript\">\n".
-				"	jtgBaseUrl = \"".Uri::root()."\";\n".
-   			"	jtgTemplateUrl = \"".Uri::root()."components/com_jtg/assets/template/".$cfg->template."\";\n".
-				"	jtgMapInit('".JText::_("COM_JTG_MAP_LAYERS")."','".$targetid."');\n";
-		$map .= JtgMapHelper::parseMapLayersJS($mapid,$layerSwitcher);
+      $geoImgsArrayJS = JtgMapHelper::parseGeotaggedImgs($trackid, $cfg->max_geoim_height, $iconpath, $iconurl, $imageList);
+
 		$trkArrJS = array();
 		for ($itrk = 0; $itrk < $gpsTrack->trackCount; $itrk++) {
 			$segCoordsArrJS = array();
@@ -97,7 +119,7 @@ class JtgMapHelper {
 			JFactory::getDocument()->addScript(Uri::root().'media/com_jtg/js/ol-layerswitcher/ol-layerswitcher.js');
    		$map .= "	jtgMap.addControl(new ol.control.LayerSwitcher());\n";
 		}
-      $geoImgsArrayJS = JtgMapHelper::parseGeotaggedImgs($trackid, $cfg->max_geoim_height, $iconpath, $iconurl, $imageList);
+
 		if (strlen($geoImgsArrayJS) != 0) {
 			$map .= "\t".$geoImgsArrayJS;	
 			$map .= "\n	addGeoPhotos(geoImages);\n";
@@ -175,11 +197,7 @@ class JtgMapHelper {
 		$cfg = JtgHelper::getConfig();
 
 		// Need to set up map here
-		$map = "\n<script type=\"text/javascript\">\n".
-            "  jtgBaseUrl = \"".Uri::root()."\";\n".
-            "  jtgTemplateUrl = \"".Uri::root()."components/com_jtg/assets/template/".$cfg->template."\";\n".
-            "  jtgMapZoomLevel = $zoomlevel;\n".
-				"	jtgMapInit();\n";
+		$map = JtgMapHelper::parseMapInitJS();
 		$map .= JtgMapHelper::parseMapLayersJS();
 
 		if ($showtracks)

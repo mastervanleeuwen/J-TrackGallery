@@ -1090,16 +1090,6 @@ class GpsDataClass
 		$this->totalDescent = 0;
 		$d = 0;
 		$this->allDistances[0] = 0;
-		/*
-		 if ( strtolower($this->unit) == "kilometer" )
-		 {
-		$earthRadius = 6378.137;
-		}
-		else
-		{
-		$earthRadius = 6378.137/1.609344;
-		}
-		*/
 		$earthRadius = 6378.137;
 
 		for ($t = 0; $t < $this->trackCount; $t++)

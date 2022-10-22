@@ -14,10 +14,7 @@ function jtgMapInit(mapLayersTitle='Map layers', targetid='jtg_map') {
 
 	jtgMap = new ol.Map ( { target: targetid,
 		controls:[
-			new ol.control.MousePosition( {coordinateFormat: ol.coordinate.createStringXY(4), projection: 'EPSG:4326' }),
-			new ol.control.ZoomSlider(),
-			new ol.control.Attribution(), 
-			new ol.control.ScaleLine() 
+			new ol.control.Attribution() 
 		],
 		view: jtgView } );
 	var fullscreenToolbar = new ol.control.FullScreen();

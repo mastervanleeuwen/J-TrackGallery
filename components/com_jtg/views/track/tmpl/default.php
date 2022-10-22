@@ -571,7 +571,7 @@ if ( ($this->track->distance != "") AND ((float) $this->track->distance != 0) )
 ?>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_DISTANCE'); ?>:</td>
-				<td><?php echo JtgHelper::getFormattedDistance($this->track->distance, $this->cfg->unit); ?></td>
+				<td><?php echo JtgHelper::getFormattedDistance($this->track->distance, '', $this->cfg->unit); ?></td>
 			</tr>
 <?php
 }
