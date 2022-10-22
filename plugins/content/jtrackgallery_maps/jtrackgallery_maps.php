@@ -156,7 +156,9 @@ class plgContentJtrackgallery_maps extends JPlugin {
 					{
 						$plg_html .= $this->rendermap($plgParams, $plg_call_params, $map_count);
 						if (isset($plg_call_params['show_link']) && $plg_call_params['show_link']) { 
-						   $plg_html .= '<div class="jtg-gpx-link"><a href='.JRoute::_('index.php?option=com_jtg&view=track&id='.$plg_call_params['id']).'>GPX track</a></div>';
+							$target = '';
+							if ($plg_call_params['show_link'] == 2) $target = ' target="_blank"';
+						   $plg_html .= '<div class="jtg-gpx-link"><a href="'.JRoute::_('index.php?option=com_jtg&view=track&id='.$plg_call_params['id']).'"'.$target.'>GPX track</a></div>';
 						}
 					}
 					else
