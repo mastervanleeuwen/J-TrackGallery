@@ -78,6 +78,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 			// Load the plugin language file
 		JFactory::getLanguage()->load('plg_content_jtrackgallery_maps', JPATH_SITE . '/plugins/content/jtrackgallery_maps',	null, true);
 		JFactory::getLanguage()->load('com_jtg', JPATH_SITE, null, true);
+		JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE, null, true);
 
 		// Check for basic requirements
 		$db = JFactory::getDBO ();
@@ -264,6 +265,12 @@ img.olTileImage {
 		// TODO: add images
 		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages, false, true, false, 'jtg_map_'.$imap);
 		$map .= ("\n</div>");
+		if (isset($plg_call_params['show_graph']) && $plg_call_params['show_graph'] != '0')
+		{
+			$usepace = false;
+			JtgMapHelper::parseGraphJS($gpsData, $cfg, $params, $usepace);
+			$map .= '<div class="profile-img" id="elevation" style="width: 100%-20px; height: '.$cfg->charts_height.'"></div>'."\n";
+		}
 	}
 
 	return $map;

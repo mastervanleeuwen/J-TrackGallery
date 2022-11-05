@@ -212,12 +212,13 @@ class JtgViewTrack extends JViewLegacy
 				$mapids = [$this->track->default_map];
 				$this->mapJS = JtgMapHelper::parseTrackMapJS($gpsData,$this->track->id, $this->track->default_map, $this->imageList, $makepreview, true, JComponentHelper::getParams('com_jtg')->get('jtg_param_show_layerswitcher'),'jtg_map');
 
+				$this->gpsTrack = $gpsData;
 				$this->coords = $gpsData->allCoords;
 				$this->longitudeData = $gpsData->longitudeData;
 				$this->latitudeData = $gpsData->latitudeData;
 				// Charts
 				$this->beatdata = $gpsData->beatData;
-				$this->heighdata = $gpsData->elevationData;
+				$this->heightdata = $gpsData->elevationData;
 				$this->speeddata = $gpsData->speedData;
 				$this->pacedata = $gpsData->paceData;
 				$this->date = $this->track->date?JHtml::_('date', $this->track->date, JText::_('COM_JTG_DATE_FORMAT_LC4')):'';

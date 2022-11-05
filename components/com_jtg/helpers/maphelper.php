@@ -1,4 +1,4 @@
-<?php
+/<?php
 /**
  * @component  J!Track Gallery (jtg) for Joomla! 2.5 and 3.x
  *
@@ -406,6 +406,144 @@ class JtgMapHelper {
 		return $imgJSarr;
 	}
 
+	static public function parseGraphAxisJS($label, $units, $linecolor, $opposite) 
+	{
+		$axisJS = <<<EOS
+	{ 
+		labels: {
+			formatter: function() {
+               return this.value + ' $units';
+			},
+			style: {
+				color: '$linecolor'
+			}
+		},
+		title: {
+			text: '$label ($units)',
+				style: {
+					color: '$linecolor'
+				}
+		},
+		opposite: $opposite
+	}
+EOS;
+
+		return $axisJS;
+	}
+
+	static public function parseGraphSeriesJS($seriesData, $label, $units, $linecolor, $iaxis, $hide = false) 
+	{
+		$visible = 'true';
+		if ($hide) $visible = 'false';
+		$seriesJS = <<<EOS
+	{
+		name: '$label',
+		unit: '$units',
+		color: '$linecolor',
+		yAxis: $iaxis,
+		data: $seriesData,
+		visible: $visible,
+		marker: {
+			enabled: false
+		},
+		tooltip: {
+			valueSuffix: ' $units'
+		}
+	}
+EOS;
+		return $seriesJS;
+	}
+
+	static public function parseGraphJS($gpsTrack, $cfg, $params, $usepace) {
+		$defaultlinecolor = "#000000";
+		$bgColor = $cfg->charts_bg? '#' . $cfg->charts_bg :"#ffffff";
+
+		$axesJS = Array();
+		$seriesJS = Array();
+
+		$axisnumber = 0;
+
+		if ( $params->get("jtg_param_show_heightchart") AND $gpsTrack->elevationDataExists)
+		{
+			$charts_linec = $cfg->charts_linec? '#' . $cfg->charts_linec: $defaultlinecolor;
+			$axesJS[] = JtgMapHelper::parseGraphAxisJS(JText::_('COM_JTG_ELEVATION'), JText::_('COM_JTG_ELEVATION_UNIT'), $charts_linec,'false');
+			$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->elevationData, JText::_('COM_JTG_ELEVATION'), JText::_('COM_JTG_ELEVATION_UNIT'), $charts_linec, $axisnumber);
+			$axisnumber ++;
+		}
+
+		if ( $params->get("jtg_param_show_speedchart") AND $gpsTrack->speedDataExists )
+		{
+			$speedcharthide = 0;
+			if ($usepace)
+			{
+				// Pace is on same axis but speed must be hidden
+				$pacechartopposite = (($axisnumber % 2) == 1) ? 'true' : 'false';
+				$paceunittxt = JText::_('COM_JTG_PACE_UNIT_' . strtoupper($cfg->unit));
+				$charts_linec_pace = $cfg->charts_linec_pace? '#' . $cfg->charts_linec_pace: $defaultlinecolor;
+				$axesJS[] = JtgMapHelper::parseGraphAxisJS(JText::_('COM_JTG_PACE'), $paceunittxt, $charts_linec_pace, $pacechartopposite);
+				$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->paceData, JText::_('COM_JTG_PACE'), $paceunittxt, $charts_linec_pace, $axisnumber);
+				$axisnumber ++;
+				$speedcharthide = 1;
+			}
+
+			$speedunittxt = JText::_('COM_JTG_SPEED_UNIT_' . strtoupper($cfg->unit));
+			$speedchartopposite = (($axisnumber % 2) == 1) ? 'true' : 'false';
+			$charts_linec_speed = $cfg->charts_linec_speed? '#' . $cfg->charts_linec_speed: $defaultlinecolor;
+			$axesJS[] = JtgMapHelper::parseGraphAxisJS(JText::_('COM_JTG_SPEED'), $speedunittxt, $charts_linec_speed, $speedchartopposite);
+			$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->speedData, JText::_('COM_JTG_SPEED'), $speedunittxt, $charts_linec_speed, $axisnumber, $speedcharthide);
+			$axisnumber ++;
+		}
+
+		if ($params->get("jtg_param_show_speedchart") AND $gpsTrack->beatDataExists )
+		{
+			// Beatchart is on left (first) axis or on right axis when there is a heighchart or a speed chart
+			$beatchartaxis = $axisnumber + 1;
+			$beatchartopposite = (($axisnumber % 2) == 1) ? 'true' : 'false';
+			$charts_linec_heartbeat = $cfg->charts_linec_heartbeat? '#' . $cfg->charts_linec_heartbeat: $defaultlinecolor;
+			$axesJS[] = JtgMapHelper::parseGraphAxisJS(JText::_('COM_JTG_HEARTFREQU'), JText::_('COM_JTG_HEARTFREQU_UNIT'), $charts_linec_heartbeat, $beartchartopposite);
+			$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->beatData, JText::_('COM_JTG_HEARTFREQU'), JText::_('COM_JTG_FREQU_UNIT'), $charts_linec_heartbeat, $axisnumber);
+			$axisnumber ++;
+		}
+
+		if ($axisnumber)
+		{
+			// Code support for joomla version greater than 3.0
+			if (version_compare(JVERSION,'3.0','ge'))
+			{
+				JHtml::_('jquery.framework');
+			}
+			else
+			{
+				JHtml::script('jquery.js', 'components/com_jtg/assets/js/', false);
+			}
+			$clicktohide = "";
+			if ($axisnumber > 1) $clicktohide = JText::_('COM_JTG_CLICK_TO_HIDE'); 
+			echo '<script type="text/javascript">'."\n";
+			echo "	jtgAxes = [ ".implode(',',$axesJS)." ];\n";
+			echo "	jtgSeries = [ ".implode(',',$seriesJS)." ];\n";
+			echo "</script>\n";
+?>
+
+<!-- begin Graphs -->
+
+<script type="text/javascript">
+	jQuery.noConflict();
+</script>
+<?php
+   		JFactory::getDocument()->addScript("///code.highcharts.com/highcharts.js");
+   		$autocenter = (bool) $params->get("jtg_param_use_map_autocentering", true) ? 'true':'false';
+   		if (! (bool) $params->get("jtg_param_disable_map_animated_cursor", false)) $animatedCursor = 'true'; else $animatedcursor='false';
+?>
+<script type="text/javascript">
+	makeGraph(jtgAxes, jtgSeries, '<?php echo JText::_('COM_JTG_DISTANCE'); ?>', '<?php echo JText::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($cfg->unit)); ?>', '<?php echo $clicktohide; ?>', '<?php echo $bgColor; ?>',
+	<?php echo $autocenter; ?>, <?php echo $animatedCursor; ?>); 
+</script>
+
+<?php
+		}
+		return $axisnumber;
+	}
+	
 	/**
 	 * Parse DPCalendar location for marker drawing
 	 *

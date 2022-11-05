@@ -478,8 +478,103 @@ function makePreview(width, height, origSize, origResolution) {
 	jtgMap.getView().setResolution(origResolution);
 }
 
+function makeGraph(axes, series, distanceLabel, distanceUnits, clickLabel, bgColor='#FFFFFF', autocenter=false, animatedCursor=true) {
+	// TODO: make animated cursor switchable
+	(function($){ // encapsulate jQuery
+		$(function () {
+			$('#elevation').highcharts({
+			chart: {
+				type: 'line',
+				zoomType: 'xy',
+				backgroundColor: bgColor
+			},
+			credits: {
+				enabled: 'false'
+			},
+			plotOptions: {
+				area: {
+					stacking: 'normal',
+					lineColor: '#FFFFFF',
+					lineWidth: 1,
+					marker: {
+						lineWidth: 1,
+						lineColor: '#FFFFFF'
+					}
+				},
+				series: {
+					fillOpacity: 0.1
+				}
+			},
+			title: { text: null },
+			xAxis: [{
+				labels: {
+					formatter: function() {
+						return this.value + ' ' + distanceUnits;
+					}
+				},
+				tooltip: {
+					valueDecimals: 2,
+					valueSuffix: distanceUnits
+				}
+			}],
+			yAxis: jtgAxes,
+			plotOptions: {
+				series: {
+					point: {
+						events: {
+							mouseOver: function () {
+								if (animatedCursor) {
+									var index = this.series.processedXData.indexOf(this.x);
+									hover_profil_graph(allpoints[index], index, autocenter);
+								}
+							}
+						}
+					},
+					events: {
+						mouseOut: function () {
+							if (animatedCursor) {
+								out_profil_graph();
+							}
+						}
+					}
+				}
+			},
+			tooltip: {
+				valueDecimals: 2,
+				formatter: function() {
+					var s = distanceLabel+' : '
+						+ this.x + ' '
+						+ distanceUnits;
+					$.each(this.points, function(i, point) {
+						s += '<br/>'+ point.series.name +': '+
+						point.y + ' ' + point.series.options.unit;
+					});
+					return s;
+				},
+				shared: true
+			},
+			legend: {
+				layout: 'vertical',
+				align: 'left',
+				x: 120,
+				verticalAlign: 'top',
+				y: 0,
+				floating: true,
+				labelFormatter: function() {
+					if (clickLabel.length) 
+						return this.name + ' (' + clickLabel + ')';
+					else
+						return this.name;
+				}
+			},
+			series: jtgSeries
+		});
+	});
+	})(jQuery);
+}
+
 /*
- *   Some definitions that used by the for the IGN geoportail maps from
+ *   Function needed for the IGN geoportail maps from
  *        the French national geographic institute
  *   Taken from the example code: https://openlayers.org/en/latest/examples/wmts-ign.html
  *
