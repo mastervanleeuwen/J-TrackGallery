@@ -385,7 +385,7 @@ function addPopup(olmap) {
     /**
      * Create an overlay to anchor the popup to the map.
      */
-    var overlay = new ol.Overlay({
+    overlay = new ol.Overlay({
         element: container,
         position: undefined,
         autoPan: true,
@@ -406,39 +406,34 @@ function addPopup(olmap) {
     };
 
     olmap.addOverlay(overlay);
-    
-    function popupInfo(event) {
-       var point = 0;
-       var pixel = olmap.getEventPixel(event.originalEvent);
-       olmap.forEachFeatureAtPixel(pixel, function(feature) {
-            if (feature.getGeometry().getType() == 'Point') { 
-               point = feature;
-            }
-       });
-       if (point) {
-          // Set content of popup
-          var content = document.getElementById('popup-content');
-          content.innerHTML = point.get('name');
-          // show image if available?
-          // and position
-          var coordinate = event.coordinate;
-          overlay.setPosition(coordinate);
-          popupActive = true;
-       }
-       else {
-          overlay.setPosition(undefined);
-          popupActive = false;
-       }
-    }
  
     /**
      * Add a click handler to the map to render the popup.
      * MvL: change this to add handler to points
      */
     olmap.on('singleclick', function(evt) {
-        var pixel = olmap.getEventPixel(evt.originalEvent);
-        popupInfo(evt);
-    });
+		var point = 0;
+		olmap = evt.map;
+		pixel = olmap.getEventPixel(evt.originalEvent);
+		olmap.forEachFeatureAtPixel(evt.pixel, function(feature) {
+			if (feature.getGeometry().getType() == 'Point') { 
+				point = feature;
+			}
+		});
+		if (point) {
+			overlay.setPosition(undefined);
+			overlay.setMap(evt.map);
+			overlay.setPosition(evt.coordinate);
+			// Set content of popup
+			var content = document.getElementById('popup-content');
+			content.innerHTML = point.get('name');
+			popupActive = true;
+		}
+		else {
+			overlay.setPosition(undefined);
+			popupActive = false;
+		}
+	});
 }
 
 function makePreview(width, height, origSize, origResolution) {
