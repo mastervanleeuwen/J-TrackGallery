@@ -505,6 +505,7 @@ EOS;
 			$axisnumber ++;
 		}
 
+		$graphJS = "";
 		if ($axisnumber)
 		{
 			// Code support for joomla version greater than 3.0
@@ -518,30 +519,26 @@ EOS;
 			}
 			$clicktohide = "";
 			if ($axisnumber > 1) $clicktohide = JText::_('COM_JTG_CLICK_TO_HIDE'); 
-			echo '<script type="text/javascript">'."\n";
-			echo "	jtgAxes = [ ".implode(',',$axesJS)." ];\n";
-			echo "	jtgSeries = [ ".implode(',',$seriesJS)." ];\n";
-			echo "</script>\n";
-?>
+			$graphJS ='<script type="text/javascript">'."\n".
+				"	jtgAxes = [ ".implode(',',$axesJS)." ];\n".
+				"	jtgSeries = [ ".implode(',',$seriesJS)." ];\n".
+				"</script>\n";
+			$graphJS .= <<<EOG
 
 <!-- begin Graphs -->
 
 <script type="text/javascript">
 	jQuery.noConflict();
 </script>
-<?php
-   		JFactory::getDocument()->addScript("///code.highcharts.com/highcharts.js");
-   		$autocenter = (bool) $params->get("jtg_param_use_map_autocentering", true) ? 'true':'false';
-   		if (! (bool) $params->get("jtg_param_disable_map_animated_cursor", false)) $animatedCursor = 'true'; else $animatedcursor='false';
-?>
-<script type="text/javascript">
-	makeGraph(jtgAxes, jtgSeries, '<?php echo JText::_('COM_JTG_DISTANCE'); ?>', '<?php echo JText::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($cfg->unit)); ?>', '<?php echo $clicktohide; ?>', '<?php echo $bgColor; ?>',
-	<?php echo $autocenter; ?>, <?php echo $animatedCursor; ?>); 
-</script>
-
-<?php
+EOG;
+			JFactory::getDocument()->addScript("///code.highcharts.com/highcharts.js");
+			$autocenter = (bool) $params->get("jtg_param_use_map_autocentering", true) ? 'true':'false';
+			if (! (bool) $params->get("jtg_param_disable_map_animated_cursor", false)) $animatedCursor = 'true'; else $animatedcursor='false';
+			$graphJS .= '<script type="text/javascript">'."\n".
+				"makeGraph(jtgAxes, jtgSeries, '".JText::_('COM_JTG_DISTANCE')."', '".JText::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($cfg->unit))."', '".$clicktohide."', '".$bgColor."', ".$autocenter.', '.$animatedCursor.", animatedCursorLayer, animatedCursorIcon, allpoints); \n".
+				"</script>\n";
 		}
-		return $axisnumber;
+		return $graphJS;
 	}
 	
 	/**

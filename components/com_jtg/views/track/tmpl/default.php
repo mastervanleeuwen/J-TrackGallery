@@ -147,23 +147,24 @@ img.olTileImage {
 }
 
 </style>
-<center><div id="jtg_map" class="olMap"></div><br /></center>
+<center><div id="jtg_map" class="olMap"></div></center>
 	<div id="popup" class="ol-popup">
    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
    <div id="popup-content"></div>
 </div>
 <?php
-	// TODO: set $usepace
+	echo $this->mapJS;
 	$sortedcats = JtgModeljtg::getCatsData(true);
 	$usepace = $this->track->catid? $sortedcats[$this->track->catid]->usepace: 0;
-	if (JtgMapHelper::parseGraphJS($this->gpsTrack, $this->cfg, $this->params, $usepace))
+	$graphJS = JtgMapHelper::parseGraphJS($this->gpsTrack, $this->cfg, $this->params, $usepace);
+	if (!empty($graphJS))
 	{
 	?>
-    <div id="profile" style="width:<?php echo $this->cfg->charts_width; ?>;" >
-	<div class="profile-img" id="elevation" style="width:<?php echo $this->cfg->charts_width; ?>
-		; height: <?php echo $this->cfg->charts_height; ?>;"></div>
-	</div>
+<div id="profile" style="width: <?php echo $this->cfg->charts_width; ?>;" >
+	<div class="profile-img" id="elevation" style="width: 100%; height: <?php echo $this->cfg->charts_height; ?>;"></div>
+</div>
 	<?php
+		echo $graphJS;
 	}
 
 	if ($gps_info){
@@ -706,7 +707,6 @@ else
 	echo '<p class="error">' . $maySeeSingleFile . '</p>';
 }
 
-echo $this->mapJS;
 echo $this->footer;
 
 ?>

@@ -191,6 +191,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		require_once JPATH_SITE . '/components/com_jtg/helpers/maphelper.php';
 		$cfg = JtgHelper::getConfig();
 		$tmpl = strlen($cfg->template) ? $cfg->template : 'default';
+		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_style.css');
 		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 		$map = "";
 
@@ -200,8 +201,6 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		// Com_jtg_additional language files are in /images/jtrackgallery/language folder
 		JFactory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',	null, true);
 
-
-		// Edit file
 		$params = JComponentHelper::getParams('com_jtg');
 
 		require_once JPATH_SITE . '/components/com_jtg/models/track.php';
@@ -253,23 +252,27 @@ class plgContentJtrackgallery_maps extends JPlugin {
 	z-index: 10000;
 }
 /* Fix Bootstrap-Openlayers issue */
-.olMap img { max-width: none !important;
-}
+.olMap img { max-width: none !important; }
 
 img.olTileImage {
 	max-width: none !important;
 }
 </style>';
 
-		$map .= ("\n<div id=\"jtg_map_${imap}\"  align=\"center\" class=\"olMap\" >");
-		// TODO: add images
+		$map .= "\n<center>\n<div id=\"jtg_map_${imap}\"  align=\"center\" class=\"olMap\" >";
+		$map .= "\n</div>\n</center>\n";
 		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages, false, true, false, 'jtg_map_'.$imap);
-		$map .= ("\n</div>");
 		if (isset($plg_call_params['show_graph']) && $plg_call_params['show_graph'] != '0')
 		{
 			$usepace = false;
-			JtgMapHelper::parseGraphJS($gpsData, $cfg, $params, $usepace);
-			$map .= '<div class="profile-img" id="elevation" style="width: 100%-20px; height: '.$cfg->charts_height.'"></div>'."\n";
+			$graphJS = JtgMapHelper::parseGraphJS($gpsData, $cfg, $params, $usepace);
+			if (!empty($graphJS))
+			{
+				$map .= '<div id="profile" style="width: '.$map_width.';" >'."\n".
+					'<div class="profile-img" id="elevation" style="width: 100%; height: '.$cfg->charts_height.'"></div>'."\n".
+					"</div>\n";
+				$map .= $graphJS;
+			}
 		}
 	}
 

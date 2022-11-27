@@ -879,12 +879,13 @@ span label {
 }
 
 #profile {
-	margin: auto;
+	margin: 20px auto 0;
 	background-color: #efeef0;
 	background-image: url(images/profile_bg.png);
 	background-repeat: repeat-y;
 	padding: 8px 8px 8px 8px;
 	border: 1px solid #aaa6a6;
+	box-sizing: border-box;
 }
 
 .comments {

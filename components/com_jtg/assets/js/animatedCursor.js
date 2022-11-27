@@ -2,13 +2,13 @@
 // Animated cursor on track
 // Design and javascript Code inspired from http://www.utagawavtt.com/
 
-function hover_profil_graph(coord, originalIdx, autocenter)
+function hover_profil_graph(animatedCursorLayer, animatedCursorIcon, allpoints, originalIdx, autocenter)
 {
 	// enable moving cursor
 	animatedCursorLayer.setVisible(true); // for opera broken in Firefox
 	//animatedCursorIcon.opacity = 0.7; // for Firefox
         
-	animatedCursorIcon.setCoordinates(ol.proj.fromLonLat(coord, jtgView.getProjection()));
+	animatedCursorIcon.setCoordinates(ol.proj.fromLonLat(allpoints[originalIdx], jtgView.getProjection()));
 	//animatedCursorIcon.redraw();
 
 	// ************************************************

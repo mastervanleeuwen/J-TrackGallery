@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `#__jtg_config` (
 TRUNCATE `#__jtg_config`;
 
 INSERT  IGNORE INTO `#__jtg_config`(`id`, `unit`, `type`, `max_size`, `max_geoim_height`, `max_thumb_height`, `terms`, `terms_id`, `map_height`, `map_width`, `charts_width`, `charts_height`, `charts_linec`, `charts_linec_pace`, `charts_linec_speed`, `charts_linec_heartbeat`, `charts_bg`, `profile`, `template`, `inform_autor`, `captcha`, `ordering`, `comments`, `access`, `approach`, `routingiconset`, `usevote`, `max_images`, `gallery`, `gallery_code`, `showcharts`, `level`, `maxTrkptDisplay`) VALUES
-(1, 'kilometer', 'jpg,jpeg,png,gif', 1500, 400, 210, 0, 0, '500px', '100%', '100%-20px', '180px', '33FF66', 'FFCC33', '66CCFF', 'FF99CC', 'FFFFFF', '0', 'default', 1, 0, 'DESC', 0, 0, 'no', 'real', 1, 10, 'highslide', '{gallery}%folder%{/gallery}', 2, 'COM_JTG_LEVEL_1\r\nCOM_JTG_LEVEL_2\r\nCOM_JTG_LEVEL_3\r\nCOM_JTG_LEVEL_4\r\nCOM_JTG_LEVEL_5', 6000);
+(1, 'kilometer', 'jpg,jpeg,png,gif', 1500, 400, 210, 0, 0, '500px', '100%', '100%', '180px', '33FF66', 'FFCC33', '66CCFF', 'FF99CC', 'FFFFFF', '0', 'default', 1, 0, 'DESC', 0, 0, 'no', 'real', 1, 10, 'highslide', '{gallery}%folder%{/gallery}', 2, 'COM_JTG_LEVEL_1\r\nCOM_JTG_LEVEL_2\r\nCOM_JTG_LEVEL_3\r\nCOM_JTG_LEVEL_4\r\nCOM_JTG_LEVEL_5', 6000);
 
 CREATE TABLE IF NOT EXISTS `#__jtg_files` (
 	`id` int(10) NOT NULL AUTO_INCREMENT,

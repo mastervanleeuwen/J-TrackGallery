@@ -473,7 +473,7 @@ function makePreview(width, height, origSize, origResolution) {
 	jtgMap.getView().setResolution(origResolution);
 }
 
-function makeGraph(axes, series, distanceLabel, distanceUnits, clickLabel, bgColor='#FFFFFF', autocenter=false, animatedCursor=true) {
+function makeGraph(axes, series, distanceLabel, distanceUnits, clickLabel, bgColor='#FFFFFF', autocenter=false, animatedCursor=true, animatedCursorLayer, animatedCursorIcon, allpoints) {
 	// TODO: make animated cursor switchable
 	(function($){ // encapsulate jQuery
 		$(function () {
@@ -512,7 +512,7 @@ function makeGraph(axes, series, distanceLabel, distanceUnits, clickLabel, bgCol
 					valueSuffix: distanceUnits
 				}
 			}],
-			yAxis: jtgAxes,
+			yAxis: axes,
 			plotOptions: {
 				series: {
 					point: {
@@ -520,7 +520,7 @@ function makeGraph(axes, series, distanceLabel, distanceUnits, clickLabel, bgCol
 							mouseOver: function () {
 								if (animatedCursor) {
 									var index = this.series.processedXData.indexOf(this.x);
-									hover_profil_graph(allpoints[index], index, autocenter);
+									hover_profil_graph(animatedCursorLayer, animatedCursorIcon, allpoints, index, autocenter);
 								}
 							}
 						}
@@ -562,7 +562,7 @@ function makeGraph(axes, series, distanceLabel, distanceUnits, clickLabel, bgCol
 						return this.name;
 				}
 			},
-			series: jtgSeries
+			series: series
 		});
 	});
 	})(jQuery);
