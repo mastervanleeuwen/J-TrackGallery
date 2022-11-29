@@ -249,8 +249,6 @@ if (! $this->params->get("jtg_param_disable_terrains"))
 		}
 
 		$terrain = implode(', ', $newterrain);
-		//echo $this->parseTemplate('headline', JText::_('COM_JTG_TERRAIN'), "jtg_param_header_terrain");
-		//echo $this->parseTemplate('description', $terrain);
 		echo "<tr><td>".JText::_('COM_JTG_TERRAIN')."</td><td>".$terrain."</td></tr>";
 	}
 	else
@@ -432,7 +430,7 @@ if ( ($durationbox) AND ($this->track->distance != "") AND ((float) $this->track
 							<div class="block-header">
 							 <?php echo JText::_('COM_JTG_TIMECOUNT'); ?>
 							</div>
-						<?php if ($pacechart)
+						<?php if ($this->gpsTrack->speedDataExists)
 						{ ?>
 								<div class="block-text"> <label class="timecalc" for="pace"> <?php echo JText::_('COM_JTG_AVG_SPEED_FROM_PACE'); ?>
 								</label> <input type="text" name="pace" id="pace" value=""
