@@ -209,6 +209,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		$trackImages = $model->getImages($plg_call_params['id']);
 		$document = JFactory::getDocument();
 		require_once JPATH_SITE . '/components/com_jtg/helpers/gpsClass.php';
+		require_once JPATH_SITE . '/components/com_jtg/models/jtg.php';
 		$document->addScript( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
@@ -273,6 +274,75 @@ img.olTileImage {
 					"</div>\n";
 				$map .= $graphJS;
 			}
+		}
+		if (isset($plg_call_params['show_info']) && $plg_call_params['show_info'] != '0') {
+			$map .= '	<div class="gps-info-cont" style="width: '.$map_width.'";>'."\n".
+				'	<div class="block-header">'.JText::_('COM_JTG_DETAILS')."</div>\n".
+				'	<div class="gps-info"><table class="gps-info-tab">'."\n";
+
+			if ( ($track->distance != "") AND ((float) $track->distance != 0) )
+			{
+				$map .= "	<tr>\n".
+					"		<td>".JText::_('COM_JTG_DISTANCE')."</td>\n".
+					"		<td>".JtgHelper::getFormattedDistance($track->distance, '', $cfg->unit)."</td>\n".
+					"	</tr>\n";
+			}
+
+			if ($track->ele_asc)
+			{
+				$map .= "	<tr>\n".
+					"		<td>".JText::_('COM_JTG_ELEVATION_UP')."</td>\n".
+					"		<td>$track->ele_asc ".JText::_('COM_JTG_UNIT_METER')."</td>\n".
+					"	</tr>\n";
+			}
+
+			if ($track->ele_desc)
+			{
+				$map .= "	<tr>\n".
+					"		<td>".JText::_('COM_JTG_ELEVATION_DOWN')."</td>\n".
+					"		<td>$track->ele_desc ".JText::_('COM_JTG_UNIT_METER')."</td>\n".
+					"	</tr>\n";
+			}
+			$map .= "	</table> </div>\n".
+				'  <div class="gps-info"><table class="gps-info-tab">'."\n";
+			if ( $track->level != "0" )
+			{
+				$map .= "	<tr>\n".
+					"		<td>".JText::_('COM_JTG_LEVEL')."</td>\n".
+					"		<td>".$model->getLevel($track->level)."</td>\n".
+					"	</tr>\n";
+			}
+			$sortedcats = JtgModeljtg::getCatsData(true);
+			$map .= "	<tr>\n".
+				"		<td>".JText::_('COM_JTG_CATS')."</td>\n".
+				'		<td colspan="2">'.
+				JtgHelper::parseMoreCats($sortedcats, $track->catid, "TrackDetails", true).
+				" </td>\n".
+				"	</tr>\n";
+			if (! $this->params->get("jtg_param_disable_terrains"))
+			{
+				// Terrain description is enabled
+				if ($track->terrain)
+				{
+					$terrain = $track->terrain;
+					$terrain = explode(',', $terrain);
+					$newterrain = array();
+
+					foreach ($terrain as $t)
+					{
+						$t = $model->getTerrain(' WHERE id=' . $t);
+
+						if ( ( isset($t[0])) AND ( $t[0]->published == 1 ) )
+						{
+							$newterrain[] = $t[0]->title;
+						}
+					}
+
+					$terrain = implode(', ', $newterrain);
+					$map .= "<tr><td>".JText::_('COM_JTG_TERRAIN')."</td><td>".$terrain."</td></tr>";
+				}
+			}
+			$map .= "</table>\n</div>";
 		}
 	}
 
