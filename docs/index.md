@@ -26,14 +26,14 @@ The main features are:
 - For bug reports etc to this version, use the [github issues page](https://github.com/mastervanleeuwen/J-TrackGallery/issues)
 - The [J!TrackGallery maps plugin](plugin) can be used to show GPS tracks in Joomla articles or other components
 
-### History of J!TrackGallery  
+### Description of the packages
 
-This is a continuation of the J!TrackGallery project that has been developed by Christophe Seguinot who also maintained a home/commmunity page at http://jtrackgallery.net which is no longer available.
-J!TrackGallery may be considered as a fork of [InJooosm](http://injooosm.sourceforge.net/)
-This valuable component is no longer maintained (last version is for Joomla 1.5). At the beginning of this project, I was not able to reach previous author so I decided to rename the component from InJooOSM to J!TrackGallery. 
+J!TrackGallery consists of several pieces, a _Joomla! component_, 2 _modules_ and _plugin_ packages.
 
-It may be note that **InJooosm** was a fork of [joomgpstracks](http://www.joomlaos.de/Joomla_CMS_Downloads/Joomla_Komponenten/JoomGPSTracks.html)
+The main functionality part or base package is a _Joomla! component_ (`com_jtg.zip<`). This is the base package, which the _modules_ and _plugin_ rely on. The J!TrackGallery component provides the interface to upload GPS files and to store information, add a description, etc and to display them.
 
- - Many Thanks to *Michael Pfister* (JoomGPSTracks) and *Christian Knorr* (InJooOSM) for providing this valuable component to the Open source community. 
+The [plugin](plugin) (`plg_jtrackgallery_maps.zip`) provides the possibility to show GPS tracks on a map on other pages, for example in Joomla! articles.
 
-N.B. For those who always use InJooosm 0.5.7, see manual: http://jtrackgallery.net/wiki/install/migrate-from-injoosm
+Two _modules_ (`mod_jtg_stats.zip` and `mod_jtg_latest.zip`) provide functionality to show a list of the most popular and most recent tracks in a fixed location on each page.
+
+

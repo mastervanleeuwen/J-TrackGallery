@@ -9,6 +9,8 @@ nav_order: 10
 
 More detailed release notes can be found on the [Github Release page](https://github.com/mastervanleeuwen/J-TrackGallery/releases)
 
+0.9.34 is the first release that is compatible with Joomla 4 (as well as 3.9.10). [This release](https://github.com/mastervanleeuwen/J-TrackGallery/releases/tag/0.9.34) also contains cosmetic/appearance changes as well as fixes to the parsing of gpx files. Italian and Russian translations added. 
+
 0.9.33c is the [latest pre-release](https://github.com/mastervanleeuwen/J-TrackGallery/releases/tag/0.9.33c) with several minor bugfixes. A new version 0.9.34 will be released when all pending issues are fixed.
 
 0.9.33 (7 Nov 2021) Joomla 4 compatibility plus various technical improvements. The User view shows a summary of the user activity.
@@ -28,3 +30,17 @@ several tweaks to layout and style of pages
 
 0.9.27 version of J!Track Gallery have been pushed in March 2017.  
 Last months commits were mostly related to adding new feature and bug fix.
+
+
+### History of J!TrackGallery  
+
+This is a continuation of the J!TrackGallery project that has been developed by Christophe Seguinot who also maintained a home/commmunity page at http://jtrackgallery.net which is no longer available.
+J!TrackGallery may be considered as a fork of [InJooosm](http://injooosm.sourceforge.net/)
+This valuable component is no longer maintained (last version is for Joomla 1.5). At the beginning of this project, I was not able to reach previous author so I decided to rename the component from InJooOSM to J!TrackGallery. 
+
+It may be noted that **InJooosm** was a fork of [joomgpstracks](http://www.joomlaos.de/Joomla_CMS_Downloads/Joomla_Komponenten/JoomGPSTracks.html)
+
+ - Many Thanks to *Michael Pfister* (JoomGPSTracks) and *Christian Knorr* (InJooOSM) for providing this valuable component to the Open source community. 
+
+N.B. For those who always use InJooosm 0.5.7, see manual: http://jtrackgallery.net/wiki/install/migrate-from-injoosm
+
