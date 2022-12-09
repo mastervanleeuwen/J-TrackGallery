@@ -473,11 +473,11 @@ function makePreview(width, height, origSize, origResolution) {
 	jtgMap.getView().setResolution(origResolution);
 }
 
-function makeGraph(axes, series, distanceLabel, distanceUnits, clickLabel, bgColor='#FFFFFF', autocenter=false, animatedCursor=true, animatedCursorLayer, animatedCursorIcon, allpoints) {
+function makeGraph(elementid, axes, series, distanceLabel, distanceUnits, clickLabel, bgColor='#FFFFFF', autocenter=false, animatedCursor=true, animatedCursorLayer, animatedCursorIcon, allpoints) {
 	// TODO: make animated cursor switchable
 	(function($){ // encapsulate jQuery
 		$(function () {
-			$('#elevation').highcharts({
+			$('#'+elementid).highcharts({
 			chart: {
 				type: 'line',
 				zoomType: 'xy',

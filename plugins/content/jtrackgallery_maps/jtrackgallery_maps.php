@@ -266,11 +266,12 @@ img.olTileImage {
 		if (isset($plg_call_params['show_graph']) && $plg_call_params['show_graph'] != '0')
 		{
 			$usepace = false;
-			$graphJS = JtgMapHelper::parseGraphJS($gpsData, $cfg, $params, $usepace);
+			$graphid = "elevation_".$imap;
+			$graphJS = JtgMapHelper::parseGraphJS($gpsData, $cfg, $params, $usepace,$graphid);
 			if (!empty($graphJS))
 			{
 				$map .= '<div id="profile" style="width: '.$map_width.';" >'."\n".
-					'<div class="profile-img" id="elevation" style="width: 100%; height: '.$cfg->charts_height.'"></div>'."\n".
+					'<div class="profile-img" id="'.$graphid.'" style="width: 100%; height: '.$cfg->charts_height.'"></div>'."\n".
 					"</div>\n";
 				$map .= $graphJS;
 			}

@@ -454,7 +454,7 @@ EOS;
 		return $seriesJS;
 	}
 
-	static public function parseGraphJS($gpsTrack, $cfg, $params, $usepace) {
+	static public function parseGraphJS($gpsTrack, $cfg, $params, $usepace, $elementid='elevation') {
 		$defaultlinecolor = "#000000";
 		$bgColor = $cfg->charts_bg? '#' . $cfg->charts_bg :"#ffffff";
 
@@ -533,9 +533,9 @@ EOS;
 EOG;
 			JFactory::getDocument()->addScript("///code.highcharts.com/highcharts.js");
 			$autocenter = (bool) $params->get("jtg_param_use_map_autocentering", true) ? 'true':'false';
-			if (! (bool) $params->get("jtg_param_disable_map_animated_cursor", false)) $animatedCursor = 'true'; else $animatedcursor='false';
+			if (! (bool) $params->get("jtg_param_disable_map_animated_cursor", false)) $animatedCursor = 'true, animatedCursorLayer, animatedCursorIcon, allpoints'; else $animatedCursor='false';
 			$graphJS .= '<script type="text/javascript">'."\n".
-				"makeGraph(jtgAxes, jtgSeries, '".JText::_('COM_JTG_DISTANCE')."', '".JText::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($cfg->unit))."', '".$clicktohide."', '".$bgColor."', ".$autocenter.', '.$animatedCursor.", animatedCursorLayer, animatedCursorIcon, allpoints); \n".
+				"makeGraph('$elementid',jtgAxes, jtgSeries, '".JText::_('COM_JTG_DISTANCE')."', '".JText::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($cfg->unit))."', '$clicktohide', '$bgColor', '$autocenter', $animatedCursor); \n".
 				"</script>\n";
 		}
 		return $graphJS;
