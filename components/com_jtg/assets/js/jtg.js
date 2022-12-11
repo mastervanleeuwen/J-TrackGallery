@@ -475,9 +475,8 @@ function makePreview(width, height, origSize, origResolution) {
 
 function makeGraph(elementid, axes, series, distanceLabel, distanceUnits, clickLabel, bgColor='#FFFFFF', autocenter=false, animatedCursor=true, animatedCursorLayer, animatedCursorIcon, allpoints) {
 	// TODO: make animated cursor switchable
-	(function($){ // encapsulate jQuery
-		$(function () {
-			$('#'+elementid).highcharts({
+	document.addEventListener('DOMContentLoaded', function () {
+		const chart = Highcharts.chart(elementid, {
 			chart: {
 				type: 'line',
 				zoomType: 'xy',
@@ -540,7 +539,7 @@ function makeGraph(elementid, axes, series, distanceLabel, distanceUnits, clickL
 					var s = distanceLabel+' : '
 						+ this.x + ' '
 						+ distanceUnits;
-					$.each(this.points, function(i, point) {
+					this.points.forEach( function(point) {
 						s += '<br/>'+ point.series.name +': '+
 						point.y + ' ' + point.series.options.unit;
 					});
@@ -565,7 +564,6 @@ function makeGraph(elementid, axes, series, distanceLabel, distanceUnits, clickL
 			series: series
 		});
 	});
-	})(jQuery);
 }
 
 /*

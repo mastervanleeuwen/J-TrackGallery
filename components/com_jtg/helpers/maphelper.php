@@ -508,15 +508,6 @@ EOS;
 		$graphJS = "";
 		if ($axisnumber)
 		{
-			// Code support for joomla version greater than 3.0
-			if (version_compare(JVERSION,'3.0','ge'))
-			{
-				JHtml::_('jquery.framework');
-			}
-			else
-			{
-				JHtml::script('jquery.js', 'components/com_jtg/assets/js/', false);
-			}
 			$clicktohide = "";
 			if ($axisnumber > 1) $clicktohide = JText::_('COM_JTG_CLICK_TO_HIDE'); 
 			$graphJS ='<script type="text/javascript">'."\n".
