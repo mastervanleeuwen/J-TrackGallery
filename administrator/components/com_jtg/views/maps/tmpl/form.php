@@ -62,7 +62,7 @@ if ($id)
 
 }
 
-if (JVERSION >= 3.0)
+if (version_compare(JVERSION,'3.0','ge'))
 {
 	$style = "	select, textarea, input{
 	width: auto !important;}";
@@ -72,7 +72,7 @@ if (JVERSION >= 3.0)
 JFormHelper::addFieldPath(JPATH_COMPONENT . '/models/fields');
 JFormHelper::loadFieldType('MapType', false);
 $maptype = new JFormFieldMapType();
-$maptype->SetValue($map->type);
+if (isset($map->type)) $maptype->SetValue($map->type);
 $maptype->__set('name','type');
 ?>
 <form action="" method="post" name="adminForm" id="adminForm"
@@ -107,7 +107,7 @@ $maptype->__set('name','type');
 			</tr>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_MAP_TYPE'); ?>:*</td>
-				<td><?php echo $maptype->renderField(); ?> </td>
+				<td><?php echo JHtml::_('select.genericlist', JtgMapHelper::getMapTypes(), 'type', 'size="1"', 'id', 'name', $map->type); //echo $maptype->renderField(); ?> </td>
 			</tr>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_OL_PARAMETERS'); ?>:*</td>
