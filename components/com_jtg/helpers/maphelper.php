@@ -1,4 +1,4 @@
-/<?php
+<?php
 /**
  * @component  J!Track Gallery (jtg) for Joomla! 2.5 and 3.x
  *
