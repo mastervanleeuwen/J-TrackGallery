@@ -93,10 +93,33 @@ function drawTrack(trackData, addStartMarker = true, animatedCursor = false) {
 			anchorOrigin: 'bottom-right', anchor: [0.15,0] }) 
 	});
 	for (var itrk = 0; itrk < trackData.length; itrk++) {
-		nseg = trackData[itrk].coords.length;
+		var nseg = trackData[itrk].coords.length;
+		var lastidx = 0;
 		for (var iseg = 0; iseg < nseg; iseg++) {
-			allpoints.push(...trackData[itrk].coords[iseg]);
-			trkGeom = new ol.geom.LineString(trackData[itrk].coords[iseg]);
+			var curCoords = trackData[itrk].coords[iseg];
+			for (var ipt = 1; ipt < curCoords.length; ipt++) {
+				if (Math.sign(curCoords[ipt][0]) != Math.sign(curCoords[ipt-1][0]) &&
+						Math.abs(curCoords[ipt][0]-curCoords[ipt-1][0]) > 180) {
+               // crossing date line: interpolate and cut track
+					var x1 = curCoords[ipt-1][0];
+					var x2 = curCoords[ipt][0];
+					if (x1 < 0) x1 += 180;
+					if (x2 < 0) x2 += 180;
+					var lat = curCoords[ipt-1][1] + (180-x2) * (curCoords[ipt][1]-curCoords[ipt-1][0])/(x2-x1);
+					var tmpCoords = curCoords.slice(lastidx,ipt);
+					allpoints.push(...tmpCoords);
+					tmpCoords.push([Math.sign(curCoords[ipt-1][0])*180.0,lat]);
+					var trkGeom = new ol.geom.LineString(tmpCoords);
+					trkGeom.transform('EPSG:4326',jtgView.getProjection());
+					gpsTracks.getSource().addFeature(new ol.Feature({geometry: trkGeom, name: trackData[itrk].name}));
+					curCoords[ipt-1][0] = Math.sign(curCoords[ipt][0])*180.0;
+					curCoords[ipt-1][1] = lat;
+					lastidx = ipt-1;
+				}
+			}
+			tmpCoords = curCoords.slice(lastidx,curCoords.length);
+			allpoints.push(...tmpCoords);
+			trkGeom = new ol.geom.LineString(tmpCoords);
 			trkGeom.transform('EPSG:4326',jtgView.getProjection());
 			gpsTracks.getSource().addFeature(new ol.Feature({geometry: trkGeom, name: trackData[itrk].name}));
 		}
