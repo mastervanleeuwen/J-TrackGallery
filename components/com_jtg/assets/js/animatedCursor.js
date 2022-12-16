@@ -29,7 +29,7 @@ function hover_profil_graph(animatedCursorLayer, animatedCursorIcon, allpoints, 
 
 }
 
-function out_profil_graph()
+function out_profil_graph(animatedCursorLayer)
 {
 	animatedCursorLayer.setVisible(false);  // for opera broken in Firefox
 
