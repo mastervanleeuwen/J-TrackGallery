@@ -105,7 +105,7 @@ function drawTrack(trackData, addStartMarker = true, animatedCursor = false) {
 					var x2 = curCoords[ipt][0];
 					if (x1 < 0) x1 += 180;
 					if (x2 < 0) x2 += 180;
-					var lat = curCoords[ipt-1][1] + (180-x2) * (curCoords[ipt][1]-curCoords[ipt-1][0])/(x2-x1);
+					var lat = curCoords[ipt-1][1] + (180-x1) * (curCoords[ipt][1]-curCoords[ipt-1][1])/(x2-x1);
 					var tmpCoords = curCoords.slice(lastidx,ipt);
 					allpoints.push(...tmpCoords);
 					tmpCoords.push([Math.sign(curCoords[ipt-1][0])*180.0,lat]);
@@ -550,7 +550,7 @@ function makeGraph(elementid, axes, series, distanceLabel, distanceUnits, clickL
 					events: {
 						mouseOut: function () {
 							if (animatedCursor) {
-								out_profil_graph();
+								out_profil_graph(animatedCursorLayer);
 							}
 						}
 					}
