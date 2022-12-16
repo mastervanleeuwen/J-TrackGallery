@@ -335,21 +335,7 @@ if (! $this->params->get("jtg_param_disable_terrains"))
 	?>
 	</div>
 
-    <div class = "block-text">
-	    <?php echo JText::_('COM_JTG_BIG_MAP') ?>:
-			<a rel="width[1000];height[700];" class="jcebox"
-				href="///maps.google.com/maps?q=<?php echo $this->track->start_n . "," . $this->track->start_e; ?>"
-				target="_blank">Google</a>, 
-			<a rel="width[1000];height[700];"
-				class="jcebox"
-				href="///openstreetmap.org/?mlat=<?php echo $this->track->start_n . "&amp;mlon=" . $this->track->start_e; ?>"
-				target="_blank">OpenStreetMap</a>,
-			<a
-				rel="width[1000];height[700];" class="jcebox"
-				href="///www.geocaching.com/map/default.aspx?lat=<?php echo $this->track->start_n . "&amp;lng=" . $this->track->start_e; ?>"
-				target="_blank">Geocaching.com</a>
-	</div>
-<div class="fb-share-button" data-href="<?php echo Uri::getInstance()->toString()?>" data-layout="button" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(Uri::getInstance()->toString())?>&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+	<div class="fb-share-button" data-href="<?php echo Uri::getInstance()->toString()?>" data-layout="button" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(Uri::getInstance()->toString())?>&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
 	</div>
 
 	<div class="no-float"></div>
