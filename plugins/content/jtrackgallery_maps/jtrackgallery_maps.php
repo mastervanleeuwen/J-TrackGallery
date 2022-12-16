@@ -226,7 +226,14 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		$map_width = isset ($plg_call_params ['map_width'])? $plg_call_params ['map_width']: $map_width;
 		$map_height = isset ($plg_call_params ['map_height'])? $plg_call_params ['map_height']: $map_height;
 
-		$mapid = $plgParams->get('mapid', false, 0);
+		if (isset($plg_call_params ['mapid'])) 
+		{
+			$mapid = $plg_call_params ['mapid'];
+		}
+		else
+		{
+			$mapid = $track->default_map; // TODO: check whether category has a default map
+		}
 
 		if ($gpsData->displayErrors())
 		{
@@ -267,7 +274,7 @@ img.olTileImage {
 		{
 			$usepace = false;
 			$graphid = "elevation_".$imap;
-			$graphJS = JtgMapHelper::parseGraphJS($gpsData, $cfg, $params, $usepace,$graphid);
+			$graphJS = JtgMapHelper::parseGraphJS($gpsData, $cfg, $params, $usepace, true, $graphid);
 			if (!empty($graphJS))
 			{
 				$map .= '<div id="profile" style="width: '.$map_width.';" >'."\n".
