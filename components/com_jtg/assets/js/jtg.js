@@ -81,7 +81,7 @@ function drawTrack(trackData, addStartMarker = true, animatedCursor = false) {
 		source: new ol.source.Vector(),
 		style: new ol.style.Style({
 		stroke: new ol.style.Stroke({
-		color: '#ff00ff', width: 5 }) })
+		color: '#ff00ff', width: 4 }) })
 	});
   	jtgMap.addLayer(gpsTracks);
 	var startMarkerStyle = new ol.style.Style({
@@ -103,8 +103,8 @@ function drawTrack(trackData, addStartMarker = true, animatedCursor = false) {
                // crossing date line: interpolate and cut track
 					var x1 = curCoords[ipt-1][0];
 					var x2 = curCoords[ipt][0];
-					if (x1 < 0) x1 += 180;
-					if (x2 < 0) x2 += 180;
+					if (x1 < 0) x1 += 360;
+					if (x2 < 0) x2 += 360;
 					var lat = curCoords[ipt-1][1] + (180-x1) * (curCoords[ipt][1]-curCoords[ipt-1][1])/(x2-x1);
 					var tmpCoords = curCoords.slice(lastidx,ipt);
 					allpoints.push(...tmpCoords);
