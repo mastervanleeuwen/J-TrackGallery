@@ -473,6 +473,9 @@ EOS;
 
 		$axisnumber = 0;
 
+		error_log("maphelper: showgraph ".($showgraph?'true':'false')." elevationDataExists ".($gpsTrack->elevationDataExists?'true':'false')." speedDataExists ".($gpsTrack->elevationDataExists?'true':'false'));
+		$graphJS = "";
+		$graphJS .= "maphelper: showgraph ".($showgraph?'true':'false')." elevationDataExists ".($gpsTrack->elevationDataExists?'true':'false')." speedDataExists ".($gpsTrack->elevationDataExists?'true':'false');
 		if ( ($showgraph OR $params->get("jtg_param_show_heightchart")) AND $gpsTrack->elevationDataExists)
 		{
 			$charts_linec = $cfg->charts_linec? '#' . $cfg->charts_linec: $defaultlinecolor;
@@ -515,12 +518,11 @@ EOS;
 			$axisnumber ++;
 		}
 
-		$graphJS = "";
 		if ($axisnumber)
 		{
 			$clicktohide = "";
 			if ($axisnumber > 1) $clicktohide = JText::_('COM_JTG_CLICK_TO_HIDE'); 
-			$graphJS ='<script type="text/javascript">'."\n".
+			$graphJS .='<script type="text/javascript">'."\n".
 				"	jtgAxes = [ ".implode(',',$axesJS)." ];\n".
 				"	jtgSeries = [ ".implode(',',$seriesJS)." ];\n".
 				"</script>\n";

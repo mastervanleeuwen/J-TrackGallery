@@ -180,6 +180,7 @@ class GpsDataClass
 		else
 			$this->start = $this->route[0]->coords[0];
 	
+		error_log("gpsClass: check whether we have time on the first point: ".$this->start[3]);
 		$this->speedDataExists = ( ( isset ($this->start[3])  && $this->start[3] > 0) ? true: false);
 		$this->elevationDataExists = ( isset ($this->start[2])? true: false);
 		$this->beatDataExists = ( (isset ($this->start[4]) && $this->start[4] > 0)? true: false);
