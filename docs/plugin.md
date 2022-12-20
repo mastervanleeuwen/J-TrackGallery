@@ -18,3 +18,4 @@ The plugin accepts the following optional parameters (comma-separated):
 | `show_graph` | (0 or 1): show graph with elevation and speed below the map. Default is no graph (0). |
 | `show_info` | (0 or 1): display track information: length, altitude, level, category, and terrain information. Default is no information (0). |
 | `show_link`  | (0, 1, or 2): show link to J!TrackGallery page with track details. Use '2' to get a link that opens in a new tab. Default is no link (0). |
+| `colors`     | Line color for the track segments, semi-colon separated list. Format: '#aabbcc' with aa, bb, cc the red, green, blue content in hex. Default color is 'ff00ff'. |

@@ -75,13 +75,13 @@ function jtgAddMapLayer(mapType = 0, mapOpt = '', apiKey = '', mapName = '', isV
 	mapLayerGroup.getLayers().push(mapLayer);
 }
 
-function drawTrack(trackData, addStartMarker = true, animatedCursor = false) {
+function drawTrack(trackData, addStartMarker = true, animatedCursor = false, colors = ['#ff00ff'] ) {
 	allpoints = [];
 	var gpsTracks = new ol.layer.Vector({ 
 		source: new ol.source.Vector(),
 		style: new ol.style.Style({
 		stroke: new ol.style.Stroke({
-		color: '#ff00ff', width: 4 }) })
+		color: colors[colors.length-1], width: 4 }) })
 	});
   	jtgMap.addLayer(gpsTracks);
 	var startMarkerStyle = new ol.style.Style({
@@ -92,6 +92,7 @@ function drawTrack(trackData, addStartMarker = true, animatedCursor = false) {
      	image: new ol.style.Icon({ src: jtgTemplateUrl+'/images/trackDest.png',
 			anchorOrigin: 'bottom-right', anchor: [0.15,0] }) 
 	});
+	var iCol = 0;
 	for (var itrk = 0; itrk < trackData.length; itrk++) {
 		var nseg = trackData[itrk].coords.length;
 		var lastidx = 0;
@@ -111,7 +112,15 @@ function drawTrack(trackData, addStartMarker = true, animatedCursor = false) {
 					tmpCoords.push([Math.sign(curCoords[ipt-1][0])*180.0,lat]);
 					var trkGeom = new ol.geom.LineString(tmpCoords);
 					trkGeom.transform('EPSG:4326',jtgView.getProjection());
-					gpsTracks.getSource().addFeature(new ol.Feature({geometry: trkGeom, name: trackData[itrk].name}));
+					var segFeat = new ol.Feature({geometry: trkGeom, name: trackData[itrk].name});
+					if (iCol < colors.length)
+					{
+						segFeat.setStyle(new ol.style.Style({
+				      	stroke: new ol.style.Stroke({
+      					color: colors[iCol], width: 4 }) }));
+						iCol++;
+					}
+					gpsTracks.getSource().addFeature(segFeat);
 					curCoords[ipt-1][0] = Math.sign(curCoords[ipt][0])*180.0;
 					curCoords[ipt-1][1] = lat;
 					lastidx = ipt-1;
@@ -121,7 +130,15 @@ function drawTrack(trackData, addStartMarker = true, animatedCursor = false) {
 			allpoints.push(...tmpCoords);
 			trkGeom = new ol.geom.LineString(tmpCoords);
 			trkGeom.transform('EPSG:4326',jtgView.getProjection());
-			gpsTracks.getSource().addFeature(new ol.Feature({geometry: trkGeom, name: trackData[itrk].name}));
+			var segFeat = new ol.Feature({geometry: trkGeom, name: trackData[itrk].name});
+			if (iCol < colors.length)
+			{
+				segFeat.setStyle(new ol.style.Style({
+			     	stroke: new ol.style.Stroke({
+      			color: colors[iCol], width: 4 }) }));
+				iCol++;
+			}
+			gpsTracks.getSource().addFeature(segFeat);
 		}
 		if (addStartMarker) {
 			var startMarker = new ol.Feature( {

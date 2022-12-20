@@ -59,7 +59,7 @@ class JtgMapHelper {
 	 *
 	 * @return string with JavaSript to set up map
 	 */
-	static public function parseTrackMapJS($gpsTrack, $trackid, $mapid, $imageList, $makepreview = false, $showLocationButton = true, $layerSwitcher = false, $targetid = 'jtg_map')
+	static public function parseTrackMapJS($gpsTrack, $trackid, $mapid, $imageList, $makepreview = false, $showLocationButton = true, $layerSwitcher = false, $trackColors = array(), $targetid = 'jtg_map')
 	{
 		$mainframe = JFactory::getApplication();
 		$cfg = JtgHelper::getConfig();
@@ -107,7 +107,11 @@ class JtgMapHelper {
 			}
 		}
 		$map .= "	trackData = [".implode(",\n",$trkArrJS)."];\n";
-		$map .= "	drawTrack(trackData, ".$trackDrawOptions.");\n";
+		$colorsJS = '';
+		if (count($trackColors)) {
+			$colorsJS=", ['".implode("','",$trackColors)."']";
+		}
+		$map .= "	drawTrack(trackData, ".$trackDrawOptions.$colorsJS.");\n";
 
 		if ($showLocationButton) {
 			JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon

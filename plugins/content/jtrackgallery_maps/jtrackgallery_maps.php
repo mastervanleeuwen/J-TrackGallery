@@ -235,6 +235,11 @@ class plgContentJtrackgallery_maps extends JPlugin {
 			$mapid = $track->default_map; // TODO: check whether category has a default map
 		}
 
+		$trackColors = array();
+		if (isset($plg_call_params['colors'])) {
+			$trackColors = explode(';', $plg_call_params['colors'] );
+		}
+
 		if ($gpsData->displayErrors())
 		{
 			$map = "";
@@ -269,7 +274,7 @@ img.olTileImage {
 
 		$map .= "\n<center>\n<div id=\"jtg_map_${imap}\"  align=\"center\" class=\"olMap\" >";
 		$map .= "\n</div>\n</center>\n";
-		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages, false, true, false, 'jtg_map_'.$imap);
+		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages, false, true, false, $trackColors, 'jtg_map_'.$imap);
 		if (isset($plg_call_params['show_graph']) && $plg_call_params['show_graph'] != '0')
 		{
 			$usepace = false;
