@@ -20,6 +20,7 @@ if (version_compare ( JVERSION, '1.6.0', 'ge' )) {
 use Joomla\String\StringHelper;
 class plgContentJtrackgallery_maps extends JPlugin {
 
+	protected $map_count = 0;
 	function onContentPrepare($context, &$row, &$params, $page = 0) {
 		$this->renderJtrackGalleryMapsPlugin ( $row, $params, $page = 0 );
 	}
@@ -99,7 +100,6 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		if (preg_match_all ( $regex, $row->text, $matches, PREG_PATTERN_ORDER ) > 0) {
 
 			// Start the replace loop
-			$map_count = 0;
 			foreach ( $matches [0] as $key => $match ) {
 
 				$plg_call_params = array (
@@ -146,16 +146,16 @@ class plgContentJtrackgallery_maps extends JPlugin {
 				if ($plg_call_params ['id'] > 0)
 				{
 					// Generate the html code for the map
-					$map_count += 1;
-					if ($map_count == 1)
+					$this->map_count += 1;
+					if ($this->map_count == 1)
 					{
 						$plg_html .= '<div id="popup" class="ol-popup">'.
 							' <a href="#" id="popup-closer" class="ol-popup-closer"></a>'.
 							' <div id="popup-content"></div> </div>'."\n";
 					}
-					if ($map_count < 10)
+					if ($this->map_count < 10)
 					{
-						$plg_html .= $this->rendermap($plgParams, $plg_call_params, $map_count);
+						$plg_html .= $this->rendermap($plgParams, $plg_call_params);
 						if (isset($plg_call_params['show_link']) && $plg_call_params['show_link']) { 
 							$target = '';
 							if ($plg_call_params['show_link'] == 2) $target = ' target="_blank"';
@@ -180,7 +180,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		}
 	}
 
-	private function rendermap($plgParams, $plg_call_params, $imap)
+	private function rendermap($plgParams, $plg_call_params)
 	{
 		$document = JFactory::getDocument();
 		$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
@@ -261,15 +261,15 @@ class plgContentJtrackgallery_maps extends JPlugin {
 .olButton::before{
 	display: none;
 }
-#jtg_map_'.$imap.' img{
+#jtg_map_'.$this->map_count.' img{
 	max-width: none; /* joomla3 max-width=100% breaks popups*/
 }
-#jtg_map_'.$imap.'.olMap {
+#jtg_map_'.$this->map_count.'.olMap {
 	height: ' . $map_height . ';
 	width: ' . $map_width . ';
 	z-index: 0;
 }
-#jtg_map_'.$imap.'.fullscreen {
+#jtg_map_'.$this->map_count.'.fullscreen {
 	height: 800px;
 	width: 100%;
 	z-index: 10000;
@@ -282,13 +282,13 @@ img.olTileImage {
 }
 </style>';
 
-		$map .= "\n<center>\n<div id=\"jtg_map_${imap}\"  align=\"center\" class=\"olMap\" >";
+		$map .= "\n<center>\n<div id=\"jtg_map_{$this->map_count}\"  align=\"center\" class=\"olMap\" >";
 		$map .= "\n</div>\n</center>\n";
-		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages, false, true, $layerSwitcher, $trackColors, 'jtg_map_'.$imap);
+		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages, false, true, $layerSwitcher, $trackColors, 'jtg_map_'.$this->map_count);
 		if (isset($plg_call_params['show_graph']) && $plg_call_params['show_graph'] != '0')
 		{
 			$usepace = false;
-			$graphid = "elevation_".$imap;
+			$graphid = "elevation_".$this->map_count;
 			$graphJS = JtgMapHelper::parseGraphJS($gpsData, $cfg, $params, $usepace, true, $graphid);
 			if (!empty($graphJS))
 			{
