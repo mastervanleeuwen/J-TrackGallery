@@ -46,7 +46,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 			return;
 
 		// Check
-		if (!JComponentHelper::isEnabled('com_jtg', true)) {
+		if (!JComponentHelper::isEnabled('com_jtg', false)) {
 			return JFactory::getApplication()->enqueueMessage(JText::_('PLG_JTG_MAPS_COM_JTG_NOT_INSTALLED'),'warning');
 		}
 
@@ -226,6 +226,16 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		$map_width = isset ($plg_call_params ['map_width'])? $plg_call_params ['map_width']: $map_width;
 		$map_height = isset ($plg_call_params ['map_height'])? $plg_call_params ['map_height']: $map_height;
 
+		$layerSwitcher = $params->get('jtg_param_show_layerswitcher');
+		if (isset($plg_call_params['layer_switcher']))
+		{
+			if ($plg_call_params['layer_switcher'] != 0 || $plg_call_params['layer_switcher']) {
+				$layerSwitcher = true;
+			}
+			else {
+				$layerSwitcher = false;
+			}
+		}
 		if (isset($plg_call_params ['mapid'])) 
 		{
 			$mapid = $plg_call_params ['mapid'];
@@ -274,7 +284,7 @@ img.olTileImage {
 
 		$map .= "\n<center>\n<div id=\"jtg_map_${imap}\"  align=\"center\" class=\"olMap\" >";
 		$map .= "\n</div>\n</center>\n";
-		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages, false, true, false, $trackColors, 'jtg_map_'.$imap);
+		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages, false, true, $layerSwitcher, $trackColors, 'jtg_map_'.$imap);
 		if (isset($plg_call_params['show_graph']) && $plg_call_params['show_graph'] != '0')
 		{
 			$usepace = false;
