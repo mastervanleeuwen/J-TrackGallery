@@ -220,21 +220,17 @@ class JtgModelTrack extends ItemModel
 
 		if (JFile::exists($newfile))
 		{
-			$alert_text = json_encode(JText::sprintf("COM_JTG_FILE_ALREADY_EXISTS", $filename));
-
-			echo "<script type='text/javascript' charset='UTF-8'>alert($alert_text);window.history.back(-1);</script>";
+			$alert_text = JText::sprintf("COM_JTG_FILE_ALREADY_EXISTS", $filename);
+			$app->enqueueMessage($alert_text,'warning');
 			return false;
 		}
 
 		if (! JFile::upload($file['tmp_name'], $newfile))
 		{
-			$alert_text = json_encode(JText::_('COM_JTG_UPLOAD_FAILS'));
-			die("<script type='text/javascript'>alert($alert_text);window.history.back(-1);</script>");
+			$app->enqueueMessage('COM_JTG_UPLOAD_FAILS','error');
+			return false;
 		}
-		else
-		{
-			chmod($newfile, 0777);
-		}
+		chmod($newfile, 0777);
 
 		// Get the start coordinates..
 
