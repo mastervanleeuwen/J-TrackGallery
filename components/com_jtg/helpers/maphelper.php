@@ -219,7 +219,7 @@ class JtgMapHelper {
 		if (!is_null($lat) && !is_null($lon))
 		{
 			$map .= "	jtgView.setCenter(ol.proj.fromLonLat([ $lon, $lat ], jtgView.getProjection()));\n";
-			$map .= "	jtgView.setZoom(jtgMapZoomLevel);\n";
+			$map .= "	jtgView.setZoom($zoomlevel);\n";
 		}
 		if ($centerOnGeo)
 		{
