@@ -173,10 +173,13 @@ class plgContentJtrackgallery_maps extends JPlugin {
 				}
 				$plg_html .= $plg_copyrights_end;
 				// Do the replace
-				$row->text = str_replace ( $match, $plg_html, $row->text );
-
+				//$row->text = str_replace ( $match, $plg_html, $row->text );
+				// Do the replace (in case of multiple matches: first occurrence only)
+				$pos = strpos($row->text, $match);
+				if ($pos !== false) {
+    				$row->text = substr_replace($row->text, $plg_html, $pos, strlen($match));
+				}
 			}
-
 		}
 	}
 
