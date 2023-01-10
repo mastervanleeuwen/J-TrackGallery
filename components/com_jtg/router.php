@@ -18,9 +18,161 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-/*
- * Function to convert a system URL to a SEF URL
-*/
+use Joomla\CMS\Component\Router\RouterBase;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Multilanguage;
+
+class jtgRouter extends RouterBase
+{
+    public function preprocess($query)
+    {
+        $active = $this->menu->getActive();
+
+        if (!isset($query['view'])) 
+        {
+            return $query;
+        }
+        
+        /**
+         * If the active item id is not the same as the supplied item id or we have a supplied item id and no active
+         * menu item then we just use the supplied menu item and continue
+         */
+        if (isset($query['Itemid']) && ($active === null || $query['Itemid'] != $active->id)) {
+            return $query;
+        }
+
+        // Get query language
+        $language = isset($query['lang']) ? $query['lang'] : '*';
+        // Set the language to the current one when multilang is enabled and item is tagged to ALL
+        if (Multilanguage::isEnabled() && $language === '*') {
+            $language = $this->app->get('language');
+        }
+        if (!isset($this->lookup[$language])) {
+            $this->buildLookup($language);
+        }
+
+        // Check if the active menu item matches the requested query
+        if ($active !== null && isset($query['Itemid'])) {
+            // Check if active->query and supplied query are the same
+            $match = true;
+				// If the menu item is a jtg view; don't change menu item
+				if ($active->query['view'] === 'jtg') return $query;
+
+            foreach ($active->query as $k => $v) {
+                if (isset($query[$k]) && $v !== $query[$k]) {
+                    // Compare again without alias
+                    if (\is_string($v) && $v == current(explode(':', $query[$k], 2))) {
+                        continue;
+                    }
+
+                    $match = false;
+                    break;
+                }
+            }
+
+            if ($match) {
+                // Just use the supplied menu item
+                return $query;
+            }
+        }
+
+        $view = isset($query['view'])?$query['view'] : '';
+        $layout = isset($query['layout']) && $query['layout'] !== 'default' ? ':' . $query['layout'] : ':';
+        $id = isset($query['id'])?':'.$query['id']:'';
+        if (isset($query['cat'])) $id = ':'.$query['cat'];
+        $key = $view.$layout.$id;
+        $itemid = false;
+        if (isset($this->lookup[$language][$key])) $itemid = $this->lookup[$language][$key];
+        else if (isset($this->lookup[$language]['jtg:'])) // Fall back to a jtg view
+            $itemid = $this->lookup[$language]['jtg:'];
+        if ($itemid) {
+            $query['Itemid'] = $itemid;
+            return $query;
+        }
+
+        // Check if the active menuitem matches the requested language
+        if (
+            $active && $active->component === 'com_jtg'
+            && ($language === '*' || \in_array($active->language, array('*', $language)) || !Multilanguage::isEnabled())
+        ) {
+            $query['Itemid'] = $active->id;
+
+            return $query;
+        }
+
+        // If not found, return language specific home link
+        $default = $this->menu->getDefault($language);
+
+        if (!empty($default->id)) {
+            $query['Itemid'] = $default->id;
+        }
+        return $query;
+    }
+
+	// Build lookup table for menu items
+	// code inspire by MenuRules
+	protected function buildLookup($language = '*')
+	{
+		// Prepare the reverse lookup array.
+		if (!isset($this->lookup[$language])) {
+			$this->lookup[$language] = array();
+
+			$component  = ComponentHelper::getComponent('com_jtg');
+			$views = array('jtg','files','user','cats');
+
+			$attributes = array('component_id');
+			$values     = array((int) $component->id);
+
+			$attributes[] = 'language';
+			$values[]     = array($language, '*');
+
+			$items = $this->menu->getItems($attributes, $values);
+
+			foreach ($items as $item) {
+				$view = '';
+				if (isset($item->query['view'])) $view = $item->query['view'];
+
+				$layout = ':';
+				if (isset($item->query['layout'])) {
+					$layout = ':' . $item->query['layout'];
+				}
+
+				$id = '';
+				if (isset($item->query['id'])) {
+					$id = ':' . $item->query['id'];
+				}
+
+				if (isset($item->query['cat'])) { // TODO: check whether we use catid 
+					$id = ':' . $item->query['cat'];
+				}
+					// TODO: improve handling of multiple similar menu items
+					if (!isset($this->lookup[$language][$view.$layout.$id]))
+						$this->lookup[$language][$view.$layout.$id] = $item->id;
+                /**
+                  * Here it will become a bit tricky
+                  * language != * can override existing entries
+                  * language == * cannot override existing entries
+                  */
+                /*
+                if (!isset($this->lookup[$language][$view . $layout][$item->query[$views[$view]->key]]) || $item->language !== '*') {
+                            $this->lookup[$language][$view . $layout][$item->query[$views[$view]->key]] = $item->id;
+                            $this->lookup[$language][$view][$item->query[$views[$view]->key]] = $item->id;
+                        }
+                    } else { */
+                        /**
+                         * Here it will become a bit tricky
+                         * language != * can override existing entries
+                         * language == * cannot override existing entries
+                         */
+                         /*
+                        if (!isset($this->lookup[$language][$view . $layout]) || $item->language !== '*') {
+                            $this->lookup[$language][$view . $layout] = $item->id;
+                        }
+                    } */
+            }
+        }
+    }
+
 	/**
 	 * Function to convert a system URL to a SEF URL
 	 *
@@ -28,19 +180,20 @@ defined('_JEXEC') or die('Restricted access');
 	 *
 	 * @return segmented URL (array)
 	 */
-function jtgBuildRoute(&$query)
+public function build(&$query)
 {
 	$segments = array();
 	$app = JFactory::getApplication();
 	$menu = $app->getMenu();
 
-	if (empty($query['itemId']))
+   // TODO: check remove this?
+	if (empty($query['Itemid']))
 	{
 		$menuItem = $menu->getActive();
 	}
 	else
 	{
-		$menuItem = $menu->getItem($query['itemId']);
+		$menuItem = $menu->getItem($query['Itemid']);
 	}
 	// $menuid = $menuItem->id;
 
@@ -86,7 +239,7 @@ function jtgBuildRoute(&$query)
  *
  * @return return_description
  */
-function _jtgParseRouteFile(&$segments)
+private function jtgParseRouteFile(&$segments)
 {
 	array_shift($segments);
 	$layout = $segments[0];
@@ -141,7 +294,7 @@ function _jtgParseRouteFile(&$segments)
  *
  * @return return_description
  */
-function _jtgParseRouteCategory(&$segments)
+private function jtgParseRouteCategory(&$segments)
 {
 	switch ($segments[0])
 	{
@@ -182,7 +335,7 @@ function _jtgParseRouteCategory(&$segments)
  *
  * @return return_description
  */
-function _jtgParseRouteSubCategory(&$segments)
+private function jtgParseRouteSubCategory(&$segments)
 {
 	$vars['view'] = $segments[0];
 	$vars['layout'] = $segments[1];
@@ -261,7 +414,7 @@ function _jtgParseRouteSubCategory(&$segments)
  *
  * @return return_description
  */
-function jtgParseRoute(&$segments)
+public function parse(&$segments)
 {
 	$vars = array();
 
@@ -275,7 +428,7 @@ function jtgParseRoute(&$segments)
 
 	if ( $count == 1 )
 	{
-		$vars = _jtgParseRouteCategory($segments);
+		$vars = $this->jtgParseRouteCategory($segments);
 	}
 	elseif ( $count == 2 )
 	{
@@ -283,12 +436,12 @@ function jtgParseRoute(&$segments)
 			AND ( $segments[1] == "default" )
 			OR  ( ( $segments[0] == "files" ) AND ( $segments[1] == "list" ) ))
 		{
-			$vars = _jtgParseRouteCategory($segments);
+			$vars = $this->jtgParseRouteCategory($segments);
 			array_shift($segments);
 		}
 		else
 		{
-			$vars = _jtgParseRouteSubCategory($segments);
+			$vars = $this->jtgParseRouteSubCategory($segments);
 		}
 	}
 	else
@@ -297,7 +450,7 @@ function jtgParseRoute(&$segments)
 		{
 			case 'files': // kept for backward compatibility
 			case 'track':
-				$vars = _jtgParseRouteFile($segments);
+				$vars = $this->jtgParseRouteFile($segments);
 				break;
 		}
 	}
@@ -312,3 +465,5 @@ function jtgParseRoute(&$segments)
 
 	return $vars;
 }
+}
+?>
