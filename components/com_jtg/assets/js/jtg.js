@@ -266,7 +266,7 @@ function getAvgTimeFromPace(pace_str, length, decimal_separator) {
 	{
 		// Pace format is decimal separator or . or ,
 		var pace_str = pace_str.replace(decimal_separator, '.');
-		pace = pace.replace(',', '.');
+		pace = parseFloat(pace_str);
 	}
 
 	var time = length * pace / 60;
