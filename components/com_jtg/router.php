@@ -91,10 +91,9 @@ class jtgRouter extends RouterBase
         }
 
         // Check if the active menuitem matches the requested language
-        if (
-            $active && $active->component === 'com_jtg'
-            && ($language === '*' || \in_array($active->language, array('*', $language)) || !Multilanguage::isEnabled())
-        ) {
+        if ( $active && 
+				($language === '*' || \in_array($active->language, array('*', $language)) || !Multilanguage::isEnabled()))
+        {
             $query['Itemid'] = $active->id;
 
             return $query;
@@ -110,7 +109,7 @@ class jtgRouter extends RouterBase
     }
 
 	// Build lookup table for menu items
-	// code inspire by MenuRules
+	// code based on Joomla core code in MenuRules
 	protected function buildLookup($language = '*')
 	{
 		// Prepare the reverse lookup array.
@@ -145,33 +144,17 @@ class jtgRouter extends RouterBase
 				if (isset($item->query['cat'])) { // TODO: check whether we use catid 
 					$id = ':' . $item->query['cat'];
 				}
-					// TODO: improve handling of multiple similar menu items
-					if (!isset($this->lookup[$language][$view.$layout.$id]))
+				if (!isset($this->lookup[$language][$view.$layout.$id]))
+					$this->lookup[$language][$view.$layout.$id] = $item->id;
+				else {  // Another menu item has the same view; which link has fewer flags
+					$item2 = $this->menu->getItem($this->lookup[$language][$view.$layout.$id]);
+					if (count($item->query) < count($item2->query) &&
+						 ($item->language !== '*' || $item2->language === '*'))
 						$this->lookup[$language][$view.$layout.$id] = $item->id;
-                /**
-                  * Here it will become a bit tricky
-                  * language != * can override existing entries
-                  * language == * cannot override existing entries
-                  */
-                /*
-                if (!isset($this->lookup[$language][$view . $layout][$item->query[$views[$view]->key]]) || $item->language !== '*') {
-                            $this->lookup[$language][$view . $layout][$item->query[$views[$view]->key]] = $item->id;
-                            $this->lookup[$language][$view][$item->query[$views[$view]->key]] = $item->id;
-                        }
-                    } else { */
-                        /**
-                         * Here it will become a bit tricky
-                         * language != * can override existing entries
-                         * language == * cannot override existing entries
-                         */
-                         /*
-                        if (!isset($this->lookup[$language][$view . $layout]) || $item->language !== '*') {
-                            $this->lookup[$language][$view . $layout] = $item->id;
-                        }
-                    } */
-            }
-        }
-    }
+				}
+			}
+		}
+	}
 
 	/**
 	 * Function to convert a system URL to a SEF URL
