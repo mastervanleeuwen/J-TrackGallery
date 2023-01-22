@@ -578,8 +578,7 @@ EOG;
 	 */
 	static public function parseDescription($desc)
 	{
-		$stringlength = 200;
-		$maxslperrow = 50;
+		$stringlength = 280;
 
 		// Strip all tags but <p>
 		$desc = str_replace(array("'","\n","\r"), array("\'","<br/>"," "), $desc);
@@ -606,17 +605,11 @@ EOG;
 
 				foreach ($words AS $word)
 				{
-					// Strip additionnal (non <p>) tags, quote and return "1" wegen der Leerstelle
+					// Strip additional (non <p>) tags, quote and return "1" wegen der Leerstelle
 					$count_letters = ( $count_letters + strlen($word) + 1);
 
 					// Einfügung von Zeilensprung BEGIN
 					$rowlen = ( $rowlen + strlen($word) );
-
-					if ( $rowlen > $maxslperrow )
-					{
-						$return = trim($return) . "<br />";
-						$rowlen = 0;
-					}
 
 					if ( ( $count_letters + strlen($word) ) > $stringlength )
 					{

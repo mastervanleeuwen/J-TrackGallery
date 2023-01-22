@@ -121,6 +121,7 @@
     width: max-content;
 }
 .jtg-centered {
-	padding: 0px;
+	padding: 0;
+	margin: 5px 0;
 	text-align: center;
 }
