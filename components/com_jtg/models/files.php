@@ -58,9 +58,11 @@ class JtgModelFiles extends JModelList
 		    	$config['filter_fields'] = array(
 		    	    'search',
 		    	    'mindist',
-		    	    'maxdist',
-		    	    'trackcat',
-		    	    'tracklevel');
+		    	    'maxdist');
+				$params = JComponentHelper::getParams('com_jtg');
+				if ($params->get('jtg_param_use_cat')) $config['filter_fields'][]='trackcat';
+				$cfg = JtgHelper::getConfig();
+				if ($cfg->uselevel) $config['filter_fields'][] = 'tracklevel';
 	    	}
 	 		parent::__construct($config);
 	}

@@ -87,11 +87,13 @@ class LayoutHelper
 		$navi .= '<div class="navi-part"><a href="' .
 				JRoute::_("index.php?option=com_jtg&view=jtg&introtext=1".$geoloc) .
 				'">' . JText::_('COM_JTG_OVERVIEW') . '</a></div>';
-		$navi .= '<div class="navi-part"><a href="' .
+		if (JComponentHelper::getParams("com_jtg")->get('jtg_param_use_cats'))
+		{
+			$navi .= '<div class="navi-part"><a href="' .
 				JRoute::_("index.php?option=com_jtg&view=cats&layout=default") . '">' . JText::_('COM_JTG_CATS') . '</a></div>';
+		}
 		$navi .= '<div class="navi-part"><a href="' .
 				JRoute::_("index.php?option=com_jtg&view=files&layout=list") . '">' . JText::_('COM_JTG_TRACKS') . '</a></div>';
-		$cfg = JtgHelper::getConfig();
 
 		$user = JFactory::getUser();
 		if ($user->get('id'))

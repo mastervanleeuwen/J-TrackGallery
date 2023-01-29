@@ -867,7 +867,13 @@ class JtgModelFiles extends JModelLegacy
 			if ( $import !== null )
 			{
 				$catid = $input->get('catid_' . $i, null, 'array');
-				$catid = $catid ? implode(',', $catid) : '';
+				if ($catid) {
+					$catid = $catid ? implode(',', $catid) : '';
+				}
+				else {
+					$params = JComponentHelper::getParams('com_jtg');
+					$catid = $params->get('jtg_param_default_cat');
+				}
 				$level = $input->get('level_' . $i, 0, 'integer');
 				$title = $db->quote($input->get('title_' . $i, '', 'string'));
 				$terrain = $input->get('terrain_' . $i, null, 'array');

@@ -201,6 +201,13 @@ margin: 1px 0 0 0;
 		<tbody>
 			<tr>
 				<td>
+					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE') . '::'
+					. JText::_('COM_JTG_TT_USE_LEVEL') . '">' . JText::_('COM_JTG_USE_LEVEL') . '</span>'; ?>
+				 </td>
+				<td><?php echo $this->lists['uselevel']; ?></td>
+			</tr>
+			<tr>
+				<td>
 					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
 					. '::' . JText::_('COM_JTG_TT_LEVELCONF') . '">' . JText::_('COM_JTG_LEVEL') . '</span>'; ?>
 				</td>

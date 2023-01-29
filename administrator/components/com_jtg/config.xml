@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
 	<fieldset name="BASIC" label="COM_JTG_BASIC_CONFIGURATION">
+		<field name="jtg_param_default_cat" type="sql"
+			addfieldpath="/administrator/components/com_jtg/elements" default="10"
+			label="COM_JTG_MENU_DEFAULT_CAT"
+			query="SELECT id, title FROM #__jtg_cats WHERE published=1"
+			key_field="id"
+			value_field="title"
+			translate="true"
+		/>
+		<field name="jtg_param_use_cats" type="radio"
+			addfieldpath="/administrator/components/com_jtg/elements" default="1"
+			label="COM_JTG_MENU_USE_CATS" description="COM_JTG_TT_MENU_USE_CATS">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="jtg_param_display_jtg_credits" type="radio"
 			addfieldpath="/administrator/components/com_jtg/elements" default="1"
 			label="COM_JTG_MENU_SHOW_JTRACKGALLERY_CREDIT" description="COM_JTG_TT_MENU_SHOW_JTRACKGALLERY_CREDIT">

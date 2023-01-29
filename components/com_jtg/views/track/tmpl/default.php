@@ -212,7 +212,7 @@ if ($this->track->ele_desc)
 }
 ?>
 
-		<?php if ( $this->track->level != "0" )
+		<?php if ( $this->cfg->uselevel && $this->track->level != "0" )
 		{
 		?>
 			<tr>
@@ -221,6 +221,9 @@ if ($this->track->ele_desc)
 			</tr>
 <?php
 } ?>
+		<?php if ($this->params->get('jtg_param_use_cats'))
+			{
+		?>
 	 		<tr>
 				<td><?php echo JText::_('COM_JTG_CATS'); ?>:</td>
 				<td colspan="2"><?php
@@ -229,6 +232,7 @@ if ($this->track->ele_desc)
 				</td>
 			</tr>
 <?php
+		}
 if (! $this->params->get("jtg_param_disable_terrains"))
 {
 	// Terrain description is enabled
@@ -249,7 +253,7 @@ if (! $this->params->get("jtg_param_disable_terrains"))
 		}
 
 		$terrain = implode(', ', $newterrain);
-		echo "<tr><td>".JText::_('COM_JTG_TERRAIN')."</td><td>".$terrain."</td></tr>";
+		echo "<tr><td>".JText::_('COM_JTG_TERRAIN').":</td><td>".$terrain."</td></tr>";
 	}
 	else
 	{

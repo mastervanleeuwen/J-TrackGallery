@@ -199,7 +199,13 @@ class JtgModelTrack extends ItemModel
 		// Get the post data
 		$input = JFactory::getApplication()->input;
 		$catid = $input->get('catid', null, 'array');
-		$catid = $catid ? implode(',', $catid) : '';
+		if ($catid) {
+			$catid = $catid ? implode(',', $catid) : '';
+		}
+		else {
+			$params = JComponentHelper::getParams('com_jtg');
+			$catid = $params->get('jtg_param_default_cat');
+		}
 		$level = $input->get('level', 0, 'integer');
 		$title = $input->get('title', '', 'string');
 		$terrain = $input->get('terrain', null, 'array');
@@ -763,8 +769,11 @@ class JtgModelTrack extends ItemModel
 			}
 		}
 
+		$setcatid = '';
+		if ($catid) $setcatid = "\n catid='" . $catid . "',"; // When categories are not used, the form does not contain this field
+
 		$query = "UPDATE #__jtg_files SET" .
-				"\n catid='" . $catid . "'," .
+				$setcatid.
 				"\n title=" . $title . "," .
 				"\n terrain='" . $terrain . "'," .
 				"\n description='" . $desc . "'," .

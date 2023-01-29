@@ -131,7 +131,7 @@ Joomla.submitbutton = function(pressbutton)
 	if (document.getElementById('title').value == ""){
 		alert( "<?php echo JText::_('COM_JTG_NEED_TITLE', true); ?>");
 	}
-	if (document.getElementById('catid').value == "") {
+	if (document.getElementById('catid') && document.getElementById('catid').value == "") {
 		alert( "<?php echo JText::_('COM_JTG_NEED_CATEGORY', true); ?>");
    }
 <?php
@@ -281,6 +281,9 @@ else
 					<td><?php echo $this->model->getLevelSelect($this->track->level); ?>
 					</td>
 				</tr>
+<?php
+	if ($this->params->get('jtg_param_use_cats'))
+	{ ?>
 				<tr class="sectiontableentry<?php
 					echo $k;
 					$k = 1 - $k;
@@ -289,6 +292,8 @@ else
 					<td><?php echo $lists['content']; ?></td>
 				</tr>
 <?php
+	}
+
 if ($this->cfg->access == 1)
 {
 ?>

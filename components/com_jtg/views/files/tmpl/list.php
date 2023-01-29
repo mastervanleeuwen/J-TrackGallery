@@ -24,7 +24,7 @@ JHtml::_('script', 'system/core.js', false, true);
 echo $this->lh;
 
 $iconheight = $this->params->get('jtg_param_list_icon_max_height');
-$hide_icon_category = (bool) $this->params->get('jtg_param_tracks_list_hide_icon_category');
+$hide_icon_category = !$this->params->get('jtg_param_use_cats') || (bool) $this->params->get('jtg_param_tracks_list_hide_icon_category');
 $hide_icon_istrack = (bool) $this->params->get('jtg_param_tracks_list_hide_icon_istrack');
 $hide_icon_isroundtrip = (bool) $this->params->get('jtg_param_tracks_list_hide_icon_isroundtrip');
 $hide_icon_is_wp = (bool) $this->params->get('jtg_param_tracks_list_hide_icon_is_wp');
@@ -32,9 +32,8 @@ $hide_icon_isgeocache = (bool) $this->params->get('jtg_param_tracks_list_hide_ic
 $height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px;" ' : ' ');
 $levelMin = $this->params->get('jtg_param_level_from');
 $levelMax = $this->params->get('jtg_param_level_to');
-$showcatcolumn = !$hide_icon_category or !$hide_icon_istrack or !$hide_icon_isroundtrip or !$hide_icon_is_wp or !$hide_icon_isgeocache;
-$cfg = JtgHelper::getConfig();
-$iconpath = JUri::root() . "components/com_jtg/assets/template/" . $cfg->template . "/images/";
+$showcatcolumn = !$hide_icon_category || !$hide_icon_istrack || !$hide_icon_isroundtrip || !$hide_icon_is_wp || !$hide_icon_isgeocache;
+$iconpath = JUri::root() . "components/com_jtg/assets/template/" . $this->cfg->template . "/images/";
 
 // no longer needed JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
@@ -45,7 +44,7 @@ $trackcategory = JFormHelper::loadFieldType('Trackcategory', false);
 $trackcategoryOptions=$trackcategory->getOptions(); // works only if you set your field getOptions on public!!
 if (version_compare(JVERSION, '4.0', 'lt')) 
 {
-	JFactory::getApplication()->getDocument()->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' .  $cfg->template . '/filter_box_j3.css');
+	JFactory::getApplication()->getDocument()->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' .  $this->cfg->template . '/filter_box_j3.css');
 }
 ?>
 
@@ -96,8 +95,10 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_CAT'), 'catid', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
 				<?php } ?>
+				<?php if ($this->cfg->uselevel) {?>
 				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_LEVEL'), 'level', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
+				<?php } ?>
 				<?php
 				if (! $this->params->get("jtg_param_disable_terrains"))
 				{
@@ -168,8 +169,12 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				}
 				$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $row->id, false);
 				$profile = JtgHelper::getProfileLink($row->uid, $row->user);
-				$cat = JtgHelper::parseMoreCats($this->sortedcats, $row->catid, "list", true, $iconheight);
-				$cat = $cat ? $cat: "<img $height src =\"/components/com_jtg/assets/images/cats/symbol_inter.png\" />\n";
+				$cat = '';
+				if (!$hide_icon_category)
+				{
+					$cat = JtgHelper::parseMoreCats($this->sortedcats, $row->catid, "list", true, $iconheight);
+					$cat = $cat ? $cat: "<img $height src =\"/components/com_jtg/assets/images/cats/symbol_inter.png\" />\n";
+				}
 				$terrain = JtgHelper::parseMoreTerrains($this->sortedter, $row->terrain, "list", true);
 				$hits = JtgHelper::getLocatedFloat($row->hits, 0);
 				$layoutHelper = new LayoutHelper;
@@ -178,7 +183,6 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				$imagelink = $this->buildImageFiletypes($row->istrack, $row->iswp, $row->isroute, $row->iscache, $row->isroundtrip, $iconheight,
 						$hide_icon_istrack, $hide_icon_is_wp, 0, $hide_icon_isgeocache, $hide_icon_isroundtrip);
 
-				$level = JtgHelper::getLevelIcon($row->level, $row->catid, $levelMin, $levelMax, $iconheight);
 
 				if (!$row->distance)
 				{
@@ -223,9 +227,13 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				<?php if ($showcatcolumn) {?>
 					<td>
 				<?php echo '<span class="fileis">' . $cat . ' ' . $imagelink . '</span>'; ?></td>
-				<?php }?>
+				<?php }
+				if ($this->cfg->uselevel) {
+					$level = JtgHelper::getLevelIcon($row->level, $row->catid, $levelMin, $levelMax, $iconheight);
+				?>
 				<td><?php echo $level; ?></td>
 				<?php
+				}
 				if (! $this->params->get("jtg_param_disable_terrains"))
 				{
 				?>

@@ -158,6 +158,7 @@ class JtgViewConfig extends JViewLegacy
 		$lists['inform']			= JHtml::_('select.genericlist', $inform, 'inform_autor', 'size="1"', 'id', 'text', $config->inform_autor);
 		$lists['captcha']			= JHtml::_('select.genericlist', $inform, 'captcha', 'size="1"', 'id', 'text', $config->captcha);
 		$lists['usevote']			= JHtml::_('select.genericlist', $inform, 'usevote', 'size="1"', 'id', 'text', $config->usevote);
+		$lists['uselevel']		= JHtml::_('select.genericlist', $inform, 'uselevel', 'size="1"', 'id', 'text', $config->uselevel);
 		$lists['order']				= JHtml::_('select.genericlist', $order, 'ordering', 'size="1"', 'order', 'text', $config->ordering);
 		$lists['comments']			= JHtml::_('select.genericlist', $comments, 'comments', 'size="1"', 'id', 'text', $config->comments);
 		$lists['access']			= JHtml::_('select.genericlist', $inform, 'access', 'size="1"', 'id', 'text', $config->access);

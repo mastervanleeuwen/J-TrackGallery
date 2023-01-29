@@ -499,6 +499,8 @@ class Com_JtgInstallerScript
 			// TODO Save default params directly in table
 			$query = 'UPDATE #__extensions SET params = ';
 			$query .= '\' {
+			"jtg_param_default_cat":"10",
+			"jtg_param_use_cats":"1",
 			"jtg_param_display_jtg_credits":"1",
 			"jtg_param_newest":"10",
 			"jtg_param_mostklicks":"10",
@@ -539,6 +541,7 @@ class Com_JtgInstallerScript
 			$db->setQuery($query);
 			$db->execute();
 		}
+		// TODO: update some params if old version did not have them
 
 		return true;
 	}
