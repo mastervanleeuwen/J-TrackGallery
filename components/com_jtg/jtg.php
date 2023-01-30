@@ -39,11 +39,11 @@ $mainframe->getLanguage()->load('com_jtg_common');
 // Com_jtg_additional language files are in /images/jtrackgallery/language
 // folder
 $mainframe->getLanguage()->load(
-		'com_jtg_additional/', JPATH_SITE . '/images/jtrackgallery', 'en-GB',
+		'com_jtg_additional', JPATH_SITE . '/images/jtrackgallery', 'en-GB',
 		true
 		);
 $mainframe->getLanguage()->load(
-		'com_jtg_additional/', JPATH_SITE . '/images/jtrackgallery', null, true
+		'com_jtg_additional', JPATH_SITE . '/images/jtrackgallery', null, true
 );
 $cfg = JtgHelper::getConfig();
 
