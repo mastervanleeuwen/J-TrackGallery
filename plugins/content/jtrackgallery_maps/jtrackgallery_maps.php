@@ -331,21 +331,23 @@ img.olTileImage {
 			}
 			$map .= "	</table> </div>\n".
 				'  <div class="gps-info"><table class="gps-info-tab">'."\n";
-			if ( $track->level != "0" )
+			if ( $cfg->uselevel && $track->level != "0" )
 			{
 				$map .= "	<tr>\n".
 					"		<td>".JText::_('COM_JTG_LEVEL')."</td>\n".
 					"		<td>".$model->getLevel($track->level)."</td>\n".
 					"	</tr>\n";
 			}
-			$sortedcats = JtgModeljtg::getCatsData(true);
-			$map .= "	<tr>\n".
-				"		<td>".JText::_('COM_JTG_CATS')."</td>\n".
-				'		<td colspan="2">'.
-				JtgHelper::parseMoreCats($sortedcats, $track->catid, "TrackDetails", true).
-				" </td>\n".
-				"	</tr>\n";
-			if (! $this->params->get("jtg_param_disable_terrains"))
+			if ($params->get('jtg_param_use_cats')) {
+				$sortedcats = JtgModeljtg::getCatsData(true);
+				$map .= "	<tr>\n".
+					"		<td>".JText::_('COM_JTG_CATS')."</td>\n".
+					'		<td colspan="2">'.
+					JtgHelper::parseMoreCats($sortedcats, $track->catid, "TrackDetails", true).
+					" </td>\n".
+					"	</tr>\n";
+			}
+			if (! $params->get("jtg_param_disable_terrains"))
 			{
 				// Terrain description is enabled
 				if ($track->terrain)
