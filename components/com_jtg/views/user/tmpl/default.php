@@ -23,6 +23,7 @@ JHtml::_('script', 'system/core.js', false, true);
 
 $user = JFactory::getUser();
 $uid = $user->id;
+$show_cat_icon = $this->params->get('jtg_param_use_cats') && ! (bool) $this->params->get('jtg_param_tracks_list_hide_icon_category');
 
 if ($uid != 0)
 {
@@ -93,14 +94,28 @@ $user_summary = $this->getModel()->getTotals($uid);
 				<th width="60px">#</th>
 				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TITLE'), 'title', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
+<?php
+				if ($show_cat_icon)
+				{   
+?> 
 				<th width="80px"><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_CAT'), 'catid', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
+<?php			} ?>
 				<th width="50px"><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_HITS'), 'hits', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
+<?php
+				if (! $this->params->get("jtg_param_disable_terrains"))
+				{   
+?> 
 				<th width="80px"><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TERRAIN'), 'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
+<?php			} 
+				if ($this->cfg->usevote == 1)
+				{
+				?> 
 				<th width="20px"><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_VOTING'), 'vote', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
+<?php			} ?>
 				<th width="20px"><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_DISTANCE'), 'distance', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
 			</tr>
@@ -122,8 +137,7 @@ $user_summary = $this->getModel()->getTotals($uid);
 
 				$votes = LayoutHelper::parseVoteFloat($row->vote);
 				$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $row->id, false);
-				$cats = JtgHelper::parseMoreCats($this->cats, $row->catid, "array");
-				$cats = implode(", ", $cats);
+				$cats = JtgHelper::parseMoreCats($this->cats, $row->catid, "list", true);
 				?>
 			<tr class="sectiontableentry<?php echo $k; ?>">
 				<td align="center"><?php echo $this->pagination->getRowOffset($i); ?>
@@ -153,10 +167,10 @@ $user_summary = $this->getModel()->getTotals($uid);
 				</td>
 				<td><a href="<?php echo $link; ?>">
 					<?php echo $row->title; ?> </a></td>
-				<td><?php echo $cats; ?></td>
+				<?php if ($show_cat_icon) echo "		<td>".$cats."</td>\n"; ?>
 				<td><?php echo $row->hits; ?></td>
-				<td><?php echo $terrain; ?></td>
-				<td><?php echo $votes; ?></td>
+				<?php if (! $this->params->get("jtg_param_disable_terrains")) echo "		<td>".$terrain."</td>\n"; ?>
+				<?php if ($this->cfg->usevote == 1) echo "<td>".$votes."</td>\n"; ?>
 				<td><?php echo $distance; ?></td>
 			</tr>
 			<?php
