@@ -46,3 +46,7 @@ The system can be configured to send a notification to an administrator user whe
 
 A basic commenting system is available and can be enabled in the administrator menu. Permissions to post comments are controlled in the permissions menu.
 E-mail notifications can be send to the owner/author of the track.
+
+## Waypoint icons
+
+Waypoints are displayed by icons on the map. The icon is set by the `<sym>` xml tag in the GPX file. The corresponding icon files are stored in the directory `components/com_jtg/assets/images/symbols`. Icons need to be provided in png file format, and for each icon there is a corresponding xml file that defines the anchor point of the icon (bottom left, bottom middle, etc) by specifying a relative offset in x and y.
