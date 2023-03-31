@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `#__jtg_terrains` (
 	`id` int(10) NOT NULL AUTO_INCREMENT,
 	`title` varchar(30) NOT NULL,
 	`published` int(5) NOT NULL,
-	`checked_out` int(5) NOT NULL,
+	`checked_out` int(5) DEFAULT '0',
 	`ordering` int(5) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
