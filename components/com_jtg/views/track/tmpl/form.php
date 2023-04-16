@@ -19,6 +19,7 @@
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Factory;
 
 //
 // This form has three states or modes:
@@ -95,7 +96,14 @@ $yesnolist = array(
 	array('id' => 0, 'title' => JText::_('JNO')),
 	array('id' => 1, 'title' => JText::_('JYES'))
 );
-$editor = Editor::getInstance('tinymce');;
+if (version_compare(JVERSION,'4.0','lt'))
+{
+	$editor = JFactory::getConfig()->get('editor');
+}
+else {
+	$editor = Factory::getApplication()->getConfig()->get('editor');
+}
+$editor = Editor::getInstance($editor);;
 
 // Field list
 $catlist = $this->model->getCats();
