@@ -179,6 +179,20 @@ class GpsDataClass
 			$this->start = $this->track[0]->coords[0][0];
 		else
 			$this->start = $this->route[0]->coords[0];
+
+		if ($this->trackCount)
+		{
+			$ntrk = count($this->track);
+			$ntrkseg = count($this->track[$ntrk-1]->coords);
+			$npt = count($this->track[$ntrk-1]->coords[$ntrkseg-1]);
+			$this->end = $this->track[$ntrk-1]->coords[$ntrkseg-1][$npt-1];
+		}
+		else
+		{
+			$nrt = count($this->route);
+			$npt = count($this->tour[$nrt-1]->coords);
+			$this->end = $this->route[$nrt-1]->coords[$npt-1];
+		}
 	
 		$this->speedDataExists = ((isset($this->start[3]) && !empty($this->start[3])) ? true: false);
 		$this->elevationDataExists = ( isset ($this->start[2])? true: false);
@@ -983,6 +997,7 @@ class GpsDataClass
 		}
 
 		// TODO: deal gracefully with cases where a time is missing...
+		$dbgTotTime = 0;
 		for ($i = 0; $i < $datacount - 1; $i++)
 		{
 			$next_coord = $coords[$i + 1];
@@ -1049,6 +1064,7 @@ class GpsDataClass
 					if ($current_time and $next_time)
 					{
 						$elapsedTime = $next_time - $current_time;
+						$dbgTotTime += $elapsedTime;
 
 						if ($elapsedTime > 0)
 						{
@@ -1091,12 +1107,19 @@ class GpsDataClass
 		$d = 0;
 		$this->allDistances[0] = 0;
 		$earthRadius = 6378.137;
+		$this->totalMovingTime = 0;
+		$this->totalTime = 0;
 
 		for ($t = 0; $t < $this->trackCount; $t++)
 		{
 			for ($s = 0; $s < $this->track[$t]->segCount; $s++)
 			{
 				$this->addTrackCoords($this->track[$t]->coords[$s]);
+				if ($this->track[$t]->coords[$s][0][3] != 0) {
+					$ncoords = sizeof($this->track[$t]->coords[$s]);
+					$segmentTime = $this->giveTimestamp($this->track[$t]->coords[$s][$ncoords-1][3]) - $this->giveTimestamp($this->track[$t]->coords[$s][0][3]);
+					$this->totalMovingTime += $segmentTime;
+				}
 			}
 		}
 
@@ -1106,6 +1129,12 @@ class GpsDataClass
 		}
 
 		$this->distance = $this->allDistances[count($this->allDistances)-1];
+
+		if ($this->speedDataExists) // FIXME
+		{
+			$this->totalTime = $this->giveTimestamp($this->end[3]) - $this->giveTimestamp($this->start[3]);
+			if ($this->totalTime != 0) $this->avgSpeed = $this->distance/($this->totalTime/3600.);
+		}
 
 		if ($this->elevationDataExists)
 		{

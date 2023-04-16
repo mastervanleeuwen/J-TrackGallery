@@ -127,6 +127,15 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
+		<field name="jtg_param_info_fields" type="checkboxes" label="COM_JTG_MENU_INFO_FIELDS" description="COM_JTG_TT_MENU_INFO_FIELDS" default="dist,ele,time,speed">
+			<option value="dist">COM_JTG_DISTANCE</option>
+			<option value="ele">COM_JTG_ELEVATION</option>
+			<option value="time">COM_JTG_DURATION</option>
+			<option value="speed">COM_JTG_AVGSPEED</option>
+			<option value="owner">COM_JTG_OWNER</option>
+			<option value="date">COM_JTG_DATE</option>
+			<option value="hits">COM_JTG_HITS</option>
+		</field>
 		<field name="jtg_param_show_durationcalc" type="radio"
 			addfieldpath="/administrator/components/com_jtg/elements" default="1"
 			label="COM_JTG_MENU_SHOW_DURATIONCALC" description="COM_JTG_TT_MENU_SHOW_DURATIONCALC">

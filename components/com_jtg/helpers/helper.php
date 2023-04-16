@@ -574,7 +574,6 @@ class JtgHelper
 	 */
 	static public function getConfig()
 	{
-		$mainframe = JFactory::getApplication();
 		$db = JtgHelper::getDbo();
 
 		$query = "SELECT * FROM #__jtg_config WHERE id='1'";
@@ -582,6 +581,27 @@ class JtgHelper
 		$result = $db->loadObject();
 
 		return $result;
+	}
+
+	static public function getTerrainLabel($terrainid)
+	{
+		$db = JtgHelper::getDbo();
+		$query = "SELECT * FROM #__jtg_terrains WHERE id=" . $terrainid . " ORDER BY title ASC";
+
+		$db->setQuery($query);
+		$row = $db->loadObjectList();
+		$terrain = array();
+
+		if ($row)
+		{
+			foreach ($row as $v)
+			{
+				$v->title = JText::_($v->title);
+				$terrain[] = $v;
+			}
+		}
+
+		return $terrain;
 	}
 
 	/**
@@ -1174,5 +1194,177 @@ static public function autoRotateImage($image) {
 				JText::_('COM_JTG_SEPARATOR_DEC'),
 				JText::_('COM_JTG_SEPARATOR_THS')
 		);
+	}
+
+	static public function formatLevel($ilevsel, $cfg)
+	{
+		$return = "\n";
+		$levels = explode("\n", $cfg->level);
+		array_unshift($levels, 'dummy');
+		$i = 0;
+
+		foreach ($levels as $level)
+		{
+			if (trim($level) != "")
+			{
+				if ($i == $ilevsel)
+				{
+					$selectedlevel = $i;
+					$selectedtext = $level;
+				}
+				$i ++;
+			}
+		}
+
+
+		return $selectedlevel . "/" . ($i - 1) . " - " . JText::_(trim($selectedtext));
+	}
+
+	/**
+	 * Get formatted time difference between from deltat in seconds
+	 *
+	 * @deltat  int  time difference in seconds
+	 *
+	 * @return formatted string with time difference 
+	*/
+	static public function formatTimeDiff($deltat) {
+		$tdiffd = (int) ($deltat/86400);
+		$tdiffh = (int) (($deltat%86400)/3600);
+		$tdiffm = (int) (($deltat%3600)/60);
+		$tdiffstr = '';
+		if ($tdiffd) $tdiffstr .= $tdiffd.' '.JText::_("COM_JTG_DAY_SHORT").' ';
+		if ($tdiffh) $tdiffstr .= $tdiffh.':';
+		$tdiffstr .= sprintf('%02d',$tdiffm);
+		return $tdiffstr;
+	}
+
+	/**
+	 * Get html output for track info
+	 *
+	 * @track  object database track object
+	 * @gpsTrack  object gpsClass object
+	 * @params  object config params object (component config)
+	 * @cfg  object config object (from custom database/config)
+	 *
+	 * @return string with html output
+	*/
+	static public function parseTrackInfo($track, $gpsTrack, $params, $cfg) {
+		$htmlout = '  <div class="gps-info-cont">
+    <div class="block-header">'.JText::_('COM_JTG_DETAILS')."</div>\n";
+      $htmlout .= '   <div class="gps-info"><table class="gps-info-tab">';
+		$fieldlist = $params->get('jtg_param_info_fields');
+		if (is_null($fieldlist)) $fieldlist = array("dist","ele","time","speed");
+		if ( in_array('dist',$fieldlist) && ($track->distance != "") && ((float) $track->distance != 0) )
+		{
+			$htmlout .= "   <tr> 
+    <td>".JText::_('COM_JTG_DISTANCE').":</td>
+    <td>".JtgHelper::getFormattedDistance($track->distance, '', $cfg->unit)."</td>
+  </tr>\n";
+		}
+
+		if ( $gpsTrack->totalMovingTime != 0 || $gpsTrack->totalTime != 0 )
+{
+			if ( in_array('time', $fieldlist) && isset($gpsTrack->totalMovingTime) && isset($gpsTrack->totalTime) ) {
+				$htmlout .= "  <tr>\n    <td>".JText::_('COM_JTG_MOVING_TIME').":</td>\n".
+					"    <td>".JtgHelper::formatTimeDiff($gpsTrack->totalMovingTime);
+            if ($gpsTrack->totalTime != $gpsTrack->totalMovingTime) {
+					$htmlout .= " ( ".JText::_('COM_JTG_TOTAL_TIME').": ".JtgHelper::formatTimeDiff($gpsTrack->totalTime)." )";
+				}
+				$htmlout .= "    </td>\n  </tr>\n";
+			}
+			if ( in_array('speed', $fieldlist) ) {
+   			$avgSpeed = -1;
+   			if ($gpsTrack->totalMovingTime != 0) {
+					// TODO: use track or gpsTrack info?
+					$avgSpeed = $gpsTrack->distance/$gpsTrack->totalMovingTime*3600;
+				}
+				else if ($gpsTrack->totalTime != 0) {
+					$avgSpeed = $gpsTrack->totalDistance/$gpsTrack->totalTime*3600;
+				}
+				if ($cfg->unit == "miles") jtgHelper::getMiles($avgSpeed);
+				$htmlout .= "  <tr>\n    <td>".JText::_('COM_JTG_AVGSPEED').":</td>\n".
+					"    <td>".
+					number_format( $avgSpeed, 2,
+            	JText::_('COM_JTG_SEPARATOR_DEC'),
+            	JText::_('COM_JTG_SEPARATOR_THS')).' '.
+            	JText::_("COM_JTG_SPEED_UNIT_".strtoupper($cfg->unit)).
+					"    </td>\n   </tr>\n";
+			}
+		}
+		if ( in_array('ele',$fieldlist) ) {
+			$htmlout .= "  <tr>\n     <td>".
+				JText::_('COM_JTG_ELEVATION_UP').":</td>\n".
+				"    <td>".$track->ele_asc.' '.
+				JText::_('COM_JTG_UNIT_METER')." </td>\n  </tr>\n";
+			$htmlout .= "  <tr>\n     <td>".
+				JText::_('COM_JTG_ELEVATION_DOWN').":</td>\n".
+				"    <td>".$track->ele_desc.' '.
+				JText::_('COM_JTG_UNIT_METER')." </td>\n  </tr>\n";
+		}
+		$htmlout .= "</table>\n</div>\n";
+		$htmlout .= "<div class=\"gps-info\"> <table class=\"gps-info-tab\">";
+		if ( $cfg->uselevel && $track->level != "0" )
+      {
+			$htmlout .= "  <tr>\n     <td>".
+            JText::_('COM_JTG_LEVEL').":</td>\n".
+            "    <td>".JtgHelper::formatLevel($track->level,$cfg)."</td>\n".
+				"  </tr>\n";
+		}
+		if ($params->get('jtg_param_use_cats'))
+		{
+			$sortedcats = JtgModeljtg::getCatsData(true); // TODO: pass as argument?
+			$htmlout .= "  <tr>\n     <td>".
+				JText::_('COM_JTG_CATS').":</td>\n".
+            '  <td colspan="2">'.JtgHelper::parseMoreCats($sortedcats, $track->catid, "TrackDetails", true)."</td>\n".
+				"  </tr>";
+      }
+		if (! $params->get("jtg_param_disable_terrains"))
+		{
+			// Terrain description is enabled
+			if ($track->terrain)
+			{
+				$terrain = $track->terrain;
+				$terrain = explode(',', $terrain);
+				$newterrain = array();
+
+				foreach ($terrain as $t)
+				{
+					$t = JtgHelper::getTerrainLabel($t);
+
+					if ( ( isset($t[0])) AND ( $t[0]->published == 1 ) )
+					{
+						$newterrain[] = $t[0]->title;
+					}
+				}
+				$terrain = implode(', ', $newterrain);
+				$htmlout .= "  <tr>\n    <td>".
+					JText::_('COM_JTG_TERRAIN').":</td>\n".
+					"    <td>".$terrain."</td>\n  </tr>";
+			}
+		}
+		if ( in_array('owner', $fieldlist) )
+		{
+			$htmlout .= "  <tr>\n     <td>".
+				JText::_('COM_JTG_UPLOADER').":</td>\n".
+				"    <td>".JtgHelper::getProfileLink($track->uid, $track->user).
+				"</td>\n  </tr>";
+		}
+		if ( in_array('date', $fieldlist) && $track->date )
+		{
+			$htmlout .= "  <tr>\n     <td>".
+				JText::_('COM_JTG_DATE').":</td>\n".
+				"    <td>".JHtml::_('date', $track->date, JText::_('COM_JTG_DATE_FORMAT_LC4')).
+				"</td>\n  </tr>";
+		}
+		if ( in_array('hits', $fieldlist) )
+		{
+			$htmlout .= "  <tr>\n     <td>".
+				JText::_('COM_JTG_HITS').":</td>\n".
+				"    <td>".$track->hits.
+				"</td>\n  </tr>";
+		}
+
+		$htmlout .= "</table>\n</div>\n</div>\n";
+		return $htmlout;
 	}
 }

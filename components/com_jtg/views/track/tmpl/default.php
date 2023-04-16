@@ -165,126 +165,15 @@ img.olTileImage {
 </div>
 	<?php
 		echo $graphJS;
+		echo '<div class="description"></div>'."\n";
 	}
 
 	if ($gps_info){
-	?>
-	<div class="description"></div>
-	<div class="gps-info-cont">
-	    <div class="block-header"><?php echo JText::_('COM_JTG_DETAILS');?></div>
-		<div class="gps-info"><table class="gps-info-tab">
-
-<?php
-if ( ($this->track->distance != "") AND ((float) $this->track->distance != 0) )
-{
-?>
-			<tr>
-				<td><?php echo JText::_('COM_JTG_DISTANCE'); ?>:</td>
-				<td><?php echo JtgHelper::getFormattedDistance($this->track->distance, '', $this->cfg->unit); ?></td>
-			</tr>
-<?php
-}
-
-if ($this->track->ele_asc)
-{
-?>
-			<tr>
-				<td><?php echo JText::_('COM_JTG_ELEVATION_UP'); ?>:</td>
-				<td><?php
-					echo $this->track->ele_asc;
-					echo ' ' . JText::_('COM_JTG_UNIT_METER');
-					?>
-				</td>
-			</tr>
-<?php
-}
-
-if ($this->track->ele_desc)
-{
-?>
-			<tr>
-				<td><?php echo JText::_('COM_JTG_ELEVATION_DOWN'); ?>:</td>	
-				<td><?php echo $this->track->ele_desc; ?>
-			    	<?php echo ' ' . JText::_('COM_JTG_UNIT_METER'); ?>
-					</td>
-			</tr>
-<?php
-}
-?>
-
-		<?php if ( $this->cfg->uselevel && $this->track->level != "0" )
-		{
-		?>
-			<tr>
-				<td><?php echo JText::_('COM_JTG_LEVEL'); ?>:</td>
-				<td><?php echo $this->model->getLevel($this->track->level); ?></td>
-			</tr>
-<?php
-} ?>
-		<?php if ($this->params->get('jtg_param_use_cats'))
-			{
-		?>
-	 		<tr>
-				<td><?php echo JText::_('COM_JTG_CATS'); ?>:</td>
-				<td colspan="2"><?php
-				echo $JtgHelper->parseMoreCats($sortedcats, $this->track->catid, "TrackDetails", true);
-				?>
-				</td>
-			</tr>
-<?php
-		}
-if (! $this->params->get("jtg_param_disable_terrains"))
-{
-	// Terrain description is enabled
-	if ($this->track->terrain)
-	{
-		$terrain = $this->track->terrain;
-		$terrain = explode(',', $terrain);
-		$newterrain = array();
-
-		foreach ($terrain as $t)
-		{
-			$t = $this->model->getTerrain(' WHERE id=' . $t);
-
-			if ( ( isset($t[0])) AND ( $t[0]->published == 1 ) )
-			{
-				$newterrain[] = $t[0]->title;
-			}
-		}
-
-		$terrain = implode(', ', $newterrain);
-		echo "<tr><td>".JText::_('COM_JTG_TERRAIN').":</td><td>".$terrain."</td></tr>";
+		echo JtgHelper::parseTrackInfo($this->track, $this->gpsTrack, $this->params, $this->cfg);
 	}
-	else
+	echo "<div class=\"description\">\n";
+	if ($this->cfg->usevote == 1)
 	{
-		echo "<a name=\"jtg_param_header_terrain\"></a>";
-	}
-}
-?>
-		</table>
-		</div>
-		<div class="gps-info">
-		<table class="gps-info-tab">
-				<tr>
-					<td><?php echo JText::_('COM_JTG_UPLOADER'); ?>:</td>
-					<td><?php echo JtgHelper::getProfileLink($this->track->uid, $this->track->user); ?></td>
-				</tr>
-					</td>
-				</tr>
-				<tr>
-					<td><?php echo JText::_('COM_JTG_DATE'); ?>:</td>
-					<td><?php echo $this->date; ?></td>
-				</tr>
-				<tr>
-					<td><?php echo JText::_('COM_JTG_HITS'); ?>:</td>
-					<td><?php echo $this->track->hits; ?></td>
-				</tr>
-
-				
-		</table>
-	<?php
-    if ($this->cfg->usevote == 1)
-    {
 		//echo $this->parseTemplate("headline", JText::_('COM_JTG_VOTING'), "jtg_param_header_rating");
 		$vote = $this->model->getVotes($this->id);
 
@@ -299,52 +188,45 @@ if (! $this->params->get("jtg_param_disable_terrains"))
 			8 => "eight",
 			9 => "nine",
 			10 => "ten"
-			);
-		$template = "<div id=\"ratingbox\">
-			<ul id=\"1001\" class=\"rating " . $vote['class'] . "\">\n";
+		);
 
-
-	for ($i = 1; $i <= 10; $i++)
-	{
-		$link = "index.php?option=com_jtg&controller=track&id=" . $this->track->id . "&task=vote&rate=" . $i . "#jtg_param_header_rating";
-		$link = JRoute::_($link, false);
-		$template .= "		<li id=\"" . $i . "\" class=\"rate " . $stars[$i] . "\">\n"
-		. "			<a href=\"" . $link . "\" title=\"" . JText::_('COM_JTG_STARS_' . $i) . "\" rel=\"nofollow\">" . $i . "</a>\n"
-		. "		</li>\n";
-	}
-
-	$template .= "	</ul>\n";
-
-	if ( $vote['count'] == 0 )
-	{
-		$template .= JText::_('COM_JTG_NOT_VOTED') . "\n";
-	}
-	else
-	{
-		$template .= JText::sprintf(
+		echo "<div class=\"ratinglabel\">";
+		if ( $vote['count'] == 0 )
+		{
+			echo JText::_('COM_JTG_NOT_VOTED') . "\n";
+		}
+		else
+		{
+			echo JText::sprintf(
 				'COM_JTG_TRACK_RATING',
 				$JtgHelper->getLocatedFloat($vote['rate'],0),
 				$vote['count']
 				) . "\n";
+		}
+		echo "</div>\n<div id=\"ratingbox\">
+		<ul id=\"1001\" class=\"rating " . $vote['class'] . "\">\n";
+
+
+		for ($i = 1; $i <= 10; $i++)
+		{
+			$link = "index.php?option=com_jtg&controller=track&id=" . $this->track->id . "&task=vote&rate=" . $i . "#jtg_param_header_rating";
+			$link = JRoute::_($link, false);
+			echo "		<li id=\"" . $i . "\" class=\"rate " . $stars[$i] . "\">\n"
+				. "			<a href=\"" . $link . "\" title=\"" . JText::_('COM_JTG_STARS_' . $i) . "\" rel=\"nofollow\">" . $i . "</a>\n"
+				. "		</li>\n";
+		}
+
+		echo "	</ul>\n</div>";
 	}
-
-	//echo $this->parseTemplate("description", $template);
-	echo $template."</div>";
-    }
 	else
-    {
-    	echo "<a name=\"jtg_param_header_rating\"></a>";
-    }
-
-	?>
-	</div>
-
-	<div class="fb-share-button" data-href="<?php echo Uri::getInstance()->toString()?>" data-layout="button" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(Uri::getInstance()->toString())?>&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
-	</div>
-
-	<div class="no-float"></div>
-<?php } // end if $gps_info
+	{
+  		echo "<a name=\"jtg_param_header_rating\"></a>";
+	}
 ?>
+
+<div class="fb-share-button" data-href="<?php echo Uri::getInstance()->toString()?>" data-layout="button" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(Uri::getInstance()->toString())?>&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+</div>
+
 
 <div class="no-float"></div>
 

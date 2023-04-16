@@ -49,6 +49,7 @@ a.anchor:hover {
 	width: 160px;
 	height: 16px;
 	padding: 0;
+	margin: 0 0 0 5px;
 	list-style: none;
 	clear: both;
 	position: relative;
@@ -210,6 +211,12 @@ ul.rating li.ten a:hover {
 /* end rating code */
 
 /* form fields */
+#pace {
+	width: 15%;
+	max-width: 5em;
+	margin-bottom: 0;
+}
+
 #speed {
 	width: 15%;
 	max-width: 5em;
@@ -660,7 +667,7 @@ v\:rect,v\:roundrect,v\:line,v\:polyline,v\:curve,v\:arc,v\:oval,v\:image,v\:sha
 .gps-info-tab {
    width: 100%;
    border: 0;
-   margin: 5px;
+   margin: 10px 0px 5px 10px;
    vertical-align: top;
 }
 
@@ -858,11 +865,16 @@ span label {
 	border: 1px solid #aaa6a6;
 }
 
+.ratinglabel {
+	display: inline-block;
+	padding: 0 0 5px;
+	vertical-align: top;
+}
+
 #ratingbox {
+	display: inline-block;
 	left: 0;
-	margin-right: 150px;
-	float: left;
-	padding: 5px;
+	padding: 0 0 5px 15px;
 }
 
 #downloadbox {

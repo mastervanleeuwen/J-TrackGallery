@@ -516,6 +516,7 @@ class Com_JtgInstallerScript
 			"jtg_param_elevation_filter_min_ascent":"10",
 			"jtg_param_show_heightchart":"1",
 			"jtg_param_hide_track_info":"0",
+			"jtg_param_info_fields":["dist","ele","time","speed"],
 			"jtg_param_show_durationcalc":"1",
 			"jtg_param_add_startmarker":"1",
 			"jtg_param_show_panzoombar":"1",
