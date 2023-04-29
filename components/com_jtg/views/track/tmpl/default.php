@@ -155,7 +155,8 @@ img.olTileImage {
 <?php
 	echo $this->mapJS;
 	$sortedcats = JtgModeljtg::getCatsData(true);
-	$usepace = $this->track->catid? $sortedcats[$this->track->catid]->usepace: 0;
+	$catids = explode(',',$this->track->catid);
+	$usepace = is_numeric($catids[0])? $sortedcats[$catids[0]]->usepace: 0;
 	$graphJS = JtgMapHelper::parseGraphJS($this->gpsTrack, $this->cfg, $this->params, $usepace);
 	if (!empty($graphJS))
 	{
