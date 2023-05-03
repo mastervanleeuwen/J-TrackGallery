@@ -1250,7 +1250,7 @@ static public function autoRotateImage($image) {
 	*/
 	static public function parseTrackInfo($track, $gpsTrack, $params, $cfg, $fieldlist = null, $width = null) {
 		$widthstr = '';
-		if (!is_null($width)) $widthstr = 'style="width: '.$map_width.'"';
+		if (!is_null($width)) $widthstr = 'style="width: '.$width.'"';
 		$htmlout = '  <div class="gps-info-cont"'.$widthstr.'>
     <div class="block-header">'.JText::_('COM_JTG_DETAILS')."</div>\n";
       $htmlout .= '   <div class="gps-info"><table class="gps-info-tab">';

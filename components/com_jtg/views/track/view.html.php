@@ -204,7 +204,7 @@ class JtgViewTrack extends JViewLegacy
 			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($this->track->file);
 			$gpsData->loadFileAndData($file, $this->track->file);
 			$this->imageList = $model->getImages($this->id);
-
+			$this->mapJS = '';
 			if (!$gpsData->displayErrors())
 			{
 				$makepreview = false;

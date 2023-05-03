@@ -157,7 +157,8 @@ img.olTileImage {
 	$sortedcats = JtgModeljtg::getCatsData(true);
 	$catids = explode(',',$this->track->catid);
 	$usepace = is_numeric($catids[0])? $sortedcats[$catids[0]]->usepace: 0;
-	$graphJS = JtgMapHelper::parseGraphJS($this->gpsTrack, $this->cfg, $this->params, $usepace);
+	$graphJS = "";
+	if (isset($this->gpsTrack)) $graphJS = JtgMapHelper::parseGraphJS($this->gpsTrack, $this->cfg, $this->params, $usepace);
 	if (!empty($graphJS))
 	{
 	?>
@@ -169,7 +170,7 @@ img.olTileImage {
 		echo '<div class="description"></div>'."\n";
 	}
 
-	if ($gps_info){
+	if ($gps_info && isset($this->gpsTrack)){
 		echo JtgHelper::parseTrackInfo($this->track, $this->gpsTrack, $this->params, $this->cfg);
 	}
 	echo "<div class=\"description\">\n";
