@@ -1248,11 +1248,13 @@ static public function autoRotateImage($image) {
 	 *
 	 * @return string with html output
 	*/
-	static public function parseTrackInfo($track, $gpsTrack, $params, $cfg) {
-		$htmlout = '  <div class="gps-info-cont">
+	static public function parseTrackInfo($track, $gpsTrack, $params, $cfg, $fieldlist = null, $width = null) {
+		$widthstr = '';
+		if (!is_null($width)) $widthstr = 'style="width: '.$map_width.'"';
+		$htmlout = '  <div class="gps-info-cont"'.$widthstr.'>
     <div class="block-header">'.JText::_('COM_JTG_DETAILS')."</div>\n";
       $htmlout .= '   <div class="gps-info"><table class="gps-info-tab">';
-		$fieldlist = $params->get('jtg_param_info_fields');
+		if (is_null($fieldlist)) $fieldlist = $params->get('jtg_param_info_fields');
 		if (is_null($fieldlist)) $fieldlist = array("dist","ele","time","speed");
 		if ( in_array('dist',$fieldlist) && ($track->distance != "") && ((float) $track->distance != 0) )
 		{

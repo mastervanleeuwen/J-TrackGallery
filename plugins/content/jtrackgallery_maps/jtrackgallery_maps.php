@@ -156,10 +156,17 @@ class plgContentJtrackgallery_maps extends JPlugin {
 					if ($this->map_count < 10)
 					{
 						$plg_html .= $this->rendermap($plgParams, $plg_call_params);
-						if (isset($plg_call_params['show_link']) && $plg_call_params['show_link']) { 
-							$target = '';
-							if ($plg_call_params['show_link'] == 2) $target = ' target="_blank"';
-						   $plg_html .= '<div class="jtg-gpx-link"><a href="'.JRoute::_('index.php?option=com_jtg&view=track&id='.$plg_call_params['id']).'"'.$target.'>GPX track</a></div>';
+						$linktarget = '';
+						if (isset($plg_call_params['show_link'])) {
+							if ($plg_call_params['show_link']) $showlink = true; else $showlink = false;
+							if ($plg_call_params['show_link'] == 2) $linktarget = ' target="_blank"';
+						}
+						else {
+							$showlink = $plgParams['show_link'];
+							if ($plgParams['link_newtab']) $linktarget = ' target="_blank"';
+						}
+						if ($showlink) {
+						   $plg_html .= '<div class="jtg-gpx-link"><a href="'.JRoute::_('index.php?option=com_jtg&view=track&id='.$plg_call_params['id']).'"'.$linktarget.'>'.JText::_($plgParams['link_text']).'</a></div>';
 						}
 					}
 					else
@@ -288,7 +295,12 @@ img.olTileImage {
 		$map .= "\n<center>\n<div id=\"jtg_map_{$this->map_count}\"  align=\"center\" class=\"olMap\" >";
 		$map .= "\n</div>\n</center>\n";
 		$map .= JtgMapHelper::parseTrackMapJS( $gpsData, $plg_call_params['id'], $mapid, $trackImages, false, true, $layerSwitcher, $trackColors, 'jtg_map_'.$this->map_count);
-		if (isset($plg_call_params['show_graph']) && $plg_call_params['show_graph'] != '0')
+		$show_graph = false;
+		if (isset($plg_call_params['show_graph'])) {
+			if ($plg_call_params['show_graph'] != '0') $show_graph = true;
+		}
+		else if ($plgParam['show_graph']) $show_graph = true;
+		if ($show_graph) 
 		{
 			$usepace = false;
 			$graphid = "elevation_".$this->map_count;
@@ -301,80 +313,18 @@ img.olTileImage {
 				$map .= $graphJS;
 			}
 		}
-		if (isset($plg_call_params['show_info']) && $plg_call_params['show_info'] != '0') {
-			$map .= '	<div class="gps-info-cont" style="width: '.$map_width.'";>'."\n".
-				'	<div class="block-header">'.JText::_('COM_JTG_DETAILS')."</div>\n".
-				'	<div class="gps-info"><table class="gps-info-tab">'."\n";
-
-			if ( ($track->distance != "") AND ((float) $track->distance != 0) )
-			{
-				$map .= "	<tr>\n".
-					"		<td>".JText::_('COM_JTG_DISTANCE')."</td>\n".
-					"		<td>".JtgHelper::getFormattedDistance($track->distance, '', $cfg->unit)."</td>\n".
-					"	</tr>\n";
-			}
-
-			if ($track->ele_asc)
-			{
-				$map .= "	<tr>\n".
-					"		<td>".JText::_('COM_JTG_ELEVATION_UP')."</td>\n".
-					"		<td>$track->ele_asc ".JText::_('COM_JTG_UNIT_METER')."</td>\n".
-					"	</tr>\n";
-			}
-
-			if ($track->ele_desc)
-			{
-				$map .= "	<tr>\n".
-					"		<td>".JText::_('COM_JTG_ELEVATION_DOWN')."</td>\n".
-					"		<td>$track->ele_desc ".JText::_('COM_JTG_UNIT_METER')."</td>\n".
-					"	</tr>\n";
-			}
-			$map .= "	</table> </div>\n".
-				'  <div class="gps-info"><table class="gps-info-tab">'."\n";
-			if ( $cfg->uselevel && $track->level != "0" )
-			{
-				$map .= "	<tr>\n".
-					"		<td>".JText::_('COM_JTG_LEVEL')."</td>\n".
-					"		<td>".$model->getLevel($track->level)."</td>\n".
-					"	</tr>\n";
-			}
-			if ($params->get('jtg_param_use_cats')) {
-				$sortedcats = JtgModeljtg::getCatsData(true);
-				$map .= "	<tr>\n".
-					"		<td>".JText::_('COM_JTG_CATS')."</td>\n".
-					'		<td colspan="2">'.
-					JtgHelper::parseMoreCats($sortedcats, $track->catid, "TrackDetails", true).
-					" </td>\n".
-					"	</tr>\n";
-			}
-			if (! $params->get("jtg_param_disable_terrains"))
-			{
-				// Terrain description is enabled
-				if ($track->terrain)
-				{
-					$terrain = $track->terrain;
-					$terrain = explode(',', $terrain);
-					$newterrain = array();
-
-					foreach ($terrain as $t)
-					{
-						$t = $model->getTerrain(' WHERE id=' . $t);
-
-						if ( ( isset($t[0])) AND ( $t[0]->published == 1 ) )
-						{
-							$newterrain[] = $t[0]->title;
-						}
-					}
-
-					$terrain = implode(', ', $newterrain);
-					$map .= "<tr><td>".JText::_('COM_JTG_TERRAIN')."</td><td>".$terrain."</td></tr>";
-				}
-			}
-			$map .= "</table>\n</div>";
+		$show_info = false;
+		if (isset($plg_call_params['show_info'])) {
+			if ($plg_call_params['show_info'] != '0') $show_info = true;
 		}
-	}
+		else if ($plgParams['show_info']) $show_info = true;
+		if ($show_info) {
+			$fieldlist = $plgParams['info_fields'];
+			$map .= JtgHelper::parseTrackInfo($track, $gpsData, $params, $cfg, $fieldlist, $map_width);
+		}
+		}
 
-	return $map;
-}
+		return $map;
+	}
 
 } // END CLASS

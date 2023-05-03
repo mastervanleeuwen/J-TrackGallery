@@ -42,7 +42,51 @@
 					label="PLG_JTG_MAPS_FIELD_HEIGHT_LABEL" 
 				>
 				</field>
-			</fieldset>
+				<field name="show_graph"
+					type="radio" default="0" layout="joomla.form.field.radio.switcher"
+					label="PLG_JTG_MAPS_SHOW_GRAPH"
+					description="PLG_JTG_MAPS_SHOW_GRAPH_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="show_info"
+					type="radio" default="1" layout="joomla.form.field.radio.switcher"
+					label="PLG_JTG_MAPS_SHOW_INFO">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="info_fields" type="checkboxes" label="COM_JTG_MENU_INFO_FIELDS" description="COM_JTG_TT_MENU_INFO_FIELDS" default="dist,ele,time,speed">
+					<option value="dist">COM_JTG_DISTANCE</option>
+					<option value="ele">COM_JTG_ELEVATION</option>
+					<option value="time">COM_JTG_DURATION</option>
+					<option value="speed">COM_JTG_AVGSPEED</option>
+					<option value="owner">COM_JTG_OWNER</option>
+					<option value="date">COM_JTG_DATE</option>
+					<option value="hits">COM_JTG_HITS</option>
+				</field>
+				<field name="show_link"
+					type="radio" default="1" layout="joomla.form.field.radio.switcher"
+					label="PLG_JTG_MAPS_SHOW_LINK"
+					description="PLG_JTG_MAPS_SHOW_LINK_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="link_newtab"
+					type="radio" default="0" layout="joomla.form.field.radio.switcher"
+					label="PLG_JTG_MAPS_LINK_NEWTAB">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="link_text"
+					type="input"
+					class="text"
+					size="50"
+					default="More GPS track information"
+					description="PLG_JTG_MAPS_LINK_TEXT_DESC"
+					label="PLG_JTG_MAPS_LINK_TEXT" 
+				>
+				</field>
+		</fieldset>
 		</fields>
 	</config>
 	<updateservers>
