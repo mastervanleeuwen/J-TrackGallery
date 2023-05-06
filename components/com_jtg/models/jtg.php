@@ -34,7 +34,7 @@ class JtgModeljtg extends JModelList
 	/**
 	 * Constructor
 	 */
-	public function __construct()
+	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields']))
 		{
@@ -45,7 +45,7 @@ class JtgModeljtg extends JModelList
 				'trackcat',
 				'tracklevel');
 		}
-		parent::__construct();
+		parent::__construct($config);
 	}
 
    protected function getListQuery(){

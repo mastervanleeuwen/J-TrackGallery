@@ -22,18 +22,11 @@
 		    hint="COM_JTG_MAX_DISTANCE"
 		    onchange="this.form.submit()"
 		/>
-        <field
+		<field
             name="tracklevel"
-            type="list"
-            hint="COM_JTG_LEVEL"
-            onchange="this.form.submit()">
-            <option value="">COM_JTG_LEVEL</option>
-            <option value="1">COM_JTG_LEVEL_1</option>
-            <option value="2">COM_JTG_LEVEL_2</option>
-            <option value="3">COM_JTG_LEVEL_3</option>
-            <option value="4">COM_JTG_LEVEL_4</option>
-            <option value="5">COM_JTG_LEVEL_5</option>
-        </field>
+            type="tracklevel"
+            onchange="this.form.submit()"
+		/>
 		<field
 		    name="trackcat"
 		    type="trackcategory"
