@@ -299,7 +299,7 @@ img.olTileImage {
 		if (isset($plg_call_params['show_graph'])) {
 			if ($plg_call_params['show_graph'] != '0') $show_graph = true;
 		}
-		else if ($plgParam['show_graph']) $show_graph = true;
+		else if ($plgParams['show_graph']) $show_graph = true;
 		if ($show_graph) 
 		{
 			$usepace = false;
