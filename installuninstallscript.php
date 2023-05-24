@@ -524,6 +524,7 @@ class Com_JtgInstallerScript
 			"jtg_param_show_scale":"1",
 			"jtg_param_allow_mousemove":"1",
 			"jtg_param_allow_keymove":"0",
+			"jtg_param_show_plugin_button":"1",
 			"jtg_param_offer_download_original":"1",
 			"jtg_param_offer_download_gpx":"1",
 			"jtg_param_offer_download_kml":"1",

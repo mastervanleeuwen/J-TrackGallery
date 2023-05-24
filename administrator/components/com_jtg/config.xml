@@ -142,6 +142,12 @@
 			<option value="1">COM_JTG_AUTOMATIC</option>
 			<option value="0">JHIDE</option>
 		</field>
+		<field name="jtg_param_show_plugin_button" type="radio"
+			default="1"
+			label="COM_JTG_MENU_SHOW_PLUGIN_BUTTON" description="COM_JTG_TT_MENU_SHOW_PLUGIN_BUTTON">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 		<field type="spacer" name="myspacer2" class="text"
 			label="COM_JTG_MENUSPACER_DOWNLOAD" />
 		<field name="jtg_param_offer_download_original" type="radio"

@@ -279,6 +279,7 @@ if ($this->canDo->get('jtg.download'))
 		TCX " . JText::_('COM_JTG_CONVERTED_FILE') . "</button>";
 	}
 ?>
+
 <form name="adminForm" id="adminForm" method="post"
 	action="<?php echo JRoute::_("index.php?option=com_jtg&controller=download&task=download"); ?>">
 
@@ -456,6 +457,15 @@ else
 // Approach END
 ?>
 <div>
+<?php
+	if ( $user->id && $this->params->get("jtg_param_show_plugin_button") )
+	{
+?>
+<button class="btn btn-primary" type="button" onclick="navigator.clipboard.writeText('<?php echo "{JTRACKGALLERYMAP} gpxfilename=".$this->track->file." {/JTRACKGALLERYMAP}";?>'); alert('<?php echo JText::sprintf('COM_JTG_SCRIPT_MESSAGE',$this->track->file);?>')"><?php echo JText::_('COM_JTG_SCRIPT_CLIPBOARD');?></button>
+
+<?php
+}
+?>
 <?php
 	if ($this->canDo->get('core.edit') || ($this->canDo->get('core.edit.own') && $this->track->uid == $user->id)) { ?>
   <button class="btn btn-primary" type="button" onclick="location = '<?php echo JRoute::_("index.php?option=com_jtg&view=track&layout=form&id=$this->id"); ?>'">
