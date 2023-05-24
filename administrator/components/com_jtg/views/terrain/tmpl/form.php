@@ -26,7 +26,7 @@ if ($this->id < 1)
 	$terrain->title = "";
 	$terrain->published = 1;
 	$terrain->checked_out = 0;
-	$terrain->ordering = 0;
+	$terrain->ordering = $this->getModel()->getTotal()+1;
 }
 else
 {
@@ -67,6 +67,11 @@ if ( $this->id )
 				<td width="150px"><?php echo JText::_('COM_JTG_TITLE'); ?></td>
 				<td><input type="text" name="title"
 					value="<?php echo $terrain->title ?>" /> (<?php echo JText::_($terrain->title); ?>)</td>
+			</tr>
+			<tr>
+				<td width="150px"><?php echo JText::_('COM_JTG_ORDER'); ?></td>
+				<td><input type="number" name="ordering"
+					value="<?php echo $terrain->ordering ?>" /> </td>
 			</tr>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_PUBLISHED'); ?></td>
