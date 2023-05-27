@@ -21,6 +21,10 @@ defined('_JEXEC') or die('Restricted access');
 // Load core.js to enable tableordering
 JHtml::_('script', 'system/core.js', false, true);
 
+$this->filterForm = $this->get('FilterForm');
+if (!$this->params->get('jtg_param_use_cats')) $this->filterForm->removeField('trackcat','filter');
+if (!$this->cfg->uselevel) $this->filterForm->removeField('tracklevel','filter');
+
 echo $this->lh;
 
 $iconheight = $this->params->get('jtg_param_list_icon_max_height');

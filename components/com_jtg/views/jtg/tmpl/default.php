@@ -20,7 +20,10 @@ $this->get('State'); // have to get state before we can set state variables
 $this->getModel()->setState('list.limit','0'); // show all tracks
 $this->items = $this->get('Items');
 $this->filterForm = $this->get('FilterForm');
-$this->activeFilters = $this->get('ActiveFilters');
+
+if (!$this->params->get('jtg_param_use_cats')) $this->filterForm->removeField('trackcat','filter');
+if (!$this->cfg->uselevel) $this->filterForm->removeField('tracklevel','filter');
+
 echo $this->lh;
 
 echo "\n<script>\n";
