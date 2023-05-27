@@ -16,21 +16,22 @@
 		    onchange="this.form.submit();"
 		/>
 		<field
-		    name="maxdist"
-		    type="number"
-		    label="COM_JTG_DISTANCE"
-		    hint="COM_JTG_MAX_DISTANCE"
-		    onchange="this.form.submit()"
+		 	name="maxdist"
+			type="number"
+			label="COM_JTG_DISTANCE"
+			hint="COM_JTG_MAX_DISTANCE"
+			onchange="this.form.submit()"
 		/>
 		<field
-            name="tracklevel"
-            type="tracklevel"
-            onchange="this.form.submit()"
+			name="tracklevel"
+			type="tracklevel"
+			onchange="this.form.submit()"
 		/>
 		<field
-		    name="trackcat"
-		    type="trackcategory"
-		    onchange="this.form.submit()"
+			name="trackcat"
+			type="trackcategory"
+			multiple="multiple"
+			onchange="this.form.submit()"
 		/>
 	</fields>
 </form>

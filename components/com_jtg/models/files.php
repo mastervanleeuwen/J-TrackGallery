@@ -83,10 +83,18 @@ class JtgModelFiles extends JModelList
 		->join('LEFT','#__users AS c ON a.uid=c.id');
 		
 		// Filter company
-		$trackcat = $this->getState('filter.trackcat');
-		if (!empty($trackcat)) {
-		    //error_log('Got category from state '.$trackcat);
-			$query->where('a.catid LIKE '.$db->quote('%'.$trackcat.'%'));
+      $trackcats = $this->getState('filter.trackcat');
+      if (!empty($trackcats)) {
+			$iCount = 0;
+			foreach ($trackcats as $trackcat) {
+				if ($iCount == 0) {
+					$query->where('a.catid LIKE '.$db->quote('%'.$trackcat.'%'));
+				}
+				else {
+					$query->orWhere('a.catid LIKE '.$db->quote('%'.$trackcat.'%'));
+				}
+				$iCount++;
+			}
 		}
 		else {
 		    $trackcat = $input->get('cat');

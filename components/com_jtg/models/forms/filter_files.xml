@@ -28,9 +28,10 @@
             onchange="this.form.submit()"
 		/>
 		<field
-		    name="trackcat"
-		    type="trackcategory"
-		    onchange="this.form.submit()"
+			name="trackcat"
+		 	type="trackcategory"
+			multiple="multiple"
+			onchange="this.form.submit()"
 		/>
 	</fields>
 	<fields name="list">
