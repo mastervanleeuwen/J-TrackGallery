@@ -454,7 +454,6 @@ function addPopup(olmap) {
     olmap.on('singleclick', function(evt) {
 		var point = 0;
 		olmap = evt.map;
-		pixel = olmap.getEventPixel(evt.originalEvent);
 		olmap.forEachFeatureAtPixel(evt.pixel, function(feature) {
 			if (feature.getGeometry().getType() == 'Point') { 
 				point = feature;
