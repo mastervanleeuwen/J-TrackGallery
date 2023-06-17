@@ -71,54 +71,60 @@ function addPopupOverview() {
      * Add a click handler to hide the popup.
      * @return {boolean} Don't follow the href.
      */
-    closer.onclick = function() {
-        overlay.setPosition(undefined);
-        closer.blur();
-        popupActive = false;
-    };
+	closer.onclick = function() {
+		overlay.setPosition(undefined);
+		closer.blur();
+		popupActive = false;
+		popupHover = false;
+	};
 
-    container.onmouseover = function() {
-        popupHover = true;
-    };
+	container.onmouseover = function() {
+		popupHover = true;
+	};
 
-    container.onmouseout = function() {
-        popupHover = false;
-    };
+	container.onmouseout = function() {
+		popupHover = false;
+	};
 
-    jtgMap.addOverlay(overlay);
+	jtgMap.addOverlay(overlay);
 
-    function displayClusterInfo(pixel) {
-        var clusters = [];
-        jtgMap.forEachFeatureAtPixel(pixel, function(feature) {
-            if (feature.get('features')) { // only take clusters of features
-               clusters.push(feature);
-            }
-        });
-        if (clusters.length > 0) {
-            features = clusters[0].get('features');
-            var info = [];
-            var i, ii;
-            for (i = 0, ii = features.length; i < ii; ++i) {
-               info.push(features[i].get('name'));
-            }
-            content.innerHTML = info.join('<br>\n') || '(unknown)';
-            if (features.length == 1) {
-               content.innerHTML += features[0].get('description');
-            }
-				return clusters[0].getGeometry().getClosestPoint(pixel);
-            //olmap.getTarget().style.cursor = 'pointer';
-        } else {
-            content.innerHTML = '&nbsp;';
-            //olmap.getTarget().style.cursor = '';
-           return false;
-       }
-    }
+	function displayClusterInfo(evt) {
+		var clusters = [];
+		var mindist = 1e30;
+		var imin = -1;
+		// Could use cluster.getClosestFeatureToCoordinate instead?
+		jtgMap.forEachFeatureAtPixel(evt.pixel, function(feature) {
+			if (feature.get('features')) { // only take clusters of features
+				clusters.push(feature);
+				pos = feature.getGeometry().getClosestPoint(evt.coordinate);
+				dist = (evt.coordinate[0]-pos[0])*(evt.coordinate[0]-pos[0])+(evt.coordinate[1]-pos[1])*(evt.coordinate[1]-pos[1]);
+				if (dist < mindist) { mindist = dist; imin = clusters.length; }
+			}
+		});
+		if (clusters.length > 0 && imin > 0) {
+			features = clusters[imin-1].get('features');
+			var info = [];
+			var i, ii;
+			for (i = 0, ii = features.length; i < ii; ++i) {
+				info.push(features[i].get('name'));
+			}
+			content.innerHTML = info.join('<br>\n') || '(unknown)';
+			if (features.length == 1) {
+				content.innerHTML += features[0].get('description');
+			}
+			return clusters[imin-1].getGeometry().getClosestPoint(evt.coordinate);
+		} else {
+			content.innerHTML = '&nbsp;';
+			popupHover = false;
+			return false;
+		}
+	}
 
     /**
      * Add a click handler to the map to render the popup.
      */
     jtgMap.on('singleclick', function(evt) {
-       if ((coord = displayClusterInfo(evt.pixel))) {
+       if ((coord = displayClusterInfo(evt))) {
            overlay.setPosition(coord);
            popupActive = true;
        }
@@ -134,7 +140,7 @@ function addPopupOverview() {
            return;
        }
 
-       if ((coord = displayClusterInfo(evt.pixel))) {
+       if ((coord = displayClusterInfo(evt))) {
            overlay.setPosition(coord);
        }
        else {
