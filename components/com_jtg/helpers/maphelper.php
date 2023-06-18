@@ -465,10 +465,9 @@ EOS;
 	 * @param   object   $cfg               jtg configuration object
 	 * @param   object   $params            jtg parameters object
 	 * @param   boolean  $usepace           use pace instead of speed
-	 * @param   boolean  $showgraph         show graph even if the settings in the params are off (used in plugin)
 	 * @param   string   $elementid         id of element on the page where the graph is shown
     **/
-	static public function parseGraphJS($gpsTrack, $cfg, $params, $usepace, $showgraph=false, $elementid='elevation') {
+	static public function parseGraphJS($gpsTrack, $cfg, $params, $usepace, $elementid='elevation') {
 		$defaultlinecolor = "#000000";
 		$bgColor = $cfg->charts_bg? '#' . $cfg->charts_bg :"#ffffff";
 
@@ -477,7 +476,7 @@ EOS;
 
 		$axisnumber = 0;
 
-		if ( ($showgraph OR $params->get("jtg_param_show_heightchart")) AND $gpsTrack->elevationDataExists)
+		if ( $params->get("jtg_param_show_heightchart") AND $gpsTrack->elevationDataExists)
 		{
 			$charts_linec = $cfg->charts_linec? '#' . $cfg->charts_linec: $defaultlinecolor;
 			$axesJS[] = JtgMapHelper::parseGraphAxisJS(JText::_('COM_JTG_ELEVATION'), JText::_('COM_JTG_ELEVATION_UNIT'), $charts_linec,'false');
@@ -485,7 +484,7 @@ EOS;
 			$axisnumber ++;
 		}
 
-		if ( ($showgraph OR $params->get("jtg_param_show_speedchart")) AND $gpsTrack->speedDataExists )
+		if ( $params->get("jtg_param_show_speedchart") AND $gpsTrack->speedDataExists )
 		{
 			$speedcharthide = 0;
 			if ($usepace)
@@ -508,7 +507,7 @@ EOS;
 			$axisnumber ++;
 		}
 
-		if (($showgraph OR $params->get("jtg_param_show_speedchart")) AND $gpsTrack->beatDataExists )
+		if ($params->get("jtg_param_show_speedchart") AND $gpsTrack->beatDataExists )
 		{
 			// Beatchart is on left (first) axis or on right axis when there is a heighchart or a speed chart
 			$beatchartaxis = $axisnumber + 1;
@@ -540,7 +539,7 @@ EOG;
 			$autocenter = (bool) $params->get("jtg_param_use_map_autocentering", true) ? 'true':'false';
 			if (! (bool) $params->get("jtg_param_disable_map_animated_cursor", false)) $animatedCursor = 'true, animatedCursorLayer, animatedCursorIcon, allpoints'; else $animatedCursor='false';
 			$graphJS .= '<script type="text/javascript">'."\n".
-				"makeGraph('$elementid',jtgAxes, jtgSeries, '".JText::_('COM_JTG_DISTANCE')."', '".JText::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($cfg->unit))."', '$clicktohide', '$bgColor', '$autocenter', $animatedCursor); \n".
+				"makeGraph('$elementid',jtgAxes, jtgSeries, '".JText::_('COM_JTG_DISTANCE')."', '".JText::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($cfg->unit))."', '$clicktohide', '$bgColor', $autocenter, $animatedCursor); \n".
 				"</script>\n";
 		}
 		return $graphJS;

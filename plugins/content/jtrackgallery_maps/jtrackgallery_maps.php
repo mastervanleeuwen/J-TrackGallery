@@ -304,7 +304,7 @@ img.olTileImage {
 		{
 			$usepace = false;
 			$graphid = "elevation_".$this->map_count;
-			$graphJS = JtgMapHelper::parseGraphJS($gpsData, $cfg, $params, $usepace, true, $graphid);
+			$graphJS = JtgMapHelper::parseGraphJS($gpsData, $cfg, $params, $usepace, $graphid);
 			if (!empty($graphJS))
 			{
 				$map .= '<div id="profile" style="width: '.$map_width.';" >'."\n".
