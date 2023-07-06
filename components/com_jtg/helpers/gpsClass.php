@@ -190,7 +190,7 @@ class GpsDataClass
 		else
 		{
 			$nrt = count($this->route);
-			$npt = count($this->tour[$nrt-1]->coords);
+			$npt = count($this->route[$nrt-1]->coords);
 			$this->end = $this->route[$nrt-1]->coords[$npt-1];
 		}
 	
