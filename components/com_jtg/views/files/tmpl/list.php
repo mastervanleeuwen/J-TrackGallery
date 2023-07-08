@@ -233,7 +233,7 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				<?php echo '<span class="fileis">' . $cat . ' ' . $imagelink . '</span>'; ?></td>
 				<?php }
 				if ($this->cfg->uselevel) {
-					$level = JtgHelper::getLevelIcon($row->level, $row->catid, $levelMin, $levelMax, $iconheight);
+					$level = JtgHelper::getLevelIcon($row->level, $this->cfg, $row->catid, $iconheight);
 				?>
 				<td><?php echo $level; ?></td>
 				<?php

@@ -1075,30 +1075,31 @@ static public function autoRotateImage($image) {
 	 *
 	 * @return HTML string with level icon or level text
 	 */
-	static public function getLevelIcon($level, $catid = 0, $levelMin=1, $levelMax=5, $iconheight = 24)
+	static public function getLevelIcon($level, $cfg, $catid = 0, $iconheight = 24)
 	{
 		$iconspath = JPATH_BASE . '/images/jtrackgallery/difficulty_level/';
 		$iconsurl = JUri::root() . 'images/jtrackgallery/difficulty_level/';
-		$levelString = $level . '/' . $levelMax;
-		$levels = ($levelMax > $levelMin);
+		$levels = explode("\n", $cfg->level);
+		$levels = array_filter($levels);
+		$nLevels = count($levels);
+		$levelString = $level . '/' . $nLevels;
 		$height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px;display:inline;" ' : ' style="display:none;" ');
 
-		if ($levels AND JFile::exists($iconspath . $catid . '_' . (string) $level . '.png'))
+		if (JFile::exists($iconspath . $catid . '_' . (string) $level . '.png'))
 		{
 			// Use $catid_$level.png
 			return '<img ' . $height . ' src="' . $iconsurl . $catid . '_' . (string) $level . '.png" alt="' . $levelString . '" title="' . $levelString . '">';
 		}
-		elseif ( $levels
-				AND (JFile::exists($iconspath . $catid . '_l1.png'))
+		elseif ( (JFile::exists($iconspath . $catid . '_l1.png'))
 				AND (JFile::exists($iconspath . $catid . '_l2.png'))
 				AND (JFile::exists($iconspath . $catid . '_l3.png')) )
 		{
 			// Use $catid_l1.png $catid_l2.png $catid_l3.png
 			$return = '';
 
-			for ($i = $levelMin; $i <= $level; $i++)
+			for ($i = 0; $i < $level; $i++)
 			{
-				$j = 1 + (int) (($i - $levelMin) / ($levelMax - $levelMin) * 3);
+				$j = 1 + (int) ($i / ($nLevels - 1) * 3);
 				$j = max(1, $j);
 				$j = min(3, $j);
 				$return .= '<img ' . $height . ' src="' . $iconsurl . $catid . '_l' . $j . '.png" alt="' . $levelString . '" title="' . $levelString . '">';
@@ -1106,22 +1107,21 @@ static public function autoRotateImage($image) {
 
 			return $return;
 		}
-		elseif ($levels AND JFile::exists($iconspath . (string) $level . '.png'))
+		elseif ( JFile::exists($iconspath . (string) $level . '.png'))
 		{
 			// Use $level.png
 			return '<img ' . $height . ' src="' . $iconsurl . (string) $level . '.png" alt="' . $levelString . '" title="' . $levelString . '">';
 		}
-		elseif ( $levels
-				AND (JFile::exists($iconspath . 'l1.png'))
+		elseif ((JFile::exists($iconspath . 'l1.png'))
 				AND (JFile::exists($iconspath . 'l2.png'))
 				AND (JFile::exists($iconspath . 'l3.png')) )
 		{
 			// Use l1.png l2.png l3.png
 			$return = '';
 
-			for ($i = $levelMin; $i <= $level; $i++)
+			for ($i = 0; $i < $level; $i++)
 			{
-				$j = 1 + round(($i - $levelMin) / ($levelMax - $levelMin) * 2);
+				$j = 1 + round($i / ($nLevels - 1) * 2);
 				$return .= '<img ' . $height . ' src="' . $iconsurl . 'l' . $j . '.png" alt="' . $levelString . '" title="' . $levelString . '">';
 			}
 
