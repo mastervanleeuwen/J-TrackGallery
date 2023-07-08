@@ -179,7 +179,7 @@ function addTracksOverviewLayer(tracks, catIcons){
 	}
 	var styleCache = {};
 	var layerVectorForMarkers = new ol.layer.Vector({name: "Features",
-		source: new ol.source.Cluster({ source: source }),
+		source: new ol.source.Cluster({ source: source, distance: 38 }),
 		style: function(feature) {
 			var size = feature.get('features').length;
 			if (size == 1) {
