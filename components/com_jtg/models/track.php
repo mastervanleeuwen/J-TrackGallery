@@ -194,6 +194,8 @@ class JtgModelTrack extends ItemModel
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 
+		$params = JComponentHelper::getParams('com_jtg');
+
 		$db = $this->getDbo();
 
 		// Get the post data
@@ -203,7 +205,6 @@ class JtgModelTrack extends ItemModel
 			$catid = $catid ? implode(',', $catid) : '';
 		}
 		else {
-			$params = JComponentHelper::getParams('com_jtg');
 			$catid = $params->get('jtg_param_default_cat');
 		}
 		$level = $input->get('level', 0, 'integer');
@@ -269,8 +270,9 @@ class JtgModelTrack extends ItemModel
 			return false;
 		}
 
-		$start_n = $gpsData->start[1];
-		$start_e = $gpsData->start[0];
+		$iconCoords = $gpsData->getIconCoords($params['jtg_param_icon_loc']);
+		$start_n = $iconCoords[1];
+		$start_e = $iconCoords[0];
 		$coords = $gpsData->allCoords;
 		$isTrack = $gpsData->isTrack;
 		$isWaypoint = $gpsData->isWaypoint;
@@ -287,8 +289,10 @@ class JtgModelTrack extends ItemModel
 		. "\n description='" . $desc . "',"
 		. "\n published='" . $published . "',"
 		. "\n date='" . $date . "',"
-		. "\n start_n='" . $start_n . "',"
-		. "\n start_e='" . $start_e . "',"
+		. "\n start_n='" . $gpsData->start[1] . "',"
+		. "\n start_e='" . $gpsData->start[0] . "',"
+		. "\n icon_n='" . $iconCoords[1] . "',"
+		. "\n icon_e='" . $iconCoords[0] . "',"
 		. "\n distance='" . $distance . "',"
 		. "\n ele_asc='" . round($gpsData->totalAscent, 0) . "',"
 		. "\n ele_desc='" . round($gpsData->totalDescent, 0) . "',"

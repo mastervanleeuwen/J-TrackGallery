@@ -105,10 +105,10 @@ class JtgModelFiles extends JModelLegacy
 			$ele = array(null,null);
 		}
 
-		if ( $gpsData->start === false )
-		{
-			return false;
-		}
+		$params = JComponentHelper::getParams('com_jtg');
+		$iconCoords = $gpsData->getIconCoords($params['jtg_param_icon_loc']);
+		if ($iconCoords === false) return false;
+		if ($gpsData->start === false) return false;
 
 		$db = $this->getDbo();
 
@@ -141,6 +141,8 @@ class JtgModelFiles extends JModelLegacy
 		. "\n iscache='" . (int) $gpsData->isCache . "',"
 		. "\n start_n='" . $gpsData->start[1] . "',"
 		. "\n start_e='" . $gpsData->start[0] . "',"
+		. "\n icon_n='" . $iconCoords[1] . "',"
+		. "\n icon_e='" . $iconCoords[0] . "',"
 		. "\n distance='" . $gpsData->distance . "',"
 		. "\n ele_asc='" . $gpsData->totalAscent . "',"
 		. "\n ele_desc='" . $gpsData->totalDescent . "',"

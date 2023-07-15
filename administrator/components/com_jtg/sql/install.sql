@@ -83,6 +83,8 @@ CREATE TABLE IF NOT EXISTS `#__jtg_files` (
 	`checked_out` int(10) DEFAULT NULL,
 	`start_n` varchar(20) NOT NULL,
 	`start_e` varchar(20) NOT NULL,
+	`icon_n` float(20) NOT NULL,
+	`icon_e` float(20) NOT NULL,
 	`distance` float(10,2),
 	`ele_asc` int(10) NOT NULL,
 	`ele_desc` int(10) NOT NULL,

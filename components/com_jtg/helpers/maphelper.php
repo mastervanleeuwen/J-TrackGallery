@@ -247,8 +247,8 @@ class JtgMapHelper {
 		foreach ( $track_array AS $row )
 		{
 			$url = JRoute::_("index.php?option=com_jtg&view=track&id=" . $row->id);
-			$lon = $row->start_e;
-			$lat = $row->start_n;
+			$lon = $row->icon_e;
+			$lat = $row->icon_n;
 			$catids = explode(',',$row->catid);
 			$catid = (int) $catids[0];
 			if ($catid == null) $catid = 0;

@@ -1193,6 +1193,46 @@ class GpsDataClass
 		return;
 	}
 
+	private function getPointAt($idx)
+	{
+		$cur_idx = 0;
+		for ($t = 0; $t < $this->trackCount; $t++)
+		{
+			for ($s = 0; $s < $this->track[$t]->segCount; $s++)
+			{
+				$segLength = count($this->track[$t]->coords[$s]);	
+				if ($cur_idx + $segLength <= $idx)
+					$cur_idx += $segLength;
+				else
+					return $this->track[$t]->coords[$s][$idx - $cur_idx];
+			}
+		}
+		if ( $this->routeCount ) return $this->route[0]->coords[$idx];
+	}
+
+	public function getMidPoint()
+	{
+		$halfLength = $this->distance / 2;
+		$idx = 0;
+		$nPoint = count($this->allDistances);
+		while ($this->allDistances[$idx] < $halfLength && $idx < $nPoint) $idx++;
+		return $this->getPointAt($idx);
+	}
+
+	public function getIconCoords($locFlag = 0)
+	{
+		if ($locFlag == 0) {
+			if ( $this->start ) return $this->start;
+		}
+		else if ($locFlag == 1) {
+			if ( $this->end ) return $this->end;
+		}
+		else {
+			return $this->getMidPoint();
+		}
+		return false;
+	}
+
 	/**
 	 * function_description
 	 *

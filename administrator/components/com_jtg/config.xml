@@ -181,6 +181,12 @@
 		<field name="map_zoom" type="number"
 			default="6" min="0" max="28"
 			label="COM_JTG_MENU_DEFAULT_ZOOM" />
+		<field name="jtg_param_icon_loc" type="list"
+			default="0" label="COM_JTG_MENU_ICON_LOC">
+			<option value="0">COM_JTG_STARTPOINT</option>
+			<option value="1">COM_JTG_ENDPOINT</option>
+			<option value="2">COM_JTG_MIDPOINT</option>
+		</field>
 		<field name="jtg_param_newest" type="text"
 			addfieldpath="/administrator/components/com_jtg/elements" default="10"
 			size="3" label="COM_JTG_MENU_NEWEST" description="COM_JTG_TT_MENU_NEWEST" />
