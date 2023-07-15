@@ -194,7 +194,21 @@ class jtgRouter extends RouterBase
 			unset($query['layout']);
 		}
 
-		if (($view == 'track' || $view == 'cat') && isset($query['id']))
+		if (isset($query['controller']))
+		{
+			$segments[] = $query['controller'];
+			unset($query['controller']);
+		}
+
+		$task='';
+		if (isset($query['task']))
+		{
+			$task=$query['task'];
+			$segments[] = $query['task'];
+			unset($query['task']);
+		}
+
+		if (($view == 'track' || $view == 'cat' || $task == 'delete') && isset($query['id']))
 		{
 			$segments[] = $query['id'];
 			unset($query['id']);
