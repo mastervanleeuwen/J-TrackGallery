@@ -255,7 +255,7 @@ class JtgViewFiles extends JViewLegacy
 			return 2;
 		}
 
-		if ( strlen($filename) > 50 )
+		if ( strlen($filename) > 127 )
 		{
 			// Dateinamenslänge überschritten
 			return 3;

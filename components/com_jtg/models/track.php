@@ -223,6 +223,14 @@ class JtgModelTrack extends ItemModel
 		// Upload the file
 		$upload_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
 		$filename = strtolower(JFile::makeSafe($file['name']));
+		if (strlen($filename) > 127)
+		{
+			$name = pathinfo($filename, PATHINFO_FILENAME);
+			$ext = pathinfo($filename, PATHINFO_EXTENSION);
+			$name = substr($name,0,126-strlen($ext));
+			$filename = $name.'.'.$ext;
+		}
+
 		$newfile = $upload_dir . $filename;
 
 		if (JFile::exists($newfile))

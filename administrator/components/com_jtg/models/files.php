@@ -911,14 +911,16 @@ class JtgModelFiles extends JModelLegacy
 
 					while (true)
 					{
-						$target = JFile::stripExt($target). '_' . $fncount . "." . $extension; // TODO: does not work with long filenames
+						$basename = JFile::stripExt($target);
+						if (strlen($target) > 124) $basename = substr($basename,0,119);
+						$target = $basename. '_' . $fncount . "." . $extension;
 
 						if (!in_array($target, $existingfiles))
 						{
 							break;
 						}
 
-						if ( $fncount > 10000 )
+						if ( $fncount > 999 )
 						{
 							die("<html>Booah! No free Filename available!<br />\"<i>" . $file . "</i>\"</html>");
 						}

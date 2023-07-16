@@ -140,11 +140,11 @@ img.olTileImage {
 					}
 					else
 					{
-						echo $this->track->file;
+						echo wordwrap($this->track->file,25,"<wbr>",true);
 					}
 					?>
 				</td>
-				<td rowspan="12" valign="top"><?php echo $map; ?></td>
+				<td rowspan="13" valign="top"><?php echo $map; ?></td>
 			</tr>
 <?php
 if ($this->id >= 1)
