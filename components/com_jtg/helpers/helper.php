@@ -1281,7 +1281,7 @@ static public function autoRotateImage($image) {
 					$avgSpeed = $gpsTrack->distance/$gpsTrack->totalMovingTime*3600;
 				}
 				else if ($gpsTrack->totalTime != 0) {
-					$avgSpeed = $gpsTrack->totalDistance/$gpsTrack->totalTime*3600;
+					$avgSpeed = $gpsTrack->distance/$gpsTrack->totalTime*3600;
 				}
 				if ($cfg->unit == "miles") jtgHelper::getMiles($avgSpeed);
 				$htmlout .= "  <tr>\n    <td>".JText::_('COM_JTG_AVGSPEED').":</td>\n".
