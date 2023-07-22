@@ -240,7 +240,6 @@ class jtgRouter extends RouterBase
 			case 'default':
 				$vars['view'] = 'track';
 				$vars['layout'] = $layout;
-				array_shift($segments);
 				$vars['id'] = $segments[0];
 				break;
 
