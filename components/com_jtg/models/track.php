@@ -45,7 +45,7 @@ class JtgModelTrack extends ItemModel
 	 */
 	function getLevelSelect ($selected)
 	{
-		$return = "<select name=\"level\">\n";
+		$return = "<select name=\"level\" class=\"form-select\">\n";
 		$cfg = JtgHelper::getConfig();
 		$levels = explode("\n", $cfg->level);
 		array_unshift($levels, 'dummy');

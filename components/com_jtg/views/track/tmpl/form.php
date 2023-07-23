@@ -92,10 +92,7 @@ else
 	JHtmlBootstrap::tooltip('.hasTooltip');
 	if ($version_parts[0] > 3) $infoIconText = '<i class="fas fa-info-circle"></i>';
 }
-$yesnolist = array(
-	array('id' => 0, 'title' => JText::_('JNO')),
-	array('id' => 1, 'title' => JText::_('JYES'))
-);
+
 if (version_compare(JVERSION,'4.0','lt'))
 {
 	$editor = JFactory::getConfig()->get('editor');
@@ -107,18 +104,16 @@ $editor = Editor::getInstance($editor);;
 
 // Field list
 $catlist = $this->model->getCats();
-$lists['content'] = JHtml::_('select.genericlist', $catlist, 'catid[]', 'multiple="multiple" ', 'id', 'title', explode(',',$this->track->catid));
+$lists['content'] = JHtml::_('select.genericlist', $catlist, 'catid[]', 'class="form-select" multiple="multiple" ', 'id', 'title', explode(',',$this->track->catid));
 $terrainlist = $this->model->getTerrain(" WHERE published=1 ");
 $size = min(count($terrainlist), 6);
-$lists['terrain'] = JHtml::_('select.genericlist', $terrainlist, 'terrain[]', 'multiple="multiple" size="' . $size . '"', 'id', 'title', explode(',',$this->track->terrain));
+$lists['terrain'] = JHtml::_('select.genericlist', $terrainlist, 'terrain[]', 'class="form-select" multiple="multiple" size="' . $size . '"', 'id', 'title', explode(',',$this->track->terrain));
 $lists['access'] = JtgHelper::getAccessList($this->track->access);
-$lists['hidden']  = JHtml::_('select.genericlist', $yesnolist, 'hidden', 'class="inputbox" size="1"', 'id', 'title', $this->track->hidden);
-$lists['published']  = JHtml::_('select.genericlist', $yesnolist, 'published', 'class="inputbox" size="1"', 'id', 'title', $this->track->published);
+$lists['hidden']  = JHtml::_('select.booleanlist', 'hidden', null, $this->track->hidden);
+$lists['published']  = JHtml::_('select.booleanlist', 'published', null, $this->track->published);
 $maplist = $this->model->getDefaultMaps();
 array_unshift($maplist, array('id' => 0, "name" => JText::_('JNONE')) );
-$lists['default_map']   = JHtml::_('select.genericlist', $maplist, 'default_map', 'size="1"', 'id', 'name', $this->track->default_map);
-
-$k = 0;
+$lists['default_map']   = JHtml::_('select.genericlist', $maplist, 'default_map', 'class="form-select size="1"', 'id', 'name', $this->track->default_map);
 
 ?>
 <script type="text/javascript">
@@ -218,16 +213,13 @@ if (isset($this->mapJS))
 <div>
 	<form name="adminForm" id="adminForm" method="post"
 		enctype="multipart/form-data" action="<?php echo JRoute::_('index.php?option=com_jtg&view=track&layout=form', false); ?>">
-		<table style="width:100%;">
+		<table class="table table-striped" style="width:100%;">
 			<tbody>
 <?php
 if (!isset($this->id))
 {
 ?>
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k;
-					?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_GPS_FILE'); ?>*
 					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_FILES'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png',$infoIconText);
 					?>
@@ -239,50 +231,31 @@ if (!isset($this->id))
 else
 {
 ?>
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k;
-					?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_ID'); ?>:</td>
 					<td><font color="grey"><?php echo $this->id; ?> </font></td>
 				</tr>
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k;
-					?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_FILE'); ?>:</td>
 					<td><font color="grey"><?php echo wordwrap($this->track->file,25,'<wbr>',true); ?> </font></td>
 				</tr>
 <?php
 }
 ?>
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k;
-					?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_HIDDEN'); ?>*</td>
 					<td><?php echo $lists['hidden']; ?></td>
 				</tr>
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k
-					?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_PUBLISHED'); ?>*</td>
 					<td><?php echo $lists['published']; ?></td>
 				</tr>
-				<tr class="sectiontableentry<?php
-				echo $k;
-				$k = 1 - $k;
-				?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_TITLE'); ?>*</td>
-					<td><input id="title" type="text" name="title"
-						value="<?php echo $tracktitle; ?>"
-						size="30" /></td>
+					<td><input id="title" class="form-control" type="text" name="title"
+						value="<?php echo $tracktitle; ?>" /></td>
 				</tr>
-				<tr class="sectiontableentry<?php
-				echo $k;
-				$k = 1 - $k;
-				?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_LEVEL'); ?>*
 					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_LEVEL'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText); ?>
 					</td>
@@ -292,10 +265,7 @@ else
 <?php
 	if ($this->params->get('jtg_param_use_cats'))
 	{ ?>
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k;
-					?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_CAT'); ?></td>
 					<td><?php echo $lists['content']; ?></td>
 				</tr>
@@ -305,10 +275,7 @@ else
 if ($this->cfg->access == 1)
 {
 ?>
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k;
-					?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_ACCESS_LEVEL'); ?>&nbsp;
 					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_ACCESS'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText);?>
 					</td>
@@ -317,17 +284,11 @@ if ($this->cfg->access == 1)
 <?php
 }
 ?>
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k;
-					?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_FILE_DEFAULT_MAP'); ?></td>
 					<td><?php echo $lists['default_map']; ?></td>
 				</tr>
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k;
-					?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_TERRAIN'); ?>
 					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_TERRAIN'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText); ?>
 					</td>
@@ -390,12 +351,9 @@ if ($this->cfg->access == 1)
 				if ($this->cfg->terms == 1)
 				{
 				?>
-				<table style="width:100%">
+				<table class="table table-striped" style="width:100%">
 				<tbody>
-				<tr class="sectiontableentry<?php
-					echo $k;
-					$k = 1 - $k;
-					?>">
+				<tr>
 					<td><?php echo JText::_('COM_JTG_TERMS'); ?></td>
 					<td><input id="terms" type="checkbox" name="terms" value="" /> <?php echo JText::_('COM_JTG_AGREE'); ?>
 						<a class="modal" href="<?php echo $this->terms; ?>"

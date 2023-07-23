@@ -616,10 +616,6 @@ class JtgViewFiles extends JViewLegacy
 		$terrain = $model->getTerrain("*", true, " WHERE published=1 ");
 		$user 	= JFactory::getUser();
 		$uid = $user->get('id');
-		$yesnolist = array(
-				array('id' => 0, 'title' => JText::_('JNO')),
-				array('id' => 1, 'title' => JText::_('JYES'))
-		);
 
 		if (!isset($id))
 		{
@@ -635,8 +631,8 @@ class JtgViewFiles extends JViewLegacy
 			$lists['terrain']	= JHtml::_('select.genericlist', $terrain, 'terrain[]', 'multiple="multiple" size="' . $size . '"', 'id', 'title', 0);
 			$row->access = $access;
 			$lists['uid']		= JHtml::_('list.users', 'uid', $uid, 1, null, 'name', 0);
-			$lists['hidden']	= JHtml::_('select.genericlist', $yesnolist, 'hidden', 'class="inputbox" size="2"', 'id', 'title', 0);
-			$lists['published']	= JHtml::_('select.genericlist', $yesnolist, 'published', 'class="inputbox" size="2"', 'id', 'title', 1);
+			$lists['hidden']	= JHtml::_('select.booleanlist', 'hidden', null, 0);
+			$lists['published']	= JHtml::_('select.booleanlist', 'published', null, 1);
 			$lists['default_map'] 	= JHtml::_('select.genericlist', $default_map, 'default_map', 'size="1"', 'id', 'name', null);
 
 			$this->lists = $lists;
@@ -666,17 +662,17 @@ class JtgViewFiles extends JViewLegacy
 			*/
 			$size = min(count($cats), 6);
 			$trackids = explode(",", $track->catid);
-			$lists['cats']		= JHtml::_('select.genericlist', $cats, 'catid[]', 'size="' . $size . '" multiple="multiple"', 'id', 'treename', $trackids, '', true);
+			$lists['cats']		= JHtml::_('select.genericlist', $cats, 'catid[]', 'class="form-select" size="' . $size . '" multiple="multiple"', 'id', 'treename', $trackids, '', true);
 			$size = min(count($terrain), 6);
-			$lists['terrain']	= $error . JHtml::_('select.genericlist', $terrain, 'terrain[]', 'multiple="multiple" size="' . $size . '"', 'id', 'title', $terrainlist);
-			$lists['default_map'] 	= JHtml::_('select.genericlist', $default_map, 'default_map', 'size="1"', 'id', 'name', $track->default_map);
+			$lists['terrain']	= $error . JHtml::_('select.genericlist', $terrain, 'terrain[]', 'class="form-select" multiple="multiple" size="' . $size . '"', 'id', 'title', $terrainlist);
+			$lists['default_map'] 	= JHtml::_('select.genericlist', $default_map, 'default_map', 'class="form-select" size="1"', 'id', 'name', $track->default_map);
 
 			// 		$row->access = $access;
 			$lists['access']	= JtgHelper::getAccessList($access);
 
 			// 		$lists['access']	= JHtml::_('list.accesslevel', $row );
-			$lists['hidden'] = JHtml::_('select.genericlist', $yesnolist, 'hidden', 'class="inputbox" size="2"', 'id', 'title', $track->hidden);
-			$lists['uid'] = JHtml::_('list.users', 'uid', $track->uid, 1, null, 'name', 0);
+			$lists['hidden'] = JHtml::_('select.booleanlist', 'hidden', null, $track->hidden);
+			$lists['uid'] = JHtml::_('list.users', 'uid', $track->uid, 1, 'class="form-select"', 'name', 0);
 
 			$imagelist = $model->getImages($id);
 
@@ -692,7 +688,7 @@ class JtgViewFiles extends JViewLegacy
 			}
          $images .= "</div>";
 
-			$lists['published'] = JHtml::_('select.genericlist', $yesnolist, 'published', 'class="inputbox" size="2"', 'id', 'title', $track->published);
+			$lists['published'] = JHtml::_('select.booleanlist', 'published', null, $track->published);
 			$lists['values'] = JtgHelper::giveGeneratedValues('backend', $this->buildImageFiletypes($track->istrack, $track->iswp, $track->isroute, $track->iscache), $track);
 			$lists['level']	= $model->getLevelList($track->level);
 			$this->lists = $lists;

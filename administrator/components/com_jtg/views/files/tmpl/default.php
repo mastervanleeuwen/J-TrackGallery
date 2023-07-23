@@ -77,7 +77,6 @@ if (version_compare(JVERSION,'4.0','lt'))
 		</tfoot>
 		<tbody>
 			<?php
-			$k = 0;
 			$missingcat = array();
 			$missingterrain = false;
 			$cfg = $this->cfg;
@@ -189,8 +188,7 @@ if (version_compare(JVERSION,'4.0','lt'))
 					$terrain = implode(", ", $terrain);
 				}
 				?>
-			<tr class="<?php echo "row$k ";
-				echo $k? 'row-odd':'row-even'; ?>">
+			<tr>
 				<!--   <td align="center"><?php echo $this->pagination->getRowOffset($i); ?></td>-->
 				<td align="center"><?php echo $row->id; ?></td>
 				<td align="center"><?php echo $checked; ?></td>
@@ -208,7 +206,6 @@ if (version_compare(JVERSION,'4.0','lt'))
 				<td align="center"><?php echo $user->username;?></td>
 			</tr>
 			<?php
-			$k = 1 - $k;
 			}
 			?>
 		</tbody>

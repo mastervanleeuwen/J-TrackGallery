@@ -677,14 +677,7 @@ class JtgModelFiles extends JModelLegacy
 			}
 		}
 
-		$size = count($levels);
-
-		if ( $size > 6)
-		{
-			$size = 6;
-		}
-
-		return JHtml::_('select.genericlist', $levels, 'level', 'size="' . $size . '"', 'id', 'title', $selected);
+		return JHtml::_('select.genericlist', $levels, 'level', 'class="form-select"', 'id', 'title', $selected);
 	}
 
 	/**

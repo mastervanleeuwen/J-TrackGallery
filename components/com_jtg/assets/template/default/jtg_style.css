@@ -230,6 +230,7 @@ ul.rating li.ten a:hover {
 }
 
 .jtg-photo-input {
+	width: auto;
 	margin: 5px;
 }
 

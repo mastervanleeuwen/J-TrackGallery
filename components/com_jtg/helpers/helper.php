@@ -537,7 +537,7 @@ class JtgHelper
 				)
 		);
 
-		return JHtml::_('select.genericlist', $access, $name, 'class="inputbox" size="4" ' . $js, 'id', 'text', $accesslevel);
+		return JHtml::_('select.genericlist', $access, $name, 'class="form-select"' . $js, 'id', 'text', $accesslevel);
 
 	}
 
