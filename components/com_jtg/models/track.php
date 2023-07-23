@@ -759,7 +759,16 @@ class JtgModelTrack extends ItemModel
              $query = "UPDATE #__jtg_photos SET title=".$db->quote($img_title)." WHERE id='".$image->id."'";
              $db->setQuery($query);
              $db->execute();
-
+			}
+			$img_lat = $input->getFloat('img_lat_' . $image->id);
+			$img_lon = $input->getFloat('img_long_' . $image->id);
+			if (!is_null($img_lat) && !is_null($img_lon)) {
+				if (number_format($img_lat,5) != number_format($image->lat,5) ||
+					 number_format($img_lon,5) != number_format($image->lon,5)) {
+					$query = "UPDATE #__jtg_photos SET lon=".$db->quote(number_format($img_lon,6)).", lat=".$db->quote(number_format($img_lat,6))." WHERE id='".$image->id."'";
+					$db->setQuery($query);
+					$db->execute();
+				}
 			}
       }
 

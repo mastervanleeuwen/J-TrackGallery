@@ -251,7 +251,7 @@ else
 					$k = 1 - $k;
 					?>">
 					<td><?php echo JText::_('COM_JTG_FILE'); ?>:</td>
-					<td><font color="grey"><?php echo $this->track->file; ?> </font></td>
+					<td><font color="grey"><?php echo wordwrap($this->track->file,25,'<wbr>',true); ?> </font></td>
 				</tr>
 <?php
 }
@@ -376,9 +376,12 @@ if ($this->cfg->access == 1)
 						foreach ($this->imageList as $image) {
 							$thumb_name = 'thumb1_' . $image->filename;
 							echo "<div class=\"jtg-photo-item\"><input type=\"checkbox\" name=\"deleteimage_" . $image->id . "\" value=\"" .
-								$image->filename . "\">" . JText::_('COM_JTG_DELETE_IMAGE') . " (" . $image->filename . ")<br />" .
+								$image->filename . "\"> " . JText::_('COM_JTG_DELETE_IMAGE') . " (" . $image->filename . ")<br />" .
 								"<img src=\"" . $imgurlpath . 'thumbs/' . $thumb_name . "\" alt=\"" . $image->filename . "\" title=\"" . $image->filename . " (thumbnail)\" /><br />".
-								"<input type=\"text\" class=\"jtg-photo-title\" name=\"img_title_".$image->id . "\" value = \"".$image->title."\" placeholder=\"Title\" maxlength=\"256\"> <br /></div>\n";
+								"<input type=\"text\" class=\"inputbox jtg-photo-input\" name=\"img_title_".$image->id . "\" value = \"".$image->title."\" placeholder=\"Title\" maxlength=\"256\"> <br>".
+								"<input type=\"text\" class=\"inputbox jtg-photo-input\" id=\"img_long_".$image->id."\" name=\"img_long_".$image->id."\" placeholder=\"".JText::_('COM_JTG_LON')."\" value = \"".(!is_null($image->lon)?number_format($image->lon,5):'')."\" size=\"8\" > ".JText::_('COM_JTG_LON_U').
+								" <input type=\"text\" class=\"inputbox jtg-photo-input\" name=\"img_lat_".$image->id."\" id=\"img_lat_".$image->id."\" placeholder=\"".JText::_('COM_JTG_LAT')."\" value = \"".(!is_null($image->lat)?number_format($image->lat,5):'')."\" size=\"8\"> ".JText::_('COM_JTG_LAT_U')."<br>".
+								"<button type=\"button\" class=\"btn btn-sm btn-primary\" onclick=\"listenLocation(".$image->id.");\">".JText::_('COM_JTG_SELECTONMAP')."</button> </div>\n";
 						}
 						echo "</div>";
 				}

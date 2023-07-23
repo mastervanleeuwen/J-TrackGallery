@@ -605,6 +605,14 @@ function makeGraph(elementid, axes, series, distanceLabel, distanceUnits, clickL
 	});
 }
 
+function listenLocation(imgID) {
+	jtgMap.once('singleclick', function(evt) {
+		lonlat = ol.proj.toLonLat(evt.coordinate, jtgView.getProjection());
+		document.getElementById('img_long_'+imgID).value = lonlat[0].toFixed(5);
+		document.getElementById('img_lat_'+imgID).value = lonlat[1].toFixed(5);
+	} );
+}
+
 /*
  *   Function needed for the IGN geoportail maps from
  *        the French national geographic institute

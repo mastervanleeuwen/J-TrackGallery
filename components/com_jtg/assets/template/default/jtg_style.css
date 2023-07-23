@@ -229,8 +229,8 @@ ul.rating li.ten a:hover {
 	margin-bottom: 0;
 }
 
-.jtg-photo-title {
-    width: 80%;
+.jtg-photo-input {
+	margin: 5px;
 }
 
 h3 {
@@ -975,12 +975,12 @@ span label {
 }
 
 .jtg-photo-item {
-	align: center;
 	text-align: center;
 }
 
 .jtg-caption {
   text-align: center;
+  margin: 5px 5px 0;
 }
 
 @media only screen and (max-width: 500px) {

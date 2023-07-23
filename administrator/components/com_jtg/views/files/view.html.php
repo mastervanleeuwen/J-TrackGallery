@@ -688,7 +688,7 @@ class JtgViewFiles extends JViewLegacy
 				$thumb_name = 'thumb1_' . $image->filename;
 				$images .= "<div class=\"jtg-photo-item\"\><input type=\"checkbox\" name=\"deleteimage_" . $image->id. "\" value=\"" . $image->filename . "\">" . JText::_('COM_JTG_DELETE_IMAGE') . " (" . $image->filename . ")<br />\n".
 				"<img src=\"" . $img_path . 'thumbs/' . $thumb_name . "\" alt=\"" . $image->filename . "\" title=\"" . $image->filename . " (thumbnail)\" /><br />\n".
-				"<input type=\"text\" name=\"img_title_".$image->id. "\" value=\"".$image->title."\" placeholder=\"Title\"> <br /></div>\n";
+				"<input type=\"text\" class="inputbox jtg-photo-input" name=\"img_title_".$image->id. "\" value=\"".$image->title."\" placeholder=\"Title\"> <br /></div>\n";
 			}
          $images .= "</div>";
 

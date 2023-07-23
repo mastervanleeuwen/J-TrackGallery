@@ -952,7 +952,7 @@ static public function autoRotateImage($image) {
 		{
 			$lon = JtgHelper::getGpsFromExif($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
 			$lat = JtgHelper::getGpsFromExif($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
-			$query .= ",\n lon='".$lon."',\n lat='".$lat."'";
+			$query .= ",\n lon='".number_format($lon,5)."',\n lat='".number_format($lat,5)."'";
 		}
 		
 		$db = JtgHelper::getDbo();
