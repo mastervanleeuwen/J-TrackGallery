@@ -400,7 +400,7 @@ class JtgMapHelper {
 
 					$size = "width=\"" . (int) $width . "\" height=\"" . (int) $height . "\"";
 					$imagehtml = "<img " . $size . " src=\"" . $imagepath . "\" alt=\"" . $image->filename . "\" title=\"" . htmlentities($image->title, ENT_QUOTES) . "\">";
-					if (strlen($image->title)) $imagehtml .= "<p>".htmlentities($image->title,ENT_QUOTES)."</p>";
+					if (strlen($image->title)) $imagehtml .= "<div class=\"jtg-caption\">".htmlentities($image->title,ENT_QUOTES)."</div>";
 					$imgsJS[] = "{long: $image->lon, lat: $image->lat, imghtml : '$imagehtml' }";
             }
 			}
