@@ -20,6 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 
 //
 // This form has three states or modes:
@@ -299,9 +300,31 @@ if ($this->cfg->access == 1)
 		<p><?php echo JText::_('COM_JTG_DESCRIPTION'); ?>*:
 			<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_DESC'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText); ?>
 		</p>
-		<?php echo $editor->display('description', $description, '100%', '200px', null, null, false, null); ?>
-
-		<?php
+<?php 
+		echo $editor->display('description', $description, '100%', '200px', null, null, false, null);
+		echo HTMLHelper::_('bootstrap.startAccordion', 'calcVals');
+		echo HTMLHelper::_('bootstrap.addSlide', 'calcVals', '<div class="jtg-header">'.JText::_('COM_JTG_CALCULATED_VALUES').'</div>', 'collapse1');
+?>
+		<table class="table">
+			<tbody>
+			<tr>
+				<td><?php echo JText::_('COM_JTG_DISTANCE'); ?></td>
+				<td><input id="distance" type="text" name="distance" class="form-control" value="<?php echo $this->track->distance; ?>" /> <?php echo JText::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($this->cfg->unit)).' <font color="grey">( '.JtgHelper::getFormattedDistance($this->gpsTrack->distance, '',$this->cfg->unit).' )</font>'; ?> </td>
+			</tr>
+			<tr>
+				<td><?php echo JText::_('COM_JTG_ELEVATION_UP') ?></td>
+				<td><input id="ascent" type="text" name="ascent" class="form-control" value="<?php echo $this->track->ele_asc; ?>" /> <?php echo JText::_('COM_JTG_ELEVATION_UNIT').' <font color="grey">( '.$this->gpsTrack->totalAscent.' ) </font>'; ?> </td>
+			</tr>
+			<tr>
+				<td><?php echo JText::_('COM_JTG_ELEVATION_DOWN') ?></td>
+				<td><input id="descent" type="text" name="descent" class="form-control" value="<?php echo $this->track->ele_desc; ?>" /> <?php echo JText::_('COM_JTG_ELEVATION_UNIT').' <font color="grey">( '.$this->gpsTrack->totalDescent.' )</font>'; ?> </td>
+			</tr>
+			</tbody>
+		</table>
+		</div>
+<?php 
+			echo HTMLHelper::_('bootstrap.endSlide');
+			echo HTMLHelper::_('bootstrap.endAccordion');
 			$max_images = $this->cfg->max_images;
 
 			if (!empty($this->imageList))
@@ -319,10 +342,12 @@ if ($this->cfg->access == 1)
 			$accept = explode(",", $accept);
 			$tt = JText::sprintf('COM_JTG_ALLOWED_FILETYPES', implode(", ", $accept)) . '  ' . JText::_('COM_JTG_MAXIMAL') . ' ' . $max_images;
 		?>
-		<?php echo JText::_('COM_JTG_IMAGES'); ?> :
+		<div>
+		<div class="jtg-header"><?php echo JText::_('COM_JTG_IMAGES'); ?>
 		<?php
 			echo JHtml::tooltip($tt, JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText);
 		?>
+		</div>
 			<input
 			<?php
 				echo $max_images <= 0 ? 'disabled="disabled" ': ''; ?>
@@ -347,6 +372,7 @@ if ($this->cfg->access == 1)
 						echo "</div>";
 				}
 				?>
+	</div>
 				<?php
 				if ($this->cfg->terms == 1)
 				{
@@ -364,6 +390,7 @@ if ($this->cfg->access == 1)
 				<?php
 				}
 			?>
+		<div>
 		<input id="mappreview" type="hidden" name="mappreview">
 		<?php
 		echo JHtml::_('form.token') . "\n"; ?>

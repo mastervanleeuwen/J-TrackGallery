@@ -643,8 +643,13 @@ v\:rect,v\:roundrect,v\:line,v\:polyline,v\:curve,v\:arc,v\:oval,v\:image,v\:sha
 	padding-bottom: 10px;
 }
 
+.jtg-header {
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
 .block-header {
-    font-size: 1.2em;
+	font-size: 1.2em;
 	font-weight: bold;
 	padding: 7px 0;
 	border-bottom: 1px solid #000;
@@ -971,6 +976,7 @@ span label {
 /* Photo gallery styles */
 .jtg-photo-grid {
 	display: grid;
+	margin: 15px 0;
 	grid-gap: 5px 3%;
 	grid-template-columns: 30% 30% 30%;
 }
