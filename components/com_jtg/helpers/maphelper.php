@@ -69,7 +69,8 @@ class JtgMapHelper {
 		$map = JtgMapHelper::parseMapInitJS($targetid);
 		$map .= JtgMapHelper::parseMapLayersJS($mapid,$layerSwitcher);
 		
-		if (JComponentHelper::getParams('com_jtg')->get('jtg_param_add_startmarker')) 
+		$params = JComponentHelper::getParams('com_jtg');
+		if ($params->get('jtg_param_add_startmarker')) 
 		{
 			$trackDrawOptions = 'true'; 
 		}
@@ -78,7 +79,7 @@ class JtgMapHelper {
 			$trackDrawOptions = 'false'; 
 		}
 		$animCursor = 'false';
-		if (JComponentHelper::getParams('com_jtg')->get('jtg_param_disable_map_animated_cursor')) 
+		if ($params->get('jtg_param_disable_map_animated_cursor')) 
 		{
 			$trackDrawOptions = $trackDrawOptions.', false'; 
 		}
@@ -107,11 +108,26 @@ class JtgMapHelper {
 			}
 		}
 		$map .= "	trackData = [".implode(",\n",$trkArrJS)."];\n";
-		$colorsJS = '';
+		$colorsJS = ", ['#ff00ff']";
 		if (count($trackColors)) {
 			$colorsJS=", ['".implode("','",$trackColors)."']";
 		}
-		$map .= "	drawTrack(trackData, ".$trackDrawOptions.$colorsJS.");\n";
+		$distInt = 0;
+		$distUnit = 1000;
+		if ($params->get('jtg_param_show_dist_markers') && $gpsTrack->distance > 1 && $gpsTrack->distance < 1000) {
+			$trackLength = $gpsTrack->distance;
+			if (strtolower($cfg->unit)=='miles') {
+				$trackLength = JtgHelper::getMiles($trackLength);
+				$distUnit = 1609;
+			}
+			$distInt = ceil($trackLength/25);
+			$distIntScale = pow(10,floor(log10($distInt)));
+			$distInt /= $distIntScale;
+			if ($distInt > 2 && $distInt < 5) $distInt = 5;
+			if ($distInt > 5 && $distInt < 10) $distInt = 10;
+			$distInt *= $distIntScale;
+		}
+		$map .= "	drawTrack(trackData, ".$trackDrawOptions.$colorsJS.", {$distInt}, {$distUnit});\n";
 
 		if ($showLocationButton) {
 			JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon

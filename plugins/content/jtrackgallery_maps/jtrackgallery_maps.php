@@ -259,6 +259,9 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		if (isset($plg_call_params['colors'])) {
 			$trackColors = explode(';', $plg_call_params['colors'] );
 		}
+		else if (!is_null($params->get('jtg_param_track_color'))) {
+			$trackColors[] = $params->get('jtg_param_track_color');
+		}
 
 		if ($gpsData->displayErrors())
 		{

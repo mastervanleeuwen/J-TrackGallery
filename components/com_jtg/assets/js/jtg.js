@@ -75,7 +75,7 @@ function jtgAddMapLayer(mapType = 0, mapOpt = '', apiKey = '', mapName = '', isV
 	mapLayerGroup.getLayers().push(mapLayer);
 }
 
-function drawTrack(trackData, addStartMarker = true, animatedCursor = false, colors = ['#ff00ff'] ) {
+function drawTrack(trackData, addStartMarker = true, animatedCursor = false, colors = ['#ff00ff'], distInt = 1, distUnit = 1000 ) {
 	allpoints = [];
 	var gpsTracks = new ol.layer.Vector({ 
 		source: new ol.source.Vector(),
@@ -93,6 +93,9 @@ function drawTrack(trackData, addStartMarker = true, animatedCursor = false, col
 			anchorOrigin: 'bottom-right', anchor: [0.15,0] }) 
 	});
 	var iCol = 0;
+	var totDist = 0;
+	const distFactor = distInt*distUnit;
+
 	for (var itrk = 0; itrk < trackData.length; itrk++) {
 		var nseg = trackData[itrk].coords.length;
 		var lastidx = 0;
@@ -125,11 +128,34 @@ function drawTrack(trackData, addStartMarker = true, animatedCursor = false, col
 					curCoords[ipt-1][1] = lat;
 					lastidx = ipt-1;
 				}
+				oldDist = totDist;
+				totDist += ol.sphere.getDistance(curCoords[ipt-1],curCoords[ipt]);
+				if (distInt !== 0 && Math.floor(totDist/distFactor) > Math.floor(oldDist/distFactor)) {
+                    const distGeom = new ol.geom.Point(ol.proj.fromLonLat(curCoords[ipt], jtgView.getProjection()));
+                    color = colors[0];
+                    if (iCol > 0 && iCol-1 < colors.length)
+                    {
+                        color = colors[iCol-1];
+                    }
+                    const fill = new ol.style.Fill({color: color});
+                    const distLabel = Math.floor(totDist/distUnit).toString();
+                    var radius = 8;
+                    if (distLabel.length == 3) radius = 12;
+                    const circleStyle = new ol.style.Circle({fill: fill, radius: radius});
+                    var textStyle = new ol.style.Text({
+                        font: '12px sans-serif',
+                        fill: new ol.style.Fill({color: '#FFFFFF'}),
+                        text: distLabel});
+                    const distMarker = new ol.Feature({geometry: distGeom});
+                    distMarker.setStyle(new ol.style.Style({ image: circleStyle, text: textStyle }));
+                    gpsTracks.getSource().addFeature(distMarker);
+				}
 			}
 			tmpCoords = curCoords.slice(lastidx,curCoords.length);
 			allpoints.push(...tmpCoords);
 			trkGeom = new ol.geom.LineString(tmpCoords);
 			trkGeom.transform('EPSG:4326',jtgView.getProjection());
+
 			var segFeat = new ol.Feature({geometry: trkGeom, name: trackData[itrk].name});
 			if (iCol < colors.length)
 			{

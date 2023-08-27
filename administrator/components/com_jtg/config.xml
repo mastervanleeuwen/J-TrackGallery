@@ -91,6 +91,14 @@
 			label="COM_JTG_UPLOAD_NOTIFY_UID" default="0" />
 	</fieldset>
 	<fieldset name="TRACKVIEW" label="COM_JTG_TRACK_VIEW">
+		<field name="jtg_param_track_color" type="color" default="FF00FF"
+			label="COM_JTG_MENU_TRACK_COLOR" />
+		<field name="jtg_param_show_dist_markers" type="radio"
+			default="1"
+			label="COM_JTG_MENU_SHOW_DISTMARKERS">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="jtg_param_show_layerswitcher" type="radio"
 			addfieldpath="/administrator/components/com_jtg/elements" default="1"
 			label="COM_JTG_MENU_SHOW_LAYER_SWITCHER" description="COM_JTG_TT_MENU_SHOW_LAYER_SWITCHER">
