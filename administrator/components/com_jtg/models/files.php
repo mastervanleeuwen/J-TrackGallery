@@ -853,6 +853,7 @@ class JtgModelFiles extends JModelLegacy
 		$targetdir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
 		$input = JFactory::getApplication()->input;
 		$found = $input->getInt('found');
+		$params = JComponentHelper::getParams('com_jtg');
 
 		for ($i = 0;$i < $found;$i++)
 		{
@@ -866,7 +867,6 @@ class JtgModelFiles extends JModelLegacy
 					$catid = $catid ? implode(',', $catid) : '';
 				}
 				else {
-					$params = JComponentHelper::getParams('com_jtg');
 					$catid = $params->get('jtg_param_default_cat');
 				}
 				$level = $input->get('level_' . $i, 0, 'integer');
@@ -961,6 +961,7 @@ class JtgModelFiles extends JModelLegacy
 				{
 					// file is OK
 					$fileokay = true;
+					$iconCoords = $gpsData->getIconCoords($params['jtg_param_icon_loc']);
 					$start_n = $gpsData->start[1];
 					$start_e = $gpsData->start[0];
 					$coords = $gpsData->allCoords;
@@ -1011,6 +1012,8 @@ class JtgModelFiles extends JModelLegacy
 					. "\n date='" . $date . "',"
 					. "\n start_n='" . $start_n . "',"
 					. "\n start_e='" . $start_e . "',"
+					. "\n icon_n='" . $iconCoords[1] . "',"
+					. "\n icon_e='" . $iconCoords[0] . "',"
 					. "\n distance='" . $distance . "',"
 					. "\n ele_asc='" . $totalAscent . "',"
 					. "\n ele_desc='" . $totalDescent . "',"
