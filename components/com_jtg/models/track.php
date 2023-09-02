@@ -326,7 +326,7 @@ class JtgModelTrack extends ItemModel
 		$cfg = JtgHelper::getConfig();
 		$types = explode(',', $cfg->type);
 
-		if (count($images) > 0)
+		if (!is_null($images) && count($images) > 0)
 		{
 			foreach ($images as $image)
 			{
