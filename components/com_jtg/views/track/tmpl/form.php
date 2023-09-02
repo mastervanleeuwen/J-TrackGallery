@@ -309,15 +309,18 @@ if ($this->cfg->access == 1)
 			<tbody>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_DISTANCE'); ?></td>
-				<td><input id="distance" type="text" name="distance" class="form-control" value="<?php echo $this->track->distance; ?>" /> <?php echo JText::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($this->cfg->unit)).' <font color="grey">( '.JtgHelper::getFormattedDistance($this->gpsTrack->distance, '',$this->cfg->unit).' )</font>'; ?> </td>
+				<td><input id="distance" type="text" name="distance" class="form-control" value="<?php echo $this->track->distance; ?>" /> <?php echo JText::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($this->cfg->unit));
+					if (isset($this->gpsTrack)) echo ' <font color="grey">( '.JtgHelper::getFormattedDistance($this->gpsTrack->distance, '',$this->cfg->unit).' )</font>'; ?> </td>
 			</tr>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_ELEVATION_UP') ?></td>
-				<td><input id="ascent" type="text" name="ascent" class="form-control" value="<?php echo $this->track->ele_asc; ?>" /> <?php echo JText::_('COM_JTG_ELEVATION_UNIT').' <font color="grey">( '.$this->gpsTrack->totalAscent.' ) </font>'; ?> </td>
+				<td><input id="ascent" type="text" name="ascent" class="form-control" value="<?php echo $this->track->ele_asc; ?>" /> <?php echo JText::_('COM_JTG_ELEVATION_UNIT');
+					if (isset($this->gpsTrack)) echo ' <font color="grey">( '.$this->gpsTrack->totalAscent.' ) </font>'; ?> </td>
 			</tr>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_ELEVATION_DOWN') ?></td>
-				<td><input id="descent" type="text" name="descent" class="form-control" value="<?php echo $this->track->ele_desc; ?>" /> <?php echo JText::_('COM_JTG_ELEVATION_UNIT').' <font color="grey">( '.$this->gpsTrack->totalDescent.' )</font>'; ?> </td>
+				<td><input id="descent" type="text" name="descent" class="form-control" value="<?php echo $this->track->ele_desc; ?>" /> <?php echo JText::_('COM_JTG_ELEVATION_UNIT');
+					if (isset($this->gpsTrack)) echo ' <font color="grey">( '.$this->gpsTrack->totalDescent.' )</font>'; ?> </td>
 			</tr>
 			</tbody>
 		</table>
