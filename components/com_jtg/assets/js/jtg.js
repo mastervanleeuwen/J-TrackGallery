@@ -9,7 +9,8 @@ var allpoints = [];
 function jtgMapInit(mapLayersTitle='Map layers', targetid='jtg_map') {
 	jtgView = new ol.View( {
 		center: [0, 0],
-		units: "m"  // TODO: use units from config
+		units: "m",  // TODO: use units from config
+		maxZoom: 20
 	} );
 
 	jtgMap = new ol.Map ( { target: targetid,
