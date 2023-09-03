@@ -731,6 +731,7 @@ class JtgModelTrack extends ItemModel
 
 		$default_map = $input->get('default_map');
 		$distance = $input->getFloat('distance', 0);
+		$cfg = JtgHelper::getConfig();
 		if (strtoupper($cfg->unit)=='MILES') $distance /= 0.621;
 		$ascent = $input->getInt('ascent', 0);
 		$descent = $input->getInt('descent', 0);
