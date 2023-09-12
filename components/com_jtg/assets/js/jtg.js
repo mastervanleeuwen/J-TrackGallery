@@ -639,6 +639,11 @@ function listenLocation(imgID) {
 	} );
 }
 
+function download(fileformat) {
+	var form = document.adminForm;
+	document.getElementById('format').value = fileformat;
+	submitform('download');
+}
 /*
  *   Function needed for the IGN geoportail maps from
  *        the French national geographic institute

@@ -254,28 +254,28 @@ if ($this->canDo->get('jtg.download'))
 	{
 		$ext = strtoupper(JFile::getExt($this->track->file));
 		$download_buttons .= "<button class=\"btn btn-secondary jtg-download\" type=\"button\"
-		onclick=\"document.getElementById('format').value = 'original';Joomla.submitbutton('download')\">
+		onclick=\"download('original')\">
 		$ext ". JText::_('COM_JTG_ORIGINAL_FILE') ."</button>";
 	}
 
 	if ( (bool) $this->params->get("jtg_param_offer_download_gpx") )
 	{
 		$download_buttons .= "<button class=\"btn btn-secondary jtg-download\" type=\"button\"
-		onclick=\"document.getElementById('format').value = 'gpx';Joomla.submitbutton('download')\">
+		onclick=\"download('gpx')\">
 		GPX " . JText::_('COM_JTG_CONVERTED_FILE') ."</button>";
 	}
 
 	if ( (bool) $this->params->get("jtg_param_offer_download_kml") )
 	{
 		$download_buttons .= "<button class=\"btn btn-secondary jtg-download\" type=\"button\"
-		onclick=\"document.getElementById('format').value = 'kml';Joomla.submitbutton('download')\">
+		onclick=\"download('kml')\">
 		KML " . JText::_('COM_JTG_CONVERTED_FILE') . "</button>";
 	}
 
 	if ( (bool) $this->params->get("jtg_param_offer_download_tcx") )
 	{
 		$download_buttons .= "<button class=\"btn btn-secondary jtg-download\" type=\"button\"
-		onclick=\"document.getElementById('format').value = 'tcx';Joomla.submitbutton('download')\">
+		onclick=\"download('tcx')\">
 		TCX " . JText::_('COM_JTG_CONVERTED_FILE') . "</button>";
 	}
 ?>
@@ -536,13 +536,6 @@ if ($this->cfg->comments == 1)
 
 	if ($this->canDo->get('jtg.comment'))
 	{
-?>
-<script type=\"text/javascript\">
-   Joomla.submitbutton = function(pressbutton)  {
-   var form = document.adminForm;
-   submitform( pressbutton);}
-</script>
-<?php
 		echo $this->model->addcomment($this->cfg);
 	}
 	else
