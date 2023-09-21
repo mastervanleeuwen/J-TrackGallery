@@ -326,7 +326,6 @@ if ($this->cfg->access == 1)
 			</tr>
 			</tbody>
 		</table>
-		</div>
 <?php 
 			echo HTMLHelper::_('bootstrap.endSlide');
 			echo HTMLHelper::_('bootstrap.endAccordion');
@@ -355,8 +354,7 @@ if ($this->cfg->access == 1)
 		?>
 		</div>
 			<input
-			<?php
-				echo $max_images <= 0 ? 'disabled="disabled" ': ''; ?>
+			<?php if ($max_images <= 0) echo 'disabled="disabled"'; ?>
 					type="file" name="images[]" class="multi"
 					maxlength="<?php echo $max_images; ?>"
 					accept="<?php echo implode("|", $accept) ?>">
