@@ -323,6 +323,7 @@ img.olTileImage {
 		else if ($plgParams['show_info']) $show_info = true;
 		if ($show_info) {
 			$fieldlist = $plgParams['info_fields'];
+			if (!is_array($fieldlist)) $fieldlist=explode(',',$fieldlist);
 			$map .= JtgHelper::parseTrackInfo($track, $gpsData, $params, $cfg, $fieldlist, $map_width);
 		}
 		}
