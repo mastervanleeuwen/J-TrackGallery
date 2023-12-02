@@ -153,7 +153,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 							' <a href="#" id="popup-closer" class="ol-popup-closer"></a>'.
 							' <div id="popup-content"></div> </div>'."\n";
 					}
-					if ($this->map_count < 10)
+					if ($this->map_count < 50)
 					{
 						$plg_html .= $this->rendermap($plgParams, $plg_call_params);
 						$linktarget = '';
