@@ -13,21 +13,12 @@
 /* use the background position according to the table above to display the required images*/
 /* Anchor-Links in single Trackview */
 tr.sectiontableheader th {
-	background-color: #cccccc;
 	color: black;
-	padding: 4px;
+	border-bottom-width: 2.5px;
 }
 
 tr.sectiontableheader th a {
 	color: black;
-}
-
-tr.sectiontableentry0 td {
-	background-color: #f2f2f2;
-}
-
-tr.sectiontableentry1 td {
-	background-color: #e6e6e6;
 }
 
 a.anchor:link,a.anchor:visited,a.anchor:hover,a.anchor:active {
@@ -628,9 +619,14 @@ v\:rect,v\:roundrect,v\:line,v\:polyline,v\:curve,v\:arc,v\:oval,v\:image,v\:sha
 	width: 100%;
 }
 
-.tracktable TD,  .tracktable  TR,  .tracktable img{
-	padding: 0px;
+.tracktable TD,  .tracktable  TR,  .tracktable th {
+	padding: 0.2rem;
 }
+
+.tracktable img{
+	padding: 0;
+}
+
 .tracktable a,.tracktable a:hover,.tracktable a:active {
 	text-decoration: none;
 }
@@ -1123,7 +1119,7 @@ div.button2jtg-left button {
 .fileis img {
     float: left; 
     border: 0 none;
-    margin-right: 2px;
+    margin-right: 0.1rem;
     padding: 0;
     display: inline;
 }

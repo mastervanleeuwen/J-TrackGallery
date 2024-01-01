@@ -88,11 +88,11 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 		echo '<b>' . JText::_('COM_JTG_LIST_NO_TRACK') . '</b>';
 	} else {
 	?>
-		<table class="tracktable">
+		<table class="table tracktable">
 		<thead>
 			<tr
 				class="sectiontableheader<?php echo $this->escape($this->params->get('pageclass_sfx')); ?>">
-				<th>#</th>
+				<th></th>
 				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TITLE'), 'title', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
 				<?php if ($showcatcolumn) {?>
@@ -151,7 +151,6 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 		</tfoot>
 		<tbody>
 			<?php
-			$k = 0;
 			foreach ($this->items as $i => $row)
 			{
 				if (!$row->title)
@@ -224,7 +223,7 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 					"</a>";
 				}
 				?>
-			<tr class="sectiontableentry<?php echo $k; ?>">
+			<tr>
 				<td><?php echo $this->pagination->getRowOffset($i) . $links; ?></td>
 				<td><a href="<?php echo $link; ?>">
 					<?php echo $row->title; ?> </a><?php echo $link_only?></td>
@@ -270,7 +269,6 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				<td><?php echo $distance; ?></td>
 			</tr>
 			<?php
-			$k = 1 - $k;
 			}
 			?>
 		</tbody>

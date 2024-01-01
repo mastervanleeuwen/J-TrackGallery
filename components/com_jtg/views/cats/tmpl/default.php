@@ -26,14 +26,14 @@
     }
     	    
 ?>
-<table class="tracktable">
+<table class="table tracktable">
 	<thead>
 		<tr class="sectiontableheader">
-			<th colspan="2" width="100px" align="center"><?php echo JText::_('COM_JTG_CAT'); ?>
+			<th colspan="2" width="100px" style="text-align:center"><?php echo JText::_('COM_JTG_CAT'); ?>
 			</th>
 			<?php if ($showdescription) 
-			    echo '<th align="left">'.JText::_('COM_JTG_DESCRIPTION').'</th>'; ?>
-			<th align="left"><?php echo JText::_('COM_JTG_NTRACK'); ?></th>
+			    echo '<th>'.JText::_('COM_JTG_DESCRIPTION').'</th>'; ?>
+			<th><?php echo JText::_('COM_JTG_NTRACK'); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -57,10 +57,7 @@
 				$link = JRoute::_('index.php?option=com_jtg&view=files&layout=list&cat=' . $cat->id);
 			}
 			?>
-		<tr class="sectiontableentry<?php
-			echo $k;
-			$k = 1 - $k;
-			?>">
+		<tr>
 			<td width="10%" align="center"><a href="<?php echo $link; ?>">
 				<?php echo $cat->img; ?>
 			</a></td>

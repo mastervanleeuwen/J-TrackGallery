@@ -87,7 +87,7 @@ $user_summary = $this->getModel()->getTotals($uid);
 		</tr>
 	</table>
 	<div style="overflow-x:auto;">
-	<table class="tracktable">
+	<table class="table tracktable">
 		<thead>
 			<tr
 				class="sectiontableheader<?php echo $this->escape($this->params->get('pageclass_sfx')); ?>">
@@ -139,7 +139,7 @@ $user_summary = $this->getModel()->getTotals($uid);
 				$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $row->id, false);
 				$cats = JtgHelper::parseMoreCats($this->cats, $row->catid, "list", true);
 				?>
-			<tr class="sectiontableentry<?php echo $k; ?>">
+			<tr>
 				<td align="center"><?php echo $this->pagination->getRowOffset($i); ?>
 <?php
 	if ($this->canDo->get('core.edit') || $this->canDo->get('core.edit.own'))
@@ -174,7 +174,6 @@ $user_summary = $this->getModel()->getTotals($uid);
 				<td><?php echo $distance; ?></td>
 			</tr>
 			<?php
-			$k = 1 - $k;
 			}
 			?>
 		</tbody>
