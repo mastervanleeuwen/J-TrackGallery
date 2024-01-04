@@ -79,17 +79,22 @@ img.olTileImage {
 <div id="geo-msg"></div>
    <form action="<?php echo JURI::getInstance(); ?>" method="post"
    name="adminForm" id="adminForm">
-   <div class="row-fluid">
-            <div class="span12">
-                <?php
-                    echo JLayoutHelper::render(
-                        'joomla.searchtools.default',
-                        array('view' => $this)
-                    );
-                ?>
-            </div>
-        </div>
+<?php
+	if ($this->params->get('jtg_param_overview_filterbox', 1)) {
+?> 
+	<div class="row-fluid">
+		<div class="span12">
+		<?php
+			echo JLayoutHelper::render(
+				'joomla.searchtools.default',
+				array('view' => $this)
+			);
+		?>
+		</div>
 	</div>
+<?php
+	}
+?>
 </form>
 </center>
 <?php

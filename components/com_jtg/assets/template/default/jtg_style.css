@@ -21,6 +21,10 @@ tr.sectiontableheader th a {
 	color: black;
 }
 
+tr.sectiontablefooter td {
+	border: 0;
+}
+
 a.anchor:link,a.anchor:visited,a.anchor:hover,a.anchor:active {
 	display: block;
 	font-size: 1.2em;
@@ -34,6 +38,11 @@ a.anchor:link,a.anchor:visited,a.anchor:hover,a.anchor:active {
 
 a.anchor:hover {
 	background-color: #E8E8FF;
+}
+
+.jtg-prevnext {
+	overflow: auto;
+	margin: 10px 0;
 }
 
 .rating {
@@ -619,8 +628,13 @@ v\:rect,v\:roundrect,v\:line,v\:polyline,v\:curve,v\:arc,v\:oval,v\:image,v\:sha
 	width: 100%;
 }
 
-.tracktable TD,  .tracktable  TR,  .tracktable th {
+.tracktable td,  .tracktable  tr,  .tracktable th {
 	padding: 0.2rem;
+}
+
+.tracktable tfoot td {
+	padding: 0.2rem;
+	border: 0;
 }
 
 .tracktable img{

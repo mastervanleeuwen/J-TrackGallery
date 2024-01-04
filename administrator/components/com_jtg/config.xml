@@ -34,10 +34,6 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
-		<field name="cat_link_view" type="list" default="0" label="COM_JTG_CAT_LINK_VIEW">
-			<option value="0">COM_JTG_MENU_DEFAULT_LAYOUT</option>
-			<option value="1">COM_JTG_MENU_FILE_LIST</option>
-		</field>
 		<field name="jtg_param_otherfiles" type="radio"
 			addfieldpath="/administrator/components/com_jtg/elements" default="0"
 			label="COM_JTG_MENU_RESTRICTEDFILES" description="COM_JTG_TT_MENU_RESTRICTEDFILES">
@@ -195,6 +191,10 @@
 			<option value="1">COM_JTG_ENDPOINT</option>
 			<option value="2">COM_JTG_MIDPOINT</option>
 		</field>
+		<field name="jtg_param_overview_filterbox" type="radio" default="1" label="COM_JTG_FILTERBOX">
+			<option value="1">JSHOW</option>
+			<option value="0">JHIDE</option>
+		</field>
 		<field name="jtg_param_newest" type="text"
 			addfieldpath="/administrator/components/com_jtg/elements" default="10"
 			size="3" label="COM_JTG_MENU_NEWEST" description="COM_JTG_TT_MENU_NEWEST" />
@@ -230,7 +230,11 @@
 		</field>
 		<field name="intro_text_overview" type="editor" label="COM_JTG_TT_INTRO_TEXT_OVERVIEW" description="COM_JTG_TT_INTRO_TEXT_OVERVIEW_DESCRIPTION" width="300" filter="safehtml" />
 	</fieldset>
-	<fieldset name="ORDERING" label="COM_JTG_TT_TRACKS_LIST">
+	<fieldset name="TRACKLIST" label="COM_JTG_TT_TRACKS_LIST">
+		<field name="jtg_param_list_filterbox" type="radio" default="1" label="COM_JTG_FILTERBOX">
+			<option value="1">JSHOW</option>
+			<option value="0">JHIDE</option>
+		</field>
 		<field name="jtg_param_track_ordering" type="list"
 			addfieldpath="/administrator/components/com_jtg/elements" default="1"
 			label="COM_JTG_MENU_TRACK_ORDERING" description="COM_JTG_TT_TRACK_ORDERING">
@@ -292,6 +296,20 @@
 			label="COM_JTG_LIST_HIDE_ICON_ISGEOCACHE" description="COM_JTG_TT_LIST_HIDE_ICON_ISGEOCACHE">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
+		</field>
+	</fieldset>
+	<fieldset name="CATEGRORY" label="COM_JTG_MENU_CAT_VIEW">
+		<field name="jtg_param_cat_show_map" type="radio" default="1" label="COM_JTG_SHOW_MAP">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="jtg_param_cat_show_list" type="radio" default="1" label="COM_JTG_SHOW_LIST">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="jtg_param_cat_filterbox" type="radio" default="1" label="COM_JTG_FILTERBOX">
+			<option value="1">JSHOW</option>
+			<option value="0">JHIDE</option>
 		</field>
 	</fieldset>
 	<fieldset name="LIMIT" label="COM_JTG_TT_MENU_LIMIT">

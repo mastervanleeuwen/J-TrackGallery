@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_JTG_MENU_CAT_VIEW">
+		<message>
+			<![CDATA[COM_JTG_CAT_VIEW_DESCRIPTION]]>
+		</message>
+	</layout>
+	<fields name="request">
+		<fieldset name="request">
+			<field name="id" type="sql" query="SELECT id, title FROM #__jtg_cats ORDER BY ordering" key_field="id" value_field="title" translate="true" label="COM_JTG_CAT_SELECT" />
+		</fieldset>
+	</fields>
+	<state>
+		<name>COM_JTG_MENU_CAT_VIEW</name>
+		<description>COM_JTG_CAT_VIEW_DESCRIPTION</description>
+		<config>
+			<fields name="params">
+				<fieldset name="basic" label="basic">
+
+				</fieldset>
+			</fields>
+		</config>
+		<advanced>
+
+		</advanced>
+	</state>
+</metadata>

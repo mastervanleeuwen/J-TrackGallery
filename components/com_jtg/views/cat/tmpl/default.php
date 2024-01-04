@@ -22,13 +22,11 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('script', 'system/core.js', false, true);
 
 $this->filterForm = $this->get('FilterForm');
-if (!$this->params->get('jtg_param_use_cats')) $this->filterForm->removeField('trackcat','filter');
 if (!$this->cfg->uselevel) $this->filterForm->removeField('tracklevel','filter');
 
 echo $this->lh;
 
 $iconheight = $this->params->get('jtg_param_list_icon_max_height');
-$hide_icon_category = !$this->params->get('jtg_param_use_cats') || (bool) $this->params->get('jtg_param_tracks_list_hide_icon_category');
 $hide_icon_istrack = (bool) $this->params->get('jtg_param_tracks_list_hide_icon_istrack');
 $hide_icon_isroundtrip = (bool) $this->params->get('jtg_param_tracks_list_hide_icon_isroundtrip');
 $hide_icon_is_wp = (bool) $this->params->get('jtg_param_tracks_list_hide_icon_is_wp');
@@ -36,16 +34,9 @@ $hide_icon_isgeocache = (bool) $this->params->get('jtg_param_tracks_list_hide_ic
 $height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px;" ' : ' ');
 $levelMin = $this->params->get('jtg_param_level_from');
 $levelMax = $this->params->get('jtg_param_level_to');
-$showcatcolumn = !$hide_icon_category || !$hide_icon_istrack || !$hide_icon_isroundtrip || !$hide_icon_is_wp || !$hide_icon_isgeocache;
+$showcatcolumn = !$hide_icon_istrack || !$hide_icon_isroundtrip || !$hide_icon_is_wp || !$hide_icon_isgeocache;
 $iconpath = JUri::root() . "components/com_jtg/assets/template/" . $this->cfg->template . "/images/";
 
-// no longer needed JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-
-// JTG_FILTER_TODO
-//Get trackcategory options
-JFormHelper::addFieldPath(JPATH_COMPONENT . '/models/fields');
-$trackcategory = JFormHelper::loadFieldType('Trackcategory', false);
-$trackcategoryOptions=$trackcategory->getOptions(); // works only if you set your field getOptions on public!!
 if (version_compare(JVERSION, '4.0', 'lt')) 
 {
 	JFactory::getApplication()->getDocument()->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' .  $this->cfg->template . '/filter_box_j3.css');
@@ -64,12 +55,84 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 	}
 </script>
 
+<style type="text/css">
+#jtg_map.olMap {
+   height: <?php echo$this->cfg->map_height; ?>;
+   width: <?php echo$this->cfg->map_width; ?>;
+   z-index: 0;
+}
+
+#jtg_map.fullscreen {
+   height: 800px;
+   width: 100%;
+   z-index: 10000;
+}
+</style>
+
+<?php 
+echo $this->parseTemplate("headline", $this->title, "jtg_param_header_map", null, $this->title);
+$lang = JFactory::getApplication()->getLanguage();
+?>
+
+<div class="jtg-prevnext">
+<?php if ($this->prev_cat_title) :
+	$direction = $lang->isRtl() ? 'right' : 'left';
+	$ariaLabel = JText::_('JPREVIOUS') . ': ' . $this->prev_cat_title;
+?>
+<div style="float:left">
+	<a class="page-link hasTooltip" href="<?php echo JRoute::_('index.php?option=com_jtg&view=cat&id='.$this->prev_cat_id); ?>" title="<?php echo $this->prev_cat_title; ?>" data-bs-original-title="<?php echo $ariaLabel; ?>" rel="prev">
+	<?php echo '<span class="icon-chevron-' . $direction . '" aria-hidden="true"></span> ' . JText::_('JPREV'); ?>
+	</a>
+</div>
+<?php endif; ?>
+
+<?php if ($this->next_cat_title) :
+	$direction = $lang->isRtl() ? 'left' : 'right';
+	$ariaLabel = JText::_('JNEXT') . ': ' . $this->next_cat_title;
+?>
+<div style="float:right">
+	<a class="page-link hasTooltip" href="<?php echo JRoute::_('index.php?option=com_jtg&view=cat&id='.$this->next_cat_id); ?>" title="<?php echo $this->next_cat_title; ?>" data-bs-original-title="<?php echo $ariaLabel; ?>" rel="next">
+	<?php echo JText::_('JNEXT') . ' <span class="icon-chevron-' . $direction . '" aria-hidden="true"></span>'; ?>
+	</a>
+</div>
+<?php endif; ?>
+</div>
+
+<?php
+if (empty($this->items)) {
+	JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_LIST_NO_TRACK'), 'Warning');
+	echo '<b>' . JText::_('COM_JTG_LIST_NO_TRACK') . '</b>';
+} else {
+
+	if ($this->showmap) {  
+		JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js',array('version'=>'auto'));
+		JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/jtgOverView.js',array('version'=>'auto'));
+		JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
+?>
+<center>
+	<div id="jtg_map" class="olMap"></div>
+
+	<div id="popup" class="ol-popup">
+		<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+		<div id="popup-content"></div>
+	</div>
+</center>
+<div class="no-float">
+   <?php
+		echo JtgMapHelper::parseOverviewMapJS($this->items,$this->showtracks,$this->zoomlevel,JFactory::getApplication()->input->get('lon'),JFactory::getApplication()->input->get('lat'),JFactory::getApplication()->input->getBool('geoloc'));
+   ?>
+</div>
+<?php
+	}?>
+
 <form action="<?php echo $this->action; ?>" method="post"
 	name="adminForm" id="adminForm">
 <?php
-	if ($this->params->get('jtg_param_list_filterbox', 1)) {
+	if ($this->params->get('jtg_param_cat_filterbox', 1)) {
+	$addborder='';
+	if (version_compare(JVERSION, '4.0', 'lt')) $addborder='style="padding: 15px 0 0"';
 ?>
-	<div class="row-fluid">
+	<div class="row-fluid"<?php echo ' '.$addborder; ?>>
             <div class="span12">
                 <?php
                     echo JLayoutHelper::render(
@@ -81,57 +144,38 @@ if (version_compare(JVERSION, '4.0', 'lt'))
         </div>
 <?php
 	}
+	if ($this->showlist) {
 ?>
-	<table style="width:100%;">
+	<table class="tracktable" style="width:100%;">
 	    <tr>
-			<td style="text-align: right"><?php echo $this->pagination->getResultsCounter(); ?>
+			<td style="padding: 10px 0.2rem; text-align: right"><?php echo $this->pagination->getResultsCounter(); ?>
 			</td>
 		</tr>
 	</table>
 	<div style="overflow-x:auto;">
-	<?php if (empty($this->items)) {
-		JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_LIST_NO_TRACK'), 'Warning');
-		echo '<b>' . JText::_('COM_JTG_LIST_NO_TRACK') . '</b>';
-	} else {
-	?>
 		<table class="table tracktable">
 		<thead>
 			<tr
 				class="sectiontableheader<?php echo $this->escape($this->params->get('pageclass_sfx')); ?>">
 				<th></th>
-				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TITLE'), 'title', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TITLE'), 'title', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 				</th>
 				<?php if ($showcatcolumn) {?>
-				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_CAT'), 'catid', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_CAT'), 'catid', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 				</th>
-				<?php } ?>
-				<?php if ($this->cfg->uselevel) {?>
-				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_LEVEL'), 'level', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+				<?php 
+				}
+				if ($this->cfg->uselevel) {?>
+				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_LEVEL'), 'level', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 				</th>
-				<?php } ?>
-				<?php
+				<?php 
+				} 
+
 				if (! $this->params->get("jtg_param_disable_terrains"))
 				{
 				?>
 								<th>
-								<?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TERRAIN'), 'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
-								</th>
-				<?php
-				}
-
-				if (! $this->params->get("jtg_param_tracks_list_hide_users"))
-				{
-				?>
-								<th>
-								<?php echo JHtml::_('grid.sort', JText::_('COM_JTG_USER'), 'user', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
-								</th>
-				<?php
-				}
-
-				if (! $this->params->get("jtg_param_tracks_list_hide_hits"))
-				{
-				?>				<th>
-								<?php echo JHtml::_('grid.sort', JText::_('COM_JTG_HITS'), 'hits', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+								<?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TERRAIN'), 'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 								</th>
 				<?php
 				}
@@ -140,13 +184,13 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				{
 				?>
 								<th>
-								<?php echo JHtml::_('grid.sort', JText::_('COM_JTG_VOTING'), 'vote', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+								<?php echo JHtml::_('grid.sort', JText::_('COM_JTG_VOTING'), 'vote', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 								</th>
 				<?php
 				}
 				?>
 				<th>
-				<?php echo JHtml::_('grid.sort', JText::_('COM_JTG_DISTANCE'), 'distance', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+				<?php echo JHtml::_('grid.sort', JText::_('COM_JTG_DISTANCE'), 'distance', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 				</th>
 			</tr>
 		</thead>
@@ -178,14 +222,7 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				}
 				$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $row->id, false);
 				$profile = JtgHelper::getProfileLink($row->uid, $row->user);
-				$cat = '';
-				if (!$hide_icon_category)
-				{
-					$cat = JtgHelper::parseMoreCats($this->sortedcats, $row->catid, "list", true, $iconheight);
-					$cat = $cat ? $cat: "<img $height src =\"/components/com_jtg/assets/images/cats/symbol_inter.png\" />\n";
-				}
 				$terrain = JtgHelper::parseMoreTerrains($this->sortedter, $row->terrain, "list", true);
-				$hits = JtgHelper::getLocatedFloat($row->hits, 0);
 				$layoutHelper = new LayoutHelper;
 				$votes = $layoutHelper->parseVoteFloat($row->vote, false);
 				$links = null;
@@ -235,7 +272,7 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 					<?php echo $row->title; ?> </a><?php echo $link_only?></td>
 				<?php if ($showcatcolumn) {?>
 					<td>
-				<?php echo '<span class="fileis">' . $cat . ' ' . $imagelink . '</span>'; ?></td>
+				<?php echo '<span class="fileis">' . $imagelink . '</span>'; ?></td>
 				<?php }
 				if ($this->cfg->uselevel) {
 					$level = JtgHelper::getLevelIcon($row->level, $this->cfg, $row->catid, $iconheight);
@@ -247,21 +284,6 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				{
 				?>
 								<td><?php echo $terrain; ?></td>
-				<?php
-				}
-
-				if (! $this->params->get("jtg_param_tracks_list_hide_users"))
-				{
-				?>
-
-								<td><?php echo $profile; ?></td>
-				<?php
-				}
-
-				if (! $this->params->get("jtg_param_tracks_list_hide_hits"))
-				{
-				?>
-								<td><?php echo $hits; ?></td>
 				<?php
 				}
 
@@ -279,8 +301,9 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 			?>
 		</tbody>
 	</table>
-	<?php } ?>
 	</div>
+	<?php }
+	} ?>
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="task" value="" /> <input type="hidden"
 		name="filter_order" value="<?php echo $this->lists['order']; ?>" /> <input

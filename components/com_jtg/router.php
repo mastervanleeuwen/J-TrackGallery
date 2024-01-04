@@ -190,7 +190,7 @@ class jtgRouter extends RouterBase
 
 		if (isset($query['layout']))
 		{
-			$segments[] = $query['layout'];
+			if ($query['layout'] !== 'default') $segments[] = $query['layout'];
 			unset($query['layout']);
 		}
 
@@ -292,6 +292,9 @@ class jtgRouter extends RouterBase
 				$vars['layout'] = 'default';
 				array_shift($segments);
 				break;
+			case 'cat':
+				$vars['view'] = 'cat';
+				break;
 			case 'track':
 				$vars['view'] = 'track';
 				break;
@@ -374,6 +377,13 @@ class jtgRouter extends RouterBase
 					$vars['layout'] = 'default';
 					$vars['id'] = $segments[0];
 				}
+				array_shift($segments);
+				break;
+
+			case 'cat':
+				$vars['view'] = 'cat';
+				$vars['layout'] = 'default';
+				$vars['id'] = $segments[0];
 				array_shift($segments);
 				break;
 
