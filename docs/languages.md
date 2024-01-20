@@ -6,6 +6,7 @@ nav_order: 6
 
 J!TrackGallery currently supports the following languages:
    - English
+	- Dutch
    - French
    - German
 	- Italian (thanks to @mambanero)

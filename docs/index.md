@@ -30,10 +30,17 @@ The main features are:
 
 J!TrackGallery consists of several pieces, a _Joomla! component_, 2 _modules_ and _plugin_ packages.
 
-The main functionality part or base package is a _Joomla! component_ (`com_jtg.zip<`). This is the base package, which the _modules_ and _plugin_ rely on. The J!TrackGallery component provides the interface to upload GPS files and to store information, add a description, etc and to display them.
+The main functionality part or base package is a Joomla! *component* (`com_jtg.zip`). This is the base package, which the _modules_ and _plugin_ rely on. The J!TrackGallery component provides the interface to upload GPS files and to store information, add a description, etc and to display them.
+The J!TrackGallery provides several _views_ which present the tracks in different formats. Most views can also be assigned to menu items in the menu(s) of your pages. The following views are provided:
+- [Overview map](overview): this is the main entry point showing an overview of all tracks that are available on your web site
+- [Track view](frontend): the main view with a map, graph, and details for a specific track - several aspects of this view can be configured to suit your needs. A button to edit the track information appears when authorised users are logged in to the site.
+- _Category list_: a list of all categories
+- _Category overview_: a map and/or list of tracks for a specific category
+- _Track list_: a (sortable) list of all tracks with basic information about each track
+- _User view_: a view for users that are logged in, showing a list of tracks owned, and recent comments (if enabled on the site), as well as summary statistics
 
 The [plugin](plugin) (`plg_jtrackgallery_maps.zip`) provides the possibility to show GPS tracks on a map on other pages, for example in Joomla! articles.
 
-Two _modules_ (`mod_jtg_stats.zip` and `mod_jtg_latest.zip`) provide functionality to show a list of the most popular and most recent tracks in a fixed location on each page.
+Two *modules* (`mod_jtg_stats.zip` and `mod_jtg_latest.zip`) provide functionality to show a list of the most popular and most recent tracks in a fixed location on each page.
 
 
