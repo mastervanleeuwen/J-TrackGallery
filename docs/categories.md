@@ -28,5 +28,6 @@ A view showing a map and/or list of tracks in a specific category
 - Overview map
 - Track search/filter box
 - Track list
+
 Each element can be switched on or off in the configuration menu.
 The selection of columns shown in the track table is similar to that in the main 'Track list' overview page; it can also be configured in the configuration menu.

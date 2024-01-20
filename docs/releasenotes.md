@@ -9,6 +9,8 @@ nav_order: 10
 
 More detailed release notes can be found on the [Github Release page](https://github.com/mastervanleeuwen/J-TrackGallery/releases)
 
+0.9.35 contains many bug fixes to support Joomla 4 and 5, improvements to the parsing of GPX files and a number of new configuration options to customise the appearance of the different views
+
 0.9.34 is the first release that is compatible with Joomla 4 (as well as 3.9.10). [This release](https://github.com/mastervanleeuwen/J-TrackGallery/releases/tag/0.9.34) also contains cosmetic/appearance changes as well as fixes to the parsing of gpx files. Italian and Russian translations added. 
 
 0.9.33c is the [latest pre-release](https://github.com/mastervanleeuwen/J-TrackGallery/releases/tag/0.9.33c) with several minor bugfixes. A new version 0.9.34 will be released when all pending issues are fixed.
