@@ -29,3 +29,7 @@ By default, the range of the map that is shown is automatically adjusted to show
   - *Center on user location* uses geolocation from the user's browser to center the map on the user's current location. This also uses the specified zoom level. If no geolocation information can be obtained, the defaults are used.
 
 There is also a configuration option to specify whether the welcome text should be shown or not.
+
+## Icon location
+
+Each track is shown on the map using the icon that is assigned to the [categorie](categories) that the track is part of. By default, the icon is placed at the start of the track, but there is a configuration option to use the end or the middle of the track. This can be useful if you have multiple tracks that start in the same location.
