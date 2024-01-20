@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="content" version="2.5" method="upgrade">
 	<name>JTrackGalleryMaps</name>
-	<author>Christophe Seguinot</author>
+	<author>Marco van Leeuwen</author>
 	<creationDate>December 2015</creationDate>
     <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>mastervanleeuwen@gmail.com</authorEmail>
 	<authorUrl>https://mastervanleeuwen.github.io/J-TrackGallery/</authorUrl>
-	<version>0.9.28</version>
+	<version>0.9.35</version>
 	<description>PLG_JTG_MAPS_XML_DESCRIPTION</description>
 	<files>
 		<filename plugin="jtrackgallery_maps">jtrackgallery_maps.php</filename>
