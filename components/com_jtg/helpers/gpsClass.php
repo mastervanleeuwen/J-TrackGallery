@@ -1480,25 +1480,17 @@ class GpsDataClass
 		$wpJSicons = [ 'unknown' => $this->parseOwnIcon() ];
 		foreach ($this->wps as $wp)
 		{
-			$replace = array("\n","'");
-			$with = array("<br />","\'");
+			$srch = "\n";
+			$repl = '<br>';
 			$hasURL = isset($wp->url); // TODO: this should probably be 'link'
 			$isGeocache = $this->isGeocache($wp->value);
 
+			$URL = "";
 			if ($hasURL)
 			{
 				$URL = " <a href=\"" . $wp->url . "\" target=\"_blank\">" .
-						trim(str_replace($replace, $with, $wp->urlname)) . "</a>";
+						trim(str_replace($srch, $repl, htmlspecialchars($wp->urlname))) . "</a>";
 			}
-			else
-			{
-				$URL = "";
-			}
-
-			$name = trim(str_replace($replace, $with, $wp->name));
-			$cmt = trim(str_replace($replace, $with, $wp->cmt));
-			$desc = trim(str_replace($replace, $with, $wp->desc));
-			$ele = (float) $wp->ele;
 
 			if ($isGeocache)
 			{
@@ -1509,21 +1501,25 @@ class GpsDataClass
 				$sym = $wp->sym;
 			}
 
+			$name = $wp->name?htmlspecialchars($wp->name):'';
 			$wpcode = $name . $URL;
-			if ($desc)
+
+			if ($wp->desc)
 			{
+				$desc = trim(str_replace($srch,$repl,(htmlspecialchars($wp->desc))));
 				$wpcode .= "<br><b>" . JText::_('COM_JTG_DESCRIPTION') . ":</b> " . $desc;
 			}
 
-			if ( ($cmt) AND ($desc != $cmt) )
+			if ( ($wp->cmt) AND ($wp->cmt != $wp->desc) )
 			{
+				$cmt = trim(str_replace($srch,$repl,(htmlspecialchars($wp->cmt))));
 				$wpcode .= "<br /><b>" . JText::_('COM_JTG_COMMENT') . ":</b> " . $cmt;
 			}
 
-			if ($ele)
+			if ($wp->ele)
 			{
 				// TODO unit in elevation !!
-				$wpcode .= "<br /><b>" . JText::_('COM_JTG_ELEVATION') . " :</b> " . round($ele, 1) . "m<small>";
+				$wpcode .= "<br /><b>" . JText::_('COM_JTG_ELEVATION') . " :</b> " . round((float)$wp->ele, 1) . " m<small>";
 			}
 			
 			if (isset($wpJSicons[$sym])) {

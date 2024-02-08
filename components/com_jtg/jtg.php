@@ -81,7 +81,8 @@ if ($controller = JFactory::getApplication()->input->getWord('controller'))
 }
 
 $classname = 'JtgController';
-if (strlen($controller)) $classname .= ucfirst($controller);
+if ($controller && strlen($controller)) $classname .= ucfirst($controller);
+
 $controller = new $classname;
 
 // Register Extra tasks
