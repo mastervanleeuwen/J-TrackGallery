@@ -210,7 +210,7 @@ class JtgModelTrack extends ItemModel
 		$level = $input->get('level', 0, 'integer');
 		$title = $input->get('title', '', 'string');
 		$terrain = $input->get('terrain', null, 'array');
-		$terrain = $terrain ? implode(', ', $terrain) : '';
+		$terrain = $terrain ? implode(',', $terrain) : '';
 		$desc = $db->escape(implode(' ', $input->get('description', '', 'array')));
 		$file = $input->files->get('file');
 		$uid = $user->id;
@@ -713,7 +713,7 @@ class JtgModelTrack extends ItemModel
 
 		if ($terrain)
 		{
-			$terrain = $terrain ? implode(', ', $terrain) : '';
+			$terrain = $terrain ? implode(',', $terrain) : '';
 		}
 		else
 		{
