@@ -75,7 +75,7 @@ $user_summary = $this->getModel()->getTotals($uid);
 
 	</table>
 </div>
-<?php echo $this->parseTemplate("headline", JText::_("My tracks"), "tracklist", null); ?>
+<?php echo $this->parseTemplate('headline', JText::_('COM_JTG_MY_FILES'), 'tracklist', null); ?>
 <form action="<?php echo $this->action; ?>" method="post"
 	name="adminForm" id="adminForm">
 	<table style="width:100%;">
