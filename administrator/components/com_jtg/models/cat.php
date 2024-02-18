@@ -283,7 +283,7 @@ class JtgModelCat extends JModelLegacy
 
 		$input = JFactory::getApplication()->input;
 		$published = $input->getInt('publish');
-		$desc = $input->get('desc', '', 'raw');
+		$desc = $input->get('desc', '', 'string');
 
 		if ( (substr($desc, 0, 3) == '<p>') AND (substr($desc, -4, 4) == '</p>') )
 		{
@@ -302,13 +302,13 @@ class JtgModelCat extends JModelLegacy
 
 		$query = "INSERT INTO #__jtg_cats SET"
 		. "\n parent_id='" . $parent . "',"
-		. "\n title='" . $title . "',"
+		. "\n title=" . $db->quote($title) . ","
 		. "\n image='" . $image . "',"
 		. "\n usepace='" . $usepace . "',"
 		. "\n default_map=" . $default_map . ","
 		. "\n ordering=" . $maxordering . ","
 		. "\n checked_out=0,"
-		. "\n description='" . $desc . "',"
+		. "\n description=" . $db->quote(htmlentities($desc)) . ","
 		. "\n published='" . $published . "'";
 
 		$db->setQuery($query);
@@ -402,7 +402,7 @@ class JtgModelCat extends JModelLegacy
 		}
 
 		$published = $input->getInt('publish');
-		$desc = $input->get('desc', '', 'raw');
+		$desc = $input->get('desc', '', 'string');
 
 		if ( (substr($desc, 0, 3) == '<p>') AND (substr($desc, -4, 4) == '</p>') )
 		{
@@ -413,11 +413,11 @@ class JtgModelCat extends JModelLegacy
 		$parent = $input->getInt('parent');
 		$query = "UPDATE #__jtg_cats SET"
 		. "\n parent_id='" . $parent . "',"
-		. "\n title='" . $title . "',"
+		. "\n title=" . $db->quote($title) . ","
 		. "\n image='" . $image . "',"
 		. "\n usepace='" . $usepace . "',"
 		. "\n default_map=" . $default_map . ","
-		. "\n description='" . $desc . "',"
+		. "\n description=" . $db->quote(htmlentities($desc)) . ","
 		. "\n published='" . $published . "'"
 		. "\n WHERE id='" . $id . "'";
 

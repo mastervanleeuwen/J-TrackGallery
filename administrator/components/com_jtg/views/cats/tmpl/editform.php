@@ -38,9 +38,8 @@ $image = $this->data->image;
 		<tbody>
 			<tr>
 				<td width="150px"><?php echo JText::_('COM_JTG_TITLE'); ?></td>
-				<td><input type="text" name="title"
-					value="<?php echo $this->data->title; ?>" /> (
-					<?php echo JText::_($this->data->title);?>)
+				<td><input type="text" name="title" size="30" maxlength="30"
+					value="<?php echo $this->data->title; ?>" />
 				</td>
 			</tr>
 			<tr>
@@ -87,7 +86,7 @@ $image = $this->data->image;
 			</tr>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_DESC_JTEXT_ALLOWED'); ?></td>
-				<td><?php echo $this->editor->display('desc', $this->data->description, '500', '200', '75', '10', false, null); ?>
+				<td><input type="text" name="desc" size="60" maxlength="255" value="<?php echo $this->data->description; ?>" />
 				</td>
 			</tr>
 		</tbody>
