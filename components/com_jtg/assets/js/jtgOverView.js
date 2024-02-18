@@ -7,7 +7,7 @@ function addTrackMarkers(tracks, catIcons) {
 	for (i=0; i < catIcons.length; i++)
 	{
 		iconStyles.push(new ol.style.Style( {
-			image: new ol.style.Icon( { src: jtgBaseUrl+'components/com_jtg/assets/images/cats/'+catIcons[i],anchorOrigin: 'bottom-left', anchor: [0.5,0] } )
+			image: new ol.style.Icon( { src: jtgBaseUrl+'images/jtrackgallery/cats/'+catIcons[i],anchorOrigin: 'bottom-left', anchor: [0.5,0] } )
 		} ) );
 	}
 	var arrayOfMarkers = [];
