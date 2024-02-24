@@ -68,17 +68,27 @@ img.olTileImage {
 }
 </style>
 <center>
-      <div id="jtg_map" class="olMap"></div>
-
-      <div id="popup" class="ol-popup">
-          <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-          <div id="popup-content"></div>
-      </div>
+<?php
+if (count($this->items))
+{
+?>
+	<div id="jtg_map" class="olMap"></div>
+	<div id="popup" class="ol-popup">
+		<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+		<div id="popup-content"></div>
+	</div>
+<?php
+}
+else
+{
+	echo "<div>".JText::_('COM_JTG_LIST_NO_TRACK')."</div>";
+}
+?>
 	<div>
-	<br>
-<div id="geo-msg"></div>
-   <form action="<?php echo JURI::getInstance(); ?>" method="post"
-   name="adminForm" id="adminForm">
+		<br>
+		<div id="geo-msg"></div>
+		<form action="<?php echo JURI::getInstance(); ?>" method="post"
+			name="adminForm" id="adminForm">
 <?php
 	if ($this->params->get('jtg_param_overview_filterbox', 1)) {
 ?> 
@@ -399,8 +409,11 @@ if ($this->rand != 0)
 
 ?>
 <div class="no-float">
-	<?php
+<?php
+	if (count($this->items))
+	{
 		echo JtgMapHelper::parseOverviewMapJS($this->items,$this->showtracks,$this->zoomlevel,JFactory::getApplication()->input->get('lon'),JFactory::getApplication()->input->get('lat'),JFactory::getApplication()->input->getBool('geoloc'));
-		echo $this->footer;
-	?>
+	}
+	echo $this->footer;
+?>
 </div>

@@ -173,7 +173,7 @@ function addTracksOverviewLayer(tracks, catIcons){
 	if (markers.length > 1) {
 		jtgView.fit( source.getExtent(), {padding: [50, 50, 50, 75]} );
 	}
-	else {
+	else if (markers.length == 1) {
 		jtgView.setCenter(ol.proj.fromLonLat([tracks[0].lon, tracks[0].lat], jtgView.getProjection()));
 		jtgView.setZoom(8); 
 	}
