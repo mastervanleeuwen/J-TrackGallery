@@ -19,7 +19,7 @@ defined('_JEXEC') or die('Restricted access');
 $tcustom_enable = $params->get('tcustom_enable');
 
 // Load english language file for 'com_jtg' component then override with current language file
-JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg',	null, true);
+JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE,	null, true);
 
 // Com_jtg_additional language files are in /images/jtrackgallery/language folder
 JFactory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',	null, true);
@@ -48,7 +48,7 @@ foreach ($tracks as $track)
 
 	if ($params->get('style') == 0)
 	{
-		$link = JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $track->id);
+		$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $track->id);
 		echo '<div align="center" style="margin-bottom:20px;">';
 		if ($map != 'none') { 
 			echo '<img src="https://maps.googleapis.com/maps/api/staticmap?center=' . $track->start_n . ',' .
