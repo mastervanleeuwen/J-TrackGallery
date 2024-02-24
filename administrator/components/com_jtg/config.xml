@@ -221,6 +221,14 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
+		<field name="jtg_param_track_colors_1" type="color" default="1764F5"
+			label="COM_JTG_MENU_TRACK_COLOR" showon="jtg_param_tracks:1" />
+		<field name="jtg_param_track_colors_2" type="color" default="F82832"
+			label="COM_JTG_MENU_TRACK_COLOR" showon="jtg_param_tracks:1" />
+		<field name="jtg_param_track_colors_3" type="color" default="32B805"
+			label="COM_JTG_MENU_TRACK_COLOR" showon="jtg_param_tracks:1" />
+		<field name="jtg_param_track_colors_4" type="color" default="DF1BF5"
+			label="COM_JTG_MENU_TRACK_COLOR" showon="jtg_param_tracks:1" />
 		<field type="spacer" name="myspacer4" class="text"
 			label="COM_JTG_MENUSPACER_DPCAL_INTEGRATION" />
 		<field name="dpcallocs_overview" type="radio" default="0"

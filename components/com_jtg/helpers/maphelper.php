@@ -330,7 +330,11 @@ class JtgMapHelper {
 			// Dummy line for Coding standard
 		}
 
-		$color = JtgMapHelper::calculateAllColors(count($rows));
+		$params = JComponentHelper::getParams('com_jtg');
+		$colors[] = $params->get('jtg_param_track_colors_1');
+		$colors[] = $params->get('jtg_param_track_colors_2');
+		$colors[] = $params->get('jtg_param_track_colors_3');
+		$colors[] = $params->get('jtg_param_track_colors_4');
 		$string = "// <!-- parseOLTracks BEGIN -->\n";
 		$i = 0;
 
@@ -342,7 +346,7 @@ class JtgMapHelper {
 			// TODO: check file type; this code builds the overview map?
 			$string .= "layer_vector = new ol.layer.Vector({";
 			$string.="source: new ol.source.Vector({ url: '".$file."', format: new ol.format.GPX() }),\n";
-			$string .= "   style: new ol.style.Style({ stroke: new ol.style.Stroke({ color:'" . JtgMapHelper::getHexColor("#" . $color[$i]) . "',\n width: 2}) })";
+			$string .= "   style: new ol.style.Style({ stroke: new ol.style.Stroke({ color:'" . $colors[$i%4] . "',\n width: 4}) })";
 			$string .= "});\n";
 			$string .= "jtgMap.addLayer(layer_vector);\n";
 			$i++;
