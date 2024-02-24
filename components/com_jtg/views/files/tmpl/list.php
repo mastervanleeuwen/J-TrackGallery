@@ -41,11 +41,7 @@ $iconpath = JUri::root() . "components/com_jtg/assets/template/" . $this->cfg->t
 
 // no longer needed JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
-// JTG_FILTER_TODO
-//Get trackcategory options
 JFormHelper::addFieldPath(JPATH_COMPONENT . '/models/fields');
-$trackcategory = JFormHelper::loadFieldType('Trackcategory', false);
-$trackcategoryOptions=$trackcategory->getOptions(); // works only if you set your field getOptions on public!!
 if (version_compare(JVERSION, '4.0', 'lt')) 
 {
 	JFactory::getApplication()->getDocument()->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' .  $this->cfg->template . '/filter_box_j3.css');
