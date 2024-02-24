@@ -49,7 +49,7 @@ class JFormFieldTrackcategory extends JFormFieldList
 	{
 		// Initialize variables.
 		$options = array();
-		$options[] = array('value' => "0", 'text' => JText::_('COM_JTG_CAT_SELECT')); 
+		//$options[] = array('value' => "", 'text' => JText::_('COM_JTG_CAT_SELECT')); 
 
 		$db	= JFactory::getDbo();
 		$query	= $db->getQuery(true);
