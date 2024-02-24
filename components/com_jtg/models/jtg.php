@@ -62,17 +62,13 @@ class JtgModeljtg extends JModelList
 
       // Filter company
       $trackcats = $this->getState('filter.trackcat');
-      if (!empty($trackcats)) {
-			$iCount = 0;
+		if (!empty($trackcats)) {
+			$catselect = "";
 			foreach ($trackcats as $trackcat) {
-				if ($iCount == 0) {
-					$query->where('a.catid LIKE '.$db->quote('%'.$trackcat.'%'));
-				}
-				else {
-					$query->orWhere('a.catid LIKE '.$db->quote('%'.$trackcat.'%'));
-				}
-				$iCount++;
+				if (strlen($catselect)) $catselect .= ' OR ';
+				$catselect.='a.catid LIKE '.$db->quote('%'.$trackcat.'%');
 			}
+			$query->where('('.$catselect.')');
 		}
       else {
           $trackcat = JFactory::getApplication()->input->get('cat');
