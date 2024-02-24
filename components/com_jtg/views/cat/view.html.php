@@ -77,7 +77,7 @@ class JtgViewCat extends JViewLegacy
 			$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
 			$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 
-			$this->showtracks = 0;
+			$this->showtracks = (bool) $params->get('jtg_param_tracks');
 			$this->zoomlevel = 6;
 		}
 		$model = $this->getModel();
@@ -124,6 +124,7 @@ class JtgViewCat extends JViewLegacy
 		$lists['order'] = $filter_order;
 		$lists['order_Dir'] = $filter_order_Dir;
 
+		$this->catid = $catid;
 		$this->sortedter = $sortedter;
 		$this->lists = $lists;
 		$this->uid = $uid;

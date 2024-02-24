@@ -212,7 +212,7 @@ class JtgMapHelper {
 	 *
 	 * @return return_description
 	 */
-	static public function parseOverviewMapJS($items,$showtracks=false,$zoomlevel=6,$lon=null,$lat=null,$centerOnGeo=false)
+	static public function parseOverviewMapJS($items,$mapCatId=0,$showtracks=false,$zoomlevel=6,$lon=null,$lat=null,$centerOnGeo=false)
 	{
 		$cfg = JtgHelper::getConfig();
 
@@ -226,7 +226,7 @@ class JtgMapHelper {
 			$map .= JtgMapHelper::parseTracksJS($items);
 		}
 
-		$retval = JtgMapHelper::parseTracksInfoJS($items);
+		$retval = JtgMapHelper::parseTracksInfoJS($items, $mapCatId);
 		$tracksJS = $retval[0];
 		$catIcons = $retval[1];
 		$map .= "	tracks = [".implode(',',$retval[0])."];\n";
@@ -254,7 +254,7 @@ class JtgMapHelper {
 	 * get track and category info for overview map
 	 *
 	*/
-	static private function parseTracksInfoJS($track_array) {
+	static private function parseTracksInfoJS($track_array, $mapCatId=0) {
 		$markersJS = array();
 		$catIdx = array();
 		$curCatId = -1;
@@ -267,6 +267,7 @@ class JtgMapHelper {
 			$lat = $row->icon_n;
 			$catids = explode(',',$row->catid);
 			$catid = (int) $catids[0];
+			if ($mapCatId && array_search($mapCatId, $catids)) $catid = $mapCatId;
 			if ($catid == null) $catid = 0;
 			if ($catid != $curCatId) {
 				$curCatId = $catid;

@@ -412,7 +412,7 @@ if ($this->rand != 0)
 <?php
 	if (count($this->items))
 	{
-		echo JtgMapHelper::parseOverviewMapJS($this->items,$this->showtracks,$this->zoomlevel,JFactory::getApplication()->input->get('lon'),JFactory::getApplication()->input->get('lat'),JFactory::getApplication()->input->getBool('geoloc'));
+		echo JtgMapHelper::parseOverviewMapJS($this->items,0,$this->showtracks,$this->zoomlevel,JFactory::getApplication()->input->get('lon'),JFactory::getApplication()->input->get('lat'),JFactory::getApplication()->input->getBool('geoloc'));
 	}
 	echo $this->footer;
 ?>

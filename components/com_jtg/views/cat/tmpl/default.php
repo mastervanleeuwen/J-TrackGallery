@@ -119,7 +119,7 @@ if (empty($this->items)) {
 </center>
 <div class="no-float">
    <?php
-		echo JtgMapHelper::parseOverviewMapJS($this->items,$this->showtracks,$this->zoomlevel,JFactory::getApplication()->input->get('lon'),JFactory::getApplication()->input->get('lat'),JFactory::getApplication()->input->getBool('geoloc'));
+		echo JtgMapHelper::parseOverviewMapJS($this->items,$this->catid,$this->showtracks,$this->zoomlevel,JFactory::getApplication()->input->get('lon'),JFactory::getApplication()->input->get('lat'),JFactory::getApplication()->input->getBool('geoloc'));
    ?>
 </div>
 <?php
