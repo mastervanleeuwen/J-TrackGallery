@@ -41,6 +41,6 @@ The J!TrackGallery provides several _views_ which present the tracks in differen
 
 The [plugin](plugin) (`plg_jtrackgallery_maps.zip`) provides the possibility to show GPS tracks on a map on other pages, for example in Joomla! articles.
 
-Two *modules* (`mod_jtg_stats.zip` and `mod_jtg_latest.zip`) provide functionality to show a list of the most popular and most recent tracks in a fixed location on each page.
+Two *modules* (`mod_jtg_stats.zip`, `mod_jtg_latest.zip`, `mod_jtg_closest.zip`) provide functionality to show a list of the most popular tracks, the most recent tracks and list of tracks near a given point in a fixed location on each page.
 
 
