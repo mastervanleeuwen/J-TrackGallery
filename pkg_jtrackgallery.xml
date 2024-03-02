@@ -12,6 +12,7 @@
  <description>J!Track Gallery integrates your GPS tracks (GPX, KML) in Joomla. It shows Tracks and Waypoints on various Maps. Registered Users can upload their own tracks.</description>
  <files folder="">
    <file type="module" id="mod_jtrackgallery_latest" client="site">mod_jtrackgallery_latest.zip</file>
+   <file type="module" id="mod_jtrackgallery_closest" client="site">mod_jtrackgallery_closest.zip</file>
    <file type="module" id="mod_jtrackgallery_stats" client="site">mod_jtrackgallery_stats.zip</file>
    <file type="component" id="com_jtg" >com_jtg.zip</file>
    <file type="plugin" group="content" id="jtrackgallery_maps" >plg_jtrackgallery_maps.zip</file>
