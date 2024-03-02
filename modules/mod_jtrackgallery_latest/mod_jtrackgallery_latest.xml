@@ -7,9 +7,9 @@
 <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
 <authorEmail>christophe@jtrackgallery.net</authorEmail>
 <authorUrl>http://jtrackgallery.net/</authorUrl>
-<version>0.9.27</version>
+<version>0.9.28</version>
 <description>MOD_JTG_LATEST_DESCRIPTION</description>
-<namespace path="src">Joomla\Module\JTrackGalleryStats</namespace>
+<namespace path="src">Joomla\Module\JTrackGalleryLatest</namespace>
 <files>
 	<filename module="mod_jtrackgallery_latest">mod_jtrackgallery_latest.php</filename>
 	<filename>index.html</filename>
