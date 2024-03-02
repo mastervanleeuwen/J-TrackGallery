@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+<name>J!Trackgallery close tracks</name>
+<author>Modified for J!trackGallery by Christophe Seguinot and Marco van Leeuwen - Modded By Jason Oxley - Original Author Michael Pfister</author>
+<creationDate>February 2024</creationDate>
+<copyright>(C) 2010 All rights reserved.</copyright>
+<license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
+<authorEmail>mastervanleeuwen@gmail.com</authorEmail>
+<authorUrl>https://github.com/mastervanleeuwen/</authorUrl>
+<version>0.9.27</version>
+<description>MOD_JTG_CLOSEST_DESCRIPTION</description>
+<namespace path="src">Joomla\Module\JTrackGalleryClosest</namespace>
+<files>
+	<filename module="mod_jtrackgallery_closest">mod_jtrackgallery_closest.php</filename>
+	<filename>index.html</filename>
+	<filename>helper.php</filename>
+	<filename>tmpl/default.php</filename>
+	<filename>tmpl/index.html</filename>
+</files>
+<languages folder="language">
+	<language tag="de-DE">de-DE/de-DE.mod_jtrackgallery_closest.ini</language>
+	<language tag="en-GB">en-GB/en-GB.mod_jtrackgallery_closest.ini</language>
+	<language tag="es-ES">es-ES/es-ES.mod_jtrackgallery_closest.ini</language>
+	<language tag="fr-FR">fr-FR/fr-FR.mod_jtrackgallery_closest.ini</language>
+	<language tag="it-IT">it-IT/it-IT.mod_jtrackgallery_closest.ini</language>
+	<language tag="nl-NL">nl-NL/nl-NL.mod_jtrackgallery_closest.ini</language>
+	<language tag="pl-PL">pl-PL/pl-PL.mod_jtrackgallery_closest.ini</language>
+	
+	<language tag="de-DE">de-DE/de-DE.mod_jtrackgallery_closest.sys.ini</language>
+	<language tag="es-ES">es-ES/es-ES.mod_jtrackgallery_closest.sys.ini</language>
+	<language tag="en-GB">en-GB/en-GB.mod_jtrackgallery_closest.sys.ini</language>
+	<language tag="fr-FR">fr-FR/fr-FR.mod_jtrackgallery_closest.sys.ini</language>
+	<language tag="it-IT">it-IT/it-IT.mod_jtrackgallery_closest.sys.ini</language>
+	<language tag="nl-NL">nl-NL/nl-NL.mod_jtrackgallery_closest.sys.ini</language>
+	<language tag="pl-PL">pl-PL/pl-PL.mod_jtrackgallery_closest.sys.ini</language>
+</languages>
+<config><fields name="params"><fieldset name="basic" label="MOD_JTG_CLOSEST_CONFIGURATION">
+	<field name="tcustom_enable" type="radio" label="MOD_JTG_CLOSEST_CUSTOM_TEXT_ENABLE" default="0">
+		<option value="1">JYes</option>
+		<option value="0">JNo</option>
+	</field>
+	<field name="tcustom" type="textarea" rows="10" cols="40" label="MOD_JTG_CLOSEST_CUSTOM_TEXT" size="40" default="Category: $cats, distance $distance_km km ($distance_mi Mi)" description="MOD_JTG_CLOSEST_CUSTOM_TEXT_DESCRIPTION" />
+
+	<field name="moduleclass_sfx" type="text" label="MOD_JTG_CLOSEST_MODULE_SFX" description="MOD_JTG_CLOSEST_MODULE_SFX_DESCRIPTION" size="15" />
+	<field name="lon" type="text" label="MOD_JTG_CLOSEST_LON" size="15" default="0" />
+	<field name="lat" type="text" label="MOD_JTG_CLOSEST_LAT" size="15" default="50" />
+	<field name="max_dist" type="text" label="MOD_JTG_CLOSEST_MAX_DIST" size="15" default="-1" />
+	<field name="apikey" type="text" label="MOD_JTG_CLOSEST_GOOGLE_API_KEY" size="15" description="MOD_JTG_CLOSEST_GOOGLE_API_KEY_DESCRIPTION"/>
+	<field name="count" type="text" label="MOD_JTG_CLOSEST_ENTRIES" size="15" default="5" />
+	<field name="width" type="text" label="MOD_JTG_CLOSEST_MAP_WIDTH" size="15" default="150" />
+	<field name="height" type="text" label="MOD_JTG_CLOSEST_MAP_HEIGHT" default="150" size="15" />
+	<field name="zoom" type="text" label="MOD_JTG_CLOSEST_ZOOM_LEVEL" size="15" description="MOD_JTG_CLOSEST_ZOOM_LEVEL_DESCRIPTION" default="6" />
+	<field name="map" type="list" label="MOD_JTG_CLOSEST_MAPTYPE" default="none">
+		<option value="none">MOD_JTG_CLOSEST_NOMAP</option>
+		<option value="roadmap">MOD_JTG_CLOSEST_ROADMAP</option>
+		<option value="mobile">MOD_JTG_CLOSEST_MOBILE</option>
+		<option value="satellite">MOD_JTG_CLOSEST_SATELLITE</option>
+		<option value="terrain">MOD_JTG_CLOSEST_TERRAIN</option>
+		<option value="hybrid">MOD_JTG_CLOSEST_HYBRID</option>
+	</field>
+	<field name="color" type="list" label="MOD_JTG_CLOSEST_MARKERCOLOR" default="red">
+		<option value="black">MOD_JTG_CLOSEST_Black</option>
+		<option value="brown">MOD_JTG_CLOSEST_Brown</option>
+		<option value="green">MOD_JTG_CLOSEST_Green</option>
+		<option value="purple">MOD_JTG_CLOSEST_Purple</option>
+		<option value="yellow">MOD_JTG_CLOSEST_Yellow</option>
+		<option value="gray">MOD_JTG_CLOSEST_Gray</option>
+		<option value="orange">MOD_JTG_CLOSEST_Orange</option>
+		<option value="red">MOD_JTG_CLOSEST_Red</option>
+		<option value="white">MOD_JTG_CLOSEST_White</option>
+	</field>
+	<field name="style" type="radio" label="MOD_JTG_CLOSEST_STYLE" default="0">
+		<option value="1">MOD_JTG_CLOSEST_Horizontal</option>
+		<option value="0">MOD_JTG_CLOSEST_Vertical</option>
+	</field>
+
+	<field type="spacer" name="myspacer1" hr="true" />
+	<field name="tcats" type="text" label="MOD_JTG_CLOSEST_CATEGORY_TEXT" size="40" default="Category: %s" description="MOD_JTG_CLOSEST_CATEGORY_DEFAULT" />
+	<field name="cats" type="radio" label="MOD_JTG_CLOSEST_CATEGORY" default="0">
+		<option value="1">JYes</option>
+		<option value="0">JNo</option>
+	</field>
+	<field type="spacer" name="myspacer2" hr="true" />
+	<field name="tdistance" type="text" label="MOD_JTG_CLOSEST_DISTANCE_TEXT" size="40" default="%s km" description="MOD_JTG_CLOSEST_DISTANCE_DEFAULT" />
+	<field name="distance" type="radio" label="MOD_JTG_CLOSEST_DISTANCE" default="0">
+		<option value="1">JYes</option>
+		<option value="0">JNo</option>
+	</field>
+	<field name="unit" type="list" label="MOD_JTG_CLOSEST_UNIT" default="Kilometer">
+		<option value="Kilometer">MOD_JTG_CLOSEST_KILOMETER</option>
+		<option value="Miles">MOD_JTG_CLOSEST_MILES</option>
+	</field>
+	<field name="decimalseparator" type="list" label="MOD_JTG_CLOSEST_DECIMAL_SEPARATOR" default=",">
+		<option value=",">MOD_JTG_CLOSEST_COMMA</option>
+		<option value=".">MOD_JTG_CLOSEST_DOT</option>
+	</field>
+</fieldset>
+</fields>
+</config>
+<updateservers>
+      <server type="extension" priority="1" name="J!TrackGallery github update">https://raw.githubusercontent.com/mastervanleeuwen/J-TrackGallery/master/autoupdate.xml</server>
+</updateservers>
+</extension>
