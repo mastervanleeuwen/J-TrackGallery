@@ -100,7 +100,6 @@ $lang = JFactory::getApplication()->getLanguage();
 
 <?php
 if (empty($this->items)) {
-	JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_LIST_NO_TRACK'), 'Warning');
 	echo '<b>' . JText::_('COM_JTG_LIST_NO_TRACK') . '</b>';
 } else {
 
@@ -123,12 +122,14 @@ if (empty($this->items)) {
    ?>
 </div>
 <?php
-	}?>
+	}
+}
+?>
 
 <form action="<?php echo $this->action; ?>" method="post"
 	name="adminForm" id="adminForm">
 <?php
-	if ($this->params->get('jtg_param_cat_filterbox', 1)) {
+if ($this->params->get('jtg_param_cat_filterbox', 1)) {
 	$addborder='';
 	if (version_compare(JVERSION, '4.0', 'lt')) $addborder='style="padding: 15px 0 0"';
 ?>
@@ -144,7 +145,7 @@ if (empty($this->items)) {
         </div>
 <?php
 	}
-	if ($this->showlist) {
+	if (!empty($this->items) && $this->showlist) {
 ?>
 	<table class="tracktable" style="width:100%;">
 	    <tr>
@@ -302,7 +303,7 @@ if (empty($this->items)) {
 		</tbody>
 	</table>
 	</div>
-	<?php }
+	<?php 
 	} ?>
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="task" value="" /> <input type="hidden"
