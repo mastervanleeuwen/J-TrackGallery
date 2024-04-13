@@ -472,9 +472,13 @@ class JtgModelTrack extends ItemModel
 				$db->setQuery($query);
 				$rate = $db->loadResult();
 
-				if ($rate === null)
+				if ($rate === null || $rate < 0 || $rate > 10)
 				{
 					$newvote = (float) (round(($givenvotes / $count), 3));
+					if ($newvote < 0 || $newvote > 10) {
+						error_log("com_jtg: rating for track $id out of range ( $newvite )");
+						$newvote = 0;
+					}
 					$query = "UPDATE #__jtg_files SET" . " vote='" . $newvote . "'" . " WHERE id='" . $id . "'";
 					$db->setQuery($query);
 
@@ -521,7 +525,7 @@ class JtgModelTrack extends ItemModel
 	 */
 	function vote ($id, $rate)
 	{
-		if ($id && $rate)
+		if ($id && $rate >= 0 && $rate <= 10)
 		{
 			$givevotes = $this->getVotes($id);
 
