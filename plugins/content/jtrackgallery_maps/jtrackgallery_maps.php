@@ -225,8 +225,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
 		$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $track->file;
-		$gpsData = new GpsDataClass($cfg->unit);
-		$gpsData->loadFileAndData($file, $track->file);
+		$gpsData = new GpsDataClass($file, $track->file);
 
 		$plgParams_map_width = $plgParams->get('map_width', false);
 		$plgParams_map_height = $plgParams->get('map_height', false);

@@ -201,10 +201,7 @@ $document->addStyleDeclaration($style);
 				}
 			}
 
-			$gpsData = new GpsDataClass("kilometer");
-
-			// TODO strtolower or not??
-			$gpsData->loadFileAndData($file, strtolower($filename_wof));
+			$gpsData = new GpsDataClass($file, strtolower($filename_wof));
 
 			if ($check === true)
 			{

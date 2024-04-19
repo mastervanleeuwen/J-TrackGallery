@@ -64,8 +64,7 @@ class JtgModelDownload extends JModelLegacy
 
 
 		// Default unit
-		$gpsData = new GpsDataClass("Kilometer");
-		$gpsData->loadFileAndData($file, $track->file);
+		$gpsData = new GpsDataClass($file, $track->file);
 
 		if ($gpsData->displayErrors())
 		{

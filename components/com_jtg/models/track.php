@@ -250,8 +250,7 @@ class JtgModelTrack extends ItemModel
 		// Get the start coordinates..
 
 		// Default unit
-		$gpsData = new GpsDataClass("kilometer");
-		$gpsData = $gpsData->loadFileAndData( $newfile, $filename );
+		$gpsData = new GpsDataClass($newfile, $filename);
 		if (strlen($title)==0) {
 			$title = trim($gpsData->trackname);
 		}

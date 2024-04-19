@@ -79,8 +79,7 @@ if ($this->id >= 1)
 		$document->addScript(JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 	}
 	$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $this->track->file;
-	$gpsData = new GpsDataClass($cfg->unit);
-	$gpsData->loadFileAndData( $file, $track->file );
+	$gpsData = new GpsDataClass($file, $track->file);
 	$imageList = $model->getImages($this->id);
 
 	if ($gpsData->displayErrors())

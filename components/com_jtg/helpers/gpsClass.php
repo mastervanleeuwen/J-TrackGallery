@@ -77,38 +77,29 @@ class GpsDataClass
 	var $fileChecked = false;
 
 	var $description = "";
+	var $trackfilename = '';
+	var $ext = '';
+	var $routeCount = 0;
+	var $start = null;
+	var $end = null;
+	var $allCoords = null;
+	var $allDistances = null;
+	var $allElevation = null;
+	var $allSpeed = null;
+	var $longitudeData = null;
+	var $latitudeData = null;
+	var $totalAscent = null;
+	var $totalDescent = null;
+	var $totalMovingTime = null;
+	var $totalTime = null;
+	var $avgSpeed = 0;
 
 	const earthRadius = 6378.137;
 
-	/**
-	 * function_description
-	 *
-	 * @param   unknown_type  $unit  param_description
-	 */
-	public function __construct($unit)
+	function __construct($filename = null, $data = null)
 	{
-		$this->unit = $unit;
-	}
-
-	/**
-	 * This function load and xml file if it exits
-	 *
-	 * @param   string  $file  the xml file (path) to load
-	 *
-	 * @return <boolean> gpsclass object
-	 */
-	public function loadFile($file)
-	{
-		if (file_exists($file))
-		{
-			$xml = simplexml_load_file($file);
-
-			return $xml;
-		}
-		else
-		{
-			return false;
-		}
+		if (!is_null($filename))
+			$this->loadFileAndData($filename, $data);
 	}
 
 	/**

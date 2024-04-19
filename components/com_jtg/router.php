@@ -24,6 +24,7 @@ use Joomla\CMS\Language\Multilanguage;
 
 class jtgRouter extends RouterBase
 {
+	var $lookup = array();
 	public function preprocess($query)
 	{
 		$active = $this->menu->getActive();

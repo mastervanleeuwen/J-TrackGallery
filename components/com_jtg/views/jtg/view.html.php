@@ -42,7 +42,7 @@ class JtgViewjtg extends JViewLegacy
 		// ToDo split in jtg and geoposition
 		$mainframe = JFactory::getApplication();
 		$cfg = JtgHelper::getConfig();
-		$gpsData = new GpsDataClass($cfg->unit);
+		$gpsData = new GpsDataClass;
 		$document = $mainframe->getDocument();
 		$user = JFactory::getUser();
 		$uid = $user->id;

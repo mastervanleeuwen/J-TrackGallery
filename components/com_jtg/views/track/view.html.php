@@ -188,7 +188,6 @@ class JtgViewTrack extends JViewLegacy
 		$this->footer = LayoutHelper::footer();
 
 		$model = $this->getModel();
-		$gpsData = new GpsDataClass($cfg->unit);
 
 		$this->coords = "";
 		if (isset ($this->id))
@@ -202,7 +201,7 @@ class JtgViewTrack extends JViewLegacy
 			}
 			$this->track = $model->getFile( $this->id );
 			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($this->track->file);
-			$gpsData->loadFileAndData($file, $this->track->file);
+			$gpsData = new GpsDataClass($file, $this->track->file);
 			$this->imageList = $model->getImages($this->id);
 			$this->mapJS = '';
 			if (!$gpsData->displayErrors())
@@ -230,6 +229,7 @@ class JtgViewTrack extends JViewLegacy
 			}
 			else {
 				$mainframe->enqueueMessage($gpsData->displayErrors(),'Error');
+				$gpsData = new GpsDataClass;
 			}
 		}
 		if (! isset($this->track) )

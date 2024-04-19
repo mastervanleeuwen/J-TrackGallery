@@ -46,6 +46,8 @@ class Com_JtgInstallerScript
 	 *
 	 * @return return_description
 	 */
+	var $release = '';
+
 	public function preflight($type, $parent)
 	{
 		// Try to increment some limits
@@ -63,28 +65,25 @@ class Com_JtgInstallerScript
 		// Installing component manifest file version
 		$this->release = $parent->getManifest()->version;
 
-		// File version of existing manifest file
-		$this->release_existing = $this->getParam('version');
-
 		// Manifest file minimum Joomla version
-		$this->minimum_joomla_release = $parent->getManifest()->attributes()->version;
+		$minimum_joomla_release = $parent->getManifest()->attributes()->version;
 		echo '<p> -- ' . JText::sprintf('COM_JTG_PREFLIGHT', $this->release) . '</p>';
 
-		if ($this->release_existing)
+		if ($cur_release = $this->getParam('version'))
 		{
-			echo '<br /> &nbsp; ' . JText::sprintf('COM_JTG_PREFLIGHT_UPDATING', $this->release_existing, $this->release);
+			echo '<br /> &nbsp; ' . JText::sprintf('COM_JTG_PREFLIGHT_UPDATING', $this->getParam('version'), $cur_release);
 		}
 		else
 		{
 			echo '<br /> &nbsp; ' . JText::sprintf('COM_JTG_PREFLIGHT_INSTALLING', $this->release);
 		}
 
-		echo '<br /> &nbsp; ' . JText::sprintf('COM_JTG_PREFLIGHT_MIN_JOOMLA', $this->minimum_joomla_release, $jversion->getShortVersion());
+		echo '<br /> &nbsp; ' . JText::sprintf('COM_JTG_PREFLIGHT_MIN_JOOMLA', $minimum_joomla_release, $jversion->getShortVersion());
 
 		// Abort if the current Joomla release is older
-		if (version_compare($jversion->getShortVersion(), $this->minimum_joomla_release, 'lt'))
+		if (version_compare($jversion->getShortVersion(), $minimum_joomla_release, 'lt'))
 		{
-			JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_JTG_PREFLIGHT_MIN_JOOMLA_ABORT', $this->minimum_joomla_release), 'Warning');
+			JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_JTG_PREFLIGHT_MIN_JOOMLA_ABORT', $minimum_joomla_release), 'Warning');
 
 			return false;
 		}
