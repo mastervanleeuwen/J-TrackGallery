@@ -286,15 +286,11 @@ class GpsDataClass
 	 */
 	public function displayErrors()
 	{
-		$error = "";
+		$errors = implode('<br>',$this->errorMessages);
 
-		foreach ($this->errorMessages as $errorMessage)
-		{
-			JFactory::getApplication()->enqueueMessage($errorMessage, 'Warning');
-			$error .= '\n' . $errorMessage;
-		}
+		JFactory::getApplication()->enqueueMessage($errors, 'Warning');
 
-		return $error;
+		return $errors;
 	}
 
 	/**
@@ -888,7 +884,7 @@ class GpsDataClass
 	{
 		// TODO REWRITE TCX FILE NOT YET SUPPORTED
 		$this->error = true;
-		$this->errorMessages[] = " ERROR TCX file not yet supported";
+		$this->errorMessages[] = "ERROR TCX file not yet supported";
 
 		return false;
 
@@ -1406,7 +1402,7 @@ class GpsDataClass
 
 		if ( ($ownicon == false) OR (is_file($jpath . $filename . '.png')) ) {
 			$icon = $pngfile;
-			$xml = $this->loadFile($xmlfile);
+			$xml = simplexml_load_file($xmlfile);
 			if ($xml === false) {
 				echo "Error loading icon xml file: $xmlfile<br>\n";
 			}
