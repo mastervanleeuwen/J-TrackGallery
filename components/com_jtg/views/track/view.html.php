@@ -223,12 +223,18 @@ class JtgViewTrack extends JViewLegacy
 				$this->speeddata = $gpsData->speedData;
 				$this->pacedata = $gpsData->paceData;
 				$this->date = $this->track->date?JHtml::_('date', $this->track->date, JText::_('COM_JTG_DATE_FORMAT_LC4')):'';
+				$this->speedDataExists = $gpsData->speedDataExists;
+				$this->elevationDataExists = $gpsData->elevationDataExists;
+				$this->beatDataExists = $gpsData->beatDataExists;
+
+				$this->tags = $model->getTable('jtg_files')->getTagsHelper()->getItemTags('com_jtg.file' , $this->id);
+				$this->tagids = $model->getTable('jtg_files')->getTagsHelper()->getTagIds($this->id, 'com_jtg.file');
+
 				if ( count($this->imageList) > 0) {
 		         $this->images = true;
 				}
 			}
 			else {
-				$mainframe->enqueueMessage($gpsData->displayErrors(),'Error');
 				$gpsData = new GpsDataClass;
 			}
 		}
@@ -249,9 +255,6 @@ class JtgViewTrack extends JViewLegacy
 
 		$this->canDo = JHelperContent::getActions('com_jtg');
 		$this->model = $model;
-		$this->speedDataExists = $gpsData->speedDataExists;
-		$this->elevationDataExists = $gpsData->elevationDataExists;
-		$this->beatDataExists = $gpsData->beatDataExists;
 
 		parent::display($tpl);
 	}

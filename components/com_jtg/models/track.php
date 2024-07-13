@@ -21,7 +21,9 @@ jimport('joomla.application.component.model');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\CMS\MVC\Model\FormBehaviorTrait;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\FormFactoryAwareTrait;
 
 /**
  * JtgModelTrack class for the jtg component
@@ -32,9 +34,20 @@ use Joomla\CMS\HTML\HTMLHelper;
  */
 
 
-//class JtgModelTrack extends JModelLegacy
 class JtgModelTrack extends ItemModel
 {
+	use FormFactoryAwareTrait;
+	use FormBehaviorTrait;
+
+	public function getForm($data = array(), $loadData = true)
+	{
+		return $this->loadForm('com_jtg.track','track',array('load_data' => $loadData)); 
+	}
+
+	public function getTable($name = 'jtg_files', $prefix = 'Table', $options = [])
+	{
+		return parent::getTable($name, $prefix, $options);
+	}
 
 	/**
 	 * function_description
@@ -198,27 +211,28 @@ class JtgModelTrack extends ItemModel
 
 		$db = $this->getDbo();
 
+		$data['uid'] = $user->id;
+
 		// Get the post data
 		$input = JFactory::getApplication()->input;
 		$catid = $input->get('catid', null, 'array');
 		if ($catid) {
-			$catid = $catid ? implode(',', $catid) : '';
+			$data['catid'] = $catid ? implode(',', $catid) : '';
 		}
 		else {
-			$catid = $params->get('jtg_param_default_cat');
+			$data['catid'] = $params->get('jtg_param_default_cat');
 		}
-		$level = $input->get('level', 0, 'integer');
-		$title = $input->get('title', '', 'string');
+		$data['level'] = $input->get('level', 0, 'integer');
+		$data['title'] = $input->get('title', '', 'string');
 		$terrain = $input->get('terrain', null, 'array');
-		$terrain = $terrain ? implode(',', $terrain) : '';
-		$desc = $db->escape(implode(' ', $input->get('description', '', 'array')));
+		$data['terrain'] = $terrain ? implode(',', $terrain) : '';
+		$data['description'] = $input->get('description', '', 'raw');
 		$file = $input->files->get('file');
-		$uid = $user->id;
-		$date = date("Y-m-d");
+		$data['date'] = date("Y-m-d");
 		$images = $input->files->get('images');
-		$access = $input->getInt('access', 0);
-		$hidden = $input->getInt('hidden', 0);
-		$published = $input->getInt('published', 0);
+		$data['access'] = $input->getInt('access', 0);
+		$data['hidden'] = $input->getInt('hidden', 0);
+		$data['published'] = $input->getInt('published', 0);
 
 		// Upload the file
 		$upload_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
@@ -251,11 +265,11 @@ class JtgModelTrack extends ItemModel
 
 		// Default unit
 		$gpsData = new GpsDataClass($newfile, $filename);
-		if (strlen($title)==0) {
-			$title = trim($gpsData->trackname);
+		if (strlen($data['title'])==0) {
+			$data['title'] = trim($gpsData->trackname);
 		}
-		if (strlen($title)==0) {
-			$title = JFile::stripExt($file['name']);
+		if (strlen($data['title'])==0) {
+			$data['title'] = JFile::stripExt($file['name']);
 		}
 		$errors = $gpsData->displayErrors();
 
@@ -264,7 +278,7 @@ class JtgModelTrack extends ItemModel
 			$map = "";
 			$coords = "";
 			$distance_float = 0;
-			$distance = 0;
+			$data['distance'] = 0;
 
 			// Try to delete the file
 			if (JFile::exists($upload_dir . $filename))
@@ -272,51 +286,35 @@ class JtgModelTrack extends ItemModel
 				JFile::delete($upload_dir . $filename);
 			}
 
-			$alert_text = json_encode(JText::_('COM_JTG_NO_SUPPORT') . '\n' . $errors);
-			echo "<script type='text/javascript'>alert($alert_text);window.history.back(-1);</script>";
+			$app->enqueueMessage(JText::_('COM_JTG_NO_SUPPORT') .' '. $errors);
 			return false;
 		}
 
+		$data['file'] = $filename;
 		$iconCoords = $gpsData->getIconCoords($params['jtg_param_icon_loc']);
-		$start_n = $iconCoords[1];
-		$start_e = $iconCoords[0];
+		$data['icon_n'] = $iconCoords[1];
+		$data['icon_e'] = $iconCoords[0];
+		$data['start_n'] = $gpsData->start[1];
+		$data['start_e'] = $gpsData->start[0];
 		$coords = $gpsData->allCoords;
-		$isTrack = $gpsData->isTrack;
-		$isWaypoint = $gpsData->isWaypoint;
-		$isRoute = $gpsData->isRoute;
-		$isCache = $gpsData->isCache;
-		$distance = $gpsData->distance;
+		$data['istrack'] = (int) $gpsData->isTrack;
+		$data['iswp'] = (int) $gpsData->isWaypoint;
+		$data['isroute'] = (int) $gpsData->isRoute;
+		$data['iscache'] = (int) $gpsData->isCache;
+		$data['distance'] = $gpsData->distance;
+		$cfg = JtgHelper::getConfig();
+		if (strtoupper($cfg->unit)=='MILES') $data['distance'] /= 0.621;
+		$data['ele_asc'] = round($gpsData->totalAscent, 0);
+		$data['ele_desc'] = round($gpsData->totalDescent, 0) ;
 
-		$query = "INSERT INTO #__jtg_files SET"
-		. "\n uid=" . $uid . ","
-		. "\n catid='" . $catid . "',"
-		. "\n title=" . $db->quote($title) . ","
-		. "\n file=" .	$db->quote($filename) . ","
-		. "\n terrain='" . $terrain . "',"
-		. "\n description='" . $desc . "',"
-		. "\n published='" . $published . "',"
-		. "\n date='" . $date . "',"
-		. "\n start_n='" . $gpsData->start[1] . "',"
-		. "\n start_e='" . $gpsData->start[0] . "',"
-		. "\n icon_n='" . $iconCoords[1] . "',"
-		. "\n icon_e='" . $iconCoords[0] . "',"
-		. "\n distance='" . $distance . "',"
-		. "\n ele_asc='" . round($gpsData->totalAscent, 0) . "',"
-		. "\n ele_desc='" . round($gpsData->totalDescent, 0) . "',"
-		. "\n level='" . $level . "',"
-		. "\n access='" . $access . "',"
-		. "\n hidden='" . $hidden . "',"
-		. "\n istrack='" . (int)$isTrack . "',"
-		. "\n iswp='" . (int)$isWaypoint . "',"
-		. "\n isroute='" . (int)$isRoute . "',"
-		. "\n iscache='" . (int)$isCache . "',"
-		. "\n hits='0',"
-		. "\n checked_out='0'";
+		$trackTable = $this->getTable('jtg_files', 'Table');
+		$trackTable->bind($data);
+		$trackTable->newTags = $input->get('tags');
+		if (!$trackTable->store()) {
+			$app->enqueueMessage("Error storing new file ".$trackTable->getError(),'Error');
+		}
 
-		$db->setQuery($query);
-		if (! $db->execute()) echo $db->stderr();
-
-		$query = "SELECT id FROM #__jtg_files WHERE file='" . strtolower($filename) . "'";
+		$query = "SELECT id FROM #__jtg_files WHERE file='" . $filename . "'";
 
 		$db->setQuery($query);
 		$rows = $db->loadObject();
@@ -475,7 +473,7 @@ class JtgModelTrack extends ItemModel
 				{
 					$newvote = (float) (round(($givenvotes / $count), 3));
 					if ($newvote < 0 || $newvote > 10) {
-						error_log("com_jtg: rating for track $id out of range ( $newvite )");
+						error_log("com_jtg: rating for track $id out of range ( $newvote )");
 						$newvote = 0;
 					}
 					$query = "UPDATE #__jtg_files SET" . " vote='" . $newvote . "'" . " WHERE id='" . $id . "'";
@@ -614,10 +612,7 @@ class JtgModelTrack extends ItemModel
 			JFile::delete($filename);
 		}
 		// Delete from DB
-		$query = "DELETE FROM #__jtg_files" . "\n WHERE id='" . $id . "'";
-		$db->setQuery($query);
-
-		if (!$db->execute())
+		if (!$this->getTable()->delete($id))
 		{
 			return false;
 		}
@@ -705,39 +700,39 @@ class JtgModelTrack extends ItemModel
 		$db = $this->getDbo();
 		$user = JFactory::getUser();
 
+		$data['id'] = $id;
 		// Get the post data
 		$input = $app->input; 
 		$catid = $input->get('catid', null, 'array');
 		$catid = $catid ? implode(',', $catid) :  '';
-		$level = $input->get('level', 0, 'integer');
-		$title = $db->quote($input->get('title', '', 'string'));
+		$data['catid'] = $catid;
+		$data['level'] = $input->get('level', 0, 'integer');
+		$data['title'] = $input->get('title', '', 'string');
 
 		$terrain = $input->get('terrain', null, 'array');
 
 		if ($terrain)
 		{
-			$terrain = $terrain ? implode(',', $terrain) : '';
+			$data['terrain'] = $terrain ? implode(',', $terrain) : '';
 		}
 		else
 		{
-			$terrain = '';
+			$data['terrain'] = '';
 		}
 
 		/* Joomla Jinput strips html tags!!
 		 http://stackoverflow.com/questions/19426943/joomlas-jinput-strips-html-with-every-filter
 		*/
-		$desc = $db->escape(implode(' ', $input->get('description', '', 'array')));
+		$data['description'] = $input->get('description', '', 'raw');
 
-		$access = $input->getInt('access', 0);
-		$hidden = $input->getInt('hidden', 0);
-		$published = $input->getInt('published', 0);
+		$data['access'] = $input->getInt('access', 0);
+		$data['hidden'] = $input->getInt('hidden', 0);
+		$data['published'] = $input->getInt('published', 0);
 
-		$default_map = $input->get('default_map');
-		$distance = $input->getFloat('distance', 0);
-		$cfg = JtgHelper::getConfig();
-		if (strtoupper($cfg->unit)=='MILES') $distance /= 0.621;
-		$ascent = $input->getInt('ascent', 0);
-		$descent = $input->getInt('descent', 0);
+		$data['default_map'] = $input->getInt('default_map');
+		$data['distance'] = $input->getFloat('distance');
+		$data['ele_asc'] = $input->getInt('ascent');
+		$data['ele_desc'] = $input->getInt('descent');
 
 		$mappreview = $input->get('mappreview','','BASE64');
 		if (!empty($mappreview)) {
@@ -798,26 +793,10 @@ class JtgModelTrack extends ItemModel
 			}
 		}
 
-		$setcatid = '';
-		if ($catid) $setcatid = "\n catid='" . $catid . "',"; // When categories are not used, the form does not contain this field
-
-		$query = "UPDATE #__jtg_files SET" .
-				$setcatid.
-				"\n title=" . $title . "," .
-				"\n terrain='" . $terrain . "'," .
-				"\n description='" . $desc . "'," .
-				"\n level='" . $level . "'," .
-				"\n hidden='" . $hidden . "'," .
-				"\n published='" . $published . "'," .
-				"\n default_map='" . $default_map . "'," .
-				"\n access='" . $access . "'," .
-				"\n distance='" . $distance . "'," .
-				"\n ele_asc='" . $ascent . "'," .
-				"\n ele_desc='" . $descent . "'" .
-				"\n WHERE id='" . $id . "'";
-
-		$db->setQuery($query);
-		$db->execute();
+		$trackTable = $this->getTable('jtg_files', 'Table');
+		$trackTable->bind($data);
+		$trackTable->newTags = $input->get('tags');
+		$trackTable->store();
 
 		return true;
 	}
@@ -1356,4 +1335,5 @@ class JtgModelTrack extends ItemModel
          return $sortedrow;
       }
    }
+
 }

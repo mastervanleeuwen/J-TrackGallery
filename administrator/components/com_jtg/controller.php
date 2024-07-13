@@ -122,6 +122,7 @@ class JtgController extends JControllerLegacy
 			case 'files':
 			case 'toshow':
 			case 'tohide':
+			case 'files.batch':
 				$input->set('view',	'files');
 				$input->set('layout',	'default');
 				break;

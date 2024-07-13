@@ -338,6 +338,9 @@ if ( ($durationbox) AND ($this->track->distance != "") AND ((float) $this->track
 <?php
 }
 
+$this->tagLayout = new JLayoutFile('joomla.content.tags');
+echo $this->tagLayout->render($this->tags);
+
 if (($this->imageList) AND ( $this->cfg->gallery != "none" ))
 {
 	echo $this->parseTemplate('headline', JText::_('COM_JTG_GALLERY'), 'jtg_param_header_gallery');

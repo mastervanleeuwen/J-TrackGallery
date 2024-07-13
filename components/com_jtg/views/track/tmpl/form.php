@@ -21,6 +21,7 @@ use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Field\TagField;
 
 //
 // This form has three states or modes:
@@ -115,6 +116,10 @@ $lists['published']  = JHtml::_('select.booleanlist', 'published', null, $this->
 $maplist = $this->model->getDefaultMaps();
 array_unshift($maplist, array('id' => 0, "name" => JText::_('JNONE')) );
 $lists['default_map']   = JHtml::_('select.genericlist', $maplist, 'default_map', 'class="form-select size="1"', 'id', 'name', $this->track->default_map);
+$trackForm = $this->getModel()->getForm(); // TODO: read data from DB
+$tagField = $trackForm->getField('tags');
+$tagField->setValue($this->tagids);
+$lists['tags'] = $tagField->renderField(array('hiddenLabel'=> true));
 
 ?>
 <script type="text/javascript">
@@ -252,8 +257,8 @@ else
 					<td><?php echo $lists['published']; ?></td>
 				</tr>
 				<tr>
-					<td><?php echo JText::_('COM_JTG_TITLE'); ?>*</td>
-					<td><input id="title" class="form-control" type="text" name="title"
+					<td class='width:30%'><?php echo JText::_('COM_JTG_TITLE'); ?>*</td>
+					<td class='width:70%'><input id="title" class="form-control" type="text" name="title"
 						value="<?php echo $tracktitle; ?>" /></td>
 				</tr>
 				<tr>
@@ -294,6 +299,10 @@ if ($this->cfg->access == 1)
 					<?php echo JHtml::tooltip(JText::_('COM_JTG_TT_TERRAIN'), JText::_('COM_JTG_TT_HEADER'), 'tooltip.png', $infoIconText); ?>
 					</td>
 					<td><?php echo $lists['terrain']; ?></td>
+				</tr>
+				<tr>
+					<td><?php echo JText::_('JTAG'); ?>:</td>
+					<td><?php echo $lists['tags']; ?></td>
 				</tr>
 			</tbody>
 		</table>

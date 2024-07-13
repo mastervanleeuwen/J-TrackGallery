@@ -17,6 +17,10 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 // Toolbar
 JToolBarHelper::title(JText::_('COM_JTG_GPS_FILES'), 'categories.png');
 JToolBarHelper::back();
@@ -27,14 +31,24 @@ $bar->appendButton('Popup', 'upload', 'COM_JTG_UPLOAD_TRACKS', $folder, 550, 400
 
 // Normal Window:
 JToolBarHelper::addNew('newfiles', $alt = 'COM_JTG_IMPORT_FILES');
-JToolBarHelper::editList('editfile');
 JToolBarHelper::publish();
 JToolBarHelper::unpublish();
 JToolBarHelper::custom('toshow', 'toshow', null, $alt = 'COM_JTG_TOSHOW_SMALL');
 JToolBarHelper::custom('tohide', 'tohide', null, $alt = 'COM_JTG_TOHIDE_SMALL');
 JToolBarHelper::deleteList('COM_JTG_VALIDATE_DELETE_ITEMS');
-JToolBarHelper::help('files/default', true);
 
+// Add a batch button
+if ($this->canDo->get('core.create') && $this->canDo->get('core.edit')
+	&& $this->canDo->get('core.edit.state'))
+{
+	// we use a standard Joomla layout to get the html for the batch button
+	$layout = new FileLayout('joomla.toolbar.batch');
+
+	$batchButtonHtml = $layout->render(array('title' => Text::_('JTOOLBAR_BATCH')));
+	$bar->appendButton('Custom', $batchButtonHtml, 'batch');
+}
+
+JToolBarHelper::help('files/default', true);
 $ordering = ($this->lists['order'] == 'ordering');
 $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
@@ -255,8 +269,8 @@ if (version_compare(JVERSION,'4.0','lt'))
 				</th>
 				<th class="title"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_TERRAIN'),
-	'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
-					<?php echo $missingterrain; ?>
+	'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'files');
+					if ($missingterrain) JFactory::getApplication()->enqueueMessage($missingterrain,'Warning'); ?>
 				</th>
 				<th class="text-center" style="white-space:normal;"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_LEVEL'),
@@ -280,6 +294,16 @@ if (version_compare(JVERSION,'4.0','lt'))
 			</tr>
 		</thead>
 	</table>
+	<?php // load the modal for displaying the batch options
+		echo HTMLHelper::_(
+			'bootstrap.renderModal',
+			'collapseModal',
+			array(
+				'title' => Text::_('COM_JTG_BATCH_OPTIONS'),
+				'footer' => $this->loadTemplate('batch_footer')
+			),
+			$this->loadTemplate('batch_body')
+		); ?>
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="task" value="files" /> <input type="hidden"
 		name="boxchecked" value="0" /> <input type="hidden" name="controller"

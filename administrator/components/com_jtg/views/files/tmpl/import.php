@@ -119,12 +119,18 @@ $document->addStyleDeclaration($style);
 
 	$toggle['level'] .= "					</select>\n";
 
+//			<td colspan=\"2\" align=\"right\">	<b>" . JText::_('COM_JTG_PRESELECTION') . "==></b><br /><br />"
+//			. JText::_('COM_JTG_PRESELECTION_DESCRIPTION') . "</td>
+	$trackForm = $this->getModel()->getForm();
+	$tagField = $trackForm->getField('tags');
+	$tagField->__set('onchange',"setSelectTags('tags')");
+	$tagField->__set('name',"tags_all");
+	$tagField->__set('id',"tags_all");
 	$table = ("		<tbody>\n
 			<tr class=\"row00\">
 			<td ><input type=\"checkbox\" onclick=\"Joomla.checkAll(this)\" title=\"" . JText::_('JGLOBAL_CHECK_ALL')
 			. "\" value=\"\" checked=\"checked\" name=\"checkall-toggle\"></td>
-			<td colspan=\"2\" align=\"right\">	<b>" . JText::_('COM_JTG_PRESELECTION') . "==></b><br /><br />"
-			. JText::_('COM_JTG_PRESELECTION_DESCRIPTION') . "</td>
+			<td> </td> <td>".$tagField->renderField()." </td>
 			<td>" . $toggle['level'] . "</td>
 			<td>" . JHtml::_('select.genericlist', $cats, 'catid_all[]', 'size="' . $catssize . '" multiple="multiple" onclick="setSelectMultiple(\'catid\')"', 'id', 'treename')
 			. "<br /><small>" . JText::_('COM_JTG_MULTIPLE_CHOICE_POSSIBLE') . "</small></td>
@@ -322,7 +328,12 @@ $document->addStyleDeclaration($style);
 				{
 					$table .= ("				<td>");
 					$table .= ("<input type=\"hidden\" name=\"file_" . $count . "\" value=\"" . $file . "\" />\n");
-					$table .= "\n				<input id=\"title_" . $count . "\" type=\"text\" name=\"title_" . $count . "\" value=\"" . $title . "\" size=\"30\" /></td>\n";
+					$table .= "\n				<input id=\"title_" . $count . "\" type=\"text\" name=\"title_" . $count . "\" value=\"" . $title . "\" size=\"30\" />\n";
+					$tagField = $trackForm->getField('tags');
+					$tagField->__set('name','tags_'.$count);
+					$tagField->__set('id','tags_'.$count);
+					$table .= $tagField->renderField(); 
+					$table .= "</td>\n";
 				}
 
 				// Row: Difficulty level
@@ -435,7 +446,7 @@ $document->addStyleDeclaration($style);
 	echo JHtml::_('form.token');
 	$js = "
 
-	function setSelectMultiple(select) {
+function setSelectMultiple(select) {
 	var srcListName = select + '_all';
 	var form = document['adminForm'];
 	var srcList = form[srcListName];
@@ -443,10 +454,10 @@ $document->addStyleDeclaration($style);
 	var i;
 	for (i=0; i<srcList.options.length; i++) {
 	values[i] = (srcList.options[i].selected==true);
-}
-for (i=0; i < " . $count . "; i++) {
-setSelectedMultipleValues('adminForm', select + '_' + i , values);
-}
+	}
+	for (i=0; i < " . $count . "; i++) {
+	setSelectedMultipleValues('adminForm', select + '_' + i , values);
+	}
 }
 function setSelectedMultipleValues( frmName, srcListName, values ) {
 var form = eval( 'document.' + frmName );
@@ -457,6 +468,19 @@ srcList.options[i].selected = values[i];
 }
 }
 
+function setSelectTags(select) {
+	var srcListName = select + '_all';
+	var form = document['adminForm'];
+	var srcList = form[srcListName];
+	var values = [];
+	for (var iopt=0; iopt<srcList.options.length; iopt++) {
+		values.push(srcList.options[iopt].value);
+	}
+	for (var i=0; i < " . $count . "; i++) {
+		var targetField = form[select + '_' + i];
+		targetField.parentNode.parentNode.parentNode.value = values;
+   }
+}
 
 function setSelect(select) {
 

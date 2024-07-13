@@ -56,6 +56,7 @@ class TableJTG_Cats extends JTable
 	public function __construct(& $db)
 	{
 		parent::__construct('#__jtg_cats', 'id', $db);
+		$this->typeAlias = 'com_jtg.category';
 	}
 
 	/**

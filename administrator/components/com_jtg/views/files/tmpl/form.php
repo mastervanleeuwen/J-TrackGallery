@@ -199,12 +199,16 @@ if ($this->id >= 1)
 				<td><?php echo $this->lists['hidden']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_FILE_DEFAULT_MAP'); ?></td>
+				<td><?php echo JText::_('COM_JTG_FILE_DEFAULT_MAP'); ?>:</td>
 				<td><?php echo $this->lists['default_map']; ?></td>
 			</tr>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_TERRAIN'); ?>:</td>
 				<td><?php echo $this->lists['terrain']; ?></td>
+			</tr>
+			<tr>
+				<td><?php echo JText::_('JTAG'); ?>:</td>
+				<td><?php echo $this->lists['tags']; ?></td>
 			</tr>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_CALCULATED_VALUES'); ?>:</td>

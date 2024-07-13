@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset
+		name="details"
+		label="Track Details"
+	>
+		<field name="id" type="hidden"/>
+		<field name="tags" type="tag"
+			label="JTAG" custom="allow"
+			class="inputbox span12 small" multiple="true"
+		>
+		</field>
+	</fieldset>
+</form>

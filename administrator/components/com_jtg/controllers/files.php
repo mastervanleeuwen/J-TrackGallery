@@ -20,6 +20,10 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
 use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+
 JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jtg/tables');
 
 /**
@@ -29,8 +33,59 @@ JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jtg/tables');
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgControllerFiles extends JtgController
+class JtgControllerFiles extends FormController
 {
+  	/**
+	 * View method for JTG
+	 *
+	 * This function override joomla.application.component.controller
+	 * View Cache not yet implemented in JTrackGallery
+	 *
+	 * @param   boolean  $cachable   If true, the view output will be cached
+	 * @param   array    $urlparams  An array of safe url parameters and their variable types
+	 *
+	 * @return void
+	 */
+	public function display($cachable = false, $urlparams = false)
+	{
+		require_once JPATH_COMPONENT . '/helpers/jtg.php';
+		// Load the submenu.
+		JtgHelper::addSubmenu($this->getTask());
+		$input = Factory::getApplication()->input;
+		switch ($this->getTask())
+		{	
+			default:
+				$input->set('view',	'default');
+				break;
+
+			case 'files':
+			case 'toshow':
+			case 'tohide':
+            case 'batch':
+				$input->set('view',	'files');
+				$input->set('layout',	'default');
+				break;
+
+			case 'upload':
+				$input->set('view',	'files');
+				$input->set('layout',	'upload');
+				break;
+
+			case 'newfiles':
+				$input->set('view',	'files');
+				$input->set('layout',	'import');
+				break;
+
+			case 'newfile':
+			case 'editfile':
+			case 'updateGeneratedValues':
+				$input->set('view',	'files');
+				$input->set('layout',	'form');
+				break;
+		}
+		parent::display();
+	}
+
 	/**
 	 * function_description
 	 *
@@ -408,4 +463,11 @@ class JtgControllerFiles extends JtgController
 		$model = $this->getModel('files');
 		echo $model->_fetchJPTfiles();
 	}
+
+   public function batch($model = null)
+   {
+      $model = $this->getModel('files');
+      $this->setRedirect((string)Uri::getInstance());
+      return parent::batch($model);
+   }
 }

@@ -22,6 +22,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 use Joomla\String\StringHelper;
 use Joomla\CMS\Editor\Editor;
+use Joomla\CMS\Helper\ContentHelper;
 
 /**
  * HTML View tracks class for the jtg component
@@ -486,6 +487,7 @@ class JtgViewFiles extends JViewLegacy
 	{
 		$mainframe = JFactory::getApplication();
 		$option = JFactory::getApplication()->input->get('option');
+		$this->canDo = ContentHelper::getActions('com_jtg');
 
 		if ($this->getLayout() == 'form')
 		{
@@ -531,6 +533,7 @@ class JtgViewFiles extends JViewLegacy
 		$cfg = JtgHelper::getConfig();
 		$cats = $model->getCats();
 
+		$this->state = $this->get('State');
 		$this->cats = $cats;
 		$this->lists = $lists;
 		$this->rows = $rows;
@@ -691,6 +694,11 @@ class JtgViewFiles extends JViewLegacy
 			$lists['published'] = JHtml::_('select.booleanlist', 'published', null, $track->published);
 			$lists['values'] = JtgHelper::giveGeneratedValues('backend', $this->buildImageFiletypes($track->istrack, $track->iswp, $track->isroute, $track->iscache), $track);
 			$lists['level']	= $model->getLevelList($track->level);
+			$this->tagids = $model->getTable('jtg_files')->getTagsHelper()->getTagIds($id, 'com_jtg.file');
+			$trackForm = $this->getModel()->getForm();
+			$tagField = $trackForm->getField('tags');
+			$tagField->setValue($this->tagids);
+			$lists['tags'] = $tagField->renderField(array('hiddenLabel'=> true));
 			$this->lists = $lists;
 			$this->track = $track;
 			$this->id = $id;

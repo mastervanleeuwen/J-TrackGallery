@@ -20,6 +20,9 @@ defined('_JEXEC') or die('Restricted access');
 
 // Include library dependencies
 jimport('joomla.filter.input');
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Tag\TaggableTableInterface;
+use Joomla\CMS\Tag\TaggableTableTrait;
 
 /**
  * Table class
@@ -28,8 +31,10 @@ jimport('joomla.filter.input');
  * @subpackage  Frontend
  * @since       0.8
  */
-class TableJTG_Files extends JTable
+class TableJTG_Files extends Table implements TaggableTableInterface
 {
+	use TaggableTableTrait;
+
 	var $id				= null;
 
 	var $uid			= null;
@@ -84,7 +89,10 @@ class TableJTG_Files extends JTable
 	public function __construct(& $db)
 	{
 		parent::__construct('#__jtg_files', 'id', $db);
+		$this->typeAlias = 'com_jtg.file';
 	}
+
+	function getTypeAlias() { return 'com_jtg.file'; }
 
 	/**
 	 * function_description

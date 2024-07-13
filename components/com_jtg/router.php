@@ -246,7 +246,7 @@ class jtgRouter extends RouterBase
 
 			case 'form':
 				$vars['view'] = 'track';
-				$vars['layout'] = 'form';
+				$vars['layout'] = $layout;
 				$vars['id'] = $segments[0];
 				break;
 
@@ -297,6 +297,7 @@ class jtgRouter extends RouterBase
 				$vars['view'] = 'cat';
 				break;
 			case 'track':
+			case 'file':
 				$vars['view'] = 'track';
 				break;
 			case 'jtg':
@@ -459,6 +460,51 @@ class jtgRouter extends RouterBase
 		}
 
 		return $vars;
+	}
+
+	/**
+	 * Helper function for generating the URL to a Category page
+	 * This is needed for the Tags functionality
+	 */
+	public static function getCategoryRoute($catid, $language = 0)
+	{
+		if ($catid instanceof JCategoryNode)
+		{
+			$id = $catid->id;
+		}
+		else
+		{
+			$id = (int) $catid;
+		}
+
+		if ($id < 1)
+		{
+			$link = '';
+		}
+		else
+		{
+			$link = 'index.php?option=com_jtg&view=cat&id=' . $id;
+
+			if ($language && $language !== '*' && JLanguageMultilang::isEnabled())
+			{
+				$link .= '&lang=' . $language;
+			}
+		}
+
+		return $link;
+	}
+
+	/*
+	*  Used to create links for tag list
+	*/
+
+	public static function getFileRoute($id, $catid = 0, $language = 0) {
+		$link = 'index.php?option=com_jtg&view=track&id=' . $id;
+		if ($language && $language !== '*' && Multilanguage::isEnabled())
+		{
+			$link .= '&lang=' . $language;
+		}
+		return $link;
 	}
 }
 ?>
