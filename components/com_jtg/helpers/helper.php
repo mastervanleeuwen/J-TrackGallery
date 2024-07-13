@@ -215,7 +215,7 @@ class JtgHelper
 		}
 
 		jimport('joomla.filesystem.file');
-		$filename = JFile::makeSafe($file['name']);
+		$filename = strtolower(JFile::makeSafe($file['name']));
 		$randnumber = (50 - strlen($filename));
 		$fncount = 0;
 		while (true)
@@ -228,19 +228,19 @@ class JtgHelper
 				}
 				else
 				{
-					chmod($dest . strtolower($filename), 0664);
+					chmod($dest . $filename, 0664);
 				}
 
 				break;
 			}
 			else
 			{
-				$filename = $fncount . JFile::makeSafe($file['name']);
+				$filename = $fncount . strtolower(JFile::makeSafe($file['name']));
 
 				// Man weiß ja nie ;)
 				if ( $fncount > 10000 )
 				{
-					JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_ERROR_NO_FREE_FILENAMES') . "(" . JFile::makeSafe($file['name']) . ")", 'Error');
+					JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_ERROR_NO_FREE_FILENAMES') . " ( $filename )", 'Error');
 				}
 
 				$fncount++;
