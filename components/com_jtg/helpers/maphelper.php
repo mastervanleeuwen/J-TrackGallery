@@ -601,7 +601,7 @@ EOG;
 		$stringlength = 280;
 
 		// Strip all tags but <p>
-		$desc = str_replace(array("'","\n","\r"), array("\'","<br/>"," "), $desc);
+		$desc = str_replace(array("\n","\r"), array("<br/>"," "), $desc);
 		$desc = strip_tags($desc, '<p>');
 
 		// Trennung nach <p>Katitel</p> BEGIN
@@ -617,6 +617,7 @@ EOG;
 			{
 				$chapter = strip_tags($chapter);
 				$chapter = trim($chapter);
+				$chapter = addslashes($chapter);
 
 				// Trennung nach Wörter BEGIN
 				$words = explode(' ', $chapter);
