@@ -875,7 +875,8 @@ class JtgModelFiles extends AdminModel
 				$data['description'] = $input->get('desc_' . $i, '', 'raw');
 				$file = $input->get('file_' . $i, '', 'raw');
 				$file_replace = $input->get('file_replace_' . $i);
-				$hidden = $input->get('hidden_' . $i);
+				$data['hidden'] = $input->get('hidden_' . $i);
+				$data['published'] = !$data['hidden'];
 				$file_tmp = explode('/', $file);
 				$filename = strtolower($file_tmp[(count($file_tmp) - 1)]);
 				$target = File::MakeSafe($filename);
@@ -1237,6 +1238,7 @@ class JtgModelFiles extends AdminModel
 		$images = $input->files->get('images');
 		$data['access'] = $input->getInt('access');
 		$data['hidden'] = $input->get('hidden');
+		$data['published'] = !$data['hidden'];
 
 		// Upload the file
 		$upload_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
