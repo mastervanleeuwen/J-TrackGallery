@@ -162,7 +162,7 @@ VALUES ('GPS Track',
     "core_created_user_id": "uid",
     "core_body": "description"
   }}',
-'jtgRouter::getFileRoute',
+'JtgHelperRoute::getFileRoute',
 'com_jtg.file');
 
 INSERT IGNORE INTO `#__jtg_maps` (`name`, `ordering`, `published`, `type`, `param`, `apikey`) VALUES
