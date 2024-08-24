@@ -408,11 +408,6 @@ class JtgModelTrack extends ItemModel
 		$result = $db->loadObject();
 		$this->track = $result; // Cache track for use with edit/delete etc
 
-		if (! $result)
-		{
-			return JTable::getInstance('jtg_files', 'table');
-		}
-
 		return $result;
 	}
 

@@ -200,6 +200,11 @@ class JtgViewTrack extends JViewLegacy
 				$document->addScript(JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 			}
 			$this->track = $model->getFile( $this->id );
+			if (!$this->track) {
+				$mainframe->enqueueMessage("Track not found id ".$this->id,'Error');
+				$mainframe->redirect(Uri::root());
+				return false;
+			}
 			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($this->track->file);
 			$gpsData = new GpsDataClass($file, $this->track->file);
 			$this->imageList = $model->getImages($this->id);
@@ -236,6 +241,7 @@ class JtgViewTrack extends JViewLegacy
 			}
 			else {
 				$gpsData = new GpsDataClass;
+				$this->tags = null;
 			}
 		}
 		if (! isset($this->track) )
