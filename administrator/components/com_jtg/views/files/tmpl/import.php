@@ -36,7 +36,8 @@ JToolBarHelper::save('savefiles', JText::_('COM_JTG_SAVE_NEW_FILE'), 'save.png')
 JToolBarHelper::deleteList('COM_JTG_VALIDATE_DELETE_ITEMS', 'removeFromImport');
 JToolBarHelper::help('files/import', true);
 $document = JFactory::getDocument();
-$style = "   .row00 {background-color: #FFFF99;}\n";
+$style = "   #row00 {--table-bg: #FFFF99;}\n";
+$style .= "   .table-admin {--table-bg: var(--admin-background);}\n";
 
 if (version_compare(JVERSION, '3.0', 'ge'))
 {
@@ -104,7 +105,7 @@ $document->addStyleDeclaration($style);
 
 	$cfg = JtgHelper::getConfig();
 	$levels = explode("\n", $cfg->level);
-	$toggle['level'] = "<select name=\"level_all\" size=\"6\" onclick=\"setSelect('level');\">
+	$toggle['level'] = "<label for=\"level_all\">".JText::_('COM_JTG_LEVEL')."</label>\n<select name=\"level_all\" class=\"form-select\" onchange=\"setSelect('level');\">
 	<option value=\"0\">" . JText::_('COM_JTG_SELECT') . "</option>";
 	$i = 1;
 
@@ -119,7 +120,7 @@ $document->addStyleDeclaration($style);
 
 	$toggle['level'] .= "					</select>\n";
 
-//			<td colspan=\"2\" align=\"right\">	<b>" . JText::_('COM_JTG_PRESELECTION') . "==></b><br /><br />"
+//			<td>	<b>" . JText::_('COM_JTG_PRESELECTION') . "==></b><br /><br />"
 //			. JText::_('COM_JTG_PRESELECTION_DESCRIPTION') . "</td>
 	$trackForm = $this->getModel()->getForm();
 	$tagField = $trackForm->getField('tags');
@@ -127,18 +128,18 @@ $document->addStyleDeclaration($style);
 	$tagField->__set('name',"tags_all");
 	$tagField->__set('id',"tags_all");
 	$table = ("		<tbody>\n
-			<tr class=\"row00\">
-			<td ><input type=\"checkbox\" onclick=\"Joomla.checkAll(this)\" title=\"" . JText::_('JGLOBAL_CHECK_ALL')
+			<tr id=\"row00\">
+			<td style=\"padding-top: 6em;\"><input type=\"checkbox\" onclick=\"Joomla.checkAll(this)\" title=\"" . JText::_('JGLOBAL_CHECK_ALL')
 			. "\" value=\"\" checked=\"checked\" name=\"checkall-toggle\"></td>
-			<td> </td> <td>".$tagField->renderField()." </td>
-			<td>" . $toggle['level'] . "</td>
-			<td>" . JHtml::_('select.genericlist', $cats, 'catid_all[]', 'size="' . $catssize . '" multiple="multiple" onclick="setSelectMultiple(\'catid\')"', 'id', 'treename')
+			<td>".$tagField->renderField()."\n"
+			 . $toggle['level'] . "</td>
+			<td>" . JHtml::_('select.genericlist', $cats, 'catid_all[]', 'size="' . $catssize . '" multiple="multiple" class="form-select" onclick="setSelectMultiple(\'catid\')"', 'id', 'treename')
 			. "<br /><small>" . JText::_('COM_JTG_MULTIPLE_CHOICE_POSSIBLE') . "</small></td>
-			<td>" . JHtml::_('select.genericlist', $terrain, 'terrain_all[]', 'size="' . $terrainsize . '"  multiple="multiple" onclick="setSelectMultiple(\'terrain\')"', 'id', 'title')
+			<td>" . JHtml::_('select.genericlist', $terrain, 'terrain_all[]', 'size="' . $terrainsize . '"  class="form-select" multiple="multiple" onclick="setSelectMultiple(\'terrain\')"', 'id', 'title')
 			. "<br /><small>" . JText::_('COM_JTG_MULTIPLE_CHOICE_POSSIBLE') . "</small></td>
-			<td>" . JHtml::_('select.genericlist', $userslist, 'uid_all', 'class="inputbox" size="' . $userslistsize . '" onclick="setSelect(\'uid\')"', 'id', 'title', $me->id) . "</td>
-			<td>" . JtgHelper::getAccessList(0, "access_all", "onclick=\"setSelect('access')\"") . "</td>
-			<td>" . JHtml::_('select.genericlist', $yesnolist, 'hidden_all', 'class="inputbox" size="1" onclick="setSelect(\'hidden\')"', 'id', 'title') . "</td>
+			<td><label for=\"uid_all\">".JText::_('COM_JTG_INFO_AUTHOR')."</label>" . JHtml::_('select.genericlist', $userslist, 'uid_all', 'class="form-select" size="' . $userslistsize . '" onchange="setSelect(\'uid\')"', 'id', 'title', $me->id) ."\n"
+			. "<label for=\"access_all\">".JText::_('COM_JTG_ACCESS_LEVEL')."</label>". JtgHelper::getAccessList(0, "access_all", "onchange=\"setSelect('access')\"") . "\n"
+			. "<label for=\"hidden_all\">".JText::_('COM_JTG_HIDDEN')."</label>" . JHtml::_('select.genericlist', $yesnolist, 'hidden_all', 'class="form-select" size="1" onchange="setSelect(\'hidden\')"', 'id', 'title') . "</td>
 			</tr>
 			");
 
@@ -146,11 +147,11 @@ $document->addStyleDeclaration($style);
 	{
 		foreach ($files AS $file)
 		{
-			$row = (1 - $row);
-			$lists['cats'] = JHtml::_('select.genericlist',
+			$lists['cats'] = '<label for="catid_">' . JText::_('COM_JTG_CAT') . "</label>\n" .
+				JHtml::_('select.genericlist',
 					$cats,
 					'catid_' . $count . '[]',
-					'multiple="multiple" size="' . $catssize . '"',
+					'multiple="multiple" class="form-select" size="' . $catssize . '"',
 					'id', 'treename' );
 			if (version_compare(JVERSION, '4.0', 'ge'))
 			{
@@ -165,15 +166,18 @@ $document->addStyleDeclaration($style);
 			$buttons = array(
 					"pagebreak",
 					"readmore");
-			$lists['access'] = JtgHelper::getAccessList(0, "access_" . $count);
-			$lists['uid'] = JHtml::_('select.genericlist', $userslist, 'uid_' . $count, ' size="' . $userslistsize . '"', 'id', 'title', $me->id);
+			$lists['access'] = "<label for=\"access_".$count."\">". JText::_('COM_JTG_ACCESS_LEVEL')."</label>".JtgHelper::getAccessList(0, "access_" . $count);
+			$lists['uid'] = '<label for="uid_' . $count . '">' . JText::_('COM_JTG_INFO_AUTHOR') . "</label>\n" .
+				JHtml::_('select.genericlist', $userslist, 'uid_' . $count, ' size="' . $userslistsize . '" class="form-select"', 'id', 'title', $me->id);
 
 			// 				genericlist($arr, $name, $attribs=null, $key= 'value', $text= 'text', $selected = null, $idtag = false, $translate = false)
-			$lists['hidden'] = JHtml::_('select.genericlist', $yesnolist, 'hidden_' . $count, 'class="inputbox" size="2"', 'id', 'title', 0);
-			$lists['terrain'] = JHtml::_('select.genericlist',
+			$lists['hidden'] = '<label for="hidden_' . $count . '">' . JText::_('COM_JTG_HIDDEN') . "</label>\n" .
+				JHtml::_('select.genericlist', $yesnolist, 'hidden_' . $count, 'class="form-select" size="1"', 'id', 'title', 0);
+			$lists['terrain'] = '<label for="terrain_' . $count . '">' . JText::_('COM_JTG_TERRAIN') . "</label>\n" . 
+				JHtml::_('select.genericlist',
 					$terrain,
 					'terrain_' . $count . '[]',
-					'multiple="multiple" size="' . $terrainsize . '"',
+					'multiple="multiple" size="' . $terrainsize . '" class="form-select"',
 					'id', 'title');
 
 			jimport('joomla.filesystem.file');
@@ -277,18 +281,18 @@ $document->addStyleDeclaration($style);
 						$color = "lightgrey";
 					}
 
-					$table .= "			<tr class=\"row$row " . ($row? "row-odd":"row-even") . "\">\n<td colspan=\"9\">" . JText::_('COM_JTG_GPS_FILE') . ':<b> ' . $filename . '</b>: <b><font color=\"red\">' . $tt . "</font></b><br /></tr>\n";
+					$table .= "			<tr>\n<td colspan=\"5\">" . JText::_('COM_JTG_GPS_FILE') . ':<b> ' . $filename . '</b>: <b><font color=\"red\">' . $tt . "</font></b><br /></tr>\n";
 				}
 				else
 				{
-					$table .= "			<tr class=\"row$row " . ($row? "row-odd":"row-even") . "\">\n<td colspan=\"9\">" . JText::_('COM_JTG_GPS_FILE') . ':<b> ' . $filename . '</b>: ' . JText::_('COM_JTG_TT_FILEOKAY') . "</tr>\n";
+					$table .= "			<tr>\n<td colspan=\"5\">" . JText::_('COM_JTG_GPS_FILE') . ':<b> ' . $filename . '</b>: ' . JText::_('COM_JTG_TT_FILEOKAY') . "</tr>\n";
 				}
 
-				$table .= ("		<tr class=\"row$row " . ($row? "row-odd":"row-even") . "\">\n");
+				$table .= ("		<tr>\n");
 
 				// Row: Selector + Date
 				{
-					$table .= '<td nowrap>' . $filename_exists;
+					$table .= '<td nowrap style="padding-top:8em;">' . $filename_exists;
 
 					/*
 					 * ($check === true) eine Spur mit Punkten an erster Stelle vorhanden
@@ -312,34 +316,34 @@ $document->addStyleDeclaration($style);
 						$table .= ("<input type=\"checkbox\" checked=\"checked\" id=\"cb" . $count . "\" value=\"" . $file . "\" name=\"import_" . $count . "\" onclick=\"Joomla.isChecked(this.checked);\" /></td>\n");
 					}
 
-					$table .= ("				<td><input id=\"date_" . $count . "\" type=\"text\" name=\"date_" . $count . "\" size=\"10\" value=\"");
-
-					if ($date === false)
-					{
-						$table .= (date('Y-m-d', time()) . '" /><font color=\"orange\">&nbsp;</font></td>');
-					}
-					else
-					{
-						$table .= ($date . "\" /></td>");
-					}
 				}
 
 				// Row: GPS filename / Title
 				{
 					$table .= ("				<td>");
 					$table .= ("<input type=\"hidden\" name=\"file_" . $count . "\" value=\"" . $file . "\" />\n");
-					$table .= "\n				<input id=\"title_" . $count . "\" type=\"text\" name=\"title_" . $count . "\" value=\"" . $title . "\" size=\"30\" />\n";
+					$table .= "\n				<label for=\"title_" . $count . "\">".JText::_('COM_JTG_TITLE')."</label>";
+					$table .= "\n				<input id=\"title_" . $count . "\" type=\"text\" class=\"inputbox form-control\" name=\"title_" . $count . "\" value=\"" . $title . "\" size=\"40\" />\n";
+
+					if ($date === false)
+					{
+						$date = date('Y-m-d', time());
+					}
+					$table .= "				<label for=\"date_" . $count . "\">" .JText::_('COM_JTG_DATE') . "</label>";
+					$table .= ("          <input id=\"date_" . $count . "\" type=\"text\" class=\"inputbox form-control\" name=\"date_" . $count . "\" size=\"10\" value=\"" . $date . "\" />");
+
 					$tagField = $trackForm->getField('tags');
 					$tagField->__set('name','tags_'.$count);
 					$tagField->__set('id','tags_'.$count);
 					$table .= $tagField->renderField(); 
-					$table .= "</td>\n";
+					$table .= "\n";
 				}
 
 				// Row: Difficulty level
 				{
-					$table .= "				<td>\n";
-					$table .= "					<select id=\"level_" . $count . "\" name=\"level_" . $count . "\" size=\"6\"\n>
+					$table .= "				\n";
+					$table .= "				<label for=\"level_" . $count . "\">" . JText::_('COM_JTG_LEVEL') . "</label>\n";;
+					$table .= "				<select id=\"level_" . $count . "\" name=\"level_" . $count . "\" class=\"form-select\">
 					<option>" . JText::_('COM_JTG_SELECT') . "</option>\n";
 					$i = 1;
 
@@ -363,21 +367,21 @@ $document->addStyleDeclaration($style);
 				$table .= ("				<td>" . $lists['terrain'] . "</td>\n");
 
 				// Row: Author
-				$table .= ("				<td>" . $lists['uid'] . "</td>\n");
+				$table .= ("				<td>" . $lists['uid'] . "\n");
 
 				// Row: Acces level
-				$table .= ("				<td>" . $lists['access'] . "</td>\n");
+				$table .= ("				" . $lists['access'] . "\n");
 
 				// Row: Hidden
-				$table .= ("				<td>" . $lists['hidden'] . "</td>\n");
+				$table .= ("				" . $lists['hidden'] . "</td>\n");
 
 				// Row: NULL
 				$table .= ("				\n");
 
-				$table .= ("			</tr>\n<tr class=\"row$row " . ($row? "row-odd":"row-even") . "\">\n");
+				$table .= ("			</tr>\n<tr>\n");
 
 				// Row: Decription
-				$table .= ("				<td>&nbsp;&nbsp;</td><td colspan='8'>" . JText::_('COM_JTG_DESCRIPTION') . ":<br />\n" . $lists['description'] . "</td>\n");
+				$table .= ("				<td>&nbsp;&nbsp;</td><td colspan='4'>" . JText::_('COM_JTG_DESCRIPTION') . ":<br />\n" . $lists['description'] . "</td>\n");
 
 				$table .= ("				\n");
 				$table .= ("			</tr>\n");
@@ -393,18 +397,14 @@ $document->addStyleDeclaration($style);
 		}
 	}
 
-	$table_header = ("	<table class=\"adminlist\" cellpadding=\"1\">
+	$table_header = ("	<table class=\"table table-admin\">
 			<thead>
 			<tr>
 			<th class=\"title\" width=\"1\">&nbsp;</th>
-			<th class=\"title\" width=\"1\">" . JText::_('COM_JTG_DATE') . "</th>
-			<th class=\"title\" width=\"1\">" . JText::_('COM_JTG_TITLE') . "</th>
-			<th class=\"title\" width=\"1\">" . JText::_('COM_JTG_LEVEL') . "</th>
+			<th class=\"title\" width=\"1\"></th>
 			<th class=\"title\" width=\"1\">" . JText::_('COM_JTG_CAT') . "</th>
 			<th class=\"title\" width=\"1\">" . JText::_('COM_JTG_TERRAIN') . "</th>
-			<th class=\"title\" width=\"1\">" . JText::_('COM_JTG_INFO_AUTHOR') . "</th>
-			<th class=\"title\" width=\"1\">" . JText::_('COM_JTG_ACCESS_LEVEL') . "</th>
-			<th class=\"title\" width=\"1\">" . JText::_('COM_JTG_HIDDEN') . "</th>
+			<th class=\"title\" width=\"1\"></th>
 			</tr>
 			</thead>\n");
 
