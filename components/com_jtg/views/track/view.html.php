@@ -156,7 +156,7 @@ class JtgViewTrack extends JViewLegacy
 		jimport('joomla.filesystem.folder');
 
 		// Code support for joomla version greater than 3.0
-		if (JVERSION >= 3.0)
+		if (version_compare(JVERSION,'3.0','ge'))
 		{
 			JHtml::_('jquery.framework');
 			JHtml::script(Juri::base() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
@@ -232,8 +232,15 @@ class JtgViewTrack extends JViewLegacy
 				$this->elevationDataExists = $gpsData->elevationDataExists;
 				$this->beatDataExists = $gpsData->beatDataExists;
 
-				$this->tags = $model->getTable('jtg_files')->getTagsHelper()->getItemTags('com_jtg.file' , $this->id);
-				$this->tagids = $model->getTable('jtg_files')->getTagsHelper()->getTagIds($this->id, 'com_jtg.file');
+				if (version_compare(JVERSION,'4.0','ge')) {
+					$this->tags = $model->getTable('jtg_files')->getTagsHelper()->getItemTags('com_jtg.file' , $this->id);
+					$this->tagids = $model->getTable('jtg_files')->getTagsHelper()->getTagIds($this->id, 'com_jtg.file');
+				}
+				else {
+					$tagsHelper = new JHelperTags;
+					$this->tags = $tagsHelper->getItemTags('com_jtg.file' , $this->id);
+					$this->tagids = $tagsHelper->getTagIds($this->id, 'com_jtg.file');
+				}
 
 				if ( count($this->imageList) > 0) {
 		         $this->images = true;

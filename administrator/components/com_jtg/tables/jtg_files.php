@@ -89,7 +89,13 @@ class TableJTG_Files extends Table implements TaggableTableInterface
 	public function __construct(& $db)
 	{
 		parent::__construct('#__jtg_files', 'id', $db);
-		$this->typeAlias = 'com_jtg.file';
+		if (version_compare(JVERSION,'4.0','ge')) {
+			$this->typeAlias = 'com_jtg.file';
+		}
+		else {
+			JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TableJTG_Files', array('typeAlias' => 'com_jtg.file'));
+			JTableObserverTags::createObserver($this, array('typeAlias' => 'com_jtg.file'));
+		}
 	}
 
 	function getTypeAlias() { return 'com_jtg.file'; }

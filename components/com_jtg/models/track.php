@@ -20,10 +20,8 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Editor\Editor;
-use Joomla\CMS\MVC\Model\ItemModel;
-use Joomla\CMS\MVC\Model\FormBehaviorTrait;
+use Joomla\CMS\MVC\Model\FormModel;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Form\FormFactoryAwareTrait;
 
 /**
  * JtgModelTrack class for the jtg component
@@ -34,10 +32,8 @@ use Joomla\CMS\Form\FormFactoryAwareTrait;
  */
 
 
-class JtgModelTrack extends ItemModel
+class JtgModelTrack extends FormModel
 {
-	use FormFactoryAwareTrait;
-	use FormBehaviorTrait;
 
 	public function getForm($data = array(), $loadData = true)
 	{

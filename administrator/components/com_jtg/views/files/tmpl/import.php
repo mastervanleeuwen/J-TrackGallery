@@ -36,7 +36,7 @@ JToolBarHelper::save('savefiles', JText::_('COM_JTG_SAVE_NEW_FILE'), 'save.png')
 JToolBarHelper::deleteList('COM_JTG_VALIDATE_DELETE_ITEMS', 'removeFromImport');
 JToolBarHelper::help('files/import', true);
 $document = JFactory::getDocument();
-$style = "   #row00 {--table-bg: #FFFF99;}\n";
+$style = "   #row00 {--table-bg: #FFFF99; background-color: #FFFF99;}\n";
 $style .= "   .table-admin {--table-bg: var(--admin-background);}\n";
 
 if (version_compare(JVERSION, '3.0', 'ge'))
@@ -124,7 +124,12 @@ $document->addStyleDeclaration($style);
 //			. JText::_('COM_JTG_PRESELECTION_DESCRIPTION') . "</td>
 	$trackForm = $this->getModel()->getForm();
 	$tagField = $trackForm->getField('tags');
-	$tagField->__set('onchange',"setSelectTags('tags')");
+	if (version_compare(JVERSION, '4.0', 'ge')) {	
+		$tagField->__set('onchange',"setSelectTags('tags')");
+	}
+	else {
+		$tagField->__set('onchange',"setSelectMultiple('tags')");
+	}
 	$tagField->__set('name',"tags_all");
 	$tagField->__set('id',"tags_all");
 	$table = ("		<tbody>\n

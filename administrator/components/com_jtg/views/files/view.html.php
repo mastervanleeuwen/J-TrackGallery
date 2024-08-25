@@ -694,7 +694,13 @@ class JtgViewFiles extends JViewLegacy
 			$lists['published'] = JHtml::_('select.booleanlist', 'published', null, $track->published);
 			$lists['values'] = JtgHelper::giveGeneratedValues('backend', $this->buildImageFiletypes($track->istrack, $track->iswp, $track->isroute, $track->iscache), $track);
 			$lists['level']	= $model->getLevelList($track->level);
-			$this->tagids = $model->getTable('jtg_files')->getTagsHelper()->getTagIds($id, 'com_jtg.file');
+			if (version_compare(JVERSION,'4.0','ge')) {
+				$this->tagids = $model->getTable('jtg_files')->getTagsHelper()->getTagIds($id, 'com_jtg.file');
+			}
+			else {
+				$tagsHelper = new JHelperTags;
+				$this->tagids = $tagsHelper->getTagIds($id, 'com_jtg.file');
+			}
 			$trackForm = $this->getModel()->getForm();
 			$tagField = $trackForm->getField('tags');
 			$tagField->setValue($this->tagids);
