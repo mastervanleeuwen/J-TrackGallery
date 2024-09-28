@@ -118,7 +118,7 @@ array_unshift($maplist, array('id' => 0, "name" => JText::_('JNONE')) );
 $lists['default_map']   = JHtml::_('select.genericlist', $maplist, 'default_map', 'class="form-select size="1"', 'id', 'name', $this->track->default_map);
 $trackForm = $this->getModel()->getForm(); // TODO: read data from DB
 $tagField = $trackForm->getField('tags');
-$tagField->setValue($this->tagids);
+if (isset($this->tagids)) $tagField->setValue($this->tagids);
 $lists['tags'] = $tagField->renderField(array('hiddenLabel'=> true));
 
 ?>
