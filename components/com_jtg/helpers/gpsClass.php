@@ -1240,7 +1240,8 @@ class GpsDataClass
 		$time_tmp_date_year = $time_tmp_date[0];
 		$time_tmp_date_month = $time_tmp_date[1];
 		$time_tmp_date_day = $time_tmp_date[2];
-		$time_tmp_time = explode(':', str_replace("Z", "", $date[1]));
+		$time_tmp_time = preg_split('/[Z+-]+/', $date[1]);
+		$time_tmp_time = explode(':', $time_tmp_time[0]);
 		$time_tmp_time_hour = $time_tmp_time[0];
 		$time_tmp_time_minute = $time_tmp_time[1];
 		$time_tmp_time_sec = (int) round($time_tmp_time[2], 0);
