@@ -280,7 +280,6 @@ if ($this->cfg->comments == 1)
 }
 else
 {
-	JResponse::setHeader('HTTP/1.0 403', true);
 	JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_ALERT_NOT_AUTHORISED'), 'Error');
 }
 

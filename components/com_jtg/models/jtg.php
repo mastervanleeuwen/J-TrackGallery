@@ -21,6 +21,8 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
 use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\ListModel;
+
 /**
  * JtgModeljtg class for the jtg component
  *
@@ -29,7 +31,7 @@ use Joomla\Utilities\ArrayHelper;
  * @since       0.8
  */
 
-class JtgModeljtg extends JModelList
+class JtgModeljtg extends ListModel
 {
 	/**
 	 * Constructor
@@ -42,23 +44,37 @@ class JtgModeljtg extends JModelList
 				'search',
 				'mindist',
 				'maxdist',
+				'tag',
 				'trackcat',
 				'tracklevel');
 		}
 		parent::__construct($config);
 	}
 
+	public function getTable($name = 'jtg_files', $prefix = 'Table', $options = [])
+   {
+      return parent::getTable($name, $prefix, $options);
+   }
+
    protected function getListQuery(){
       // TODO: add accesslevel logic, or remove completely? replace by per-track access using native Joomla! logic?
 
       $db = $this->getDbo();
-      $query = $db->getQuery(true);
       $user = JFactory::getUser();
       $uid = $user->id;
 
-      $query->select('a.*, c.name AS user')
-      ->from('#__jtg_files as a')
-      ->join('LEFT','#__users AS c ON a.uid=c.id');
+		if (!is_null($this->getState('filter.tag')))
+		{
+			$query = $this->getTable()->getTagsHelper()->getTagItemsQuery($this->getState('filter.tag'));
+			$query->join('LEFT','#__jtg_files AS a ON m.content_item_id = a.id');
+			$query->select("a.*");
+		}
+		else {
+			$query = $db->getQuery(true);
+			$query->select('a.*, c.name AS user')
+				->from('#__jtg_files as a')
+				->join('LEFT','#__users AS c ON a.uid=c.id');
+		}
 
       // Filter company
       $trackcats = $this->getState('filter.trackcat');

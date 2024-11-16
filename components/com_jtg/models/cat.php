@@ -16,6 +16,8 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 use Joomla\CMS\Factory;
 use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\ListModel;
+
 /**
  * JtgModelCat class for the jtg component
  *
@@ -26,7 +28,7 @@ use Joomla\Utilities\ArrayHelper;
 
 
 
-class JtgModelCat extends JModelList
+class JtgModelCat extends ListModel
 {
 	/**
 	 * files data array
@@ -53,27 +55,39 @@ class JtgModelCat extends JModelList
 	    	{
 				// MvL TODO: what is the function of these? Should they be the names of the database fields, or of the filterform fields
 		    	$config['filter_fields'] = array(
-		    	    'search',
-		    	    'mindist',
-		    	    'maxdist');
+					'search',
+					'tag',
+					'mindist',
+					'maxdist');
 				$cfg = JtgHelper::getConfig();
 				if ($cfg->uselevel) $config['filter_fields'][] = 'tracklevel';
 	    	}
 	 		parent::__construct($config);
 	}
 
+	public function getTable($name = 'jtg_files', $prefix = 'Table', $options = [])
+	{
+		return parent::getTable($name, $prefix, $options);
+	}
 
 	protected function getListQuery(){
 		$db = $this->getDbo();
-		$query = $db->getQuery(true);
 		$user = Factory::getUser();
 		$uid = $user->id;
-		
 		$input = Factory::getApplication()->input;
-		$query->select('a.*, c.name AS user')
-		->from('#__jtg_files as a')
-		->join('LEFT','#__users AS c ON a.uid=c.id');
-		
+
+		if (!is_null($this->getState('filter.tag')))
+		{
+			$query = $this->getTable()->getTagsHelper()->getTagItemsQuery($this->getState('filter.tag'));
+			$query->join('LEFT','#__jtg_files AS a ON m.content_item_id = a.id');
+			$query->select("a.*");
+		}
+		else {
+			$query = $db->getQuery(true);
+			$query->select('a.*, c.name AS user')
+				->from('#__jtg_files as a')
+				->join('LEFT','#__users AS c ON a.uid=c.id');
+		}	
 		// Filter company
 		$catid = $input->get('id',null);
 		if (!is_null($catid)) {
