@@ -7,8 +7,9 @@
 		<field name="id" type="hidden"/>
 		<field name="tags" type="tag"
 			label="JTAG"
-			class="inputbox span12 small" multiple="true"
-		>
-		</field>
+			class="inputbox span12 small"
+			multiple="true"
+			custom="deny"
+		/>
 	</fieldset>
 </form>
