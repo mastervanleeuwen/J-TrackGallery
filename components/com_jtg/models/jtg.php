@@ -65,7 +65,13 @@ class JtgModeljtg extends ListModel
 
 		if (!is_null($this->getState('filter.tag')))
 		{
-			$query = $this->getTable()->getTagsHelper()->getTagItemsQuery($this->getState('filter.tag'));
+			if (version_compare(JVERSION,'4.0','ge')) {
+				$query = $this->getTable()->getTagsHelper()->getTagItemsQuery($this->getState('filter.tag'));
+			}
+			else {
+				$tagsHelper = new JHelperTags;
+				$query = $tagsHelper->getTagItemsQuery($this->getState('filter.tag'));
+			}
 			$query->join('LEFT','#__jtg_files AS a ON m.content_item_id = a.id');
 			$query->select("a.*");
 		}
