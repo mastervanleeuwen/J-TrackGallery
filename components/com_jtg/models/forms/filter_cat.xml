@@ -31,7 +31,7 @@
          name="tag"
          type="tag"
          label="JTAG"
-         description="JTAG_DESC"
+         description="JTAG_FIELD_SELECT_DESC"
 			mode="ajax"
 			multiple="true"
          class="inputbox span12 small"
