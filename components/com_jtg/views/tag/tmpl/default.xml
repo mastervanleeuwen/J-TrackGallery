@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_JTG_MENU_TAG_VIEW">
+		<message>
+			<![CDATA[COM_JTG_TAG_VIEW_DESCRIPTION]]>
+		</message>
+	</layout>
+	<fields name="request">
+		<fieldset name="request">
+			<field name="id" type="tag"
+			label="JTAG"
+         mode="ajax"
+         multiple="false"
+         class="inputbox span12 small"
+         custom="deny"
+      />
+		</fieldset>
+	</fields>
+</metadata>

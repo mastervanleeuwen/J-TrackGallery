@@ -296,6 +296,9 @@ class jtgRouter extends RouterBase
 			case 'cat':
 				$vars['view'] = 'cat';
 				break;
+			case 'tag':
+				$vars['view'] = 'tag';
+				break;
 			case 'track':
 			case 'file':
 				$vars['view'] = 'track';
@@ -383,7 +386,8 @@ class jtgRouter extends RouterBase
 				break;
 
 			case 'cat':
-				$vars['view'] = 'cat';
+			case 'tag':
+				$vars['view'] = $view;
 				$vars['layout'] = 'default';
 				$vars['id'] = $segments[0];
 				array_shift($segments);
