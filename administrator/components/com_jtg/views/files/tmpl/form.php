@@ -164,8 +164,13 @@ if ($this->id >= 1)
 				<td><?php echo JText::_('COM_JTG_TITLE'); ?>:*</td>
 				<td><input id="title" class="inputbox form-control" type="text" name="title"
 					value="<?php echo (isset($this->id) AND ($this->id != 0))? $this->track->title: ''; ?>"
-					size="30" /></td>
+					style="width:100%;" /></td>
 			</tr>
+			<tr>
+				<td><?php echo JText::_('JALIAS'); ?>:</td>
+				<td><input id="alias" class="inputbox form-control" type="text" name="alias" placeholder="<?php echo JText::_('JFIELD_ALIAS_PLACEHOLDER'); ?>"
+					value="<?php echo (isset($this->id) AND ($this->id != 0))? $this->track->alias: ''; ?>"
+					style="width:100%;" /></td>
 			<tr>
 				<td><?php echo JText::_('COM_JTG_DATE'); ?>:*</td>
 				<td><input id="date" class="inputbox form-control" type="text" name="date"

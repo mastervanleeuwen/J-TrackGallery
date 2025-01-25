@@ -20,6 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Editor\Editor;
+use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\MVC\Model\FormModel;
 use Joomla\CMS\HTML\HTMLHelper;
 
@@ -219,7 +220,11 @@ class JtgModelTrack extends FormModel
 			$data['catid'] = $params->get('jtg_param_default_cat');
 		}
 		$data['level'] = $input->get('level', 0, 'integer');
-		$data['title'] = $input->get('title', '', 'string');
+		$data['title'] = trim($input->get('title', '', 'string'));
+		$alias = OutputFilter::stringURLSafe(trim($input->get('alias', '', 'string')));
+		if (strlen($alias) == 0) $alias = OutputFilter::stringURLSafe($data['title']);
+		if (strlen($alias) == 0) $alias = OutputFilter::stringURLSafe(date('Y-m-d H:i:s'));
+		$data['alias'] = $alias;
 		$terrain = $input->get('terrain', null, 'array');
 		$data['terrain'] = $terrain ? implode(',', $terrain) : '';
 		$data['description'] = $input->get('description', '', 'raw');
@@ -306,6 +311,7 @@ class JtgModelTrack extends FormModel
 		$trackTable = $this->getTable('jtg_files', 'Table');
 		$trackTable->bind($data);
 		$trackTable->newTags = $input->get('tags');
+		$trackTable->check();
 		if (!$trackTable->store()) {
 			$app->enqueueMessage("Error storing new file ".$trackTable->getError(),'Error');
 		}
@@ -699,6 +705,7 @@ class JtgModelTrack extends FormModel
 		$data['catid'] = $catid;
 		$data['level'] = $input->get('level', 0, 'integer');
 		$data['title'] = $input->get('title', '', 'string');
+		$data['alias'] = OutputFilter::stringURLSafe(trim($input->get('alias', '', 'string')));
 
 		$terrain = $input->get('terrain', null, 'array');
 
@@ -787,6 +794,7 @@ class JtgModelTrack extends FormModel
 		$trackTable = $this->getTable('jtg_files', 'Table');
 		$trackTable->bind($data);
 		$trackTable->newTags = $input->get('tags');
+		$trackTable->check();
 		$trackTable->store();
 
 		return true;

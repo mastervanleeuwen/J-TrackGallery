@@ -26,6 +26,10 @@ Don't use /administrator/componentes/com_jtg//installuninstall.php which is copi
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Factory;
+
 /**
  * Installer class for the jtg component
  *
@@ -47,6 +51,7 @@ class Com_JtgInstallerScript
 	 * @return return_description
 	 */
 	var $release = '';
+	var $generateAliases = false;
 
 	public function preflight($type, $parent)
 	{
@@ -102,6 +107,12 @@ class Com_JtgInstallerScript
 				return false;
 
 				// TODO this aborts the install process but generates and error in Joomla !!!
+			}
+			$db = JFactory::getDBO();
+			$columns = $db->getTableColumns('#__jtg_files');
+			if ($columns && !isset($columns['alias']))
+			{
+				$this->generateAliases = true;
 			}
 		}
 
@@ -384,20 +395,20 @@ class Com_JtgInstallerScript
       $db->setQuery($query);
       $db->execute();
       $nphotos = $db->loadResult();
-	if ( $nphotos == 0 )
-	{
+		if ( $nphotos == 0 )
+		{
 			require_once JPATH_SITE . '/components/com_jtg/helpers/helper.php';
 
 			$statusdb = true;
 
       	$img_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images';
 
-      $query = 'SELECT id FROM #__jtg_files';
-      $db->setQuery($query);
-      $db->execute();
-	$ids = $db->loadColumn();
+      	$query = 'SELECT id FROM #__jtg_files';
+      	$db->setQuery($query);
+      	$db->execute();
+			$ids = $db->loadColumn();
 
-	foreach ( $ids as $key => $id )
+			foreach ( $ids as $key => $id )
 	      {
 			//
 			//  Add entry to image database
@@ -453,6 +464,46 @@ class Com_JtgInstallerScript
 
 		// 0.9.32 folder for map images
 		JFolder::create(JPATH_SITE . '/images/jtrackgallery/maps');
+
+		if ($this->generateAliases) {
+			echo "Track aliases generated from titles";
+			// Would like to use Table interface, but cannot get an instance in Joomla 3.9.10
+
+      	$query = 'SELECT id FROM #__jtg_files';
+      	$db->setQuery($query);
+      	$db->execute();
+			$ids = $db->loadColumn();
+
+			foreach ( $ids as $key => $id )
+			{
+      		$query = 'SELECT title FROM #__jtg_files WHERE id='.$id;
+      		$db->setQuery($query);
+      		$db->execute();
+				$title = $db->loadResult();
+				$alias = OutputFilter::stringURLSafe(trim($title));
+				if (!empty($alias))
+				{
+					$query = $db->getQuery(true);
+      			$query->select('COUNT(*)')
+      				->from($db->quoteName('#__jtg_files'))
+      				->where($db->quoteName('alias') . ' = '. $db->quote($alias));
+      			$db->setQuery($query);
+      			if ($db->loadResult() > 0) $alias = $id.'-'.$alias;
+				}
+				else
+				{
+					$alias = $id;
+				}
+      		$query = 'UPDATE #__jtg_files SET alias='.$db->quote($alias).' WHERE id='.$id;
+      		$db->setQuery($query);
+      		//$db->execute();
+	      	if (!$db->execute())
+   	   	{
+					$app->enqueueMessag("Storing track ".$id.$db->stderr(),'error');
+         		return false;
+	      	}
+			}
+		}
 		return true;
 	}
 

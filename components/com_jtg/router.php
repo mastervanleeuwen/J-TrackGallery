@@ -20,6 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Component\Router\RouterBase;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Multilanguage;
 
 class jtgRouter extends RouterBase
@@ -189,9 +190,14 @@ class jtgRouter extends RouterBase
 			unset($query['view']);
 		}
 
+		$layout='';
 		if (isset($query['layout']))
 		{
-			if ($query['layout'] !== 'default') $segments[] = $query['layout'];
+			if ($query['layout'] !== 'default')
+			{
+				$layout = $query['layout'];
+				$segments[] = $layout;
+			}
 			unset($query['layout']);
 		}
 
@@ -209,7 +215,19 @@ class jtgRouter extends RouterBase
 			unset($query['task']);
 		}
 
-		if (($view == 'track' || $view == 'cat' || $task == 'delete' || $task == 'vote') && isset($query['id']))
+		if ($view == 'track' && empty($task) && isset($query['id']))
+		{
+			if (strlen($layout)==0)
+			{
+				$segments[] = $this->getAliasFromId($query['id']);
+			}
+			else
+			{
+				$segments[] = $query['id'];
+			}
+			unset($query['id']);
+		}
+		else if (($view == 'cat' || $task == 'delete' || $task == 'vote') && isset($query['id']))
 		{
 			$segments[] = $query['id'];
 			unset($query['id']);
@@ -380,7 +398,15 @@ class jtgRouter extends RouterBase
 				{
 					$vars['view'] = 'track';
 					$vars['layout'] = 'default';
-					$vars['id'] = $segments[0];
+					if (is_numeric($segments[0]))
+					{
+						$vars['id'] = $segments[0];
+					}
+					else
+					{
+						$vars['id'] = $this->getIdFromAlias($segments[0]);
+						if (is_null($vars['id'])) return false;
+					}
 				}
 				array_shift($segments);
 				break;
@@ -496,6 +522,42 @@ class jtgRouter extends RouterBase
 		}
 
 		return $link;
+	}
+
+	/**
+    * Get track alias from Id number
+    *
+    * @return string alias
+   */
+   function getAliasFromId($id)
+   {
+		//$db = Factory::getContainer()->get('DatabaseDriver');
+		$db = Factory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('alias');
+		$query->from($db->quoteName('#__jtg_files'));
+		$query->where($db->quoteName('id') . ' = '. $db->quote($id));
+		$db->setQuery($query);
+		$alias = $db->loadResult();
+		if (empty($alias)) $alias = $id;
+		return $alias;
+	}
+
+   /**
+    * Get track Id number from alias
+    *
+    * @return int id
+   */
+   function getIdFromAlias($alias)
+	{
+		//$db = Factory::getContainer()->get('DatabaseDriver');
+		$db = Factory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('id');
+		$query->from($db->quoteName('#__jtg_files'));
+		$query->where($db->quoteName('alias') . ' = '. $db->quote($alias));
+		$db->setQuery($query);
+		return $db->loadResult();
 	}
 }
 ?>

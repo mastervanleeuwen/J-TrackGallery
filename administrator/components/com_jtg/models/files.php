@@ -833,7 +833,7 @@ class JtgModelFiles extends AdminModel
 	 */
 	function saveFiles()
 	{
-		$mainframe = JFactory::getApplication();
+		$app = JFactory::getApplication();
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 		require_once '../components/com_jtg/helpers/gpsClass.php';
@@ -861,6 +861,7 @@ class JtgModelFiles extends AdminModel
 				}
 				$data['level'] = $input->get('level_' . $i, 0, 'integer');
 				$data['title'] = $input->get('title_' . $i, '', 'string');
+				$data['alias'] = $input->get('alias_' . $i, '', 'string');
 				$terrain = $input->get('terrain_' . $i, null, 'array');
 
 				if ($terrain)
@@ -995,6 +996,7 @@ class JtgModelFiles extends AdminModel
 					$trackTable = $this->getTable();
 					$trackTable->bind($data);
 					$trackTable->newTags = $input->get('tags_'.$i);
+					$trackTable->check();
 					$trackTable->store();
 				}
 			}
@@ -1199,7 +1201,7 @@ class JtgModelFiles extends AdminModel
 		$catid = $input->get('catid', null, 'array');
 		$data['catid'] = $catid ? implode(',', $catid) : '';
 		$data['level'] = $input->get('level', 0, 'integer');
-		$data['title'] = $db->quote($input->get('title', '', 'string'));
+		$data['title'] = trim($input->get('title', '', 'string'));
 		$terrain = $input->get('terrain', null, 'array');
 
 		if ($terrain)
@@ -1312,10 +1314,12 @@ class JtgModelFiles extends AdminModel
 			$data['distance'] = $gpsData->distance;
 
 			$trackTable = $this->getTable();
+			$data['alias'] = trim($input->get('alias', '', 'string'));
+
 			$trackTable->bind($data);
 			$trackTable->newTags = $input->get('tags');
-
-			if (! $table->save()) {
+			$trackTable->check();
+			if (! $trackTable->save()) {
 				JFile::delete($file);
 				return false;
 			}
@@ -1574,6 +1578,7 @@ class JtgModelFiles extends AdminModel
 		$data['catid'] = $catid ? implode(',', $catid) : '';
 		$data['level'] = $input->get('level', 0, 'integer');
 		$data['title'] = $input->get('title', '', 'string');
+		$data['alias'] = trim($input->get('alias', '', 'string'));
 		$data['hidden'] = $input->get('hidden');
 		$data['published'] = $input->get('published');
 
@@ -1656,10 +1661,10 @@ class JtgModelFiles extends AdminModel
 		$trackTable = $this->getTable();
 		$trackTable->bind($data);
 		$trackTable->newTags = $input->get('tags');
-		$trackTable->store();
-		if (! $trackTable->store())
+		$trackTable->check();
+		if (!$trackTable->store())
 		{
-			$app->enqueueMessag($db->stderr(),'error');;
+			$app->enqueueMessag('Error storing track: '.$db->stderr(),'error');;
 
 			return false;
 		}

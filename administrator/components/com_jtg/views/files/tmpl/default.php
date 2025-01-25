@@ -186,7 +186,7 @@ if (version_compare(JVERSION,'4.0','lt'))
 								JText::sprintf('COM_JTG_ERROR_MISSING_TERRAINID', $v) .
 								"</font>";
 
-						if ( $v != 0 )
+						if ( $v != 0 && !empty($v))
 						{
 							$missingterrain = true;
 						}
@@ -270,7 +270,7 @@ if (version_compare(JVERSION,'4.0','lt'))
 				<th class="title"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_TERRAIN'),
 	'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'files');
-					if ($missingterrain) JFactory::getApplication()->enqueueMessage($missingterrain,'Warning'); ?>
+					if ($missingterrain) JFactory::getApplication()->enqueueMessage('Some terrains are missing from the database','Warning'); ?>
 				</th>
 				<th class="text-center" style="white-space:normal;"><?php
 				echo JHtml::_('grid.sort', JText::_('COM_JTG_LEVEL'),

@@ -20,6 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // Include library dependencies
 jimport('joomla.filter.input');
+use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Tag\TaggableTableInterface;
 use Joomla\CMS\Tag\TaggableTableTrait;
@@ -31,17 +32,19 @@ use Joomla\CMS\Tag\TaggableTableTrait;
  * @subpackage  Frontend
  * @since       0.8
  */
-class TableJTG_Files extends Table implements TaggableTableInterface
+class TableJtg_files extends Table implements TaggableTableInterface
 {
 	use TaggableTableTrait;
 
 	var $id				= null;
 
-	var $uid			= null;
+	var $uid				= null;
 
 	var $catid			= null;
 
 	var $title			= null;
+
+	var $alias			= null;
 
 	var $file			= null;
 
@@ -121,6 +124,27 @@ class TableJTG_Files extends Table implements TaggableTableInterface
 	}
 
 	/**
+	 * Check whether a given alias already exists in the table
+	 *
+	 * @param   string  $alias  alias to check for
+	 * @param   integer $id     track id to ignore (current track id) 
+	 *
+	 * @return boolean
+	 */
+	function aliasExists($alias, $id = null)
+	{
+		$db = $this->getDbo();
+		//or: $db = Factory::getContainer()->get('DatabaseDriver');
+		$query = $db->getQuery(true);
+		$query->select('COUNT(*)');
+		$query->from($db->quoteName('#__jtg_files'));
+		$query->where($db->quoteName('alias') . ' = '. $db->quote($alias));
+		if (!is_null($id)) $query->andWhere($db->quoteName('id') . ' != '. $db->quote($id));
+		$db->setQuery($query);
+		return $db->loadResult() > 0;
+	}
+
+	/**
 	 * function_description
 	 *
 	 * @return boolean
@@ -134,7 +158,15 @@ class TableJTG_Files extends Table implements TaggableTableInterface
 			$this->alias = $this->title;
 		}
 
-		$this->alias = JFilterOutput::stringURLSafe($this->alias);
+		$this->alias = OutputFilter::stringURLSafe($this->alias);
+		if (empty($this->alias)) $this->alias = OutputFilter::stringURLSafe(date('Y-m-d H:i:s'));
+		$cnt = 1;
+		$alias_test = $this->alias;
+		while ($this->aliasExists($this->alias, $this->id))
+		{
+			$this->alias = substr($alias_test,0,250).'-'.$cnt;
+			$cnt++;
+		}
 
 		return true;
 	}

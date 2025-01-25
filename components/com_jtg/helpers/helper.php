@@ -1065,6 +1065,39 @@ static public function autoRotateImage($image) {
 	}
 
 	/**
+	 * Get track alias from Id number
+	 *
+	 * @return string alias
+	*/
+	static function getAliasFromId($id)
+	{
+		$db = JtgHelper::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('alias');
+		$query->from($db->quoteName('#__jtg_files'));
+		$query->where($db->quoteName('id') . ' = '. $db->quote($id));
+		$alias = $db->setQuery($query);
+		if (empty($alias)) return $id;
+		return $alias;
+	}
+
+	/**
+	 * Get track Id number from alias
+	 *
+	 * @return int id
+	*/
+	static function getIdFromAlias($alias)
+	{
+		$db = JtgHelper::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('id');
+		$query->from($db->quoteName('#__jtg_files'));
+		$query->where($db->quoteName('alias') . ' = '. $db->quote($alias));
+		$db->setQuery($query);
+		return $db->loadResult();
+	}
+
+	/**
 	 * function_description
 	 *
 	 * @param   integer  $level       track difficulty level

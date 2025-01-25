@@ -258,8 +258,13 @@ else
 				</tr>
 				<tr>
 					<td class='width:30%'><?php echo JText::_('COM_JTG_TITLE'); ?>*</td>
-					<td class='width:70%'><input id="title" class="form-control" type="text" name="title"
+					<td class='width:70%'><input id="title" class="form-control" style="width:100%;" type="text" name="title"
 						value="<?php echo $tracktitle; ?>" /></td>
+				</tr>
+				<tr>
+					<td class='width:30%'><?php echo JText::_('JALIAS'); ?></td>
+					<td class='width:70%'><input id="alias" class="form-control" style="width:100%;" type="text" name="alias" description="<?php echo JText::_('JFIELD_ALIAS_DESC'); ?>" placeholder="<?php echo JText::_('JFIELD_ALIAS_PLACEHOLDER'); ?>"
+						value="<?php echo $this->track->alias; ?>" /></td>
 				</tr>
 				<tr>
 					<td><?php echo JText::_('COM_JTG_LEVEL'); ?>*

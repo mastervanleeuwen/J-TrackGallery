@@ -19,6 +19,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\OutputFilter;
 
 // Toolbar
 JToolBarHelper::title(JText::_('COM_JTG_ADD_FILES'), 'categories.png');
@@ -224,6 +225,7 @@ $document->addStyleDeclaration($style);
 			}
 
 			$title = $gpsData->trackname;
+			$alias = OutputFilter::stringURLSafe(trim($title));
 			$date = $gpsData->Date;
 			$description = $gpsData->description;
 
@@ -329,7 +331,14 @@ $document->addStyleDeclaration($style);
 					$table .= ("<input type=\"hidden\" name=\"file_" . $count . "\" value=\"" . $file . "\" />\n");
 					$table .= "\n				<label for=\"title_" . $count . "\">".JText::_('COM_JTG_TITLE')."</label>";
 					$table .= "\n				<input id=\"title_" . $count . "\" type=\"text\" class=\"inputbox form-control\" name=\"title_" . $count . "\" value=\"" . $title . "\" size=\"40\" />\n";
+					$table .= "\n				<label for=\"alias_" . $count . "\">".JText::_('JALIAS')."</label>";
+					$table .= "\n				<input id=\"alias_" . $count . "\" type=\"text\" class=\"inputbox form-control\" name=\"alias_" . $count . "\" value=\"" . $alias . "\" size=\"40\" />\n";
 
+					$tagField = $trackForm->getField('tags');
+					$tagField->__set('name','tags_'.$count);
+					$tagField->__set('id','tags_'.$count);
+					$table .= $tagField->renderField(); 
+					$table .= "\n";
 					if ($date === false)
 					{
 						$date = date('Y-m-d', time());
@@ -337,11 +346,6 @@ $document->addStyleDeclaration($style);
 					$table .= "				<label for=\"date_" . $count . "\">" .JText::_('COM_JTG_DATE') . "</label>";
 					$table .= ("          <input id=\"date_" . $count . "\" type=\"text\" class=\"inputbox form-control\" name=\"date_" . $count . "\" size=\"10\" value=\"" . $date . "\" />");
 
-					$tagField = $trackForm->getField('tags');
-					$tagField->__set('name','tags_'.$count);
-					$tagField->__set('id','tags_'.$count);
-					$table .= $tagField->renderField(); 
-					$table .= "\n";
 				}
 
 				// Row: Difficulty level
