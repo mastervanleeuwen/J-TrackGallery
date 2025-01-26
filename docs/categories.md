@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Categories
+title: Categories and tags
 nav_order: 4
 ---
 
@@ -21,10 +21,11 @@ J!TrackGallery offers the possibility to organise tracks in _Categeries_, which 
 
 If you only need one category, you can switch off the use of categories in the configuration menu. Internally, the tracks are still categorised, but this not explicitly shown in the frontend to reduce complexity for the user. Track icons on the overview map are stil determined by the categories. All new tracks will be assigned to the default category.
 
+Joomla _tags_ are a way to add keywords and organise items that way. J!Trackgallery now supports tags for GPS tracks.
 
-## Category view
+## Category and tag overviews
 
-A view showing a map and/or list of tracks in a specific category
+A view showing a map and/or list of tracks in a specific category or tracks with a specific tag
 - Overview map
 - Track search/filter box
 - Track list

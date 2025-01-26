@@ -32,4 +32,4 @@ There is also a configuration option to specify whether the welcome text should 
 
 ## Icon location
 
-Each track is shown on the map using the icon that is assigned to the [categorie](categories) that the track is part of. By default, the icon is placed at the start of the track, but there is a configuration option to use the end or the middle of the track. This can be useful if you have multiple tracks that start in the same location.
+Each track is shown on the map using the icon that is assigned to the [category](categories) that the track is part of. By default, the icon is placed at the start of the track, but there is a configuration option to use the end or the middle of the track. This can be useful if you have multiple tracks that start in the same location.

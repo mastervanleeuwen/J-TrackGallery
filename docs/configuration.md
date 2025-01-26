@@ -21,7 +21,7 @@ nav_order: 5
 
 This is not an exhaustive list of settings, but explains some of the main configuration options:
 - Show main menu: by default, each _view_ shows a menu with links to the overview map, track list etc; this can be switched off
-- Use categories/levels: J!TrackGallery offers the possibility to organise tracks in different 'Categories'. This is useful for websites that contain a lot of different tracks. For smaller sites, this may be superfluous and it can be switched off. Similarly, there is the possibility to indicate a difficulty level for each track, which can be suppressed as well.
+- Use categories/levels: J!TrackGallery offers the possibility to organise tracks in different [Categories](categories). This is useful for websites that contain a lot of different tracks. For smaller sites, this may be superfluous and it can be switched off. Similarly, there is the possibility to indicate a difficulty level for each track, which can be suppressed as well.
 - Several customisation options for the different views are organised in tabs in the configuration section
 
 ## Permissions
