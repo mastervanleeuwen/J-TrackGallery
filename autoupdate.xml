@@ -8,7 +8,8 @@
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/mastervanleeuwen/J-TrackGallery/releases/download/0.9.36/com_jtg.zip</downloadurl>
 		</downloads>
-		<targetplatform name="joomla" version="3.[23456789]|10" />
+		<targetplatform name="joomla" version="3.10" />
+		<targetplatform name="joomla" version="4|5.*" />
 		<php_minimum>7.1</php_minimum>
 	</update>
 	<update>
@@ -20,7 +21,8 @@
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/mastervanleeuwen/J-TrackGallery/releases/download/0.9.36/plg_jtrackgallery_maps.zip</downloadurl>
 		</downloads>
-		<targetplatform name="joomla" version="3.[23456789]|10" />
+		<targetplatform name="joomla" version="3.10" />
+		<targetplatform name="joomla" version="4|5.*" />
 		<php_minimum>7.1</php_minimum>
 	</update>
 	<update>
@@ -33,7 +35,8 @@
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/mastervanleeuwen/J-TrackGallery/releases/download/0.9.36/mod_jtrackgallery_latest.zip</downloadurl>
 		</downloads>
-		<targetplatform name="joomla" version="3.[23456789]|10" />
+		<targetplatform name="joomla" version="3.10" />
+		<targetplatform name="joomla" version="4|5.*" />
 		<php_minimum>7.1</php_minimum>
 	</update>
 	<update>
@@ -46,7 +49,22 @@
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/mastervanleeuwen/J-TrackGallery/releases/download/0.9.36/mod_jtrackgallery_stats.zip</downloadurl>
 		</downloads>
-		<targetplatform name="joomla" version="3.[23456789]|10" />
+		<targetplatform name="joomla" version="3.10" />
+		<targetplatform name="joomla" version="4|5.*" />
+		<php_minimum>7.1</php_minimum>
+	</update>
+	<update>
+		<name>J!Trackgallery close tracks</name>
+		<description><MOD_JTG_CLOSEST_DESCRIPTION/description>
+		<element>mod_jtrackgallery_closest</element>
+		<type>module</type>
+		<client>site</client>
+		<version>0.9.27</version>
+		<downloads>
+			<downloadurl type="full" format="zip">https://github.com/mastervanleeuwen/J-TrackGallery/releases/download/0.9.36/mod_jtrackgallery_closest.zip</downloadurl>
+		</downloads>
+		<targetplatform name="joomla" version="3.10" />
+		<targetplatform name="joomla" version="4|5.*" />
 		<php_minimum>7.1</php_minimum>
 	</update>
 </updates>
