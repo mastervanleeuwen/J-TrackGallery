@@ -51,7 +51,7 @@
 	</update>
 	<update>
 		<name>J!Trackgallery close tracks</name>
-		<description><MOD_JTG_CLOSEST_DESCRIPTION/description>
+		<description><MOD_JTG_CLOSEST_DESCRIPTION</description>
 		<element>mod_jtrackgallery_closest</element>
 		<type>module</type>
 		<client>site</client>
