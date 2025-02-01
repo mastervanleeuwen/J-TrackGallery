@@ -2,8 +2,15 @@ ALTER TABLE `#__jtg_files`
 ADD `alias` varchar(255) DEFAULT '' NOT NULL,
 MODIFY `title` varchar(255) NOT NULL;
 UPDATE `#__content_types` 
-SET table=
-'{"special":{"dbtable":"#__jtg_files","key":"id","type":"Jtg_files","prefix":"Table","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Corecontent","prefix":"Table","config":"array()"}}',
+SET `table`=
+'{"special":{"dbtable":"#__jtg_files","key":"id",
+    "type":"Jtg_files",
+    "prefix":"Table",
+    "config":"array()"},
+  "common":{"dbtable":"#__ucm_content","key":"ucm_id",
+    "type":"Corecontent",
+    "prefix":"Table","config":"array()"
+  }}',
 field_mappings=
 '{"common": {
     "core_content_item_id": "id",
