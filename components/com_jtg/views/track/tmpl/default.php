@@ -24,6 +24,12 @@ $document = JFactory::getDocument();
 $document->setTitle($this->track->title . " - " . $sitename);
 $pathway = $app->getPathway();
 $pathway->addItem($this->track->title, '');
+if ($this->track->description) {
+    $description = substr(strip_tags($this->track->description), 0, 160);
+} else {
+    $description = "View details for the track: " . $this->track->title . " on " . $sitename;
+}
+$document->setDescription($description);
 
 echo $this->menubar;
 
@@ -236,7 +242,8 @@ img.olTileImage {
 
 if ($this->track->description)
 {
-	echo $this->parseTemplate("headline", JText::_('COM_JTG_DESCRIPTION'), "jtg_param_header_description");
+	echo $this->parseTemplate("subheadline", JText::_('COM_JTG_DESCRIPTION'), "jtg_param_header_description");
+	//TODO: add <div="description"> + close tag?
 	echo $this->parseTemplate("description", JHTML::_('content.prepare', $this->track->description));
 }
 else
@@ -248,7 +255,7 @@ $user = JFactory::getUser();
 if ($this->canDo->get('jtg.download'))
 {
 	$download_buttons ='';
-	echo "<div class=\"gps-info\"> <div class=\"block-header\">".
+	echo "<div class=\"gps-info\"> <div class=\"gps-subheadline\">".
           JText::_('COM_JTG_DOWNLOAD')."</div>";
 	if ( (bool) $this->params->get("jtg_param_offer_download_original") )
 	{
@@ -302,7 +309,7 @@ if ( ($durationbox) AND ($this->track->distance != "") AND ((float) $this->track
 ?>
 						<div class="gps-info">
 						<!-- <div id="count-box"> -->
-							<div class="block-header">
+							<div class="gps-subheadline">
 							 <?php echo JText::_('COM_JTG_TIMECOUNT'); ?>
 							</div>
 						<?php if ($this->gpsTrack->speedDataExists)
@@ -343,7 +350,7 @@ echo $this->tagLayout->render($this->tags);
 
 if (($this->imageList) AND ( $this->cfg->gallery != "none" ))
 {
-	echo $this->parseTemplate('headline', JText::_('COM_JTG_GALLERY'), 'jtg_param_header_gallery');
+	echo $this->parseTemplate('subheadline', JText::_('COM_JTG_GALLERY'), 'jtg_param_header_gallery');
 	echo "<div class=\"description\">";
 	
 	$imgurlpath=Uri::root() . "images/jtrackgallery/uploaded_tracks_images/track_" . $this->track->id . "/";
@@ -429,7 +436,7 @@ else
 
 if ( $this->cfg->approach != 'no' )
 {
-	echo $this->parseTemplate("headline", JText::_('COM_JTG_APPROACH_SERVICE'), "jtg_param_header_approach");
+	echo $this->parseTemplate("subheadline", JText::_('COM_JTG_APPROACH_SERVICE'), "jtg_param_header_approach");
 	$description = "	<table id=\"approach\">
 	<tr valign=\"top\">";
 
@@ -491,7 +498,7 @@ else
 // Adding the comments
 if ($this->cfg->comments == 1)
 {
-	echo $this->parseTemplate("headline", JText::_('COM_JTG_COMMENTS'), "jtg_param_header_comment");
+	echo $this->parseTemplate("subheadline", JText::_('COM_JTG_COMMENTS'), "jtg_param_header_comment");
 	$comments = $this->model->getComments($this->id, $this->cfg->ordering);
 
 	if (!$comments)

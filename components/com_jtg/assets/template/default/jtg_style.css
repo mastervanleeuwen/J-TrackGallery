@@ -27,7 +27,6 @@ tr.sectiontablefooter td {
 
 a.anchor:link,a.anchor:visited,a.anchor:hover,a.anchor:active {
 	display: block;
-	font-size: 1.2em;
 	font-weight: bold;
 	padding: 5px 0 5px 0;
 	width: 100%;
@@ -514,7 +513,7 @@ h3 {
 	opacity: .4;
 	-moz-opacity: .4;
 	-khtml-opacity: 0.4;
-	filter: alpha(opacity =                                     40);
+	filter: alpha(opacity = 40);
 }
 
 .jdGallery .gallerySelector {
@@ -658,10 +657,10 @@ v\:rect,v\:roundrect,v\:line,v\:polyline,v\:curve,v\:arc,v\:oval,v\:image,v\:sha
 	font-weight: bold;
 }
 
-.block-header {
+.gps-subheadline {
 	font-size: 1.2em;
 	font-weight: bold;
-	padding: 7px 0;
+	padding: 5px 0 5px 0;
 	border-bottom: 1px solid #000;
 }
 
@@ -863,7 +862,7 @@ span label {
 
 .gps-headline {
 	display: block;
-	font-size: 1.2em;
+	font-size: 1.8em;
 	font-weight: bold; /*
 	text-transform: uppercase; */
 	padding: 5px 0 5px 0;

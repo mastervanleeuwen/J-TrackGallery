@@ -28,5 +28,5 @@ define('_PARSETEMPLATE_HEADLINE_CLOSE', true);
  */
 function ParseTemplate_Headline_close($linkname)
 {
-	return "</a></div>";
+	return "</a></h1>";
 }

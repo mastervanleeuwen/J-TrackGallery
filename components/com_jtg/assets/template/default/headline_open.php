@@ -63,5 +63,5 @@ function ParseTemplate_Headline_open($linkname, $printbutton = false)
 	}
 
 	// Headline_close will add "</a></div>"
-	return "<div class=\"gps-headline\">$printlink \n $navlink";
+	return "<h1 class=\"gps-headline\">$printlink \n" . $navlink;
 }

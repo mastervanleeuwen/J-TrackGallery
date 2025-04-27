@@ -47,7 +47,7 @@ if (empty($this->items)) {
 } else 
 {
 
-echo $this->parseTemplate("headline", JText::_("COM_JTG_USER_TOTALS"), "summary", null);
+echo $this->parseTemplate("subheadline", JText::_("COM_JTG_USER_TOTALS"), "summary", null);
 $user_summary = $this->getModel()->getTotals($uid);
 // TODO: add units for distance
  ?>
@@ -75,7 +75,7 @@ $user_summary = $this->getModel()->getTotals($uid);
 
 	</table>
 </div>
-<?php echo $this->parseTemplate('headline', JText::_('COM_JTG_MY_FILES'), 'tracklist', null); ?>
+<?php echo $this->parseTemplate('subheadline', JText::_('COM_JTG_MY_FILES'), 'tracklist', null); ?>
 <form action="<?php echo $this->action; ?>" method="post"
 	name="adminForm" id="adminForm">
 	<table style="width:100%;">
@@ -195,7 +195,7 @@ $user_summary = $this->getModel()->getTotals($uid);
 // Adding the comments
 if ($this->cfg->comments == 1)
 {
-   echo $this->parseTemplate("headline", JText::_('COM_JTG_COMMENTS'), "commentstome");
+   echo $this->parseTemplate("subheadline", JText::_('COM_JTG_COMMENTS'), "commentstome");
    $comments = $this->getModel()->getCommentsToTracks();
 	// TODO: need to add links to the tracks in the displayed list
 	//LayoutHelper::parseComments($comments);
@@ -243,7 +243,7 @@ if ($this->cfg->comments == 1)
 <?php
 	}
 	}
-   echo $this->parseTemplate("headline", JText::_('COM_JTG_MYCOMMENTS'), "mycomments");
+   echo $this->parseTemplate("subheadline", JText::_('COM_JTG_MYCOMMENTS'), "mycomments");
    $mycomments = $this->getModel()->getComments();
 	if (!$mycomments)
    {

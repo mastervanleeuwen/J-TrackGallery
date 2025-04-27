@@ -1285,7 +1285,7 @@ static public function autoRotateImage($image) {
 		$widthstr = '';
 		if (!is_null($width)) $widthstr = 'style="width: '.$width.'"';
 		$htmlout = '  <div class="gps-info-cont"'.$widthstr.'>
-    <div class="block-header">'.JText::_('COM_JTG_DETAILS')."</div>\n";
+    <div class="gps-subheadline">'.JText::_('COM_JTG_DETAILS')."</div>\n";
       $htmlout .= '   <div class="gps-info"><table class="gps-info-tab">';
 		if (is_null($fieldlist)) $fieldlist = $params->get('jtg_param_info_fields');
 		if (is_null($fieldlist)) $fieldlist = array("dist","ele","time","speed");
