@@ -344,7 +344,17 @@ if ( ($durationbox) AND ($this->track->distance != "") AND ((float) $this->track
 						</div>
 <?php
 }
-
+if ($this->params->get('jtg_param_navigate_start_button'))
+{
+?>
+<div class="gps-info" style="padding: 20px 20px">
+<a href="https://www.google.com/maps?saddr=My+Location&daddr=
+<?php echo $this->track->start_n.','.$this->track->start_e;?>"
+class="btn btn-secondary" target="blank_">
+   <?php echo JText::_('COM_JTG_NAV_START'); ?> </a>
+</div>
+<?php
+}
 $this->tagLayout = new JLayoutFile('joomla.content.tags');
 echo $this->tagLayout->render($this->tags);
 
