@@ -325,6 +325,15 @@ img.olTileImage {
 			if (!is_array($fieldlist)) $fieldlist=explode(',',$fieldlist);
 			$map .= JtgHelper::parseTrackInfo($track, $gpsData, $params, $cfg, $fieldlist, $map_width);
 		}
+		
+		if ($params->get('jtg_param_navigate_start_button'))
+		{
+			$map .= '<a href="https://www.google.com/maps?daddr='.
+						$this->track->start_n.','.$this->track->start_e."\"\n".
+						' class="btn btn-secondary btn-sm" style="float:left;padding:5px 10px"'.
+						' target="blank_">'.
+   					JText::_('COM_JTG_NAV_START')."</a>\n";
+		}
 		}
 
 		return $map;
