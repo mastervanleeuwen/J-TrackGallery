@@ -456,7 +456,7 @@ class JtgPagination extends JObject
 		$selected = $this->_viewall ? 0 : $this->limit;
 
 		// Build the select list.
-		if ($app->isAdmin())
+		if ($app->isClient('admin'))
 		{
 			$html = JHtml::_(
 				'select.genericlist',
