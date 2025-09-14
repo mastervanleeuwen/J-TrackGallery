@@ -16,13 +16,18 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+
 $tcustom_enable = $params->get('tcustom_enable');
 
 // Load english language file for 'com_jtg' component then override with current language file
-JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE,	null, true);
+Factory::getLanguage()->load('com_jtg_common', JPATH_SITE,	null, true);
 
 // Com_jtg_additional language files are in /images/jtrackgallery/language folder
-JFactory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',	null, true);
+Factory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',	null, true);
 
 $max_dist = $params->get('max_dist');
 $earthRadius = 6378.137;
@@ -44,7 +49,7 @@ foreach ($tracks as $track)
 	if ($tcustom_enable)
 	{
 		$tcustom = $params->get('tcustom');
-		$tcustom = str_replace('$cats', ($track->cat? JText::_($track->cat): '?'), $tcustom);
+		$tcustom = str_replace('$cats', ($track->cat? Text::_($track->cat): '?'), $tcustom);
 		$tcustom = str_replace('$distance_km', $distance_km, $tcustom);
 		$tcustom = str_replace('$distance_mi', $distance_mi, $tcustom);
 	}
@@ -69,7 +74,7 @@ foreach ($tracks as $track)
 		{
 			if ( ($params->get('cats') != 0 ) and ($track->cat) )
 			{
-				echo '<div align="center">' . sprintf($params->get('tcats'), JText::_($track->cat)) . '</div>';
+				echo '<div align="center">' . sprintf($params->get('tcats'), Text::_($track->cat)) . '</div>';
 			}
 
 			if ($params->get('distance') != 0)
@@ -83,7 +88,7 @@ foreach ($tracks as $track)
 	elseif ($params->get('style') == 1)
 	{
 		echo '<table><tr>';
-		$link = JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $track->id);
+		$link = Route::_('index.php?option=com_jtg&view=files&layout=file&id=' . $track->id);
 		echo '<td align="center" style="padding: 10px" valign="top">';
 		if ( $map != 'none' ) {
 		echo '<img src="https://maps.googleapis.com/maps/api/staticmap?center=' . $track->start_n . ',' .
@@ -101,7 +106,7 @@ foreach ($tracks as $track)
 		{
 			if ( ($params->get('cats') != 0 ) and ($track->cat) )
 			{
-				echo '<div align="center">' . sprintf($params->get('tcats'), JText::_($track->cat)) . '</div>';
+				echo '<div align="center">' . sprintf($params->get('tcats'), Text::_($track->cat)) . '</div>';
 			}
 
 			if ($params->get('distance') != 0)

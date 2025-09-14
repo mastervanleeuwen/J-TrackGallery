@@ -17,8 +17,10 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+
 /**
- * ModjtrackgalleryLatestHelper class for Module JTrackGalleryStats
+ * ModjtrackgalleryStatsHelper class for Module JTrackGalleryStats
  *
  * @package     Comjtg
  * @subpackage  Module JTrackGalleryStats
@@ -33,8 +35,7 @@ class ModjtrackgalleryStatsHelper
 	 */
 	public function countCats()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = Factory::getDbo();
 		$query = "SELECT COUNT(*) FROM #__jtg_cats WHERE published='1'";
 		$db->setQuery($query);
 		$result = $db->loadResult();
@@ -49,8 +50,7 @@ class ModjtrackgalleryStatsHelper
 	 */
 	public function countTracks()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = Factory::getDbo();
 		$query = "SELECT COUNT(*) FROM #__jtg_files WHERE published='1'";
 		$db->setQuery($query);
 		$result = $db->loadResult();
@@ -65,9 +65,7 @@ class ModjtrackgalleryStatsHelper
 	 */
 	public function countDistance()
 	{
-		$mainframe = JFactory::getApplication();
-
-		$db = JFactory::getDBO();
+		$db = Factory::getDbo();
 
 		$query = "SELECT SUM(distance) FROM #__jtg_files WHERE published='1'";
 		$db->setQuery($query);
@@ -85,8 +83,7 @@ class ModjtrackgalleryStatsHelper
 	 */
 	public function countAscent()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = Factory::getDbo();
 		$query = "SELECT SUM(ele_asc) FROM #__jtg_files WHERE published='1'";
 		$db->setQuery($query);
 
@@ -103,8 +100,7 @@ class ModjtrackgalleryStatsHelper
 	 */
 	public function countDescent()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = Factory::getDbo();
 		$query = "SELECT SUM(ele_desc) FROM #__jtg_files WHERE published='1'";
 		$db->setQuery($query);
 
@@ -121,8 +117,7 @@ class ModjtrackgalleryStatsHelper
 	 */
 	public function countViews()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = Factory::getDbo();
 		$query = "SELECT SUM(hits) FROM #__jtg_files WHERE published='1'";
 		$db->setQuery($query);
 		$result = $db->loadResult();
@@ -137,8 +132,7 @@ class ModjtrackgalleryStatsHelper
 	 */
 	public function countVotes()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$db = Factory::getDbo();
 		$query = "SELECT COUNT(*) FROM #__jtg_votes";
 		$db->setQuery($query);
 		$result = $db->loadResult();

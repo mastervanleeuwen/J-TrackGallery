@@ -17,6 +17,8 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Helper\ModuleHelper;
+
 require_once dirname(__FILE__) . '/helper.php';
 $stats = new ModjtrackgalleryStatsHelper;
 
@@ -74,4 +76,4 @@ if ($decimalseparator != '.')
 	$descent = str_replace('.', $decimalseparator, $descent);
 }
 
-require JModuleHelper::getLayoutPath('mod_jtrackgallery_stats', $params->get('layout', 'default'));
+ModuleHelper::getLayoutPath('mod_jtrackgallery_stats', $params->get('layout', 'default'));

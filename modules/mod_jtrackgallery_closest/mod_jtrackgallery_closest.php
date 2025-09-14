@@ -17,6 +17,8 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Helper\ModuleHelper;
+
 require_once dirname(__FILE__) . '/helper.php';
 $helper = new ModjtrackgalleryClosestHelper;
 
@@ -43,4 +45,4 @@ else
 }
 
 
-require JModuleHelper::getLayoutPath('mod_jtrackgallery_closest', $params->get('layout', 'default'));
+ModuleHelper::getLayoutPath('mod_jtrackgallery_closest', $params->get('layout', 'default'));

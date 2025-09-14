@@ -14,10 +14,14 @@
 defined ( '_JEXEC' ) or die ( 'Restricted access' );
 
 jimport ( 'joomla.plugin.plugin' );
-if (version_compare ( JVERSION, '1.6.0', 'ge' )) {
-	jimport ( 'joomla.html.parameter' );
-}
+jimport ( 'joomla.html.parameter' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 use Joomla\String\StringHelper;
+	
 class plgContentJtrackgallery_maps extends JPlugin {
 
 	protected $map_count = 0;
@@ -29,8 +33,8 @@ class plgContentJtrackgallery_maps extends JPlugin {
 	private function renderJtrackGalleryMapsPlugin(&$row, &$params, $page = 0) {
 		// API
 		jimport ( 'joomla.filesystem.file' );
-		$mainframe = JFactory::getApplication ();
-		$document = JFactory::getDocument ();
+		$app = Factory::getApplication ();
+		$document = Factory::getDocument ();
 
 		// Assign paths
 		$plg_name = "jtrackgallery_maps";
@@ -48,7 +52,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 
 		// Check
 		if (!JComponentHelper::isEnabled('com_jtg', false)) {
-			return JFactory::getApplication()->enqueueMessage(JText::_('PLG_JTG_MAPS_COM_JTG_NOT_INSTALLED'),'warning');
+			return Factory::getApplication()->enqueueMessage(Text::_('PLG_JTG_MAPS_COM_JTG_NOT_INSTALLED'),'warning');
 		}
 
 		// Bail out if the page format is not what we want
@@ -56,7 +60,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 				'',
 				'html'
 		);
-		if (! in_array ( JFactory::getApplication()->input->getCmd ( 'format' ), $allowedFormats ))
+		if (! in_array ( Factory::getApplication()->input->getCmd ( 'format' ), $allowedFormats ))
 			return;
 
 			// Simple performance check to determine whether plugin should process further
@@ -77,12 +81,12 @@ class plgContentJtrackgallery_maps extends JPlugin {
 			return;
 
 			// Load the plugin language file
-		JFactory::getLanguage()->load('plg_content_jtrackgallery_maps', JPATH_SITE . '/plugins/content/jtrackgallery_maps',	null, true);
-		JFactory::getLanguage()->load('com_jtg', JPATH_SITE, null, true);
-		JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE, null, true);
+		Factory::getLanguage()->load('plg_content_jtrackgallery_maps', JPATH_SITE . '/plugins/content/jtrackgallery_maps',	null, true);
+		Factory::getLanguage()->load('com_jtg', JPATH_SITE, null, true);
+		Factory::getLanguage()->load('com_jtg_common', JPATH_SITE, null, true);
 
 		// Check for basic requirements
-		$db = JFactory::getDBO ();
+		$db = Factory::getDbo ();
 
 		// ----------------------------------- Get plugin parameters -----------------------------------
 
@@ -117,7 +121,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 				$warningtext = ' id=' . ($plg_call_params ['id'] ? $plg_call_params ['id'] : 'null') . ' gpxfilename=' . ($plg_call_params ['gpxfilename'] ? $plg_call_params ['gpxfilename'] : '') ;
 
 				if ((! $plg_call_params ['id'] > 0) and (! $plg_call_params ['gpxfilename'])) {
-					 JFactory::getApplication()->enqueueMessage(JText::_ ( 'PLG_JTG_MAPS_TRACK_NOT_SPECIFIED' ) . "()" );
+					 Factory::getApplication()->enqueueMessage(Text::_ ( 'PLG_JTG_MAPS_TRACK_NOT_SPECIFIED' ) . "()" );
 				}
 				// Test if given id or filename correspond to one track in database
 				if ($plg_call_params ['gpxfilename']) {
@@ -136,7 +140,7 @@ class plgContentJtrackgallery_maps extends JPlugin {
 					}
 					else
 					{
-						JFactory::getApplication()->enqueueMessage( JText::_ ( 'PLG_JTG_MAPS_TRACK_NOT_FOUND' ) . " ($warningtext)" );
+						Factory::getApplication()->enqueueMessage( Text::_ ( 'PLG_JTG_MAPS_TRACK_NOT_FOUND' ) . " ($warningtext)" );
 						$plg_call_params ['id'] = 0;
 					}
 				}
@@ -166,17 +170,17 @@ class plgContentJtrackgallery_maps extends JPlugin {
 							if ($plgParams['link_newtab']) $linktarget = ' target="_blank"';
 						}
 						if ($showlink) {
-						   $plg_html .= '<div class="jtg-gpx-link"><a href="'.JRoute::_('index.php?option=com_jtg&view=track&id='.$plg_call_params['id']).'"'.$linktarget.'>'.JText::_($plgParams['link_text']).'</a></div>';
+						   $plg_html .= '<div class="jtg-gpx-link"><a href="'.Route::_('index.php?option=com_jtg&view=track&id='.$plg_call_params['id']).'"'.$linktarget.'>'.Text::_($plgParams['link_text']).'</a></div>';
 						}
 					}
 					else
 					{
-						JFactory::getApplication()->enqueueMessage(JText::_ ( 'PLG_JTG_MAPS_CANT_RENDER_TRACKS' ));
-						$plg_html .= JText::_ ( 'PLG_JTG_MAPS_CANT_RENDER_TRACKS' );
+						Factory::getApplication()->enqueueMessage(Text::_ ( 'PLG_JTG_MAPS_CANT_RENDER_TRACKS' ));
+						$plg_html .= Text::_ ( 'PLG_JTG_MAPS_CANT_RENDER_TRACKS' );
 					}
                     
 				} else {
-					$plg_html .= JText::_ ( 'PLG_JTG_MAPS_TRACK_NOT_FOUND' ) . " ($warningtext)" ;
+					$plg_html .= Text::_ ( 'PLG_JTG_MAPS_TRACK_NOT_FOUND' ) . " ($warningtext)" ;
 				}
 				$plg_html .= $plg_copyrights_end;
 				// Do the replace
@@ -192,24 +196,24 @@ class plgContentJtrackgallery_maps extends JPlugin {
 
 	private function rendermap($plgParams, $plg_call_params)
 	{
-		$document = JFactory::getDocument();
-		$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
-		$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css.map');
+		$document = Factory::getDocument();
+		$document->addStyleSheet(Uri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
+		$document->addStyleSheet(Uri::root(true) . '/media/com_jtg/js/openlayers/ol.css.map');
 
 		// Add jtg_map stylesheet
 		require_once JPATH_SITE . '/components/com_jtg/helpers/helper.php';
 		require_once JPATH_SITE . '/components/com_jtg/helpers/maphelper.php';
 		$cfg = JtgHelper::getConfig();
 		$tmpl = strlen($cfg->template) ? $cfg->template : 'default';
-		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_style.css');
-		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
+		$document->addStyleSheet(Uri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_style.css');
+		$document->addStyleSheet(Uri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 		$map = "";
 
 		// Load english language file for 'com_jtg' component then override with current language file
-		JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg',	null, true);
+		Factory::getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg',	null, true);
 
 		// Com_jtg_additional language files are in /images/jtrackgallery/language folder
-		JFactory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',	null, true);
+		Factory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',	null, true);
 
 		$params = JComponentHelper::getParams('com_jtg');
 
@@ -217,13 +221,13 @@ class plgContentJtrackgallery_maps extends JPlugin {
 		$model = JModelLegacy::getInstance( 'Track', 'JtgModel' );
 		$track = $model->getFile($plg_call_params['id']);
 		$trackImages = $model->getImages($plg_call_params['id']);
-		$document = JFactory::getDocument();
+		$document = Factory::getDocument();
 		require_once JPATH_SITE . '/components/com_jtg/helpers/gpsClass.php';
 		require_once JPATH_SITE . '/components/com_jtg/models/jtg.php';
-		$document->addScript( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
-		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
-		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
-		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
+		$document->addScript( Uri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
+		$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/jtg.js');
+		$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
+		$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
 		$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $track->file;
 		$gpsData = new GpsDataClass($file, $track->file);
 
@@ -332,7 +336,7 @@ img.olTileImage {
 						$this->track->start_n.','.$this->track->start_e."\"\n".
 						' class="btn btn-secondary btn-sm" style="float:left;padding:5px 10px"'.
 						' target="blank_">'.
-   					JText::_('COM_JTG_NAV_START')."</a>\n";
+   					Text::_('COM_JTG_NAV_START')."</a>\n";
 		}
 		}
 

@@ -17,6 +17,8 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+
 /**
  * ModjtrackgalleryClosestHelper class for Module JTrackGalleryClosest
  *
@@ -36,9 +38,7 @@ class ModjtrackgalleryClosestHelper
 	 */
 	public function getTracks($lon,$lat,$max_dist,$count)
 	{
-		$mainframe = JFactory::getApplication();
-
-		$db = JFactory::getDBO();
+		$db = Factory::getDBO();
 
 		$lonrad = deg2rad($lon);
 		$latrad = deg2rad($lat);

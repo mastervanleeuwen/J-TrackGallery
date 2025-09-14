@@ -16,6 +16,9 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+
 ?>
 <div style="padding-left:10px">
 <?php
@@ -38,7 +41,7 @@ else
 	if ($theado == "1")
 	{
 		echo "<div>";
-		echo JText::_($thead);
+		echo Text::_($thead);
 		echo "</div>";
 	}
 

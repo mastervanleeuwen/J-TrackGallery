@@ -17,6 +17,8 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+
 /**
  * ModjtrackgalleryLatestHelper class for Module JTrackGalleryLatest
  *
@@ -36,9 +38,7 @@ class ModjtrackgalleryLatestHelper
 	 */
 	public function getTracks($count)
 	{
-		$mainframe = JFactory::getApplication();
-
-		$db = JFactory::getDBO();
+		$db = Factory::getDbo();
 
 		$query = "SELECT a.*, b.title as cat FROM #__jtg_files AS a"
 				. "\n LEFT JOIN #__jtg_cats AS b ON b.id=a.catid"
