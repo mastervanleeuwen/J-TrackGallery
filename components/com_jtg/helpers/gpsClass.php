@@ -18,6 +18,9 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
 /**
@@ -130,7 +133,7 @@ class GpsDataClass
 		{
 			$this->error = true;
 			$this->fileChecked = 6;
-			$this->errorMessages[] = JText::sprintf('COM_JTG_GPS_FILE_ERROR_0', $this->trackfilename);
+			$this->errorMessages[] = Text::sprintf('COM_JTG_GPS_FILE_ERROR_0', $this->trackfilename);
 
 			return $this;
 		}
@@ -151,7 +154,7 @@ class GpsDataClass
 			default:
 				$extract_result = null;
 				$this->error = true;
-				$this->errorMessages[] = JText::_('COM_JTG_GPS_FILE_ERROR');
+				$this->errorMessages[] = Text::_('COM_JTG_GPS_FILE_ERROR');
 
 				return $this;
 		}
@@ -160,7 +163,7 @@ class GpsDataClass
 		{
 			$this->fileChecked = 7;
 			$this->error = true;
-			$this->errorMessages[] = JText::sprintf('COM_JTG_GPS_FILE_ERROR_2', $this->trackfilename);
+			$this->errorMessages[] = Text::sprintf('COM_JTG_GPS_FILE_ERROR_2', $this->trackfilename);
 
 			return $this;
 		}
@@ -215,20 +218,20 @@ class GpsDataClass
 		jimport('joomla.filesystem.file');
 		$xml = false;
 
-		if ( ($gpsFile) and (JFile::exists($gpsFile)) )
+		if ( ($gpsFile) and (File::exists($gpsFile)) )
 		{
 			$this->gpsFile = $gpsFile;
-			$this->ext = JFile::getExt($gpsFile);
+			$this->ext = File::getExt($gpsFile);
 		}
-		elseif  (JFile::exists($this->gpsFile))
+		elseif  (File::exists($this->gpsFile))
 		{
 			// $this->gpsFile = $gpsFile;
-			$this->ext = JFile::getExt($this->gpsFile);
+			$this->ext = File::getExt($this->gpsFile);
 		}
 		else
 		{
 			$this->error = true;
-			$this->errorMessages[] = JText::sprintf('COM_JTG_GPS_FILE_ERROR_1', ($this->trackfilename?  $this->trackfilename: $gpsFile));
+			$this->errorMessages[] = Text::sprintf('COM_JTG_GPS_FILE_ERROR_1', ($this->trackfilename?  $this->trackfilename: $gpsFile));
 
 			return false;
 		}
@@ -288,7 +291,7 @@ class GpsDataClass
 	{
 		$errors = implode('<br>',$this->errorMessages);
 
-		JFactory::getApplication()->enqueueMessage($errors, 'Warning');
+		Factory::getApplication()->enqueueMessage($errors, 'Warning');
 
 		return $errors;
 	}
@@ -1382,17 +1385,17 @@ class GpsDataClass
 		$jpath = JPATH_SITE . "/components/com_jtg/assets/images/symbols/";
 		$jbase = JUri::root() . "components/com_jtg/assets/images/symbols/";
 
-		$filename = JFile::makeSafe($ownicon);
+		$filename = File::makeSafe($ownicon);
 		$pngfile = $jbase . $filename . ".png";
 		$xmlfile = $jpath . $filename . ".xml";
 
 		if ( $ownicon == false )
 		{
-			if ((!JFile::exists($xmlfile)) AND (is_writable($jpath)))
+			if ((!File::exists($xmlfile)) AND (is_writable($jpath)))
 			{
 				// Vorlage zur Erstellung unbekannter Icons
 				$xmlcontent = "<xml>\n	<sizex>16</sizex>\n	<sizey>16</sizey>\n	<offsetx>8</offsetx>\n	<offsety>8</offsety>\n</xml>\n<!--\nUm dieses Icon verfügbar zu machen, erstelle dieses Bild: \"" . $filename . ".png\",\nund vervollständige obige 4 Parameter.\n\"offsetx\" beschreibt die Anzahl der Pixel von links bis zum Punkt (negativ) und\n\"offsety\" beschreibt die Anzahl der Pixel von oben bis zum Punkt (ebenfalls negativ).\nMit \"Punkt\" ist der Punkt gemeint, der auf der Koordinate sitzt.\n-->\n";
-				JFile::write($xmlfile, $xmlcontent);
+				File::write($xmlfile, $xmlcontent);
 				JPath::setPermissions($xmlfile, "0666");
 			}
 			// Standardicon
@@ -1495,19 +1498,19 @@ class GpsDataClass
 			if ($wp->desc)
 			{
 				$desc = trim(str_replace($srch,$repl,(htmlspecialchars($wp->desc))));
-				$wpcode .= "<br><b>" . JText::_('COM_JTG_DESCRIPTION') . ":</b> " . $desc;
+				$wpcode .= "<br><b>" . Text::_('COM_JTG_DESCRIPTION') . ":</b> " . $desc;
 			}
 
 			if ( ($wp->cmt) AND ($wp->cmt != $wp->desc) )
 			{
 				$cmt = trim(str_replace($srch,$repl,(htmlspecialchars($wp->cmt))));
-				$wpcode .= "<br /><b>" . JText::_('COM_JTG_COMMENT') . ":</b> " . $cmt;
+				$wpcode .= "<br /><b>" . Text::_('COM_JTG_COMMENT') . ":</b> " . $cmt;
 			}
 
 			if ($wp->ele)
 			{
 				// TODO unit in elevation !!
-				$wpcode .= "<br /><b>" . JText::_('COM_JTG_ELEVATION') . " :</b> " . round((float)$wp->ele, 1) . " m<small>";
+				$wpcode .= "<br /><b>" . Text::_('COM_JTG_ELEVATION') . " :</b> " . round((float)$wp->ele, 1) . " m<small>";
 			}
 			
 			if (isset($wpJSicons[$sym])) {
@@ -1546,7 +1549,7 @@ class GpsDataClass
 			return false;
 		}
 
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$return = array();
 
 		foreach ( $rows AS $row )
@@ -1693,7 +1696,7 @@ class GpsDataClass
 	{
 		// TODO function keeped for TCX, move this in extractCoordsTCX
 		jimport('joomla.filesystem.file');
-		$ext = JFile::getExt($file);
+		$ext = File::getExt($file);
 
 		if ($ext == 'tcx')
 		{

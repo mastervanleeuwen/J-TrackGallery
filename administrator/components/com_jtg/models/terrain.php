@@ -20,6 +20,8 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Factory;
 use Joomla\Utilities\ArrayHelper;
 /**
  * Model Class Terrain
@@ -43,20 +45,20 @@ class JtgModelTerrain extends JModelLegacy
 	public function __construct()
 	{
 		parent::__construct();
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Get the pagination request variables
-		$limit		= $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
-		$limitstart	= $mainframe->getUserStateFromRequest($this->option . '.limitstart', 'limitstart', 0, 'int');
+		$limit		= $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'), 'int');
+		$limitstart	= $app->getUserStateFromRequest($this->option . '.limitstart', 'limitstart', 0, 'int');
 
 		// In case limit has been changed, adjust limitstart accordingly
-		$limitstart = JFactory::getApplication()->input->get('limitstart', 0);
+		$limitstart = Factory::getApplication()->input->get('limitstart', 0);
 
 		$this->setState('limit', $limit);
 		$this->setState('limitstart', $limitstart);
 
-		$array = JFactory::getApplication()->input->get('cid', array(0), 'array');
-		$edit	= JFactory::getApplication()->input->get('edit', true);
+		$array = Factory::getApplication()->input->get('cid', array(0), 'array');
+		$edit	= Factory::getApplication()->input->get('edit', true);
 
 		if ($edit)
 		{
@@ -127,7 +129,7 @@ class JtgModelTerrain extends JModelLegacy
 
 	protected function _buildQuery($terrain=null)
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$orderby	= $this->_buildContentOrderBy();
 		$db = $this->getDbo();
 		$query = "SELECT * FROM #__jtg_terrains"
@@ -150,10 +152,10 @@ class JtgModelTerrain extends JModelLegacy
 	protected function _buildContentOrderBy()
 	{
 		return;
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 
-		$filter_order = $mainframe->getUserStateFromRequest($this->option . 'filter_order', 'filter_order', 'title', 'cmd');
-		$filter_order_Dir = $mainframe->getUserStateFromRequest($this->option . 'filter_order_Dir', 'filter_order_Dir', '', 'word');
+		$filter_order = $app->getUserStateFromRequest($this->option . 'filter_order', 'filter_order', 'title', 'cmd');
+		$filter_order_Dir = $app->getUserStateFromRequest($this->option . 'filter_order_Dir', 'filter_order_Dir', '', 'word');
 
 		$orderby = ' ORDER BY ' . $filter_order . ' ' . $filter_order_Dir . ' , title ';
 
@@ -188,13 +190,13 @@ class JtgModelTerrain extends JModelLegacy
 	function save()
 	{
 		// Get post data
-		$row = JFactory::getApplication()->input->getArray();
+		$row = Factory::getApplication()->input->getArray();
 		$table = $this->getTable('jtg_terrain');
 		$table->bind($row);
 
 		if (!$table->store())
 		{
-			JFactory::getApplication()->enqueueMessage($table->getError(), 'Warning');
+			Factory::getApplication()->enqueueMessage($table->getError(), 'Warning');
 
 			return false;
 		}
@@ -212,7 +214,7 @@ class JtgModelTerrain extends JModelLegacy
 	 */
 	function publish($cid = array(), $publish = 1)
 	{
-		$user 	= JFactory::getUser();
+		$user 	= Factory::getUser();
 
 		if (count($cid))
 		{

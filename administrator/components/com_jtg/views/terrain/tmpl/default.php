@@ -17,16 +17,20 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 // Toolbar
-JToolBarHelper::title(JText::_('COM_JTG_TERRAIN'), 'categories.png');
-JToolBarHelper::back();
-JToolBarHelper::spacer();
-JToolBarHelper::addNew('newterrain', 'COM_JTG_NEW_TERRAIN');
-JToolBarHelper::editList('editterrain');
-JToolBarHelper::publish();
-JToolBarHelper::unpublish();
-JToolBarHelper::deleteList();
-JToolBarHelper::help('terrain', true);
+ToolbarHelper::title(Text::_('COM_JTG_TERRAIN'), 'categories.png');
+ToolbarHelper::back();
+ToolbarHelper::spacer();
+ToolbarHelper::addNew('newterrain', 'COM_JTG_NEW_TERRAIN');
+ToolbarHelper::editList('editterrain');
+ToolbarHelper::publish();
+ToolbarHelper::unpublish();
+ToolbarHelper::deleteList();
+ToolbarHelper::help('terrain', true);
 
 if (version_compare(JVERSION,'4.0','lt'))
 {
@@ -45,15 +49,15 @@ if (version_compare(JVERSION,'4.0','lt'))
 	<table class="adminlist">
 		<thead>
 			<tr>
-				<th class="title"><?php echo JText::_('COM_JTG_NUM'); ?></th>
+				<th class="title"><?php echo Text::_('COM_JTG_NUM'); ?></th>
 				<th class="title"><input type="checkbox"
 					onclick="Joomla.checkAll(this)"
-					title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" value=""
+					title="<?php echo Text::_('JGLOBAL_CHECK_ALL'); ?>" value=""
 					name="checkall-toggle"></th>
-				<th class="title"><?php echo JText::_('COM_JTG_TITLE'); ?></th>
-				<th class="title"><?php echo JText::_('COM_JTG_TRANSLATION'); ?></th>
-				<th class="title"><?php echo JText::_('COM_JTG_PUBLISHED'); ?></th>
-				<th class="title" nowrap="nowrap"><?php echo JText::_('COM_JTG_ID'); ?>
+				<th class="title"><?php echo Text::_('COM_JTG_TITLE'); ?></th>
+				<th class="title"><?php echo Text::_('COM_JTG_TRANSLATION'); ?></th>
+				<th class="title"><?php echo Text::_('COM_JTG_PUBLISHED'); ?></th>
+				<th class="title" nowrap="nowrap"><?php echo Text::_('COM_JTG_ID'); ?>
 				</th>
 			</tr>
 		</thead>
@@ -73,8 +77,8 @@ if (version_compare(JVERSION,'4.0','lt'))
 
 				$link 	= JRoute::_('index.php?option=com_jtg&task=editterrain&controller=terrain&id=' . $row->id);
 
-				$checked 	= JHtml::_('grid.checkedout', $row, $i);
-				$published 	= JHtml::_('jgrid.published', $row->published, $i);
+				$checked 	= HTMLHelper::_('grid.checkedout', $row, $i);
+				$published 	= HTMLHelper::_('jgrid.published', $row->published, $i);
 
 				?>
 			<tr class="<?php echo "row$k ";
@@ -88,7 +92,7 @@ if (version_compare(JVERSION,'4.0','lt'))
 				</a></td>
 				<td align="center"><a href="javascript:void(0);"
 					onclick="javascript:return Joomla.listItemTask('cb<?php echo $i; ?>','editterrain')">
-					<?php echo JText::_($row->title); ?></a></td>
+					<?php echo Text::_($row->title); ?></a></td>
 				<td align="center"><?php echo $published;?></td>
 				<td><?php echo $row->id; ?></td>
 			</tr>
@@ -99,13 +103,13 @@ if (version_compare(JVERSION,'4.0','lt'))
 		</tbody>
 	</table>
 	<br />
-	<?php echo JText::_('COM_JTG_TERRAINS_HELP'); ?>
+	<?php echo Text::_('COM_JTG_TERRAINS_HELP'); ?>
 
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="task" value="" /> <input type="hidden"
 		name="boxchecked" value="0" /> <input type="hidden" name="controller"
 		value="terrain" />
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 </form>
 <?php
 if (version_compare(JVERSION,'4.0','lt'))

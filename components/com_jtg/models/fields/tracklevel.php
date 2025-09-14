@@ -19,8 +19,11 @@ defined('JPATH_BASE') or die;
 
 jimport('joomla.html.html');
 jimport('joomla.form.formfield');
-jimport('joomla.form.helper');
-JFormHelper::loadFieldClass('list');
+
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Language\Text;
+
+FormHelper::loadFieldClass('list');
 
 /**
  * Custom Field class for the Joomla Framework.
@@ -59,7 +62,7 @@ class JFormFieldTracklevel extends JFormFieldList
 		{
 			if (trim($level) != "")
 			{
-				$label = JText::_(trim($level));
+				$label = Text::_(trim($level));
 				if ($i != 0) $label = $i.' - '.$label;
 				$options[] = array('value' => $i, 'text' => $label);
 				$i++;

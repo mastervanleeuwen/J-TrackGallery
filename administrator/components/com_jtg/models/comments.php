@@ -20,6 +20,8 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Factory;
 use Joomla\Utilities\ArrayHelper;
 /**
  * JtgModelComments class for the jtg component
@@ -38,14 +40,14 @@ class JtgModelComments extends JModelLegacy
 	public function __construct()
 	{
 		parent::__construct();
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Get the pagination request variables
-		$limit		= $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
-		$limitstart	= $mainframe->getUserStateFromRequest($this->option . '.limitstart', 'limitstart', 0, 'int');
+		$limit		= $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'), 'int');
+		$limitstart	= $app->getUserStateFromRequest($this->option . '.limitstart', 'limitstart', 0, 'int');
 
 		// In case limit has been changed, adjust limitstart accordingly
-		$limitstart = JFactory::getApplication()->input->get('limitstart', 0);
+		$limitstart = $app->input->get('limitstart', 0);
 
 		$this->setState('limit', $limit);
 		$this->setState('limitstart', $limitstart);
@@ -127,7 +129,7 @@ class JtgModelComments extends JModelLegacy
 	 */
 	function publish($cid = array(), $publish = 1)
 	{
-		$user 	= JFactory::getUser();
+		$user 	= Factory::getUser();
 
 		if (count($cid))
 		{
@@ -208,9 +210,7 @@ class JtgModelComments extends JModelLegacy
 	 */
 	function saveComment()
 	{
-		$mainframe = JFactory::getApplication();
-
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$id     = $input->getInt('id');
 		$title  = $input->get('title', '', 'string');
 		$text   = $input->get('text', '', 'raw');

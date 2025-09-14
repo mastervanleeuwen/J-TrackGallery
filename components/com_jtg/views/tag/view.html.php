@@ -16,6 +16,10 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Languaga\Text;
+use Joomla\CMS\Uri\Uri;
+
 jimport('joomla.application.component.view');
 require_once JPATH_COMPONENT . '/helpers/maphelper.php';
 
@@ -43,7 +47,7 @@ class JtgViewTag extends JViewLegacy
 		$file = JPATH_SITE . "/components/com_jtg/models/jtg.php";
 		require_once $file;
 
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$tagid = $app->input->get('id');
 		$this->canDo = JHelperContent::getActions('com_jtg');
 
@@ -55,11 +59,10 @@ class JtgViewTag extends JViewLegacy
 
 		$model = $this->getModel();
 
-		$mainframe = JFactory::getApplication();
-		$option = $mainframe->input->get('option');
+		$option = $app->input->get('option');
 		$cfg = JtgHelper::getConfig();
-		$document = $mainframe->getDocument();
-		$sitename = $mainframe->getCfg('sitename');
+		$document = $app->getDocument();
+		$sitename = $app->getCfg('sitename');
 
 		if (is_null($tagid))
 		{
@@ -73,18 +76,18 @@ class JtgViewTag extends JViewLegacy
 			$this->title = htmlspecialchars($tagsHelper->getTagNames(array($tagid))[0], ENT_QUOTES, 'UTF-8');
 		}
 		$document->setTitle($this->title . " - " . $sitename);
-		$pathway = $mainframe->getPathway();
+		$pathway = $app->getPathway();
 		$pathway->addItem($this->title, '');
 
-		$params = $mainframe->getParams();
+		$params = $app->getParams();
 		$this->showmap = $params->get('jtg_param_cat_show_map',1);
 		$this->showlist = $params->get('jtg_param_cat_show_list',1);
 
 		if ($this->showmap) {
 			LayoutHelper::parseMap($document); // Loads ol.js
 			$tmpl = strlen($cfg->template) ? $cfg->template : 'default';
-			$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
-			$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
+			$document->addStyleSheet(Uri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
+			$document->addStyleSheet(Uri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 
 			$this->showtracks = (bool) $params->get('jtg_param_tracks');
 			$this->zoomlevel = 6;
@@ -92,25 +95,25 @@ class JtgViewTag extends JViewLegacy
 		$model = $this->getModel();
 
 		$sortedter = JtgModeljtg::getTerrainData(true);
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$uid = $user->get('id');
 		$gid = $user->get('gid');
 		$deletegid = $user->get('deletegid');
 		$lh = LayoutHelper::navigation();
 		$footer = LayoutHelper::footer();
 		$cfg = JtgHelper::getConfig();
-		$pathway = $mainframe->getPathway();
-		$pathway->addItem(JText::_('COM_JTG_GPS_FILES'), '');
-		$sitename = $mainframe->getCfg('sitename');
-		$document = $mainframe->getDocument();
-		$document->setTitle(JText::_('COM_JTG_GPS_FILES') . " - " . $sitename);
+		$pathway = $app->getPathway();
+		$pathway->addItem(Text::_('COM_JTG_GPS_FILES'), '');
+		$sitename = $app->getCfg('sitename');
+		$document = $app->getDocument();
+		$document->setTitle(Text::_('COM_JTG_GPS_FILES') . " - " . $sitename);
 
 		//Following variables used more than once
 		$this->sortColumn 	= $this->state->get('list.ordering');
 		$this->sortDirection	= $this->state->get('list.direction');
 
-		$filter_order = $mainframe->getUserStateFromRequest("$option.filter_order", 'filter_order', '', 'cmd');
-		$filter_order_Dir = $mainframe->getUserStateFromRequest("$option.filter_order_Dir", 'filter_order_Dir', '', 'cmd');
+		$filter_order = $app->getUserStateFromRequest("$option.filter_order", 'filter_order', '', 'cmd');
+		$filter_order_Dir = $app->getUserStateFromRequest("$option.filter_order_Dir", 'filter_order_Dir', '', 'cmd');
 
 		$action = JRoute::_('index.php?option=com_jtg&view=tagt&layout=default&id='.$tagid, false);
 
@@ -147,24 +150,24 @@ class JtgViewTag extends JViewLegacy
 	{
 		$height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px;" ' : ' ');
 		$imagelink = "";
-		$iconpath = JUri::root()."/components/com_jtg/assets/images";
+		$iconpath = Uri::root()."/components/com_jtg/assets/images";
 		if (!$hide_icon_istrack)
 		{
 			$foundtrackroute = 0;
 			if ( ( isset($track) ) AND ( $track == "1" ) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/track1.png\" title=\"" . JText::_('COM_JTG_ISTRACK1') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/track1.png\" title=\"" . Text::_('COM_JTG_ISTRACK1') . "\"/>\n";
                                 $foundtrackroute = 1;
 			}
 
 			if ( ( isset($route) ) AND ( $route == "1" ) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/route1.png\" title=\"" . JText::_('COM_JTG_ISROUTE1') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/route1.png\" title=\"" . Text::_('COM_JTG_ISROUTE1') . "\"/>\n";
 				$foundtrackroute = 1;
 			}
 
 			if ( !$foundtrackroute )
-				$imagelink .= "<img $height src =\"$iconpath/track0.png\" title=\"" . JText::_('COM_JTG_ISTRACK0') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/track0.png\" title=\"" . Text::_('COM_JTG_ISTRACK0') . "\"/>\n";
 		}
 
 		if (! $hide_icon_isroundtrip)
@@ -180,11 +183,11 @@ class JtgViewTag extends JViewLegacy
 
 			if ( isset($roundtrip) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . JText::_('COM_JTG_ISROUNDTRIP' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . Text::_('COM_JTG_ISROUNDTRIP' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . JText::_('COM_JTG_DKROUNDTRIP') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . Text::_('COM_JTG_DKROUNDTRIP') . "\"/>\n";
 			}
 		}
 
@@ -201,11 +204,11 @@ class JtgViewTag extends JViewLegacy
 
 			if ( isset($wp) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . JText::_('COM_JTG_ISWP' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . Text::_('COM_JTG_ISWP' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . JText::_('COM_JTG_DKWP') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . Text::_('COM_JTG_DKWP') . "\"/>\n";
 			}
 		}
 
@@ -222,11 +225,11 @@ class JtgViewTag extends JViewLegacy
 
 			if ( isset($cache) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . JText::_('COM_JTG_ISCACHE' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . Text::_('COM_JTG_ISCACHE' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . JText::_('COM_JTG_DKCACHE') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . Text::_('COM_JTG_DKCACHE') . "\"/>\n";
 			}
 		}
 

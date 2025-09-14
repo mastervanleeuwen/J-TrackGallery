@@ -20,6 +20,10 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 jimport('joomla.application.component.view');
 
 /**
@@ -45,7 +49,7 @@ class JtgViewUser extends JViewLegacy
 	{
 		if (!isset($param->track))
 		{
-			return JText::_('COM_JTG_NO_RESSOURCE');
+			return Text::_('COM_JTG_NO_RESSOURCE');
 		}
 
 		if ($this->cfg->access == 0)
@@ -62,9 +66,9 @@ class JtgViewUser extends JViewLegacy
 		2 = special // Ie admin
 		9 = private
 		*/
-		$uid = JFactory::getUser()->id;
+		$uid = Factory::getUser()->id;
 
-		if (JFactory::getUser()->get('isRoot'))
+		if (Factory::getUser()->get('isRoot'))
 		{
 			$admin = true;
 		}
@@ -151,7 +155,7 @@ class JtgViewUser extends JViewLegacy
 		$file = JPATH_SITE . "/components/com_jtg/models/jtg.php";
 		require_once $file;
 
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$app->setUserState("jtg.files.layout",$this->getLayout());
 		$this->canDo = JHelperContent::getActions('com_jtg');
 
@@ -173,10 +177,10 @@ class JtgViewUser extends JViewLegacy
 		$model = $this->getModel();
 		$cfg = JtgHelper::getConfig();
 		$pathway = $app->getPathway();
-		$pathway->addItem(JText::_('COM_JTG_MY_FILES'), '');
+		$pathway->addItem(Text::_('COM_JTG_MY_FILES'), '');
 		$sitename = $app->getCfg('sitename');
-		$document = JFactory::getDocument();
-		$document->setTitle(JText::_('COM_JTG_MY_FILES') . " - " . $sitename);
+		$document = $app->getDocument();
+		$document->setTitle(Text::_('COM_JTG_MY_FILES') . " - " . $sitename);
 
 		$order = $app->input->getWord('order', 'order');
 
@@ -214,24 +218,24 @@ class JtgViewUser extends JViewLegacy
 	{
 		$height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px;" ' : ' ');
 		$imagelink = "";
-		$iconpath = JUri::root()."/components/com_jtg/assets/images";
+		$iconpath = Uri::root()."/components/com_jtg/assets/images";
 		if (!$hide_icon_istrack)
 		{
 			$foundtrackroute = 0;
 			if ( ( isset($track) ) AND ( $track == "1" ) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/track1.png\" title=\"" . JText::_('COM_JTG_ISTRACK1') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/track1.png\" title=\"" . Text::_('COM_JTG_ISTRACK1') . "\"/>\n";
                                 $foundtrackroute = 1;
 			}
 
 			if ( ( isset($route) ) AND ( $route == "1" ) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/route1.png\" title=\"" . JText::_('COM_JTG_ISROUTE1') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/route1.png\" title=\"" . Text::_('COM_JTG_ISROUTE1') . "\"/>\n";
 				$foundtrackroute = 1;
 			}
 
 			if ( !$foundtrackroute )
-				$imagelink .= "<img $height src =\"$iconpath/track0.png\" title=\"" . JText::_('COM_JTG_ISTRACK0') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/track0.png\" title=\"" . Text::_('COM_JTG_ISTRACK0') . "\"/>\n";
 		}
 
 		if (! $hide_icon_isroundtrip)
@@ -247,11 +251,11 @@ class JtgViewUser extends JViewLegacy
 
 			if ( isset($roundtrip) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . JText::_('COM_JTG_ISROUNDTRIP' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . Text::_('COM_JTG_ISROUNDTRIP' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . JText::_('COM_JTG_DKROUNDTRIP') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . Text::_('COM_JTG_DKROUNDTRIP') . "\"/>\n";
 			}
 		}
 
@@ -268,11 +272,11 @@ class JtgViewUser extends JViewLegacy
 
 			if ( isset($wp) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . JText::_('COM_JTG_ISWP' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . Text::_('COM_JTG_ISWP' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . JText::_('COM_JTG_DKWP') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . Text::_('COM_JTG_DKWP') . "\"/>\n";
 			}
 		}
 
@@ -289,11 +293,11 @@ class JtgViewUser extends JViewLegacy
 
 			if ( isset($cache) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . JText::_('COM_JTG_ISCACHE' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . Text::_('COM_JTG_ISCACHE' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . JText::_('COM_JTG_DKCACHE') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . Text::_('COM_JTG_DKCACHE') . "\"/>\n";
 			}
 		}
 

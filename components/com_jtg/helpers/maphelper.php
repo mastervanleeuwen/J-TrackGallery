@@ -19,6 +19,11 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 
 /*
@@ -42,8 +47,8 @@ class JtgMapHelper {
 		$map = "\n<script type=\"text/javascript\">\n".
 				"	jtgBaseUrl = \"".Uri::root()."\";\n".
    			"	jtgTemplateUrl = \"".Uri::root()."components/com_jtg/assets/template/".$cfg->template."\";\n".
-				"	jtgMapInit('".JText::_("COM_JTG_MAP_LAYERS")."','".$targetid."');\n";
-		$params = JComponentHelper::getParams('com_jtg');
+				"	jtgMapInit('".Text::_("COM_JTG_MAP_LAYERS")."','".$targetid."');\n";
+		$params = ComponentHelper::getParams('com_jtg');
 		if ($params->get('jtg_param_show_scale')) $map .= "	jtgMap.addControl(new ol.control.ScaleLine({units: '$mapUnits'}));\n";
 		if ($params->get('jtg_param_show_mouselocation')) $map .= "	jtgMap.addControl(new ol.control.MousePosition( {coordinateFormat: ol.coordinate.createStringXY(4), projection: 'EPSG:4326' } ));\n";
 		if ($params->get('jtg_param_show_panzoombar')) $map .= "	jtgMap.addControl(new ol.control.ZoomSlider());\n";
@@ -61,15 +66,15 @@ class JtgMapHelper {
 	 */
 	static public function parseTrackMapJS($gpsTrack, $trackid, $mapid, $imageList, $makepreview = false, $showLocationButton = true, $layerSwitcher = false, $trackColors = array(), $targetid = 'jtg_map')
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$cfg = JtgHelper::getConfig();
-		$iconurl = JUri::root() . "components/com_jtg/assets/template/" . $cfg->template . "/images/";
+		$iconurl = Uri::root() . "components/com_jtg/assets/template/" . $cfg->template . "/images/";
 		$iconpath = JPATH_SITE . "/components/com_jtg/assets/template/" . $cfg->template . "/images/";
 
 		$map = JtgMapHelper::parseMapInitJS($targetid);
 		$map .= JtgMapHelper::parseMapLayersJS($mapid,$layerSwitcher);
 		
-		$params = JComponentHelper::getParams('com_jtg');
+		$params = ComponentHelper::getParams('com_jtg');
 		if ($params->get('jtg_param_add_startmarker')) 
 		{
 			$trackDrawOptions = 'true'; 
@@ -130,13 +135,13 @@ class JtgMapHelper {
 		$map .= "	drawTrack(trackData, ".$trackDrawOptions.$colorsJS.", {$distInt}, {$distUnit});\n";
 
 		if ($showLocationButton) {
-			JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
+			Factory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
    		$map .= "	jtgMap.addControl(new ShowLocationControl());\n";
 		}
       
 		if ($layerSwitcher) {
-			JFactory::getDocument()->addStyleSheet(Uri::root().'media/com_jtg/js/ol-layerswitcher/ol-layerswitcher.css');
-			JFactory::getDocument()->addScript(Uri::root().'media/com_jtg/js/ol-layerswitcher/ol-layerswitcher.js');
+			Factory::getDocument()->addStyleSheet(Uri::root().'media/com_jtg/js/ol-layerswitcher/ol-layerswitcher.css');
+			Factory::getDocument()->addScript(Uri::root().'media/com_jtg/js/ol-layerswitcher/ol-layerswitcher.js');
    		$map .= "	jtgMap.addControl(new ol.control.LayerSwitcher());\n";
 		}
 
@@ -163,7 +168,7 @@ class JtgMapHelper {
 	 */
 	static function parseMapLayersJS($mapid=0,$layerSwitcher=false)
 	{
-		$db = JFactory::getDBO();
+		$db = Factory::getDBO();
 		if ($mapid != 0) {
 			$query = $db->getQuery(true);
 			$query->select('*')
@@ -171,7 +176,7 @@ class JtgMapHelper {
 				->where($db->quoteName('id')." = ".$db->quote($mapid));
 			$db->setQuery($query);
 			$result = $db->loadAssoc();
-			$mapLayersJS = "	jtgAddMapLayer(".$result['type'].",'".$result['param']."','".$result['apikey']."','".JText::_($result['name'])."');\n";
+			$mapLayersJS = "	jtgAddMapLayer(".$result['type'].",'".$result['param']."','".$result['apikey']."','".Text::_($result['name'])."');\n";
 			if ($layerSwitcher) {
 				$query = $db->getQuery(true);
 				$query->select('*')
@@ -180,7 +185,7 @@ class JtgMapHelper {
 				$db->setQuery($query);
 				$results = $db->loadAssocList();
 				foreach ($results as $result) {
-					$mapLayersJS .= "	jtgAddMapLayer(".$result['type'].",'".$result['param']."','".$result['apikey']."','".JText::_($result['name'])."', false);\n";
+					$mapLayersJS .= "	jtgAddMapLayer(".$result['type'].",'".$result['param']."','".$result['apikey']."','".Text::_($result['name'])."', false);\n";
 				}
 			}
 		}
@@ -196,7 +201,7 @@ class JtgMapHelper {
 			$visible = true;
 			$mapLayersJS = '';
 			foreach ($results as $result) {
-				$mapLayersJS .= "	jtgAddMapLayer(".$result['type'].",'".$result['param']."','".$result['apikey']."','".JText::_($result['name'])."', ".($visible?'true':'false').");\n";
+				$mapLayersJS .= "	jtgAddMapLayer(".$result['type'].",'".$result['param']."','".$result['apikey']."','".Text::_($result['name'])."', ".($visible?'true':'false').");\n";
 				if ($visible) $visible = false;
 			}
 		}
@@ -243,7 +248,7 @@ class JtgMapHelper {
 			$map .= "	geoControl.handleCenterOnGeo();\n";
 		}
 		else { // Show button
-			JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
+			Factory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
 			$map .= "	jtgMap.addControl(new CenterOnGeoControl);\n";
 		}
 		$map .= "</script>\n";
@@ -262,7 +267,7 @@ class JtgMapHelper {
 		$iCat = 0;
 		foreach ( $track_array AS $row )
 		{
-			$url = JRoute::_("index.php?option=com_jtg&view=track&id=" . $row->id);
+			$url = Route::_("index.php?option=com_jtg&view=track&id=" . $row->id);
 			$lon = $row->icon_e;
 			$lat = $row->icon_n;
 			$catids = explode(',',$row->catid);
@@ -289,7 +294,7 @@ class JtgMapHelper {
 			}
 			else
 			{
-				$link .= "<i>" . str_replace(array("'"), array("\'"), JText::_('COM_JTG_NO_TITLE')) . "</i>";
+				$link .= "<i>" . str_replace(array("'"), array("\'"), Text::_('COM_JTG_NO_TITLE')) . "</i>";
 			}
 			$link .= "</a>";
 
@@ -330,7 +335,7 @@ class JtgMapHelper {
 			// Dummy line for Coding standard
 		}
 
-		$params = JComponentHelper::getParams('com_jtg');
+		$params = ComponentHelper::getParams('com_jtg');
 		$colors[] = $params->get('jtg_param_track_colors_1');
 		$colors[] = $params->get('jtg_param_track_colors_2');
 		$colors[] = $params->get('jtg_param_track_colors_3');
@@ -341,7 +346,7 @@ class JtgMapHelper {
 		// TODO: the vectors are now added one by one instead of as layers with many vectors.
 		foreach ($rows AS $row)
 		{
-			$file = JUri::base()."images/jtrackgallery/uploaded_tracks/" . $row->file;
+			$file = Uri::base()."images/jtrackgallery/uploaded_tracks/" . $row->file;
 			$filename = $file;
 			// TODO: check file type; this code builds the overview map?
 			$string .= "layer_vector = new ol.layer.Vector({";
@@ -372,7 +377,7 @@ class JtgMapHelper {
 		jimport('joomla.filesystem.folder');
 		$max_geoim_height = (int) $max_geoim_height;
 		$foundpics = false;
-		$httppath = JUri::root() . "images/jtrackgallery/uploaded_tracks_images/track_" . $id . "/";
+		$httppath = Uri::root() . "images/jtrackgallery/uploaded_tracks_images/track_" . $id . "/";
 		$folder = JPATH_SITE . "/images/jtrackgallery/uploaded_tracks_images/" . 'track_' . $id . '/';
 
 		$imgJSarr = '';
@@ -383,7 +388,7 @@ class JtgMapHelper {
 			{
             if ($image->lon) {
 					// Retrieve thumbnail path
-					if ( JFile::exists($folder . 'thumbs/thumb1_' . $image->filename))
+					if ( File::exists($folder . 'thumbs/thumb1_' . $image->filename))
 					{
 						$imginfo = getimagesize($folder.'thumbs/thumb1_'.$image->filename);
 						$imagepath = $httppath . 'thumbs/thumb1_' . $image->filename;
@@ -500,8 +505,8 @@ EOS;
 		if ( $params->get("jtg_param_show_heightchart") AND $gpsTrack->elevationDataExists)
 		{
 			$charts_linec = $cfg->charts_linec? '#' . $cfg->charts_linec: $defaultlinecolor;
-			$axesJS[] = JtgMapHelper::parseGraphAxisJS(JText::_('COM_JTG_ELEVATION'), JText::_('COM_JTG_ELEVATION_UNIT'), $charts_linec,'false');
-			$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->elevationData, JText::_('COM_JTG_ELEVATION'), JText::_('COM_JTG_ELEVATION_UNIT'), $charts_linec, $axisnumber);
+			$axesJS[] = JtgMapHelper::parseGraphAxisJS(Text::_('COM_JTG_ELEVATION'), Text::_('COM_JTG_ELEVATION_UNIT'), $charts_linec,'false');
+			$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->elevationData, Text::_('COM_JTG_ELEVATION'), Text::_('COM_JTG_ELEVATION_UNIT'), $charts_linec, $axisnumber);
 			$axisnumber ++;
 		}
 
@@ -512,19 +517,19 @@ EOS;
 			{
 				// Pace is on same axis but speed must be hidden
 				$pacechartopposite = (($axisnumber % 2) == 1) ? 'true' : 'false';
-				$paceunittxt = JText::_('COM_JTG_PACE_UNIT_' . strtoupper($cfg->unit));
+				$paceunittxt = Text::_('COM_JTG_PACE_UNIT_' . strtoupper($cfg->unit));
 				$charts_linec_pace = $cfg->charts_linec_pace? '#' . $cfg->charts_linec_pace: $defaultlinecolor;
-				$axesJS[] = JtgMapHelper::parseGraphAxisJS(JText::_('COM_JTG_PACE'), $paceunittxt, $charts_linec_pace, $pacechartopposite);
-				$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->paceData, JText::_('COM_JTG_PACE'), $paceunittxt, $charts_linec_pace, $axisnumber);
+				$axesJS[] = JtgMapHelper::parseGraphAxisJS(Text::_('COM_JTG_PACE'), $paceunittxt, $charts_linec_pace, $pacechartopposite);
+				$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->paceData, Text::_('COM_JTG_PACE'), $paceunittxt, $charts_linec_pace, $axisnumber);
 				$axisnumber ++;
 				$speedcharthide = 1;
 			}
 
-			$speedunittxt = JText::_('COM_JTG_SPEED_UNIT_' . strtoupper($cfg->unit));
+			$speedunittxt = Text::_('COM_JTG_SPEED_UNIT_' . strtoupper($cfg->unit));
 			$speedchartopposite = (($axisnumber % 2) == 1) ? 'true' : 'false';
 			$charts_linec_speed = $cfg->charts_linec_speed? '#' . $cfg->charts_linec_speed: $defaultlinecolor;
-			$axesJS[] = JtgMapHelper::parseGraphAxisJS(JText::_('COM_JTG_SPEED'), $speedunittxt, $charts_linec_speed, $speedchartopposite);
-			$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->speedData, JText::_('COM_JTG_SPEED'), $speedunittxt, $charts_linec_speed, $axisnumber, $speedcharthide);
+			$axesJS[] = JtgMapHelper::parseGraphAxisJS(Text::_('COM_JTG_SPEED'), $speedunittxt, $charts_linec_speed, $speedchartopposite);
+			$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->speedData, Text::_('COM_JTG_SPEED'), $speedunittxt, $charts_linec_speed, $axisnumber, $speedcharthide);
 			$axisnumber ++;
 		}
 
@@ -534,8 +539,8 @@ EOS;
 			$beatchartaxis = $axisnumber + 1;
 			$beatchartopposite = (($axisnumber % 2) == 1) ? 'true' : 'false';
 			$charts_linec_heartbeat = $cfg->charts_linec_heartbeat? '#' . $cfg->charts_linec_heartbeat: $defaultlinecolor;
-			$axesJS[] = JtgMapHelper::parseGraphAxisJS(JText::_('COM_JTG_HEARTFREQU'), JText::_('COM_JTG_HEARTFREQU_UNIT'), $charts_linec_heartbeat, $beartchartopposite);
-			$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->beatData, JText::_('COM_JTG_HEARTFREQU'), JText::_('COM_JTG_FREQU_UNIT'), $charts_linec_heartbeat, $axisnumber);
+			$axesJS[] = JtgMapHelper::parseGraphAxisJS(Text::_('COM_JTG_HEARTFREQU'), Text::_('COM_JTG_HEARTFREQU_UNIT'), $charts_linec_heartbeat, $beartchartopposite);
+			$seriesJS[] = JtgMapHelper::parseGraphSeriesJS($gpsTrack->beatData, Text::_('COM_JTG_HEARTFREQU'), Text::_('COM_JTG_FREQU_UNIT'), $charts_linec_heartbeat, $axisnumber);
 			$axisnumber ++;
 		}
 
@@ -543,7 +548,7 @@ EOS;
 		if ($axisnumber)
 		{
 			$clicktohide = "";
-			if ($axisnumber > 1) $clicktohide = JText::_('COM_JTG_CLICK_TO_HIDE'); 
+			if ($axisnumber > 1) $clicktohide = Text::_('COM_JTG_CLICK_TO_HIDE'); 
 			$graphJS ='<script type="text/javascript">'."\n".
 				"	jtgAxes = [ ".implode(',',$axesJS)." ];\n".
 				"	jtgSeries = [ ".implode(',',$seriesJS)." ];\n".
@@ -556,11 +561,11 @@ EOS;
 	jQuery.noConflict();
 </script>
 EOG;
-			JFactory::getDocument()->addScript("///code.highcharts.com/highcharts.js");
+			Factory::getDocument()->addScript("///code.highcharts.com/highcharts.js");
 			$autocenter = (bool) $params->get("jtg_param_use_map_autocentering", true) ? 'true':'false';
 			if (! (bool) $params->get("jtg_param_disable_map_animated_cursor", false)) $animatedCursor = 'true, animatedCursorLayer, animatedCursorIcon, allpoints'; else $animatedCursor='false';
 			$graphJS .= '<script type="text/javascript">'."\n".
-				"makeGraph('$elementid',jtgAxes, jtgSeries, '".JText::_('COM_JTG_DISTANCE')."', '".JText::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($cfg->unit))."', '$clicktohide', '$bgColor', $autocenter, $animatedCursor); \n".
+				"makeGraph('$elementid',jtgAxes, jtgSeries, '".Text::_('COM_JTG_DISTANCE')."', '".Text::_('COM_JTG_DISTANCE_UNIT_'.strtoupper($cfg->unit))."', '$clicktohide', '$bgColor', $autocenter, $animatedCursor); \n".
 				"</script>\n";
 		}
 		return $graphJS;
@@ -581,7 +586,7 @@ EOG;
 			$DPCalItem = "  \n{\n    'lon' : $item->longitude,\n";
 			$DPCalItem .= "    'lat' : $item->latitude,\n";
 			$DPCalItem .= "    'title' : '".htmlentities($item->title,ENT_QUOTES)."',\n";
-			$DPCalItem .= "    'url' : '".JRoute::_("index.php?option=com_dpcalendar&view=location&id=$item->id")."',\n";
+			$DPCalItem .= "    'url' : '".Route::_("index.php?option=com_dpcalendar&view=location&id=$item->id")."',\n";
 			$DPCalItem .= "    'color' : '".$item->color."'\n";
 			$DPCalItem .= "  }";
 			$DPCalLocArray[] = $DPCalItem;
@@ -651,7 +656,7 @@ EOG;
 
 		if ( $count_letters == 0 )
 		{
-			return "<p>" . str_replace(array("'","\n","\r"), array("\'","<br/>"," "), JText::_('COM_JTG_NO_DESC')) . "</p>";
+			return "<p>" . str_replace(array("'","\n","\r"), array("\'","<br/>"," "), Text::_('COM_JTG_NO_DESC')) . "</p>";
 		}
 
 		return $return;

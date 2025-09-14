@@ -17,6 +17,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 /**
  * JtgModelFiles class for the jtg component
  *
@@ -68,7 +72,7 @@ class JtgModelUser extends JModelList
 		
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$uid = $user->id;
 		
 		$query->select('a.*, c.name AS user')
@@ -82,7 +86,7 @@ class JtgModelUser extends JModelList
 			$query->where('a.catid LIKE '.$db->quote('%'.$trackcat.'%'));
 		}
 		else {
-		    $trackcat = JFactory::getApplication()->input->get('cat');
+		    $trackcat = Factory::getApplication()->input->get('cat');
 		    //error_log('Got category from url '.$trackcat);
 		    if ($trackcat !== null) {
 		        $this->setState('filter.trackcat', $trackcat);
@@ -127,7 +131,7 @@ class JtgModelUser extends JModelList
 	{
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$uid = JFactory::getUser()->id;
+		$uid = Factory::getUser()->id;
 		
 		$query->select('a.title as tracktitle, c.*')
 		->from('#__jtg_comments as c')
@@ -147,7 +151,7 @@ class JtgModelUser extends JModelList
 	{
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$uid = JFactory::getUser()->id;
+		$uid = Factory::getUser()->id;
 		
 		$query->select('a.title as tracktitle, c.*')
 		->from('#__jtg_comments as c')
@@ -206,7 +210,7 @@ class JtgModelUser extends JModelList
 			}
 		}
 
-		$return .= $selectedlevel . "/" . ($i - 1) . " - " . JText::_(trim($selectedtext));
+		$return .= $selectedlevel . "/" . ($i - 1) . " - " . Text::_(trim($selectedtext));
 
 		return $return;
 	}
@@ -219,9 +223,9 @@ class JtgModelUser extends JModelList
 	 */
 	protected function _buildContentOrderBy (bool $addorder=true)
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 
-		$params = $mainframe->getParams();
+		$params = $app->getParams();
 		$ordering = '';
 
 		switch ($params->get('jtg_param_track_ordering'))
@@ -271,7 +275,7 @@ class JtgModelUser extends JModelList
 		}
 
 		// V0.9.17: Order $filter_order is set to $ordering (default ordering) when no other ordering is set by the user
-		$filter_order = $mainframe->getUserStateFromRequest($this->option . 'filter_order', 'filter_order', $ordering, 'cmd');
+		$filter_order = $app->getUserStateFromRequest($this->option . 'filter_order', 'filter_order', $ordering, 'cmd');
 
 		if ($filter_order == $ordering)
 		{
@@ -279,7 +283,7 @@ class JtgModelUser extends JModelList
 		}
 		else
 		{
-			$filter_order_Dir = $mainframe->getUserStateFromRequest($this->option . 'filter_order_Dir', 'filter_order_Dir', '', 'word');
+			$filter_order_Dir = $app->getUserStateFromRequest($this->option . 'filter_order_Dir', 'filter_order_Dir', '', 'word');
 		}
 
 		if ($filter_order == '')
@@ -308,7 +312,7 @@ class JtgModelUser extends JModelList
 	 */
 	function getVotes ($id)
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		$class = array(
 				'nostar',
@@ -397,7 +401,7 @@ class JtgModelUser extends JModelList
 	 */
 	function getTerrain ($where = null)
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$db = $this->getDbo();
 
 		$query = "SELECT * FROM #__jtg_terrains " . $where . " ORDER BY title ASC";
@@ -410,7 +414,7 @@ class JtgModelUser extends JModelList
 		{
 			foreach ($row as $v)
 			{
-				$v->title = JText::_($v->title);
+				$v->title = Text::_($v->title);
 				$terrain[] = $v;
 			}
 		}
@@ -427,8 +431,6 @@ class JtgModelUser extends JModelList
 	 */
 	function getAuthorData ($id)
 	{
-		$mainframe = JFactory::getApplication();
-
 		$db = $this->getDbo();
 		$query = "SELECT a.uid, b.name, b.email FROM #__jtg_files AS a" . "\n LEFT JOIN #__users AS b ON a.uid=b.id" . "\n WHERE a.id='" . $id . "'";
 

@@ -18,9 +18,11 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Filesystem\Folder;
 
 /**
  * function_description
@@ -37,23 +39,23 @@ function Com_Jtg_Refresh_thumbnails()
 	$success = true;
 	$regex_folder = '^track_';
 	$regex_images = '([^\s]+(\.(?i)(jpg|png|gif|bmp))$)';
-	$folders = JFolder::folders($base_dir, $regex_folder, $recurse = false, $full = false);
+	$folders = Folder::folders($base_dir, $regex_folder, $recurse = false, $full = false);
 
 	foreach ($folders as $folder)
 	{
-		$imgs = JFolder::files($base_dir . '/' . $folder);
+		$imgs = Folder::files($base_dir . '/' . $folder);
 		$thumb_dir = $base_dir . '/' . $folder . '/thumbs';
 
 		if ($imgs)
 		{
-			if (JFolder::exists($thumb_dir))
+			if (Folder::exists($thumb_dir))
 			{
 				// Remove old thumbnails
-				$filesToDelete = JFolder::files($thumb_dir, $regex_images);
+				$filesToDelete = Folder::files($thumb_dir, $regex_images);
 
 				foreach ($filesToDelete AS $fileToDelete)
 				{
-					JFile::delete($thumb_dir . '/' . $fileToDelete);
+					File::delete($thumb_dir . '/' . $fileToDelete);
 				}
 			}
 
@@ -70,9 +72,9 @@ function Com_Jtg_Refresh_thumbnails()
 		else
 		{
 			// No imgs so delete possibly existing folder
-			if (JFolder::exists($thumb_dir))
+			if (Folder::exists($thumb_dir))
 			{
-				JFolder::delete($thumb_dir);
+				Folder::delete($thumb_dir);
 			}
 		}
 	}
@@ -95,13 +97,13 @@ function Com_Jtg_Create_thumbnails($image_dir, $image_name, $max_thumb_height = 
 {
 	jimport('joomla.filesystem.folder');
 	jimport('joomla.filesystem.file');
-	$ext = JFile::getExt($image_name);
+	$ext = File::getExt($image_name);
 	$image_path = $image_dir . '/'. $image_name;
 	$thumb_dir = $image_dir . '/thumbs/';
 
-	if (! JFolder::exists($thumb_dir))
+	if (! Folder::exists($thumb_dir))
 	{
-		JFolder::create($thumb_dir);
+		Folder::create($thumb_dir);
 	}
 
 	switch (strtolower($ext))

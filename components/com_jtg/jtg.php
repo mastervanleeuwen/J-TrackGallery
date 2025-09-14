@@ -18,6 +18,9 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+
 global $jtg_microtime;
 $jtg_microtime = microtime(true);
 
@@ -32,17 +35,17 @@ JLoader::register('gpsCLass',
 );
 JLoader::import('components.com_jtg.helpers.gpsClass', JPATH_SITE, 'gpsClass');
 
-$mainframe = JFactory::getApplication();
-$mainframe->getLanguage()->load('com_jtg');
-$mainframe->getLanguage()->load('com_jtg_common');
+$app = Factory::getApplication();
+$app->getLanguage()->load('com_jtg');
+$app->getLanguage()->load('com_jtg_common');
 
 // Com_jtg_additional language files are in /images/jtrackgallery/language
 // folder
-$mainframe->getLanguage()->load(
+$app->getLanguage()->load(
 		'com_jtg_additional', JPATH_SITE . '/images/jtrackgallery', 'en-GB',
 		true
 		);
-$mainframe->getLanguage()->load(
+$app->getLanguage()->load(
 		'com_jtg_additional', JPATH_SITE . '/images/jtrackgallery', null, true
 );
 $cfg = JtgHelper::getConfig();
@@ -50,23 +53,23 @@ $cfg = JtgHelper::getConfig();
 // Set the template
 $tmpl = strlen($cfg->template) ? $cfg->template : 'default';
 
-$document = JFactory::getDocument();
+$document = Factory::getDocument();
 $document->addStyleSheet(
 		JUri::base() . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_style.css'
 );
 
 // Override style with user templates
 jimport('joomla.filesystem.file');
-$template_css = 'templates/' . $mainframe->getTemplate() . '/css/jtg_style.css';
+$template_css = 'templates/' . $app->getTemplate() . '/css/jtg_style.css';
 
-if (JFile::exists($template_css))
+if (File::exists($template_css))
 {
 	// Override with site template
 	$document->addStyleSheet($template_css);
 }
 
 // Initialize the controller
-if ($controller = JFactory::getApplication()->input->getWord('controller'))
+if ($controller = Factory::getApplication()->input->getWord('controller'))
 {
 	$path = JPATH_COMPONENT . '/controllers/' . $controller . '.php';
 
@@ -88,7 +91,7 @@ $controller = new $classname;
 // Register Extra tasks
 $controller->registerTask('save', 'save');
 
-$controller->execute(JFactory::getApplication()->input->get('task'));
+$controller->execute(Factory::getApplication()->input->get('task'));
 
 // Redirect if set by the controller
 $controller->redirect();

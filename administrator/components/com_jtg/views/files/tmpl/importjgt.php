@@ -16,14 +16,19 @@
  */
 
 defined('_JEXEC') or die('Restricted access');
-JToolBarHelper::title(JText::_('COM_JTG_ADD_FILES'), 'categories.png');
-JToolBarHelper::back();
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
+ToolbarHelper::title(Text::_('COM_JTG_ADD_FILES'), 'categories.png');
+ToolbarHelper::back();
 $model = $this->getModel();
 $rows = $model->_fetchJPTfiles();
 
 if ($rows == false)
 {
-	JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_ERROR_NOJGTFOUND'), 'Error');
+	Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_ERROR_NOJGTFOUND'), 'Error');
 }
 else
 {
@@ -47,10 +52,10 @@ else
 
 	if ($importdone == true)
 	{
-		JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_IMPORT_DONE'));
+		Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_IMPORT_DONE'));
 	}
 	else
 	{
-		JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_IMPORT_FAILURE'), 'Warning');
+		Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_IMPORT_FAILURE'), 'Warning');
 	}
 }

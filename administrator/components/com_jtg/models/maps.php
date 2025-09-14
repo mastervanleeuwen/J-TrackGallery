@@ -20,7 +20,11 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\Utilities\ArrayHelper;
+
 /**
  * JtgModelMaps class for the jtg component
  *
@@ -81,21 +85,21 @@ class JtgModelMaps extends JModelLegacy
 	public function __construct()
 	{
 		parent::__construct();
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Get the pagination request variables
-		$limit		= $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
-		$limitstart	= $mainframe->getUserStateFromRequest($this->option . '.limitstart', 'limitstart', 0, 'int');
+		$limit		= $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'), 'int');
+		$limitstart	= $app->getUserStateFromRequest($this->option . '.limitstart', 'limitstart', 0, 'int');
 
 		// In case limit has been changed, adjust limitstart accordingly
 		// $limitstart = ($limit != 0 ? (floor($limitstart / $limit) * $limit) : 0);
-		$limitstart = JFactory::getApplication()->input->get('limitstart', 0);
+		$limitstart = Factory::getApplication()->input->get('limitstart', 0);
 
 		$this->setState('limit', $limit);
 		$this->setState('limitstart', $limitstart);
 
-		$array = JFactory::getApplication()->input->get('cid', array(0), 'array');
-		$edit	= JFactory::getApplication()->input->get('edit', true);
+		$array = Factory::getApplication()->input->get('cid', array(0), 'array');
+		$edit	= Factory::getApplication()->input->get('edit', true);
 
 		if ($edit)
 		{
@@ -110,7 +114,6 @@ class JtgModelMaps extends JModelLegacy
 	 */
 	protected function _buildQuery()
 	{
-		$mainframe = JFactory::getApplication();
 		$orderby = $this->_buildContentOrderBy();
 		$query = "SELECT * FROM #__jtg_maps"
 		. $where
@@ -155,7 +158,6 @@ class JtgModelMaps extends JModelLegacy
 	 */
 	function getMap($id)
 	{
-		$mainframe = JFactory::getApplication();
 		$db = $this->getDbo();
 		$query = "SELECT * FROM #__jtg_maps"
 		. "\n WHERE id=" . $id;
@@ -173,11 +175,11 @@ class JtgModelMaps extends JModelLegacy
 	 */
 	protected function _buildContentOrderBy()
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 
-		$filter_order		= $mainframe->getUserStateFromRequest(
+		$filter_order		= $app->getUserStateFromRequest(
 				$this->option . 'filter_order', 'filter_order', 'ordering', 'cmd');
-		$filter_order_Dir	= $mainframe->getUserStateFromRequest(
+		$filter_order_Dir	= $app->getUserStateFromRequest(
 				$this->option . 'filter_order_Dir', 'filter_order_Dir', '', 'word');
 
 		if ($filter_order == 'ordering')
@@ -199,9 +201,7 @@ class JtgModelMaps extends JModelLegacy
 	 */
 	protected function _buildContentWhere()
 	{
-		$mainframe = JFactory::getApplication();
-
-		$search = JFactory::getApplication()->input->get('search');
+		$search = Factory::getApplication()->input->get('search');
 		$where = array();
 		$db = $this->getDbo();
 
@@ -287,7 +287,7 @@ class JtgModelMaps extends JModelLegacy
 	 */
 	function publish($cid = array(), $publish = 1)
 	{
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		if (count($cid))
 		{
@@ -316,13 +316,10 @@ class JtgModelMaps extends JModelLegacy
 	 */
 	function saveMap()
 	{
-		$mainframe = JFactory::getApplication();
-		jimport('joomla.filesystem.file');
-
 		$db = $this->getDbo();
 
 		// Get the post data
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$publish = $input->getInt('publish');
 		$order = $input->getInt('order');
 		$name = $input->get('name', '', 'string');
@@ -330,7 +327,6 @@ class JtgModelMaps extends JModelLegacy
 
 		$type = $input->getInt('type');
 		// Raw extraction remove link (attribution need links)
-		// $param = JFactory::getApplication()->input->get('param', '', 'raw');
 		$param = $input->get('param', '', 'array');
 		$param = str_replace("'", '&#39;', $param[0]);
 		$apikey = $input->get('apikey', '', 'string');
@@ -339,7 +335,7 @@ class JtgModelMaps extends JModelLegacy
 
 		if ( ( $name == "" ) )
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_MAP_NOT_SAVED'), 'Warning');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_MAP_NOT_SAVED'), 'Warning');
 
 			return false;
 		}
@@ -392,15 +388,13 @@ class JtgModelMaps extends JModelLegacy
 		$db = $this->getDbo();
 
 		// Get the post data
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$publish = $input->getInt('publish');
 		$order = $input->getInt('order');
 		$id = $input->getInt('id');
 		$name = $input->get('name', '', 'string');
 		$name = htmlentities($name);
 		$type = $input->getInt('type','0');
-		// Raw extraction remove link (attribution need links)
-		// $param = JFactory::getApplication()->input->get('param', '', 'raw');
 		$param = $input->get('param', '', 'array');
 		$param = str_replace("'", '&#39;', $param[0]);
 
@@ -410,7 +404,7 @@ class JtgModelMaps extends JModelLegacy
 
 		if ( ( $name == "" ) )
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_MAP_NOT_SAVED'), 'Warning');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_MAP_NOT_SAVED'), 'Warning');
 			return false;
 		}
 

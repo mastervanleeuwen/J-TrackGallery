@@ -16,6 +16,11 @@
  */
 
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 $this->get('State'); // have to get state before we can set state variables
 $this->getModel()->setState('list.limit','0'); // show all tracks
 $this->items = $this->get('Items');
@@ -31,15 +36,15 @@ echo "  DPCalLocs = ".JtgMapHelper::parseDPCalLocations($this->dpcallocs);
 echo "\n  DPCalIconFile = '/components/com_jtg/assets/images/orange-dot.png';\n";
 echo "</script>\n";
 
-JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js',array('version'=>'auto'));
-JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/jtgOverView.js',array('version'=>'auto'));
-JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
+Factory::getDocument()->addScript(Uri::root(true) . '/components/com_jtg/assets/js/geolocation.js',array('version'=>'auto'));
+Factory::getDocument()->addScript(Uri::root(true) . '/components/com_jtg/assets/js/jtgOverView.js',array('version'=>'auto'));
+Factory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
 ?>
 
 <style type="text/css">
 #jtg_map.olMap {
-	height: <?php echo$this->cfg->map_height; ?>;
-	width: <?php echo$this->cfg->map_width; ?>;
+	height: <?php echo $this->cfg->map_height; ?>;
+	width: <?php echo $this->cfg->map_width; ?>;
 	z-index: 0;
 }
 
@@ -81,7 +86,7 @@ if (count($this->items))
 }
 else
 {
-	echo "<div>".JText::_('COM_JTG_LIST_NO_TRACK')."</div>";
+	echo "<div>".Text::_('COM_JTG_LIST_NO_TRACK')."</div>";
 }
 ?>
 	<div>
@@ -117,16 +122,16 @@ if ($this->newest != 0)
 <div class="<?php echo $this->toptracks; ?>">
 	<div class="<?php echo $this->toptracks; ?>_title">
 		<span class="headline"> <a href="#TT_newest"><?php
-		echo JText::_('COM_JTG_NEWEST');
+		echo Text::_('COM_JTG_NEWEST');
 		?> </a>
 		</span>
 		<ul class="title">
 			<li>
 				<div class="list-left">
-					<b><?php echo JText::_('COM_JTG_TITLE'); ?> </b>
+					<b><?php echo Text::_('COM_JTG_TITLE'); ?> </b>
 				</div>
 				<div class="list-right">
-					<b><?php echo JText::_('COM_JTG_CAT'); ?> </b>
+					<b><?php echo Text::_('COM_JTG_CAT'); ?> </b>
 				</div>
 				<div class="no-float"></div>
 			</li>
@@ -137,7 +142,7 @@ if ($this->newest != 0)
 			<?php
 			if ( count($this->newest) == 0 )
 			{
-				echo JText::_('COM_JTG_NOENTRY');
+				echo Text::_('COM_JTG_NOENTRY');
 			}
 			else
 			{
@@ -157,7 +162,7 @@ if ($this->newest != 0)
 						}
 						else
 						{
-							echo '<i>' . JText::_('COM_JTG_NO_TITLE') . '</i>';
+							echo '<i>' . Text::_('COM_JTG_NO_TITLE') . '</i>';
 						}
 						?> </a>
 				</div>
@@ -182,16 +187,16 @@ if ($this->hits != 0)
 <div class="<?php echo $this->toptracks; ?>">
 	<div class="<?php echo $this->toptracks; ?>_title">
 		<span class="headline"> <a href="#TT_hits"><?php
-		echo JText::_('COM_JTG_MOSTHITS');
+		echo Text::_('COM_JTG_MOSTHITS');
 		?> </a>
 		</span>
 		<ul class="title">
 			<li>
 				<div class="list-left">
-					<b><?php echo JText::_('COM_JTG_TITLE'); ?> </b>
+					<b><?php echo Text::_('COM_JTG_TITLE'); ?> </b>
 				</div>
 				<div class="list-right">
-					<b><?php echo JText::_('COM_JTG_HITS'); ?> </b>
+					<b><?php echo Text::_('COM_JTG_HITS'); ?> </b>
 				</div>
 				<div class="no-float"></div>
 			</li>
@@ -203,7 +208,7 @@ if ($this->hits != 0)
 
 			if ( count($this->hits) == 0 )
 			{
-				echo JText::_('COM_JTG_NOENTRY');
+				echo Text::_('COM_JTG_NOENTRY');
 			}
 			else
 			{
@@ -223,7 +228,7 @@ if ($this->hits != 0)
 						}
 						else
 						{
-							echo '<i>' . JText::_('COM_JTG_NO_TITLE') . '</i>';
+							echo '<i>' . Text::_('COM_JTG_NO_TITLE') . '</i>';
 						}
 						?> </a>
 				</div>
@@ -250,16 +255,16 @@ if ($this->best != 0)
 <div class="<?php echo $this->toptracks; ?>">
 	<div class="<?php echo $this->toptracks; ?>_title">
 		<span class="headline"> <a href="#TT_best"><?php
-		echo JText::_('COM_JTG_MOSTVOTES');
+		echo Text::_('COM_JTG_MOSTVOTES');
 		?> </a>
 		</span>
 		<ul class="title">
 			<li>
 				<div class="list-left">
-					<b><?php echo JText::_('COM_JTG_TITLE'); ?> </b>
+					<b><?php echo Text::_('COM_JTG_TITLE'); ?> </b>
 				</div>
 				<div class="list-right">
-					<b><?php echo JText::_('COM_JTG_STARS'); ?> </b>
+					<b><?php echo Text::_('COM_JTG_STARS'); ?> </b>
 				</div>
 				<div class="no-float"></div>
 			</li>
@@ -271,7 +276,7 @@ if ($this->best != 0)
 
 			if ( count($this->best[1]) == 0 )
 			{
-				echo JText::_('COM_JTG_NOENTRY');
+				echo Text::_('COM_JTG_NOENTRY');
 			}
 			else
 			{
@@ -291,7 +296,7 @@ if ($this->best != 0)
 						}
 						else
 						{
-							echo '<i>' . JText::_('COM_JTG_NO_TITLE') . '</i>';
+							echo '<i>' . Text::_('COM_JTG_NO_TITLE') . '</i>';
 						}
 						?> </a>
 				</div>
@@ -303,15 +308,15 @@ if ($this->best != 0)
 
 					if ( $stars_float == 0 )
 					{
-						$title = JText::_('COM_JTG_NOT_VOTED');
+						$title = Text::_('COM_JTG_NOT_VOTED');
 					}
 					elseif ( $best->vote == 1 )
 					{
-						$title = "1 " . JText::_('COM_JTG_STAR');
+						$title = "1 " . Text::_('COM_JTG_STAR');
 					}
 					else
 					{
-						$title = $stars_float2 . " " . JText::_('COM_JTG_STARS');
+						$title = $stars_float2 . " " . Text::_('COM_JTG_STARS');
 					}
 
 					if ($this->best[0])
@@ -344,16 +349,16 @@ if ($this->rand != 0)
 <div class="<?php echo $this->toptracks; ?>">
 	<div class="<?php echo $this->toptracks; ?>_title">
 		<span class="headline"> <a href="#TT_rand"><?php
-		echo JText::_('COM_JTG_RANDOM_TRACKS');
+		echo Text::_('COM_JTG_RANDOM_TRACKS');
 		?> </a>
 		</span>
 		<ul class="title">
 			<li>
 				<div class="list-left">
-					<b><?php echo JText::_('COM_JTG_TITLE'); ?> </b>
+					<b><?php echo Text::_('COM_JTG_TITLE'); ?> </b>
 				</div>
 				<div class="list-right">
-					<b><?php echo JText::_('COM_JTG_CAT'); ?> </b>
+					<b><?php echo Text::_('COM_JTG_CAT'); ?> </b>
 				</div>
 				<div class="no-float"></div>
 			</li>
@@ -365,7 +370,7 @@ if ($this->rand != 0)
 
 			if ( count($this->rand) == 0 )
 			{
-				echo JText::_('COM_JTG_NOENTRY');
+				echo Text::_('COM_JTG_NOENTRY');
 			}
 			else
 			{
@@ -385,7 +390,7 @@ if ($this->rand != 0)
 						}
 						else
 						{
-							echo '<i>' . JText::_('COM_JTG_NO_TITLE') . '</i>';
+							echo '<i>' . Text::_('COM_JTG_NO_TITLE') . '</i>';
 						}
 						?> </a>
 				</div>
@@ -412,8 +417,9 @@ if ($this->rand != 0)
 <?php
 	if (count($this->items))
 	{
-		echo JtgMapHelper::parseOverviewMapJS($this->items,0,$this->showtracks,$this->zoomlevel,JFactory::getApplication()->input->get('lon'),JFactory::getApplication()->input->get('lat'),JFactory::getApplication()->input->getBool('geoloc'));
+		echo JtgMapHelper::parseOverviewMapJS($this->items,0,$this->showtracks,$this->zoomlevel,Factory::getApplication()->input->get('lon'),Factory::getApplication()->input->get('lat'),Factory::getApplication()->input->getBool('geoloc'));
 	}
+
 	echo $this->footer;
 ?>
 </div>

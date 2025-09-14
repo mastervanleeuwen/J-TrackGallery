@@ -19,6 +19,12 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+
 /**
  * Controller Class Configuration
  *
@@ -52,19 +58,17 @@ class JtgControllerConfig extends JtgController
 	 */
 	function saveconfig()
 	{
-		$mainframe = JFactory::getApplication();
-
 		// 	check the token
-		JSession::checkToken() or die( 'JINVALID_TOKEN' );
+		Session::checkToken() or die( 'JINVALID_TOKEN' );
 		$model = $this->getModel('config');
 		$error = $model->saveConfig();
 
 		if ($error !== true)
 		{
-			JFactory::getApplication()->enqueueMessage($error, 'Warning');
+			Factory::getApplication()->enqueueMessage($error, 'Warning');
 		}
 
-		$link = JRoute::_("index.php?option=com_jtg&task=config&controller=config", false);
-		$this->setRedirect($link, JText::_('COM_JTG_CONFIG_SAVED'));
+		$link = Route::_("index.php?option=com_jtg&task=config&controller=config", false);
+		$this->setRedirect($link, Text::_('COM_JTG_CONFIG_SAVED'));
 	}
 }

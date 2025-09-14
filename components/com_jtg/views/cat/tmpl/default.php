@@ -18,8 +18,13 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 // Load core.js to enable tableordering
-JHtml::_('script', 'system/core.js', false, true);
+HTMLHelper::_('script', 'system/core.js', false, true);
 
 $this->filterForm = $this->get('FilterForm');
 if (!$this->cfg->uselevel) $this->filterForm->removeField('tracklevel','filter');
@@ -35,11 +40,11 @@ $height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px;" ' : ' ')
 $levelMin = $this->params->get('jtg_param_level_from');
 $levelMax = $this->params->get('jtg_param_level_to');
 $showcatcolumn = !$hide_icon_istrack || !$hide_icon_isroundtrip || !$hide_icon_is_wp || !$hide_icon_isgeocache;
-$iconpath = JUri::root() . "components/com_jtg/assets/template/" . $this->cfg->template . "/images/";
+$iconpath = Uri::root() . "components/com_jtg/assets/template/" . $this->cfg->template . "/images/";
 
 if (version_compare(JVERSION, '4.0', 'lt')) 
 {
-	JFactory::getApplication()->getDocument()->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' .  $this->cfg->template . '/filter_box_j3.css');
+	Factory::getApplication()->getDocument()->addStyleSheet(Uri::root(true) . '/components/com_jtg/assets/template/' .  $this->cfg->template . '/filter_box_j3.css');
 }
 ?>
 
@@ -71,28 +76,28 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 
 <?php 
 echo $this->parseTemplate("headline", $this->title, "jtg_param_header_map", null, $this->title);
-$lang = JFactory::getApplication()->getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 ?>
 
 <div class="jtg-prevnext">
 <?php if ($this->prev_cat_title) :
 	$direction = $lang->isRtl() ? 'right' : 'left';
-	$ariaLabel = JText::_('JPREVIOUS') . ': ' . $this->prev_cat_title;
+	$ariaLabel = Text::_('JPREVIOUS') . ': ' . $this->prev_cat_title;
 ?>
 <div style="float:left">
 	<a class="page-link hasTooltip" href="<?php echo JRoute::_('index.php?option=com_jtg&view=cat&id='.$this->prev_cat_id); ?>" title="<?php echo $this->prev_cat_title; ?>" data-bs-original-title="<?php echo $ariaLabel; ?>" rel="prev">
-	<?php echo '<span class="icon-chevron-' . $direction . '" aria-hidden="true"></span> ' . JText::_('JPREV'); ?>
+	<?php echo '<span class="icon-chevron-' . $direction . '" aria-hidden="true"></span> ' . Text::_('JPREV'); ?>
 	</a>
 </div>
 <?php endif; ?>
 
 <?php if ($this->next_cat_title) :
 	$direction = $lang->isRtl() ? 'left' : 'right';
-	$ariaLabel = JText::_('JNEXT') . ': ' . $this->next_cat_title;
+	$ariaLabel = Text::_('JNEXT') . ': ' . $this->next_cat_title;
 ?>
 <div style="float:right">
 	<a class="page-link hasTooltip" href="<?php echo JRoute::_('index.php?option=com_jtg&view=cat&id='.$this->next_cat_id); ?>" title="<?php echo $this->next_cat_title; ?>" data-bs-original-title="<?php echo $ariaLabel; ?>" rel="next">
-	<?php echo JText::_('JNEXT') . ' <span class="icon-chevron-' . $direction . '" aria-hidden="true"></span>'; ?>
+	<?php echo Text::_('JNEXT') . ' <span class="icon-chevron-' . $direction . '" aria-hidden="true"></span>'; ?>
 	</a>
 </div>
 <?php endif; ?>
@@ -100,13 +105,13 @@ $lang = JFactory::getApplication()->getLanguage();
 
 <?php
 if (empty($this->items)) {
-	echo '<b>' . JText::_('COM_JTG_LIST_NO_TRACK') . '</b>';
+	echo '<b>' . Text::_('COM_JTG_LIST_NO_TRACK') . '</b>';
 } else {
 
 	if ($this->showmap) {  
-		JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js',array('version'=>'auto'));
-		JFactory::getDocument()->addScript(JUri::root(true) . '/components/com_jtg/assets/js/jtgOverView.js',array('version'=>'auto'));
-		JFactory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
+		Factory::getDocument()->addScript(Uri::root(true) . '/components/com_jtg/assets/js/geolocation.js',array('version'=>'auto'));
+		Factory::getDocument()->addScript(Uri::root(true) . '/components/com_jtg/assets/js/jtgOverView.js',array('version'=>'auto'));
+		Factory::getDocument()->addStyleSheet('https://fonts.googleapis.com/icon?family=Material+Icons'); // For geolocation/center icon
 ?>
 <center>
 	<div id="jtg_map" class="olMap"></div>
@@ -118,7 +123,7 @@ if (empty($this->items)) {
 </center>
 <div class="no-float">
    <?php
-		echo JtgMapHelper::parseOverviewMapJS($this->items,$this->catid,$this->showtracks,$this->zoomlevel,JFactory::getApplication()->input->get('lon'),JFactory::getApplication()->input->get('lat'),JFactory::getApplication()->input->getBool('geoloc'));
+		echo JtgMapHelper::parseOverviewMapJS($this->items,$this->catid,$this->showtracks,$this->zoomlevel,Factory::getApplication()->input->get('lon'),Factory::getApplication()->input->get('lat'),Factory::getApplication()->input->getBool('geoloc'));
    ?>
 </div>
 <?php
@@ -159,15 +164,15 @@ if ($this->params->get('jtg_param_cat_filterbox', 1)) {
 			<tr
 				class="sectiontableheader<?php echo $this->escape($this->params->get('pageclass_sfx')); ?>">
 				<th></th>
-				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TITLE'), 'title', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
+				<th><?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_TITLE'), 'title', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 				</th>
 				<?php if ($showcatcolumn) {?>
-				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_CAT'), 'catid', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
+				<th><?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_CAT'), 'catid', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 				</th>
 				<?php 
 				}
 				if ($this->cfg->uselevel) {?>
-				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_LEVEL'), 'level', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
+				<th><?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_LEVEL'), 'level', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 				</th>
 				<?php 
 				} 
@@ -176,7 +181,7 @@ if ($this->params->get('jtg_param_cat_filterbox', 1)) {
 				{
 				?>
 								<th>
-								<?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TERRAIN'), 'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
+								<?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_TERRAIN'), 'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 								</th>
 				<?php
 				}
@@ -185,13 +190,13 @@ if ($this->params->get('jtg_param_cat_filterbox', 1)) {
 				{
 				?>
 								<th>
-								<?php echo JHtml::_('grid.sort', JText::_('COM_JTG_VOTING'), 'vote', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
+								<?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_VOTING'), 'vote', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 								</th>
 				<?php
 				}
 				?>
 				<th>
-				<?php echo JHtml::_('grid.sort', JText::_('COM_JTG_DISTANCE'), 'distance', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
+				<?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_DISTANCE'), 'distance', @$this->lists['order_Dir'], @$this->lists['order'], 'cat'); ?>
 				</th>
 			</tr>
 		</thead>
@@ -206,19 +211,19 @@ if ($this->params->get('jtg_param_cat_filterbox', 1)) {
 			{
 				if (!$row->title)
 				{
-					$row->title = "<font class=\"emptyEntry\">" . JText::_('COM_JTG_NO_TITLE') . "</font>";
+					$row->title = "<font class=\"emptyEntry\">" . Text::_('COM_JTG_NO_TITLE') . "</font>";
 				}
 				$link_only='';
 				switch ($row->access)
 				{
 					case 1:
-						$link_only = "&nbsp;<img alt=\"" . JText::_('COM_JTG_REGISTERED') . "\" src=\"" . $iconpath . "registered_only.png\" />";
+						$link_only = "&nbsp;<img alt=\"" . Text::_('COM_JTG_REGISTERED') . "\" src=\"" . $iconpath . "registered_only.png\" />";
 						break;
 					case 2:
-						$link_only = "&nbsp;<img alt=\"" . JText::_('COM_JTG_ADMINISTRATORS') . "\" src=\"" . $iconpath . "special_only.png\" />";
+						$link_only = "&nbsp;<img alt=\"" . Text::_('COM_JTG_ADMINISTRATORS') . "\" src=\"" . $iconpath . "special_only.png\" />";
 						break;
 					case 9:
-						$link_only = "&nbsp;<img alt=\"" . JText::_('COM_JTG_PRIVATE') . "\" src=\"" . $iconpath . "private_only.png\" />";
+						$link_only = "&nbsp;<img alt=\"" . Text::_('COM_JTG_PRIVATE') . "\" src=\"" . $iconpath . "private_only.png\" />";
 						break;
 				}
 				$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $row->id, false);
@@ -244,26 +249,26 @@ if ($this->params->get('jtg_param_cat_filterbox', 1)) {
 				}
 				else
 				{
-					$profile .= "<font class=\"emptyEntry\">" . JText::_('COM_JTG_NO_USER') . "</font>&nbsp;";
+					$profile .= "<font class=\"emptyEntry\">" . Text::_('COM_JTG_NO_USER') . "</font>&nbsp;";
 				}
 
-				$user = JFactory::getUser();
+				$user = Factory::getUser();
 				if ($this->canDo->get('core.edit') ||
 					($this->canDo->get('core.edit.own') && ($row->uid==$user->id)))
 				{
 					$editlink = JRoute::_('index.php?option=com_jtg&view=track&layout=form&id=' . $row->id, false);
 					$links = " <a href=\"" . $editlink . "\">" .
-					"<img title=\"" . JText::_('JACTION_EDIT') . "\" alt=\"" .
-						JText::_('JACTION_EDIT') . "\" src=\"" . JUri::root() . "components/com_jtg/assets/images/edit_f2.png\" width=\"16px\" />" .
+					"<img title=\"" . Text::_('JACTION_EDIT') . "\" alt=\"" .
+						Text::_('JACTION_EDIT') . "\" src=\"" . Uri::root() . "components/com_jtg/assets/images/edit_f2.png\" width=\"16px\" />" .
 					"</a> ";
 				}
 				if ($this->canDo->get('core.delete') ||
 					($this->canDo->get('core.edit.own') && ($row->uid==$user->id)))
 				{
 					$deletelink = JRoute::_('index.php?option=com_jtg&controller=track&task=delete&id=' . $row->id, false);
-					$links .= "<a href=\"" . $deletelink . "\" onclick=\"return confirm('". JText::_('COM_JTG_VALIDATE_DELETE_TRACK') ."')\">" .
-						"<img title=\"" . JText::_('JACTION_DELETE') . "\" alt=\"" .
-						JText::_('JACTION_DELETE') . "\" src=\"" . JUri::root() . "components/com_jtg/assets/images/cancel_f2.png\" width=\"16px\" />" .
+					$links .= "<a href=\"" . $deletelink . "\" onclick=\"return confirm('". Text::_('COM_JTG_VALIDATE_DELETE_TRACK') ."')\">" .
+						"<img title=\"" . Text::_('JACTION_DELETE') . "\" alt=\"" .
+						Text::_('JACTION_DELETE') . "\" src=\"" . Uri::root() . "components/com_jtg/assets/images/cancel_f2.png\" width=\"16px\" />" .
 					"</a>";
 				}
 				?>

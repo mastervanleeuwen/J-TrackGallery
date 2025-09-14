@@ -17,9 +17,12 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
-use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Utilities\ArrayHelper;
 
 /**
  * JtgModelFiles class for the jtg component
@@ -194,11 +197,11 @@ class JtgModelFiles extends ListModel
 
 				if ($i == 0)
 				{
-					$return .= JText::_('COM_JTG_SELECT');
+					$return .= Text::_('COM_JTG_SELECT');
 				}
 				else
 				{
-					$return .= $i . " - " . JText::_(trim($level));
+					$return .= $i . " - " . Text::_(trim($level));
 				}
 
 				$return .= ("</option>\n");
@@ -238,7 +241,7 @@ class JtgModelFiles extends ListModel
 			}
 		}
 
-		$return .= $selectedlevel . "/" . ($i - 1) . " - " . JText::_(trim($selectedtext));
+		$return .= $selectedlevel . "/" . ($i - 1) . " - " . Text::_(trim($selectedtext));
 
 		return $return;
 	}
@@ -251,8 +254,8 @@ class JtgModelFiles extends ListModel
 	 */
 	protected function _buildContentOrderBy (bool $addorder=true)
 	{
-		$mainframe = Factory::getApplication();
-		$params = $mainframe->getParams();
+		$app = Factory::getApplication();
+		$params = $app->getParams();
 		$ordering = '';
 
 		switch ($params->get('jtg_param_track_ordering'))
@@ -302,7 +305,7 @@ class JtgModelFiles extends ListModel
 		}
 
 		// V0.9.17: Order $filter_order is set to $ordering (default ordering) when no other ordering is set by the user
-		$filter_order = $mainframe->getUserStateFromRequest($this->option . 'filter_order', 'filter_order', $ordering, 'cmd');
+		$filter_order = $app->getUserStateFromRequest($this->option . 'filter_order', 'filter_order', $ordering, 'cmd');
 
 		if ($filter_order == $ordering)
 		{
@@ -310,7 +313,7 @@ class JtgModelFiles extends ListModel
 		}
 		else
 		{
-			$filter_order_Dir = $mainframe->getUserStateFromRequest($this->option . 'filter_order_Dir', 'filter_order_Dir', '', 'word');
+			$filter_order_Dir = $app->getUserStateFromRequest($this->option . 'filter_order_Dir', 'filter_order_Dir', '', 'word');
 		}
 
 		if ($filter_order == '')
@@ -338,9 +341,9 @@ class JtgModelFiles extends ListModel
 	 */
 	protected function _buildContentWhere()
 	{
-		$mainframe = Factory::getApplication();
+		$app = Factory::getApplication();
 
-		$input = $mainframe->input;
+		$input = $app->input;
 		$search = $input->get('search');
 		$cat = $input->get('cat');
 		$terrain = $input->get('terrain');
@@ -388,7 +391,7 @@ class JtgModelFiles extends ListModel
 		// Add frontend filtering related to access level
 
 		$access = JtgHelper::giveAccessLevel(); // User access level
-		$params = $mainframe->getParams();
+		$params = $app->getParams();
 		$otherfiles = $params->get('jtg_param_otherfiles');// Access level defined in backend
 		$where = JtgHelper::MayIsee($where, $access, $otherfiles);
 		return $where;
@@ -412,20 +415,20 @@ class JtgModelFiles extends ListModel
 
 		foreach ($rows as $v)
 		{
-			$v->title = JText::_($v->title);
+			$v->title = Text::_($v->title);
 			$pt = $v->parent_id;
 			$list = @$children[$pt] ? $children[$pt] : array();
 			array_push($list, $v);
 			$children[$pt] = $list;
 		}
 
-		$list = JHtml::_('menu.treerecurse', 0, '', array(), $children, $maxlevel = 9999, $level = 0, $type = 0);
+		$list = HTMLHelper::_('menu.treerecurse', 0, '', array(), $children, $maxlevel = 9999, $level = 0, $type = 0);
 		$list = array_slice($list, 0, $limit);
 		$cats = array();
 		$nullcat = array(
 				'id' => 0,
-				'title' => JText::_('JNONE'),
-				'name' => JText::_('JNONE'),
+				'title' => Text::_('JNONE'),
+				'name' => Text::_('JNONE'),
 				'image' => ""
 		);
 		$cats[0] = ArrayHelper::toObject($nullcat);
@@ -444,7 +447,7 @@ class JtgModelFiles extends ListModel
 			$arr = array(
 					'id' => $cat->id,
 					'title' => $title,
-					'name' => JText::_($cat->title),
+					'name' => Text::_($cat->title),
 					'image' => $cat->image
 			);
 			$cats[$cat->id] = ArrayHelper::toObject($arr);
@@ -562,7 +565,7 @@ class JtgModelFiles extends ListModel
 		{
 			foreach ($row as $v)
 			{
-				$v->title = JText::_($v->title);
+				$v->title = Text::_($v->title);
 				$terrain[] = $v;
 			}
 		}
@@ -579,8 +582,6 @@ class JtgModelFiles extends ListModel
 	 */
 	function getAuthorData ($id)
 	{
-		$mainframe = Factory::getApplication();
-
 		$db = $this->getDbo();
 		$query = "SELECT a.uid, b.name, b.email FROM #__jtg_files AS a" . "\n LEFT JOIN #__users AS b ON a.uid=b.id" . "\n WHERE a.id='" . $id . "'";
 
@@ -742,7 +743,7 @@ class JtgModelFiles extends ListModel
 		foreach ($result as $k => $v)
 		{
 			$newresult[$k] = $v;
-			$newresult[$k]->name = JText::_($newresult[$k]->name);
+			$newresult[$k]->name = Text::_($newresult[$k]->name);
 		}
 
 		return $newresult;
@@ -769,7 +770,7 @@ class JtgModelFiles extends ListModel
 		foreach ($result as $k => $v)
 		{
 			$newresult[$k] = $v;
-			$newresult[$k]->name = JText::_($newresult[$k]->name);
+			$newresult[$k]->name = Text::_($newresult[$k]->name);
 		}
 
 		return $newresult;
@@ -806,7 +807,7 @@ class JtgModelFiles extends ListModel
          $nullcat = array(
                "id"        => 0,
                "parent"    => 0,
-               "title"        => "<label title=\"" . JText::_('COM_JTG_CAT_NONE') . "\">-</label>",
+               "title"        => "<label title=\"" . Text::_('COM_JTG_CAT_NONE') . "\">-</label>",
                "description"  => null,
                "image"        => null,
                "ordering"     => 0,

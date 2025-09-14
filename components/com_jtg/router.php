@@ -168,7 +168,7 @@ class jtgRouter extends RouterBase
 	public function build(&$query)
 	{
 		$segments = array();
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$menu = $app->getMenu();
 
 		// TODO: check remove this?
@@ -445,7 +445,7 @@ class jtgRouter extends RouterBase
 		$vars = array();
 
 		// Get the active menu item
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$menu = $app->getMenu();
 		$item = $menu->getActive();
 
@@ -531,7 +531,6 @@ class jtgRouter extends RouterBase
    */
    function getAliasFromId($id)
    {
-		//$db = Factory::getContainer()->get('DatabaseDriver');
 		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('alias');
@@ -550,7 +549,6 @@ class jtgRouter extends RouterBase
    */
    function getIdFromAlias($alias)
 	{
-		//$db = Factory::getContainer()->get('DatabaseDriver');
 		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('id');

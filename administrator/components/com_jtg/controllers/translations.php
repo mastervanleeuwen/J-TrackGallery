@@ -19,6 +19,12 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+
 /**
  * JtgControllertranslations class for the jtg component
  *
@@ -50,21 +56,21 @@ class JtgControllertranslations extends JtgController
 	function saveLanguages()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('translations');
 		$success = $model->saveLanguage();
 
 		// Redirect to translations
-		$link = JRoute::_("index.php?option=com_jtg&task=translations&controller=translations", false);
+		$link = Route::_("index.php?option=com_jtg&task=translations&controller=translations", false);
 
 		if ($success)
 		{
-			$this->setRedirect($link, JText::_('COM_JTG_TRANSLATIONS_SAVED'));
+			$this->setRedirect($link, Text::_('COM_JTG_TRANSLATIONS_SAVED'));
 		}
 		else
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_TRANSLATIONS_NOTSAVED'), 'Warning');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_TRANSLATIONS_NOTSAVED'), 'Warning');
 			$this->setRedirect($link);
 		}
 	}

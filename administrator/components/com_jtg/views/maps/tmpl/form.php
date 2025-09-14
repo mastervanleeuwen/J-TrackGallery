@@ -16,16 +16,22 @@
  */
 
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 $id = $this->_models['maps']->_id;
 
 // Toolbar
 if ($id < 1)
 {
-	$title = JText::_('COM_JTG_ADD_MAP');
+	$title = Text::_('COM_JTG_ADD_MAP');
 }
 else
 {
-	$title = JText::_('COM_JTG_EDIT_MAP');
+	$title = Text::_('COM_JTG_EDIT_MAP');
 }
 
 JToolBarHelper::title($title, 'categories.png');
@@ -53,10 +59,10 @@ else
 }
 
 JToolBarHelper::help("maps/newmap", true);
-	$document = JFactory::getDocument();
+	$document = Factory::getDocument();
 if ($id)
 {
-	$cache = JFactory::getCache('com_jtg');
+	$cache = Factory::getCache('com_jtg');
 	$cfg = JtgHelper::getConfig();
 	$model = $this->getModel();
 
@@ -69,8 +75,8 @@ if (version_compare(JVERSION,'3.0','ge'))
 	$document->addStyleDeclaration($style);
 }
 
-JFormHelper::addFieldPath(JPATH_COMPONENT . '/models/fields');
-JFormHelper::loadFieldType('MapType', false);
+FormHelper::addFieldPath(JPATH_COMPONENT . '/models/fields');
+FormHelper::loadFieldType('MapType', false);
 $maptype = new JFormFieldMapType();
 if (isset($map->type)) $maptype->SetValue($map->type);
 $maptype->__set('name','type');
@@ -95,22 +101,22 @@ $maptype->__set('name','type');
 }
 ?>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_NAME'); ?>:*</td>
+				<td><?php echo Text::_('COM_JTG_NAME'); ?>:*</td>
 				<td><input id="name" type="text" name="name"
 					value="<?php echo isset($map->name)? $map->name: (string) $id; ?>"
-					size="50" maxlength="50" /> (<?php echo isset($map->name)? JText::_($map->name): (string) $id; ?>)
+					size="50" maxlength="50" /> (<?php echo isset($map->name)? Text::_($map->name): (string) $id; ?>)
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_PUBLISHED'); ?>:*</td>
+				<td><?php echo Text::_('COM_JTG_PUBLISHED'); ?>:*</td>
 				<td><?php echo $this->list['published']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_MAP_TYPE'); ?>:*</td>
-				<td><?php echo JHtml::_('select.genericlist', JtgMapHelper::getMapTypes(), 'type', 'size="1"', 'id', 'name', $map->type); //echo $maptype->renderField(); ?> </td>
+				<td><?php echo Text::_('COM_JTG_MAP_TYPE'); ?>:*</td>
+				<td><?php echo HTMLHelper::_('select.genericlist', JtgMapHelper::getMapTypes(), 'type', 'size="1"', 'id', 'name', $map->type); //echo $maptype->renderField(); ?> </td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_OL_PARAMETERS'); ?>:*</td>
+				<td><?php echo Text::_('COM_JTG_OL_PARAMETERS'); ?>:*</td>
 						<?php
 						if (($id) AND (isset($map->param)))
 						{
@@ -125,7 +131,7 @@ $maptype->__set('name','type');
 						cols="100" maxlength="500" rows="8"><?php echo $param; ?></textarea>
 				</td>
 			</tr>
-				<td><?php echo JText::_('API Key'); ?>:</td>
+				<td><?php echo Text::_('API Key'); ?>:</td>
 						<?php
 						if (($id) AND (isset($map->apikey)))
 						{
@@ -145,7 +151,7 @@ $maptype->__set('name','type');
 			<tr>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_ORDER'); ?>:*</td>
+				<td><?php echo Text::_('COM_JTG_ORDER'); ?>:*</td>
 				<td><input id="order" type="text" name="order"
 					value="<?php echo (($id AND isset($map->ordering))? $map->ordering: '99'); ?>"
 					size="2" maxlength="2">
@@ -154,7 +160,7 @@ $maptype->__set('name','type');
 		</tbody>
 	</table>
 	<?php
-	echo JHtml::_('form.token'); ?>
+	echo HTMLHelper::_('form.token'); ?>
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="controller" value="maps" /> <input type="hidden"
 		name="checked_out" value="0" /> <input type="hidden" name="task"

@@ -16,19 +16,20 @@
  */
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 // Toolbar
-JToolBarHelper::title(JText::_('COM_JTG_CONFIG'), 'generic.png');
-JToolBarHelper::back();
-JToolBarHelper::save('saveconfig', $alt = 'COM_JTG_SAVE', 'save.png');
-JToolBarHelper::preferences('com_jtg', 600, 800, $alt = 'COM_JTG_MENU_DEFAULT_SETTINGS');
-JToolBarHelper::help('config/default', true);
-if (version_compare(JVERSION, '4.0', 'ge'))
+ToolbarHelper::title(Text::_('COM_JTG_CONFIG'), 'generic.png');
+ToolbarHelper::back();
+ToolbarHelper::save('saveconfig', $alt = 'COM_JTG_SAVE', 'save.png');
+ToolbarHelper::preferences('com_jtg', 600, 800, $alt = 'COM_JTG_MENU_DEFAULT_SETTINGS');
+ToolbarHelper::help('config/default', true);
+if (version_compare(JVERSION, '4.0', 'lt'))
 {
-   JHtmlBootstrap::tooltip('.hasTooltip');
-}
-else
-{
-	JHtml::_('behavior.tooltip');
+	HTMLHelper::_('behavior.tooltip');
 ?>
 
 <div id="j-sidebar-container" class="span2">
@@ -42,7 +43,7 @@ else
 <form action="" method="post" name="adminForm" id="adminForm"
 	class="adminForm">
 	<?php
-	$document = JFactory::getDocument();
+	$document = Factory::getDocument();
 	$style = '
 	dt.tabs h3
 	{
@@ -110,30 +111,30 @@ margin: 1px 0 0 0;
 	// Configuration BEGIN
 
 	echo JHtmlBootstrap::startTabSet('tabs', $options);
-	echo JHtmlBootstrap::addTab('tabs', 'mainconfig', JText::_('COM_JTG_MAINCONF'));
+	echo JHtmlBootstrap::addTab('tabs', 'mainconfig', Text::_('COM_JTG_MAINCONF'));
 	?>
 	<table class="admintable">
 		<tbody>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_TT_USE_ACCESS_LEVEL') . '">' . JText::_('COM_JTG_USE_ACCESS_LEVEL') . '</span>'; ?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE')
+					. '::' . Text::_('COM_JTG_TT_USE_ACCESS_LEVEL') . '">' . Text::_('COM_JTG_USE_ACCESS_LEVEL') . '</span>'; ?>
 				</td>
 				<td><?php echo $this->lists['access']; ?></td>
 			</tr>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_TT_TERMS_IN_USE') . '">' . JText::_('COM_JTG_TERMS_IN_USE') . '</span>'; ?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE')
+					. '::' . Text::_('COM_JTG_TT_TERMS_IN_USE') . '">' . Text::_('COM_JTG_TERMS_IN_USE') . '</span>'; ?>
 				</td>
 				<td><select name="terms" size="1">
 						<option value="1"
 						<?php echo $this->config->terms == "1" ? 'selected=selected': ''; ?>>
-							<?php echo JText::_('JYES'); ?>
+							<?php echo Text::_('JYES'); ?>
 						</option>
 						<option value="0"
 						<?php echo $this->config->terms == "0" ? 'selected=selected': ''; ?>>
-							<?php echo JText::_('JNO'); ?>
+							<?php echo Text::_('JNO'); ?>
 						</option>
 				</select>
 				</td>
@@ -145,8 +146,8 @@ margin: 1px 0 0 0;
 				?>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_TT_TERMS') . '">' . JText::_('COM_JTG_TERMS') . '</span>'; ?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE')
+					. '::' . Text::_('COM_JTG_TT_TERMS') . '">' . Text::_('COM_JTG_TERMS') . '</span>'; ?>
 				</td>
 				<td><?php echo $this->lists['content']; ?></td>
 			</tr>
@@ -155,13 +156,13 @@ margin: 1px 0 0 0;
 			?>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE') . '::'
-					. JText::_('COM_JTG_TT_PROFILEEXT') . '">' . JText::_('COM_JTG_PROFILEEXT') . '</span>'; ?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE') . '::'
+					. Text::_('COM_JTG_TT_PROFILEEXT') . '">' . Text::_('COM_JTG_PROFILEEXT') . '</span>'; ?>
 				</td>
 				<td><select name="profile" size="1">
 						<option value="0"
 						<?php echo $this->config->profile == "0"? 'selected=selected': ''; ?>>
-							<?php echo JText::_('COM_JTG_NO_PROFILE'); ?>
+							<?php echo Text::_('COM_JTG_NO_PROFILE'); ?>
 						</option>
 						<option value="cb"
 						<?php echo $this->config->profile == "cb"? 'selected=selected': ''; ?>>Community
@@ -175,15 +176,15 @@ margin: 1px 0 0 0;
 			</tr>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE') . '::'
-					. JText::_('COM_JTG_TT_VOTE') . '">' . JText::_('COM_JTG_VOTE') . '</span>'; ?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE') . '::'
+					. Text::_('COM_JTG_TT_VOTE') . '">' . Text::_('COM_JTG_VOTE') . '</span>'; ?>
 				 </td>
 				<td><?php echo $this->lists['usevote']; ?></td>
 			</tr>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE') . '::'
-					. JText::_('COM_JTG_TT_APPROACH') . '">' . JText::_('COM_JTG_APPROACH') . '</span>'; ?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE') . '::'
+					. Text::_('COM_JTG_TT_APPROACH') . '">' . Text::_('COM_JTG_APPROACH') . '</span>'; ?>
 				</td>
 				<td><?php echo $this->lists['approach']; ?></td>
 			</tr>
@@ -195,108 +196,108 @@ margin: 1px 0 0 0;
 	// Configuration END
 
 	// Level BEGIN
-	echo JHtmlBootstrap::addTab('tabs', 'levelconfig', JText::_('COM_JTG_LEVEL'));
+	echo JHtmlBootstrap::addTab('tabs', 'levelconfig', Text::_('COM_JTG_LEVEL'));
 	?>
 	<table class="admintable">
 		<tbody>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE') . '::'
-					. JText::_('COM_JTG_TT_USE_LEVEL') . '">' . JText::_('COM_JTG_USE_LEVEL') . '</span>'; ?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE') . '::'
+					. Text::_('COM_JTG_TT_USE_LEVEL') . '">' . Text::_('COM_JTG_USE_LEVEL') . '</span>'; ?>
 				 </td>
 				<td><?php echo $this->lists['uselevel']; ?></td>
 			</tr>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_TT_LEVELCONF') . '">' . JText::_('COM_JTG_LEVEL') . '</span>'; ?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE')
+					. '::' . Text::_('COM_JTG_TT_LEVELCONF') . '">' . Text::_('COM_JTG_LEVEL') . '</span>'; ?>
 				</td>
-				<td valign="top"><?php echo JText::_('COM_JTG_LEVELCONF_FIRST') . "<br />" . $this->lists['level']; ?>
+				<td valign="top"><?php echo Text::_('COM_JTG_LEVELCONF_FIRST') . "<br />" . $this->lists['level']; ?>
 				</td>
-				<td valign="top"><?php echo JText::_('COM_JTG_LEVEL_TRANSLATION') . ":<br />" . $this->lists['translevel']; ?>
+				<td valign="top"><?php echo Text::_('COM_JTG_LEVEL_TRANSLATION') . ":<br />" . $this->lists['translevel']; ?>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	&nbsp;
 	<?php
-	echo '<br /><br />' . JText::_('COM_JTG_LEVELCONF_HELP') . '<br />';
+	echo '<br /><br />' . Text::_('COM_JTG_LEVELCONF_HELP') . '<br />';
 	echo JHtmlBootstrap::endTab();
 	// Level END
-	echo JHtmlBootstrap::addTab('tabs', 'maps', JText::_('COM_JTG_MAPS'));
+	echo JHtmlBootstrap::addTab('tabs', 'maps', Text::_('COM_JTG_MAPS'));
 
 	?>
 	<table class="admintable">
 		<tbody>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_UNIT'); ?></td>
+				<td><?php echo Text::_('COM_JTG_UNIT'); ?></td>
 				<td>&nbsp;&nbsp;<?php echo $this->lists['unit']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_MAPWIDTH'); ?></td>
+				<td><?php echo Text::_('COM_JTG_MAPWIDTH'); ?></td>
 				<td>&nbsp;&nbsp;<input type="text" name="map_width"
 					value="<?php echo $this->config->map_width; ?>" size="20" />
-					<?php echo JText::_('COM_JTG_PX_OR_PERCENT'); ?>
+					<?php echo Text::_('COM_JTG_PX_OR_PERCENT'); ?>
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_MAPHEIGHT'); ?></td>
+				<td><?php echo Text::_('COM_JTG_MAPHEIGHT'); ?></td>
 				<td>&nbsp;&nbsp;<input type="text" name="map_height"
 					value="<?php echo $this->config->map_height; ?>" size="20" />
-					<?php echo JText::_('COM_JTG_PX_OR_PERCENT'); ?>
+					<?php echo Text::_('COM_JTG_PX_OR_PERCENT'); ?>
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_MAX_TRKPT_DISPLAY'); ?></td>
+				<td><?php echo Text::_('COM_JTG_MAX_TRKPT_DISPLAY'); ?></td>
 				<td>&nbsp;&nbsp;<input type="text" name="maxTrkptDisplay"
 					value="<?php echo $this->config->maxTrkptDisplay; ?>" size="20" />
-					<?php echo JText::_('COM_JTG_MAX_TRKPT_DISPLAY2'); ?>
+					<?php echo Text::_('COM_JTG_MAX_TRKPT_DISPLAY2'); ?>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2"><b><?php echo JText::_('COM_JTG_CHARTS_PROFILE'); ?>
+				<td colspan="2"><b><?php echo Text::_('COM_JTG_CHARTS_PROFILE'); ?>
 				</b></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_CHARTWIDTH'); ?></td>
+				<td><?php echo Text::_('COM_JTG_CHARTWIDTH'); ?></td>
 				<td>&nbsp;&nbsp;<input type="text" name="charts_width"
 					value="<?php echo $this->config->charts_width; ?>" size="20" />
-					<?php echo JText::_('COM_JTG_PX_OR_PERCENT'); ?>
+					<?php echo Text::_('COM_JTG_PX_OR_PERCENT'); ?>
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_CHARTHEIGTH'); ?></td>
+				<td><?php echo Text::_('COM_JTG_CHARTHEIGTH'); ?></td>
 				<td>&nbsp;&nbsp;<input type="text" name="charts_height"
 					value="<?php echo $this->config->charts_height; ?>" size="20" />
-					<?php echo JText::_('COM_JTG_PX_OR_PERCENT'); ?>
+					<?php echo Text::_('COM_JTG_PX_OR_PERCENT'); ?>
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_CHARTBG'); ?></td>
+				<td><?php echo Text::_('COM_JTG_CHARTBG'); ?></td>
 				<td>&nbsp;&nbsp;#<input type="text" name="charts_bg"
 					value="<?php echo $this->config->charts_bg; ?>" size="20" />
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_CHARTLINEC'); ?></td>
+				<td><?php echo Text::_('COM_JTG_CHARTLINEC'); ?></td>
 				<td>&nbsp;&nbsp;#<input type="text" name="charts_linec"
 					value="<?php echo $this->config->charts_linec; ?>" size="20" />
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_CHARTLINEC_SPEED'); ?></td>
+				<td><?php echo Text::_('COM_JTG_CHARTLINEC_SPEED'); ?></td>
 				<td>&nbsp;&nbsp;#<input type="text" name="charts_linec_speed"
 					value="<?php echo $this->config->charts_linec_speed; ?>" size="20" />
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_CHARTLINEC_PACE'); ?></td>
+				<td><?php echo Text::_('COM_JTG_CHARTLINEC_PACE'); ?></td>
 				<td>&nbsp;&nbsp;#<input type="text" name="charts_linec_pace"
 					value="<?php echo $this->config->charts_linec_pace; ?>" size="20" />
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_CHARTLINEC_HEARTBEAT'); ?></td>
+				<td><?php echo Text::_('COM_JTG_CHARTLINEC_HEARTBEAT'); ?></td>
 				<td>&nbsp;&nbsp;#<input type="text" name="charts_linec_heartbeat"
 					value="<?php echo $this->config->charts_linec_heartbeat; ?>" size="20" />
 				</td>
@@ -307,54 +308,54 @@ margin: 1px 0 0 0;
 	<?php
 	echo JHtmlBootstrap::endTab();
 	// Viewing options BEGIN
-	echo JHtmlBootstrap::addTab('tabs', 'display', JText::_('COM_JTG_DISPLAY'));
+	echo JHtmlBootstrap::addTab('tabs', 'display', Text::_('COM_JTG_DISPLAY'));
 
 	?>
 	<table class="admintable">
 		<tbody>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_TEMPLATE'); ?></td>
+				<td><?php echo Text::_('COM_JTG_TEMPLATE'); ?></td>
 				<td><?php echo $this->lists['tmpl']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_GALLERY'); ?></td>
+				<td><?php echo Text::_('COM_JTG_GALLERY'); ?></td>
 				<td><?php echo $this->lists['gallery']; ?></td>
 			</tr>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_GALLERY_CODE_DESC') . '">' . JText::_('COM_JTG_GALLERY_CODE') . '</span>'; ?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE')
+					. '::' . Text::_('COM_JTG_GALLERY_CODE_DESC') . '">' . Text::_('COM_JTG_GALLERY_CODE') . '</span>'; ?>
 				</td>
 				<td><textarea rows="2" cols="70" name="gallery_code"><?php echo $this->config->gallery_code; ?></textarea></td>
 			</tr>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_IMAGETYPES_DESC') . '">' . JText::_('COM_JTG_IMAGETYPES') . '</span>';?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE')
+					. '::' . Text::_('COM_JTG_IMAGETYPES_DESC') . '">' . Text::_('COM_JTG_IMAGETYPES') . '</span>';?>
 				</td>
 				<td><input type="text" name="type"
 					value="<?php echo $this->config->type; ?>" size="30" /></td>
 			</tr>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_TT_MAX_IMAGES_DESC') . '">' . JText::_('COM_JTG_MAX_IMAGES') . '</span>';?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE')
+					. '::' . Text::_('COM_JTG_TT_MAX_IMAGES_DESC') . '">' . Text::_('COM_JTG_MAX_IMAGES') . '</span>';?>
 				</td>
 				<td><input type="text" name="max_images"
 					value="<?php echo $this->config->max_images; ?>" size="30" /></td>
 			</tr>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_TT_SIZE_DESC') . '">' . JText::_('COM_JTG_IMAGESIZE') . '</span>';?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE')
+					. '::' . Text::_('COM_JTG_TT_SIZE_DESC') . '">' . Text::_('COM_JTG_IMAGESIZE') . '</span>';?>
 				</td>
 				<td><input type="text" name="max_size"
 					value="<?php echo $this->config->max_size; ?>" size="20" /></td>
 			</tr>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_TT_GEOIM_HEIGHT_DESC') . '">' . JText::_('COM_JTG_GEOIM_HEIGHT') . '</span>';?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE')
+					. '::' . Text::_('COM_JTG_TT_GEOIM_HEIGHT_DESC') . '">' . Text::_('COM_JTG_GEOIM_HEIGHT') . '</span>';?>
 				</td>
 				<td><input type="text" name="max_geoim_height"
 					value="<?php echo $this->config->max_geoim_height; ?>" size="20" />
@@ -362,8 +363,8 @@ margin: 1px 0 0 0;
 			</tr>
 			<tr>
 				<td>
-					<?php echo '<span class="hasTip" title="' . JText::_('COM_JTG_TT_TITLE')
-					. '::' . JText::_('COM_JTG_TT_THUMB_HEIGHT_DESC') . '">' . JText::_('COM_JTG_THUMB_HEIGHT') . '</span>';?>
+					<?php echo '<span class="hasTip" title="' . Text::_('COM_JTG_TT_TITLE')
+					. '::' . Text::_('COM_JTG_TT_THUMB_HEIGHT_DESC') . '">' . Text::_('COM_JTG_THUMB_HEIGHT') . '</span>';?>
 				</td>
 				<td><input type="text" name="max_thumb_height"
 					value="<?php echo $this->config->max_thumb_height; ?>" size="20" />
@@ -378,35 +379,35 @@ margin: 1px 0 0 0;
 
 	// Comments BEGIN
 
-	echo JHtmlBootstrap::addTab('tabs', 'comments', JText::_('COM_JTG_COMMENTS'));
+	echo JHtmlBootstrap::addTab('tabs', 'comments', Text::_('COM_JTG_COMMENTS'));
 	?>
 	<table class="admintable">
 		<tr>
 			<td valign="top">
-				<?php echo '<span class="hasTip" title=" ' . JText::_('COM_JTG_TT_TITLE')
-				. '::' . JText::_('COM_JTG_TT_ACTIVATE_COMMENTS') . '">' . JText::_('COM_JTG_ACTIVATE_COMMENTS') . '</span>'; ?>
+				<?php echo '<span class="hasTip" title=" ' . Text::_('COM_JTG_TT_TITLE')
+				. '::' . Text::_('COM_JTG_TT_ACTIVATE_COMMENTS') . '">' . Text::_('COM_JTG_ACTIVATE_COMMENTS') . '</span>'; ?>
 			</td>
 			<td><?php echo $this->lists['comments']; ?></td>
 		</tr>
 		<tr>
 			<td valign="top">
-				<?php echo '<span class="hasTip" title=" ' . JText::_('COM_JTG_TT_TITLE')
-				. '::' . JText::_('COM_JTG_TT_INFORM_AUTOR') . '">' . JText::_('COM_JTG_INFORM_AUTOR') . '</span>'; ?>
+				<?php echo '<span class="hasTip" title=" ' . Text::_('COM_JTG_TT_TITLE')
+				. '::' . Text::_('COM_JTG_TT_INFORM_AUTOR') . '">' . Text::_('COM_JTG_INFORM_AUTOR') . '</span>'; ?>
 			</td>
 			<td><?php echo $this->lists['inform']; ?></td>
 		</tr>
 		<tr>
 			<td valign="top">
-				<?php echo '<span class="hasTip" title=" ' . JText::_('COM_JTG_TT_TITLE')
-				. '::' . JText::_('COM_JTG_TT_CAPTCHA') . '">' . JText::_('COM_JTG_CAPTCHA') . '</span>'; ?>
+				<?php echo '<span class="hasTip" title=" ' . Text::_('COM_JTG_TT_TITLE')
+				. '::' . Text::_('COM_JTG_TT_CAPTCHA') . '">' . Text::_('COM_JTG_CAPTCHA') . '</span>'; ?>
 			</td>
 			<td><?php echo $this->lists['captcha']; ?>
 				<div>
-					<?php echo JText::_('COM_JTG_OST_CAPTCHA') . " " . $this->captcha; ?>
+					<?php echo Text::_('COM_JTG_OST_CAPTCHA') . " " . $this->captcha; ?>
 				</div></td>
 		</tr>
 		<tr>
-			<td valign="top"><?php echo JText::_('COM_JTG_ORDERING'); ?></td>
+			<td valign="top"><?php echo Text::_('COM_JTG_ORDERING'); ?></td>
 			<td><?php echo $this->lists['order']; ?></td>
 		</tr>
 	</table>
@@ -421,7 +422,7 @@ margin: 1px 0 0 0;
 	// Approach BEGIN
 	if ($this->config->approach != "no")
 	{
-		echo JHtmlBootstrap::addTab('tabs', 'jtg-approach', JText::_('COM_JTG_APPROACH'));
+		echo JHtmlBootstrap::addTab('tabs', 'jtg-approach', Text::_('COM_JTG_APPROACH'));
 		?>
 	<table class="admintable">
 		<?php
@@ -430,8 +431,8 @@ margin: 1px 0 0 0;
 			?>
 		<tr>
 			<td>
-				<?php echo '<span class="hasTip" title=" ' . JText::_('COM_JTG_TT_TITLE')
-				. '::' . JText::_('COM_JTG_TT_SERVICE_PROVIDER') . '">' . JText::_('COM_JTG_SERVICE_PROVIDER') . '</span>'; ?>
+				<?php echo '<span class="hasTip" title=" ' . Text::_('COM_JTG_TT_TITLE')
+				. '::' . Text::_('COM_JTG_TT_SERVICE_PROVIDER') . '">' . Text::_('COM_JTG_SERVICE_PROVIDER') . '</span>'; ?>
 			</td>
 			<td><?php
 				// TODO: echo $this->lists['serviceprovider'];
@@ -447,16 +448,16 @@ margin: 1px 0 0 0;
 			?>
 		<tr>
 			<td>
-				<?php echo '<span class="hasTip" title=" ' . JText::_('COM_JTG_TT_TITLE')
-				. '::' . JText::_('COM_JTG_TT_ICONSET') . '">' . JText::_('COM_JTG_ICONSET') . '</span>'; ?>
+				<?php echo '<span class="hasTip" title=" ' . Text::_('COM_JTG_TT_TITLE')
+				. '::' . Text::_('COM_JTG_TT_ICONSET') . '">' . Text::_('COM_JTG_ICONSET') . '</span>'; ?>
 			</td>
 			<td><?php echo $this->lists['routingiconset']; ?></td>
 		</tr>
 		<tr>
-			<td colspan="2"><?php echo JText::_('COM_JTG_POWERED_BY')
+			<td colspan="2"><?php echo Text::_('COM_JTG_POWERED_BY')
 			. ": <a href=\"http://openrouteservice.org\">openrouteservice.org</a>
 			(<a href=\"http://wiki.openstreetmap.org/wiki/OpenRouteService\">"
-			. JText::_('COM_JTG_HELP') . "</a>)\n";
+			. Text::_('COM_JTG_HELP') . "</a>)\n";
 			?>
 			</td>
 		</tr>
@@ -468,15 +469,15 @@ margin: 1px 0 0 0;
 			?>
 		<tr>
 			<td>
-				<?php echo '<span class="hasTip" title=" ' . JText::_('COM_JTG_TT_TITLE')
-				. '::' . JText::_('COM_JTG_TT_ICONSET') . '">' . JText::_('COM_JTG_ICONSET') . '</span>'; ?>
+				<?php echo '<span class="hasTip" title=" ' . Text::_('COM_JTG_TT_TITLE')
+				. '::' . Text::_('COM_JTG_TT_ICONSET') . '">' . Text::_('COM_JTG_ICONSET') . '</span>'; ?>
 			</td>
 			<td><?php echo $this->lists['routingiconset']; ?></td>
 		</tr>
 		<tr>
-			<td colspan="2"><?php echo JText::_('COM_JTG_POWEREDBY')
+			<td colspan="2"><?php echo Text::_('COM_JTG_POWEREDBY')
 			. ": <a href=\"http://cloudmade.com/\">CloudMade</a> (<a href=\"http://wiki.openstreetmap.org/wiki/Cloudmade\">"
-			. JText::_('COM_JTG_HELP') . "</a>)\n";
+			. Text::_('COM_JTG_HELP') . "</a>)\n";
 			?>
 			</td>
 		</tr>
@@ -491,7 +492,7 @@ margin: 1px 0 0 0;
 	// Approach END
 
 	echo JHtmlBootstrap::endTabSet();
-	echo JHtml::_('form.token');
+	echo HTMLHelper::_('form.token');
 	?>
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="id" value="1" /> <input type="hidden" name="task"

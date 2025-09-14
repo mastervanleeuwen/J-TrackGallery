@@ -19,10 +19,14 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
-use Joomla\Utilities\ArrayHelper;
-use Joomla\CMS\MVC\Controller\FormController;
+
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Utilities\ArrayHelper;
 
 JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jtg/tables');
 
@@ -94,7 +98,7 @@ class JtgControllerFiles extends FormController
 	function updateGeneratedValues ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('files');
 
@@ -103,7 +107,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 	}
 
 	/**
@@ -113,8 +117,8 @@ class JtgControllerFiles extends FormController
 	 */
 	function uploadfiles ()
 	{
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
-		$jFileInput = JFactory::getApplication()->input->files;
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		$jFileInput = Factory::getApplication()->input->files;
 		$files = $jFileInput->get('files');
 		$model = $this->getModel('files');
 		$dest = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks' .
@@ -125,13 +129,13 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		if (JFactory::getApplication()->input->get('toimport'))
+		if (Factory::getApplication()->input->get('toimport'))
 		{
-			$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=newfiles&controller=files', false));
+			$this->setRedirect(Route::_('index.php?option=com_jtg&task=newfiles&controller=files', false));
 		}
 		else
 		{
-			$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+			$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 		}
 	}
 
@@ -143,14 +147,14 @@ class JtgControllerFiles extends FormController
 	function publish ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_PUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_PUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('files');
@@ -160,7 +164,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 	}
 
 	/**
@@ -171,14 +175,14 @@ class JtgControllerFiles extends FormController
 	function tohide ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('files');
@@ -188,7 +192,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 	}
 
 	/**
@@ -199,14 +203,14 @@ class JtgControllerFiles extends FormController
 	function toshow ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('files');
@@ -216,7 +220,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 	}
 
 	/**
@@ -227,14 +231,14 @@ class JtgControllerFiles extends FormController
 	function unpublish ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('files');
@@ -244,7 +248,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 	}
 
 	/**
@@ -255,14 +259,14 @@ class JtgControllerFiles extends FormController
 	function accessregistered ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_PUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_PUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('files');
@@ -272,7 +276,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 	}
 
 	/**
@@ -283,14 +287,14 @@ class JtgControllerFiles extends FormController
 	function accessspecial ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('files');
@@ -300,7 +304,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 	}
 
 	/**
@@ -311,14 +315,14 @@ class JtgControllerFiles extends FormController
 	function accesspublic ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('files');
@@ -328,7 +332,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 	}
 
 	/**
@@ -339,14 +343,14 @@ class JtgControllerFiles extends FormController
 	function remove ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_DELETE'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_DELETE'), 'Error');
 		}
 
 		$model = $this->getModel('files');
@@ -356,7 +360,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 	}
 
 	/**
@@ -367,9 +371,9 @@ class JtgControllerFiles extends FormController
 	function removeFromImport ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$found = JFactory::getApplication()->input->get('found');
+		$found = Factory::getApplication()->input->get('found');
 
 		$model = $this->getModel('files');
 
@@ -378,7 +382,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=newfiles&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=newfiles&controller=files', false));
 	}
 
 	/**
@@ -389,26 +393,17 @@ class JtgControllerFiles extends FormController
 	function savefile ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('files');
 
 		if (! $model->saveFile())
 		{
-			/*
-			echo "<script> alert('" . $model->getError(true) . "');
-			window.history.go(-1); </script>\n";
-			*/
 			echo "<script> alert('Error');</script>";
-			/*
-			 * $this->setRedirect(
-			 * JRoute::_('index.php?option=com_jtg&task=files&controller=files',
-			 * false ));
-			*/
 		}
 		else
 		{
-			$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+			$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 		}
 	}
 
@@ -420,7 +415,7 @@ class JtgControllerFiles extends FormController
 	function savefiles ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('files');
 
@@ -429,7 +424,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 	}
 
 	/**
@@ -440,7 +435,7 @@ class JtgControllerFiles extends FormController
 	function updatefile ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('files');
 
@@ -449,7 +444,7 @@ class JtgControllerFiles extends FormController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=files&controller=files', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=files&controller=files', false));
 	}
 
 	/**
@@ -459,7 +454,7 @@ class JtgControllerFiles extends FormController
 	 */
 	function fetchJPTfiles ()
 	{
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 		$model = $this->getModel('files');
 		echo $model->_fetchJPTfiles();
 	}

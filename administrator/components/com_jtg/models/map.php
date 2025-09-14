@@ -18,6 +18,8 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+
 /**
  * Model Class Categorie
  *
@@ -35,8 +37,8 @@ class JtgModelMAp extends JModelLegacy
 	{
 		parent::__construct();
 
-		$array = JFactory::getApplication()->input->get('cid', array(0), 'array');
-		$edit	= JFactory::getApplication()->input->get('edit', true);
+		$array = Factory::getApplication()->input->get('cid', array(0), 'array');
+		$edit	= Factory::getApplication()->input->get('edit', true);
 
 		if ($edit)
 		{

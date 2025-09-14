@@ -16,44 +16,51 @@
  */
 
 defined('_JEXEC') or die('Restricted access');
-$document = JFactory::getDocument();
-$user = JFactory::getUser();
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
+$document = Factory::getDocument();
+$user = Factory::getUser();
 $userid = (int) $user->id;
 $tmpl = strlen($this->cfg->template) ? $this->cfg->template : 'default';
-$iconpath = JUri::root() . "components/com_jtg/assets/template/" . $tmpl . "/images/";
+$iconpath = Uri::root() . "components/com_jtg/assets/template/" . $tmpl . "/images/";
 
 if ( $userid )
 {
-	$document->addScriptDeclaration("var alerttext = '" . str_replace("'", "\'", JText::_('COM_JTG_SET_HOMEPOSITION')) . "';");
+	$document->addScriptDeclaration("var alerttext = '" . str_replace("'", "\'", Text::_('COM_JTG_SET_HOMEPOSITION')) . "';");
 }
 else
 {
-	$document->addScriptDeclaration("var alerttext = '" . str_replace("'", "\'", JText::_('COM_JTG_HOMEPOSITION_GUESTS')) . "';");
+	$document->addScriptDeclaration("var alerttext = '" . str_replace("'", "\'", Text::_('COM_JTG_HOMEPOSITION_GUESTS')) . "';");
 }
 
-//$document->addScript( JUri::root(true) . '/media/system/js/mootools.js');
+//$document->addScript( Uri::root(true) . '/media/system/js/mootools.js');
 $document->addScriptDeclaration('var iconpath = \'' . $iconpath . '\';');
-$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/homeposition.js');
+$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/homeposition.js');
 
-// JHtml::_('behavior.tooltip'); // with this option IE8 doesn't work
+// HTMLHelper::_('behavior.tooltip'); // with this option IE8 doesn't work
 $otherusers = 0;
 $scriptbody = "";
 $imgpath = 'templates/' . $template . '/css/ol_images';
 
-if ( JFolder::exists(JPATH_SITE . '/' . $imgpath))
+if ( Folder::exists(JPATH_SITE . '/' . $imgpath))
 {
-	$imgpath = JUri::root() . $imgpath;
+	$imgpath = Uri::root() . $imgpath;
 }
 else
 {
-	$imgpath = JUri::root() . 'components/com_jtg/assets/template/default/images/';
+	$imgpath = Uri::root() . 'components/com_jtg/assets/template/default/images/';
 }
 
 
 $scriptheader = ("<script type=\"text/javascript\">
 		var iconpath = '" . $iconpath . "';\n");
 
-$app = JFactory::getApplication();
+$app = Factory::getApplication();
 $defaultvars = (
 		"	var imgpath = '" . $imgpath . "';
 		var jtg_param_geo_lat = " . $app->input->getFloat('jtg_param_geo_lat') . ";
@@ -69,7 +76,7 @@ if ( $userid )
 			JtgHelper::getLatLon(false, $userid)
 	);
 
-	$homepos = JText::_('COM_JTG_MY_HOMEPOSITION');
+	$homepos = Text::_('COM_JTG_MY_HOMEPOSITION');
 }
 else
 {
@@ -106,12 +113,12 @@ for ($x = 0;$x <= count($latlon);$x++)
 				);
 				$distance = JtgHelper::getFormattedDistance($distance, 0, $this->cfg->unit);
 
-				$distancetext = "<br />" . JText::_('COM_JTG_DISTANCE_GUEST');
+				$distancetext = "<br />" . Text::_('COM_JTG_DISTANCE_GUEST');
 			}
 			else
 			{
 				$distance = "";
-				$distancetext = "<br />" . JText::_('COM_JTG_NO_DISTANCE_GUEST');
+				$distancetext = "<br />" . Text::_('COM_JTG_NO_DISTANCE_GUEST');
 			}
 
 			if (empty($vars))
@@ -121,7 +128,7 @@ for ($x = 0;$x <= count($latlon);$x++)
 						var OffsetIconOtherUser = [-0.5,-0.66];
 						var IconOtherUser = '" . $iconpath . "user.png';
 						var MarkerHomePosition = '" . $homepos . "';
-						var inittext = '" . JText::_('COM_JTG_HERE_LIVE') . ": ';
+						var inittext = '" . Text::_('COM_JTG_HERE_LIVE') . ": ';
 						var distancetext = '" . $distancetext . "';
 						var distance=Array();
 						var username=Array();
@@ -161,19 +168,19 @@ $script = $scriptheader . $defaultvars . $vars . $scriptbody . $scriptfooter;
 
 echo $script;
 echo "<div id=\"jtg_map\"  class=\"olMap\" style=\"width: " . $this->cfg->map_width . "px; height: " . $this->cfg->map_height . ";\" ></div>
-<div id=\"otheruser\" style=\"width: " . $this->cfg->map_width . ";\" >" . JText::_('COM_JTG_HERE_LIVE_DESC') . "</div>\n";
+<div id=\"otheruser\" style=\"width: " . $this->cfg->map_width . ";\" >" . Text::_('COM_JTG_HERE_LIVE_DESC') . "</div>\n";
 
 if ( $userid )
 {
 	?>
 <form action="<?php echo $this->geo; ?>" method="post" name="adminForm"
 	id="adminForm">
-	<?php echo '<br />' . JText::_('COM_JTG_LOCATION_DESCRIPTION') . '<br />';?>
+	<?php echo '<br />' . Text::_('COM_JTG_LOCATION_DESCRIPTION') . '<br />';?>
 	<table>
 		<tr>
 			<td><?php
 
-			echo JText::_('COM_JTG_LAT');
+			echo Text::_('COM_JTG_LAT');
 
 			if (isset($userlat))
 			{
@@ -197,27 +204,27 @@ if ( $userid )
 			<td><input type="text" size="15" class="output" name="lat" id="lat"
 				value="<?php echo $lat; ?>"
 				onchange="handleFillLL();mapcenter();"></input> <?php
-				echo JText::_('COM_JTG_LAT_U');
+				echo Text::_('COM_JTG_LAT_U');
 				echo "</td>\n			<td>";
-				echo JHtml::tooltip(JText::_('COM_JTG_TT_LAT'));?>
+				echo HTMLHelper::tooltip(Text::_('COM_JTG_TT_LAT'));?>
 			</td>
 		</tr>
 		<tr>
 			<td><?php
-			echo JText::_('COM_JTG_LON');
+			echo Text::_('COM_JTG_LON');
 			?>
 			</td>
 			<td><input type="text" size="15" class="output" name="lon" id="lon"
 				value="<?php
 			echo $lon; ?>"
 				onchange="handleFillLL();mapcenter();"></input> <?php
-				echo JText::_('COM_JTG_LON_U');
+				echo Text::_('COM_JTG_LON_U');
 				echo "</td>\n			<td>";
-				echo JHtml::tooltip(JText::_('COM_JTG_TT_LON'));?>
+				echo HTMLHelper::tooltip(Text::_('COM_JTG_TT_LON'));?>
 			</td>
 		</tr>
 		<tr>
-			<td><?php echo JText::_('COM_JTG_VISIBLE'); ?></td>
+			<td><?php echo Text::_('COM_JTG_VISIBLE'); ?></td>
 			<td><select name="visible" id="visible" size="3">
 					<?php
 					// Selected="selected"
@@ -238,9 +245,9 @@ if ( $userid )
 						$sall = " selected=\"selected\"";
 					}
 
-					echo "					<option value=\"all\"" . $sall . ">" . JText::_('COM_JTG_VISIBLE_ALL') . "</option>
-					<option value=\"reg\"" . $sreg . ">" . JText::_('COM_JTG_VISIBLE_REG') . "</option>
-					<option value=\"non\"" . $snon . ">" . JText::_('COM_JTG_VISIBLE_NONE') . "</option>
+					echo "					<option value=\"all\"" . $sall . ">" . Text::_('COM_JTG_VISIBLE_ALL') . "</option>
+					<option value=\"reg\"" . $sreg . ">" . Text::_('COM_JTG_VISIBLE_REG') . "</option>
+					<option value=\"non\"" . $snon . ">" . Text::_('COM_JTG_VISIBLE_NONE') . "</option>
 					";
 					?>
 </select>
@@ -248,7 +255,7 @@ if ( $userid )
 		</tr>
 	</table>
 	<?php
-	echo JHtml::_('form.token') . "\n"; ?>
+	echo HTMLHelper::_('form.token') . "\n"; ?>
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="controller" value="geo" /> <input type="hidden"
 		name="task" value="" />
@@ -259,7 +266,7 @@ if ( $userid )
 	}
 	?>
 	<input type="submit" name="Submit" class="button"
-		value="<?php echo JText::_('COM_JTG_SAVE') ?>"
+		value="<?php echo Text::_('COM_JTG_SAVE') ?>"
 		onclick="submitbutton('save')" />
 </form>
 <?php

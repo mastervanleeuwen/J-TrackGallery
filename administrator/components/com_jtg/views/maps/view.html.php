@@ -18,6 +18,9 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+
 // Import Joomla! libraries
 jimport('joomla.application.component.view');
 use Joomla\String\StringHelper;
@@ -41,10 +44,8 @@ class JtgViewMaps extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$mainframe = JFactory::getApplication();
-		$option = JFactory::getApplication()->input->get('option');
-
-		// 	$order = JFactory::getApplication()->input->get('order',true);
+		$app = Factory::getApplication();
+		$option = Factory::getApplication()->input->get('option');
 
 		if ($this->getLayout() == 'form')
 		{
@@ -57,18 +58,14 @@ class JtgViewMaps extends JViewLegacy
 		$total = $model->getTotal();
 		$maps = $model->getMaps();
 
-		// $tmpl = $model->getTemplates();
+		$lists['block']	= HTMLHelper::_('select.booleanlist', 'publish', 'class="inputbox" size="1"', 1);
 
-		$lists['block']	= JHtml::_('select.booleanlist', 'publish', 'class="inputbox" size="1"', 1);
-
-		// 	$order = JFactory::getApplication()->input->get('order', 'order', 'string' );
-
-		$filter_order		= $mainframe->getUserStateFromRequest(
+		$filter_order		= $app->getUserStateFromRequest(
 				$option . "filter_order",
 				'filter_order',
 				'ordering',
 				'cmd');
-		$filter_order_Dir	= $mainframe->getUserStateFromRequest(
+		$filter_order_Dir	= $app->getUserStateFromRequest(
 				$option . "filter_order_Dir",
 				'filter_order_Dir',
 				'',
@@ -76,7 +73,7 @@ class JtgViewMaps extends JViewLegacy
 		$lists['order']		= $filter_order;
 		$lists['order_Dir']	= $filter_order_Dir;
 
-		$search = $mainframe->getUserStateFromRequest(
+		$search = $app->getUserStateFromRequest(
 				$option . "search",
 				'search',
 				'',
@@ -131,7 +128,7 @@ class JtgViewMaps extends JViewLegacy
 			$published = 0;
 		}
 
-		$list['published']	= JHtml::_('select.booleanlist', 'publish', 'class="inputbox" size="1"', $published);
+		$list['published']	= HTMLHelper::_('select.booleanlist', 'publish', 'class="inputbox" size="1"', $published);
 		$this->list = $list;
 
 		// Parent::display($tpl);

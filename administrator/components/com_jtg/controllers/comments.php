@@ -18,6 +18,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session;
 use Joomla\Utilities\ArrayHelper;
 /**
  * JtgControllerComments class for the jtg component
@@ -37,14 +41,14 @@ class JtgControllerComments extends JtgController
 	function publish ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_PUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_PUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('comments');
@@ -65,14 +69,14 @@ class JtgControllerComments extends JtgController
 	function unpublish ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('comments');
@@ -93,14 +97,14 @@ class JtgControllerComments extends JtgController
 	function remove ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_DELETE'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_DELETE'), 'Error');
 		}
 
 		$model = $this->getModel('comments');
@@ -121,7 +125,7 @@ class JtgControllerComments extends JtgController
 	function saveComment ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('comments');
 

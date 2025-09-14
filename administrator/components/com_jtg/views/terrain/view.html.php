@@ -18,6 +18,9 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+
 // Import Joomla! libraries
 jimport('joomla.application.component.view');
 /**
@@ -39,8 +42,7 @@ class JtgViewTerrain extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$mainframe = JFactory::getApplication();
-		$option = JFactory::getApplication()->input->get('option');
+		$option = Factory::getApplication()->input->get('option');
 
 		if ($this->getLayout() == 'form')
 		{
@@ -76,7 +78,7 @@ class JtgViewTerrain extends JViewLegacy
 	protected function _displayForm($tpl)
 	{
 		$model = $this->getModel();
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 
 		if (count($cid) != 0)
 		{
@@ -92,7 +94,7 @@ class JtgViewTerrain extends JViewLegacy
 			$published = 1;
 		}
 
-		$lists['block'] = JHtml::_('select.booleanlist', 'published', 'class="inputbox" size="1"', $published);
+		$lists['block'] = HTMLHelper::_('select.booleanlist', 'published', 'class="inputbox" size="1"', $published);
 		$this->id = $id;
 		$this->lists = $lists;
 		$this->terrain = $terrain;

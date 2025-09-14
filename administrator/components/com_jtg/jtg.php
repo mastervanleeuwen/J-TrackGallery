@@ -18,6 +18,9 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 /*
  * Define constants for all pages
 */
@@ -29,12 +32,12 @@ define('COM_JTG_BASEURL', JUri::root() . '/' . COM_JTG_DIR);
 jimport('joomla.filesystem.file');
 
 // Load english language file for 'com_jtg' component then override with current language file
-JFactory::getLanguage()->load('com_jtg');
-JFactory::getLanguage()->load('com_jtg_common', JPATH_SITE);
+Factory::getLanguage()->load('com_jtg');
+Factory::getLanguage()->load('com_jtg_common', JPATH_SITE);
 
 // Com_jtg_additional language files are in /images/jtrackgallery/language folder
-JFactory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery', 'en-GB', true);
-JFactory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',    null, true);
+Factory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery', 'en-GB', true);
+Factory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',    null, true);
 
 $contr = JPATH_COMPONENT . '/controllers/install.php';
 $model = JPATH_COMPONENT . '/models/install.php';
@@ -48,7 +51,7 @@ require_once JPATH_COMPONENT . '/controller.php';
 JLoader::import('components.com_jtg.helpers.gpsClass', JPATH_SITE, 'gpsClass');
 
 // Initialize the controller
-$input = JFactory::getApplication()->input;
+$input = Factory::getApplication()->input;
 if ($controller = $input->getWord('controller'))
 {
 	$path = JPATH_COMPONENT . '/controllers/' . $controller . '.php';
@@ -73,9 +76,9 @@ $controller = new $classname;
 $controller->execute($getCmdTask);
 
 // Access check: is this user allowed to access the backend of J!TrackGallery?
-if (!JFactory::getUser()->authorise('core.manage', 'com_jtg'))
+if (!Factory::getUser()->authorise('core.manage', 'com_jtg'))
 {
-	return JFactory::getApplication()->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'),'warning');
+	return Factory::getApplication()->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'),'warning');
 }
 
 // Redirect if set by the controller

@@ -16,17 +16,23 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Uri\Uri;
+
 // Toolbar
-JToolBarHelper::title(JText::_('COM_JTG_CATS'), 'categories.png');
-JToolBarHelper::back();
-JToolBarHelper::spacer();
-JToolBarHelper::addNew('newcat', $alt = 'COM_JTG_NEW_CATEGORY');
-JToolBarHelper::custom('managecatpics', 'new-style.png', 'new-style.png', 'COM_JTG_MANAGE_PICS', false);
-JToolBarHelper::editList('editcat');
-JToolBarHelper::publish();
-JToolBarHelper::unpublish();
-JToolBarHelper::deleteList('COM_JTG_DELETE_IMAGES');
-JToolBarHelper::help('cats', true);
+ToolbarHelper::title(Text::_('COM_JTG_CATS'), 'categories.png');
+ToolbarHelper::back();
+ToolbarHelper::spacer();
+ToolbarHelper::addNew('newcat', $alt = 'COM_JTG_NEW_CATEGORY');
+ToolbarHelper::custom('managecatpics', 'new-style.png', 'new-style.png', 'COM_JTG_MANAGE_PICS', false);
+ToolbarHelper::editList('editcat');
+ToolbarHelper::publish();
+ToolbarHelper::unpublish();
+ToolbarHelper::deleteList('COM_JTG_DELETE_IMAGES');
+ToolbarHelper::help('cats', true);
 
 $ordering = ($this->lists['order'] == 'ordering');
 
@@ -48,33 +54,33 @@ if (version_compare(JVERSION,'4.0','lt'))
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th class="center"><?php echo JText::_('COM_JTG_NUM'); ?></th>
-				<th class="center" nowrap="nowrap"><?php echo JText::_('COM_JTG_ID'); ?></th>
+				<th class="center"><?php echo Text::_('COM_JTG_NUM'); ?></th>
+				<th class="center" nowrap="nowrap"><?php echo Text::_('COM_JTG_ID'); ?></th>
 				<th class="center"><input type="checkbox"
 					onclick="Joomla.checkAll(this)"
-					title="<?php echo JText::_('JGLOBAL_CHECK_ALL');?>" value=""
+					title="<?php echo Text::_('JGLOBAL_CHECK_ALL');?>" value=""
 					name="checkall-toggle"></th>
-				<th class="center"><?php echo JText::_('COM_JTG_IMAGE'); ?></th>
-				<th class="title"><?php echo JText::_('COM_JTG_CAT'); ?></th>
-				<th class="title"><?php echo JText::_('COM_JTG_DESCRIPTION'); ?></th>
-				<th class="center"><?php echo JText::_('COM_JTG_DEFAULT_MAP'); ?></th>
-				<th class="center"><?php echo JText::_('COM_JTG_USEPACE'); ?></th>
+				<th class="center"><?php echo Text::_('COM_JTG_IMAGE'); ?></th>
+				<th class="title"><?php echo Text::_('COM_JTG_CAT'); ?></th>
+				<th class="title"><?php echo Text::_('COM_JTG_DESCRIPTION'); ?></th>
+				<th class="center"><?php echo Text::_('COM_JTG_DEFAULT_MAP'); ?></th>
+				<th class="center"><?php echo Text::_('COM_JTG_USEPACE'); ?></th>
 				<?php
 if ( $ordering !== false )
 {
 ?>
-				<th class="order"><?php echo JText::_('COM_JTG_ORDER'); ?>
+				<th class="order"><?php echo Text::_('COM_JTG_ORDER'); ?>
 	<?php
 	if ($ordering)
 	{
-		echo JHtml::_('grid.order', $this->rows);
+		echo HTMLHelper::_('grid.order', $this->rows);
 	}
 	?>
 				</th>
 <?php
 }
 ?>
-				<th class="title"><?php echo JText::_('COM_JTG_PUBLISHED'); ?></th>
+				<th class="title"><?php echo Text::_('COM_JTG_PUBLISHED'); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -85,8 +91,8 @@ $n = count($this->list);
 for ($i = 0; $i < $n; $i++)
 {
 	$row = $this->list[$i];
-	$checked 	= JHtml::_('grid.checkedout', $row, $i);
-	$published 	= JHtml::_('jgrid.published', $row->published, $i);
+	$checked 	= HTMLHelper::_('grid.checkedout', $row, $i);
+	$published 	= HTMLHelper::_('jgrid.published', $row->published, $i);
 ?>
 			<tr class="<?php echo $k? "row$k row-odd":"row$k row-even"; ?>">
 				<td class="center"><?php echo $this->pagination->getRowOffset($i); ?>
@@ -101,12 +107,12 @@ if ((isset($this->catpic[$this->list[$i]->id])) AND ( $this->catpic[$this->list[
 }
 ?>
 				</td>
-				<td class="break-word"><a href="<?php echo JRoute::_("index.php?option=com_jtg&amp;controller=cats&amp;task=editcat&amp;cid=".$row->id); ?>">
-						<?php echo JText::_($row->treename); ?>
+				<td class="break-word"><a href="<?php echo Route::_("index.php?option=com_jtg&amp;controller=cats&amp;task=editcat&amp;cid=".$row->id); ?>">
+						<?php echo Text::_($row->treename); ?>
 				</a></td>
-				<td class="break-word"><?php echo JText::_($row->description); ?></td>
-				<td class="center"><?php echo $row->default_map? $row->default_map: JText::_('COM_JTG_NONE'); ?></td>
-				<td class="center"><?php echo $row->usepace? JText::_('JYES'): JText::_('JNO'); ?></td>
+				<td class="break-word"><?php echo Text::_($row->description); ?></td>
+				<td class="center"><?php echo $row->default_map? $row->default_map: Text::_('COM_JTG_NONE'); ?></td>
+				<td class="center"><?php echo $row->usepace? Text::_('JYES'): Text::_('JNO'); ?></td>
 	<?php
 	if ( $ordering !== false )
 	{
@@ -134,7 +140,7 @@ if ((isset($this->catpic[$this->list[$i]->id])) AND ( $this->catpic[$this->list[
 		value="<?php echo $this->lists['order']; ?>" /> <input type="hidden"
 		name="filter_order_Dir"
 		value="<?php echo $this->lists['order_Dir']; ?>" />
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 	&nbsp;
 </form>
 <?php

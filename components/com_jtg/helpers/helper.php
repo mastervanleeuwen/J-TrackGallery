@@ -18,6 +18,13 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * JtgHelper class for the jtg component
  *
@@ -43,42 +50,42 @@ class JtgHelper
 		//$active = ($vName == 'config') || ($vName == 'cats');
 		$active = false;
 		JHtmlSidebar::addEntry(
-				JText::_('COM_JTG_CONFIGURATION'),
+				Text::_('COM_JTG_CONFIGURATION'),
 				'index.php?option=com_jtg&task=config&controller=config',
 				$tName == 'config'
 		);
 		JHtmlSidebar::addEntry(
-				JText::_('COM_JTG_GPS_FILES'),
+				Text::_('COM_JTG_GPS_FILES'),
 				'index.php?option=com_jtg&task=files&controller=files',
 				$tName == 'files'
 		);
 		JHtmlSidebar::addEntry(
-				JText::_('COM_JTG_MAPS'),
+				Text::_('COM_JTG_MAPS'),
 				'index.php?option=com_jtg&task=maps&controller=maps',
 				$tName == 'maps'
 		);
 		JHtmlSidebar::addEntry(
-				JText::_('COM_JTG_CATS'),
+				Text::_('COM_JTG_CATS'),
 				'index.php?option=com_jtg&task=cats&controller=cats',
 				$tName == 'cats'
 		);
 		JHtmlSidebar::addEntry(
-				JText::_('COM_JTG_TERRAIN'),
+				Text::_('COM_JTG_TERRAIN'),
 				'index.php?option=com_jtg&task=terrain&controller=terrain',
 				$tName == 'terrain'
 		);
 		JHtmlSidebar::addEntry(
-				JText::_('COM_JTG_COMMENTS'),
+				Text::_('COM_JTG_COMMENTS'),
 				'index.php?option=com_jtg&task=comments&controller=comments',
 				$tName == 'comments'
 		);
 		JHtmlSidebar::addEntry(
-				JText::_('COM_JTG_TRANSLATE'),
+				Text::_('COM_JTG_TRANSLATE'),
 				'index.php?option=com_jtg&task=translations&controller=translations',
 				$tName == 'translations'
 		);
 		JHtmlSidebar::addEntry(
-				JText::_('COM_JTG_INFO'),
+				Text::_('COM_JTG_INFO'),
 				'index.php?option=com_jtg&task=info&controller=info',
 				$tName == 'info'
 		);
@@ -130,7 +137,7 @@ class JtgHelper
 
 		if ( ( $track->start_n == null ) OR ( $track->start_e == null ) )
 		{
-			$error = "<font color=red> (" . JText::_('Error') . ")</font> ";
+			$error = "<font color=red> (" . Text::_('Error') . ")</font> ";
 			$north = 0;
 			$east = 0;
 			$osm = null;
@@ -143,7 +150,7 @@ class JtgHelper
 			$osm = " <a href='http://www.openstreetmap.org/?mlat=" . $north . "&mlon=" . $east . "&zoom=18' target='_blank' >OpenStreetMap</a>";
 		}
 
-		$values = JText::_('COM_JTG_COORDS') . $error . ": " . $north . ", " . $east . $osm;
+		$values = Text::_('COM_JTG_COORDS') . $error . ": " . $north . ", " . $east . $osm;
 		$distance = (float) $track->distance;
 
 		if ( $distance != 0 )
@@ -157,27 +164,27 @@ class JtgHelper
 			$distance = 0;
 		}
 
-		$distance = JText::_('COM_JTG_DISTANCE') . ": " . $distance;
-		$ele_asc = JText::_('COM_JTG_ELEVATION_UP') . ": " . (float) $track->ele_asc." ".JText::_('COM_JTG_UNIT_METER');
-		$ele_desc = JText::_('COM_JTG_ELEVATION_DOWN') . ": " . (float) $track->ele_desc." ".JText::_('COM_JTG_UNIT_METER');
+		$distance = Text::_('COM_JTG_DISTANCE') . ": " . $distance;
+		$ele_asc = Text::_('COM_JTG_ELEVATION_UP') . ": " . (float) $track->ele_asc." ".Text::_('COM_JTG_UNIT_METER');
+		$ele_desc = Text::_('COM_JTG_ELEVATION_DOWN') . ": " . (float) $track->ele_desc." ".Text::_('COM_JTG_UNIT_METER');
 		$voted = self::howMuchVote($track->id);
 
 		if ( ( $voted != 0 ) AND ( (float) $track->vote == 0 ) )
 		{
 			// When gevoted wurde aber Voting gleich 0
 			// If voted but voting = 0
-			$error = "<font color=red> (" . JText::_('Error') . "?)</font> ";
+			$error = "<font color=red> (" . Text::_('Error') . "?)</font> ";
 		}
 		else
 		{
 			$error = null;
 		}
 
-		$voted = JText::sprintf('COM_JTG_MENU_LIMIT_CONSTRUCT_VOTED', $voted) . $error;
+		$voted = Text::sprintf('COM_JTG_MENU_LIMIT_CONSTRUCT_VOTED', $voted) . $error;
 		$vote = (float) $track->vote;
 		$vote = self::getLocatedFloat($vote, 0);
-		$vote = JText::sprintf('COM_JTG_MENU_LIMIT_CONSTRUCT_VOTE', $vote) . $error;
-		$button = "<button class=\"button\" type=\"button\" onclick=\"submitbutton('updateGeneratedValues')\">" . JText::_('COM_JTG_REFRESH_DATAS') . "</button>";
+		$vote = Text::sprintf('COM_JTG_MENU_LIMIT_CONSTRUCT_VOTE', $vote) . $error;
+		$button = "<button class=\"button\" type=\"button\" onclick=\"submitbutton('updateGeneratedValues')\">" . Text::_('COM_JTG_REFRESH_DATAS') . "</button>";
 
 		return "<ul><li>"
 		. $filetypes
@@ -215,14 +222,14 @@ class JtgHelper
 		}
 
 		jimport('joomla.filesystem.file');
-		$filename = strtolower(JFile::makeSafe($file['name']));
+		$filename = strtolower(File::makeSafe($file['name']));
 		$randnumber = (50 - strlen($filename));
 		$fncount = 0;
 		while (true)
 		{
-			if (!JFile::exists($dest . $filename))
+			if (!File::exists($dest . $filename))
 			{
-				if (!JFile::upload($file['tmp_name'], $dest . $filename))
+				if (!File::upload($file['tmp_name'], $dest . $filename))
 				{
 					return false;
 				}
@@ -235,12 +242,12 @@ class JtgHelper
 			}
 			else
 			{
-				$filename = $fncount . strtolower(JFile::makeSafe($file['name']));
+				$filename = $fncount . strtolower(File::makeSafe($file['name']));
 
 				// Man weiß ja nie ;)
 				if ( $fncount > 10000 )
 				{
-					JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_ERROR_NO_FREE_FILENAMES') . " ( $filename )", 'Error');
+					Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_ERROR_NO_FREE_FILENAMES') . " ( $filename )", 'Error');
 				}
 
 				$fncount++;
@@ -264,7 +271,7 @@ class JtgHelper
 	static public function parseMoreCats($allcats, $catid, $format = "array", $link = false, $iconheight = 24)
 	{
 		$baseurl = "index.php?option=com_jtg&view=files&layout=list&cat=";
-		$image = JUri::base() . 'images/jtrackgallery/cats/';
+		$image = Uri::base() . 'images/jtrackgallery/cats/';
 		$catids = explode(",", $catid);
 		$return = array();
 		$height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px" ' : '');
@@ -278,7 +285,7 @@ class JtgHelper
 					{
 						if ( isset($allcats[$catid]->title) )
 						{
-							$return[] = JText::_($allcats[$catid]->title);
+							$return[] = Text::_($allcats[$catid]->title);
 						}
 					}
 				}
@@ -290,7 +297,7 @@ class JtgHelper
 						{
 							$url = JRoute::_($baseurl . $allcats[$catid]->id, true);
 							$return[] = "<a href=\"" . $url . "\">" .
-									JText::_($allcats[$catid]->title) .
+									Text::_($allcats[$catid]->title) .
 									"</a>";
 						}
 					}
@@ -306,7 +313,7 @@ class JtgHelper
 					{
 						if ( isset($allcats[$catid]->title) )
 						{
-							$return[] = JText::_($allcats[$catid]->title);
+							$return[] = Text::_($allcats[$catid]->title);
 						}
 					}
 				}
@@ -321,12 +328,12 @@ class JtgHelper
 							if ( $allcats[$catid]->image != "")
 							{
 								$return[] = "<a href=\"" . $url . "\">" .
-										"<img $height title=\"" . JText::_($allcats[$catid]->title) . "\" alt=\"" . JText::_($allcats[$catid]->title) . "\" src=\"" . $image . $allcats[$catid]->image . "\" /></a>";
+										"<img $height title=\"" . Text::_($allcats[$catid]->title) . "\" alt=\"" . Text::_($allcats[$catid]->title) . "\" src=\"" . $image . $allcats[$catid]->image . "\" /></a>";
 							}
 							else
 							{
 								$return[] = "<a href=\"" . $url . "\">" .
-										JText::_($allcats[$catid]->title) .
+										Text::_($allcats[$catid]->title) .
 										"</a>";
 							}
 						}
@@ -343,7 +350,7 @@ class JtgHelper
 					{
 						if ( isset($allcats[$catid]->title) )
 						{
-							$return[] = JText::_($allcats[$catid]->title);
+							$return[] = Text::_($allcats[$catid]->title);
 						}
 					}
 				}
@@ -357,12 +364,12 @@ class JtgHelper
 
 							if ( $allcats[$catid]->image == "" )
 							{
-								$return[] = "<a href=\"" . $url . "\">" . JText::_($allcats[$catid]->title) . "</a>";
+								$return[] = "<a href=\"" . $url . "\">" . Text::_($allcats[$catid]->title) . "</a>";
 							}
 							else
 							{
-								$return[] = "<a href=\"" . $url . "\"><img $height title=\"" . JText::_($allcats[$catid]->title)
-								. "\" alt=\"" . JText::_($allcats[$catid]->title) . "\" src=\"" . $image
+								$return[] = "<a href=\"" . $url . "\"><img $height title=\"" . Text::_($allcats[$catid]->title)
+								. "\" alt=\"" . Text::_($allcats[$catid]->title) . "\" src=\"" . $image
 								. $allcats[$catid]->image . "\" /></a>";
 							}
 						}
@@ -379,7 +386,7 @@ class JtgHelper
 					{
 						if ( isset($allcats[$catid]->title) )
 						{
-							$return[] = JText::_($allcats[$catid]->title);
+							$return[] = Text::_($allcats[$catid]->title);
 						}
 					}
 				}
@@ -393,12 +400,12 @@ class JtgHelper
 
 							if ( $allcats[$catid]->image == "" )
 							{
-								$return[] = "<a href=\"" . $url . "\">" . JText::_($allcats[$catid]->title) . "</a>";
+								$return[] = "<a href=\"" . $url . "\">" . Text::_($allcats[$catid]->title) . "</a>";
 							}
 							else
 							{
-								$return[] = "<a href=\"" . $url . "\"><img $height title=\"" . JText::_($allcats[$catid]->title)
-								. "\" alt=\"" . JText::_($allcats[$catid]->title) . "\" src=\""
+								$return[] = "<a href=\"" . $url . "\"><img $height title=\"" . Text::_($allcats[$catid]->title)
+								. "\" alt=\"" . Text::_($allcats[$catid]->title) . "\" src=\""
 								. $image . $allcats[$catid]->image . "\" /></a>";
 							}
 						}
@@ -414,7 +421,7 @@ class JtgHelper
 				{
 					if ( isset($allcats[$catid]))
 					{
-						$return[] = JText::_($allcats[$catid]->title);
+						$return[] = Text::_($allcats[$catid]->title);
 					}
 				}
 				break;
@@ -425,17 +432,12 @@ class JtgHelper
 
 	static public function getDbo()
 	{
-		if (version_compare(JVERSION,'4.0','lt')) {
-			return JFactory::getDbo();
-		}
-		else {
-			return \Joomla\CMS\Factory::getContainer()->get('DatabaseDriver');
-		}
+		return Factory::getDbo();
 	}
 
 	static public function getCatIconName($catid)
 	{
-		$mainframe = JFactory::getApplication();
+		$mainframe = Factory::getApplication();
 
 		$db = JtgHelper::getDbo();
 
@@ -458,7 +460,7 @@ class JtgHelper
 	static public function parseMoreTerrains($allterrains, $terrainid, $format = "array", $link = false)
 	{
 		$baseurl = "index.php?option=com_jtg&view=files&layout=list&terrain=";
-		$image = JUri::base() . 'images/jtrackgallery/terrain/';
+		$image = Uri::base() . 'images/jtrackgallery/terrain/';
 		$terrainids = explode(",", $terrainid);
 		$return = array();
 
@@ -469,7 +471,7 @@ class JtgHelper
 				{
 					foreach ($terrainids as $terrainid)
 					{
-						$return[] = JText::_($allterrains[$terrainid]->title);
+						$return[] = Text::_($allterrains[$terrainid]->title);
 					}
 				}
 				else
@@ -480,7 +482,7 @@ class JtgHelper
 						{
 							$url = JRoute::_($baseurl . $allterrains[$terrainid]->id, false);
 							$return[] = "<a href=\"" . $url . "\">" .
-									JText::_($allterrains[$terrainid]->title) . "</a>";
+									Text::_($allterrains[$terrainid]->title) . "</a>";
 						}
 					}
 				}
@@ -493,7 +495,7 @@ class JtgHelper
 				{
 					if ( isset($allterrains[$terrainid]) )
 					{
-						$return[] = JText::_($allterrains[$terrainid]->title);
+						$return[] = Text::_($allterrains[$terrainid]->title);
 					}
 				}
 				break;
@@ -501,7 +503,7 @@ class JtgHelper
 
 		if ( $return == "" )
 		{
-			$return = "<label title=\"" . JText::_('COM_JTG_TERRAIN_NONE') . "\">-</label>";
+			$return = "<label title=\"" . Text::_('COM_JTG_TERRAIN_NONE') . "\">-</label>";
 		}
 
 		return $return;
@@ -521,23 +523,23 @@ class JtgHelper
 		$access = array (
 				array (
 						'id' => 9,
-						'text' => JText::_('COM_JTG_PRIVATE')
+						'text' => Text::_('COM_JTG_PRIVATE')
 				),
 				array (
 						'id' => 0,
-						'text' => JText::_('COM_JTG_PUBLIC')
+						'text' => Text::_('COM_JTG_PUBLIC')
 				),
 				array (
 						'id' => 1,
-						'text' => JText::_('COM_JTG_REGISTERED')
+						'text' => Text::_('COM_JTG_REGISTERED')
 				),
 				array (
 						'id' => 2,
-						'text' => JText::_('COM_JTG_ADMINISTRATORS')
+						'text' => Text::_('COM_JTG_ADMINISTRATORS')
 				)
 		);
 
-		return JHtml::_('select.genericlist', $access, $name, 'class="form-select"' . $js, 'id', 'text', $accesslevel);
+		return HTMLHelper::_('select.genericlist', $access, $name, 'class="form-select"' . $js, 'id', 'text', $accesslevel);
 
 	}
 
@@ -548,7 +550,7 @@ class JtgHelper
 	 */
 	static public function giveAccessLevel()
 	{
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		if (!$user->id)
 		{
@@ -596,7 +598,7 @@ class JtgHelper
 		{
 			foreach ($row as $v)
 			{
-				$v->title = JText::_($v->title);
+				$v->title = Text::_($v->title);
 				$terrain[] = $v;
 			}
 		}
@@ -611,7 +613,7 @@ class JtgHelper
 	 */
 	static public function checkCaptcha()
 	{
-		$mainframe = JFactory::getApplication();
+		$mainframe = Factory::getApplication();
 		$db = JtgHelper::getDbo();
 
 		$query = "SELECT extension_id FROM #__extensions WHERE element='captcha'";
@@ -631,7 +633,7 @@ class JtgHelper
 	 */
 	static public function getLatLon($uid = false, $exclude = false)
 	{
-		$mainframe = JFactory::getApplication();
+		$mainframe = Factory::getApplication();
 		$db = JtgHelper::getDbo();
 		$query = "SELECT u.id,u.name,u.username,u2.jtglat,u2.jtglon,u2.jtgvisible FROM #__users as u left join #__jtg_users as u2 ON u.id=u2.user_id";
 
@@ -810,7 +812,7 @@ static public function autoRotateImage($image) {
 		imagecopyresampled($tmp, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 
 		$outfullname = $image_dir .'/'. $outfname;
-		if (JFile::exists($outfullname)) {
+		if (File::exists($outfullname)) {
 			return false;
 		}
 		switch (strtolower($ext))
@@ -826,7 +828,7 @@ static public function autoRotateImage($image) {
 				else
 				{
 					// Copy the image and convert NOT (for exif-data)
-					$statusupload = JFile::copy($file_tmp_name, $outfullname);
+					$statusupload = File::copy($file_tmp_name, $outfullname);
 				}
 				break;
 
@@ -853,7 +855,7 @@ static public function autoRotateImage($image) {
 	 * @return return_description
 	 */
 	static public function resizeConvertImk($file_tmp_name, $image_dir, $outfname) {
-		if (JFile::exists($image_dir.'/'.$outfname)) {
+		if (File::exists($image_dir.'/'.$outfname)) {
 			return false;
 		}
 		$image = new Imagick($file_tmp_name);
@@ -920,14 +922,14 @@ static public function autoRotateImage($image) {
 		$cfg = self::getConfig();
 
 		$image_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/track_' . $trackID;
-		if (! JFolder::exists($image_dir))
+		if (! Folder::exists($image_dir))
 		{  	
-			JFolder::create($image_dir, 0777);
+			Folder::create($image_dir, 0777);
 		}
 
 		$outfname = str_replace('.' . $ext, '.jpg', $outfname);		
-		if (JFile::exists($image_dir.'/'.$outfname)) {
-			JFactory::getApplication()->enqueueMessage(JText::_sprintf("COM_JTG_FILE_ALREADY_EXISTS",$outfname));
+		if (File::exists($image_dir.'/'.$outfname)) {
+			Factory::getApplication()->enqueueMessage(Text::_sprintf("COM_JTG_FILE_ALREADY_EXISTS",$outfname));
 			return false;
 		}
 		if (phpversion('imagick')) {
@@ -936,7 +938,7 @@ static public function autoRotateImage($image) {
 		else if (phpversion('gd')) {
 		   $statusupload = JtgHelper::resizeConvertGd($file_tmp_name, $ext, $image_dir, $outfname);
 		}
-		else JFactory::getApplication()->enqueueMessage('ERROR: need ImageMagick or gd extension to handle images','warning');
+		else Factory::getApplication()->enqueueMessage('ERROR: need ImageMagick or gd extension to handle images','warning');
 
 		if ($statusupload)
 		{
@@ -1111,21 +1113,21 @@ static public function autoRotateImage($image) {
 	static public function getLevelIcon($level, $cfg, $catid = 0, $iconheight = 24)
 	{
 		$iconspath = JPATH_BASE . '/images/jtrackgallery/difficulty_level/';
-		$iconsurl = JUri::root() . 'images/jtrackgallery/difficulty_level/';
+		$iconsurl = Uri::root() . 'images/jtrackgallery/difficulty_level/';
 		$levels = explode("\n", $cfg->level);
 		$levels = array_filter($levels);
 		$nLevels = count($levels);
 		$levelString = $level . '/' . $nLevels;
 		$height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px;display:inline;" ' : ' style="display:none;" ');
 
-		if (JFile::exists($iconspath . $catid . '_' . (string) $level . '.png'))
+		if (File::exists($iconspath . $catid . '_' . (string) $level . '.png'))
 		{
 			// Use $catid_$level.png
 			return '<img ' . $height . ' src="' . $iconsurl . $catid . '_' . (string) $level . '.png" alt="' . $levelString . '" title="' . $levelString . '">';
 		}
-		elseif ( (JFile::exists($iconspath . $catid . '_l1.png'))
-				AND (JFile::exists($iconspath . $catid . '_l2.png'))
-				AND (JFile::exists($iconspath . $catid . '_l3.png')) )
+		elseif ( (File::exists($iconspath . $catid . '_l1.png'))
+				AND (File::exists($iconspath . $catid . '_l2.png'))
+				AND (File::exists($iconspath . $catid . '_l3.png')) )
 		{
 			// Use $catid_l1.png $catid_l2.png $catid_l3.png
 			$return = '';
@@ -1140,14 +1142,14 @@ static public function autoRotateImage($image) {
 
 			return $return;
 		}
-		elseif ( JFile::exists($iconspath . (string) $level . '.png'))
+		elseif ( File::exists($iconspath . (string) $level . '.png'))
 		{
 			// Use $level.png
 			return '<img ' . $height . ' src="' . $iconsurl . (string) $level . '.png" alt="' . $levelString . '" title="' . $levelString . '">';
 		}
-		elseif ((JFile::exists($iconspath . 'l1.png'))
-				AND (JFile::exists($iconspath . 'l2.png'))
-				AND (JFile::exists($iconspath . 'l3.png')) )
+		elseif ((File::exists($iconspath . 'l1.png'))
+				AND (File::exists($iconspath . 'l2.png'))
+				AND (File::exists($iconspath . 'l3.png')) )
 		{
 			// Use l1.png l2.png l3.png
 			$return = '';
@@ -1187,14 +1189,14 @@ static public function autoRotateImage($image) {
 		if ( strtolower($unit) == "miles" || strtolower($unit) == "mi")
 		{
 			$dist = self::getMiles($dist);
-			$unit = JText::_('COM_JTG_DISTANCE_UNIT_MILES');
+			$unit = Text::_('COM_JTG_DISTANCE_UNIT_MILES');
 		}
 		else {
-			$unit = JText::_('COM_JTG_DISTANCE_UNIT_KILOMETER');
+			$unit = Text::_('COM_JTG_DISTANCE_UNIT_KILOMETER');
 			if ( $dist < 1 )
 			{
 				$dist = $dist * 1000;
-				$unit = JText::_('COM_JTG_UNIT_METER');
+				$unit = Text::_('COM_JTG_UNIT_METER');
 			}
 		}
 
@@ -1207,8 +1209,8 @@ static public function autoRotateImage($image) {
 		return number_format(
 				$dist,
 				$digits,
-				JText::_('COM_JTG_SEPARATOR_DEC'),
-				JText::_('COM_JTG_SEPARATOR_THS')
+				Text::_('COM_JTG_SEPARATOR_DEC'),
+				Text::_('COM_JTG_SEPARATOR_THS')
 		) . $unit;
 	}
 
@@ -1224,8 +1226,8 @@ static public function autoRotateImage($image) {
 		return number_format(
 				$float,
 				$digits,
-				JText::_('COM_JTG_SEPARATOR_DEC'),
-				JText::_('COM_JTG_SEPARATOR_THS')
+				Text::_('COM_JTG_SEPARATOR_DEC'),
+				Text::_('COM_JTG_SEPARATOR_THS')
 		);
 	}
 
@@ -1250,7 +1252,7 @@ static public function autoRotateImage($image) {
 		}
 
 
-		return $selectedlevel . "/" . ($i - 1) . " - " . JText::_(trim($selectedtext));
+		return $selectedlevel . "/" . ($i - 1) . " - " . Text::_(trim($selectedtext));
 	}
 
 	/**
@@ -1265,7 +1267,7 @@ static public function autoRotateImage($image) {
 		$tdiffh = (int) (($deltat%86400)/3600);
 		$tdiffm = (int) (($deltat%3600)/60);
 		$tdiffstr = '';
-		if ($tdiffd) $tdiffstr .= $tdiffd.' '.JText::_("COM_JTG_DAY_SHORT").' ';
+		if ($tdiffd) $tdiffstr .= $tdiffd.' '.Text::_("COM_JTG_DAY_SHORT").' ';
 		if ($tdiffh) $tdiffstr .= $tdiffh.':';
 		$tdiffstr .= sprintf('%02d',$tdiffm);
 		return $tdiffstr;
@@ -1285,14 +1287,14 @@ static public function autoRotateImage($image) {
 		$widthstr = '';
 		if (!is_null($width)) $widthstr = 'style="width: '.$width.'"';
 		$htmlout = '  <div class="gps-info-cont"'.$widthstr.'>
-    <div class="gps-subheadline">'.JText::_('COM_JTG_DETAILS')."</div>\n";
+    <div class="gps-subheadline">'.Text::_('COM_JTG_DETAILS')."</div>\n";
       $htmlout .= '   <div class="gps-info"><table class="gps-info-tab">';
 		if (is_null($fieldlist)) $fieldlist = $params->get('jtg_param_info_fields');
 		if (is_null($fieldlist)) $fieldlist = array("dist","ele","time","speed");
 		if ( in_array('dist',$fieldlist) && ($track->distance != "") && ((float) $track->distance != 0) )
 		{
 			$htmlout .= "   <tr> 
-    <td>".JText::_('COM_JTG_DISTANCE').":</td>
+    <td>".Text::_('COM_JTG_DISTANCE').":</td>
     <td>".JtgHelper::getFormattedDistance($track->distance, '', $cfg->unit)."</td>
   </tr>\n";
 		}
@@ -1300,10 +1302,10 @@ static public function autoRotateImage($image) {
 		if ( $gpsTrack->totalMovingTime != 0 || $gpsTrack->totalTime != 0 )
 {
 			if ( in_array('time', $fieldlist) && isset($gpsTrack->totalMovingTime) && isset($gpsTrack->totalTime) ) {
-				$htmlout .= "  <tr>\n    <td>".JText::_('COM_JTG_MOVING_TIME').":</td>\n".
+				$htmlout .= "  <tr>\n    <td>".Text::_('COM_JTG_MOVING_TIME').":</td>\n".
 					"    <td>".JtgHelper::formatTimeDiff($gpsTrack->totalMovingTime);
             if ($gpsTrack->totalTime != $gpsTrack->totalMovingTime) {
-					$htmlout .= " ( ".JText::_('COM_JTG_TOTAL_TIME').": ".JtgHelper::formatTimeDiff($gpsTrack->totalTime)." )";
+					$htmlout .= " ( ".Text::_('COM_JTG_TOTAL_TIME').": ".JtgHelper::formatTimeDiff($gpsTrack->totalTime)." )";
 				}
 				$htmlout .= "    </td>\n  </tr>\n";
 			}
@@ -1317,31 +1319,31 @@ static public function autoRotateImage($image) {
 					$avgSpeed = $gpsTrack->distance/$gpsTrack->totalTime*3600;
 				}
 				if ($cfg->unit == "miles") jtgHelper::getMiles($avgSpeed);
-				$htmlout .= "  <tr>\n    <td>".JText::_('COM_JTG_AVGSPEED').":</td>\n".
+				$htmlout .= "  <tr>\n    <td>".Text::_('COM_JTG_AVGSPEED').":</td>\n".
 					"    <td>".
 					number_format( $avgSpeed, 2,
-            	JText::_('COM_JTG_SEPARATOR_DEC'),
-            	JText::_('COM_JTG_SEPARATOR_THS')).' '.
-            	JText::_("COM_JTG_SPEED_UNIT_".strtoupper($cfg->unit)).
+            	Text::_('COM_JTG_SEPARATOR_DEC'),
+            	Text::_('COM_JTG_SEPARATOR_THS')).' '.
+            	Text::_("COM_JTG_SPEED_UNIT_".strtoupper($cfg->unit)).
 					"    </td>\n   </tr>\n";
 			}
 		}
 		if ( in_array('ele',$fieldlist) ) {
 			$htmlout .= "  <tr>\n     <td>".
-				JText::_('COM_JTG_ELEVATION_UP').":</td>\n".
+				Text::_('COM_JTG_ELEVATION_UP').":</td>\n".
 				"    <td>".$track->ele_asc.' '.
-				JText::_('COM_JTG_UNIT_METER')." </td>\n  </tr>\n";
+				Text::_('COM_JTG_UNIT_METER')." </td>\n  </tr>\n";
 			$htmlout .= "  <tr>\n     <td>".
-				JText::_('COM_JTG_ELEVATION_DOWN').":</td>\n".
+				Text::_('COM_JTG_ELEVATION_DOWN').":</td>\n".
 				"    <td>".$track->ele_desc.' '.
-				JText::_('COM_JTG_UNIT_METER')." </td>\n  </tr>\n";
+				Text::_('COM_JTG_UNIT_METER')." </td>\n  </tr>\n";
 		}
 		$htmlout .= "</table>\n</div>\n";
 		$htmlout .= "<div class=\"gps-info\"> <table class=\"gps-info-tab\">";
 		if ( $cfg->uselevel && $track->level != "0" )
       {
 			$htmlout .= "  <tr>\n     <td>".
-            JText::_('COM_JTG_LEVEL').":</td>\n".
+            Text::_('COM_JTG_LEVEL').":</td>\n".
             "    <td>".JtgHelper::formatLevel($track->level,$cfg)."</td>\n".
 				"  </tr>\n";
 		}
@@ -1349,7 +1351,7 @@ static public function autoRotateImage($image) {
 		{
 			$sortedcats = JtgModeljtg::getCatsData(true); // TODO: pass as argument?
 			$htmlout .= "  <tr>\n     <td>".
-				JText::_('COM_JTG_CATS').":</td>\n".
+				Text::_('COM_JTG_CATS').":</td>\n".
             '  <td colspan="2">'.JtgHelper::parseMoreCats($sortedcats, $track->catid, "TrackDetails", true)."</td>\n".
 				"  </tr>";
       }
@@ -1373,28 +1375,28 @@ static public function autoRotateImage($image) {
 				}
 				$terrain = implode(', ', $newterrain);
 				$htmlout .= "  <tr>\n    <td>".
-					JText::_('COM_JTG_TERRAIN').":</td>\n".
+					Text::_('COM_JTG_TERRAIN').":</td>\n".
 					"    <td>".$terrain."</td>\n  </tr>";
 			}
 		}
 		if ( in_array('owner', $fieldlist) )
 		{
 			$htmlout .= "  <tr>\n     <td>".
-				JText::_('COM_JTG_UPLOADER').":</td>\n".
+				Text::_('COM_JTG_UPLOADER').":</td>\n".
 				"    <td>".JtgHelper::getProfileLink($track->uid, $track->user).
 				"</td>\n  </tr>";
 		}
 		if ( in_array('date', $fieldlist) && $track->date )
 		{
 			$htmlout .= "  <tr>\n     <td>".
-				JText::_('COM_JTG_DATE').":</td>\n".
-				"    <td>".JHtml::_('date', $track->date, JText::_('COM_JTG_DATE_FORMAT_LC4')).
+				Text::_('COM_JTG_DATE').":</td>\n".
+				"    <td>".HTMLHelper::_('date', $track->date, Text::_('COM_JTG_DATE_FORMAT_LC4')).
 				"</td>\n  </tr>";
 		}
 		if ( in_array('hits', $fieldlist) )
 		{
 			$htmlout .= "  <tr>\n     <td>".
-				JText::_('COM_JTG_HITS').":</td>\n".
+				Text::_('COM_JTG_HITS').":</td>\n".
 				"    <td>".$track->hits.
 				"</td>\n  </tr>";
 		}

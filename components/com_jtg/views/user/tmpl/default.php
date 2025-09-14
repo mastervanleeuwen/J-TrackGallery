@@ -18,10 +18,16 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-// Load core.js to enable tableordering
-JHtml::_('script', 'system/core.js', false, true);
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
-$user = JFactory::getUser();
+// Load core.js to enable tableordering
+HTMLHelper::_('script', 'system/core.js', false, true);
+
+$user = Factory::getUser();
 $uid = $user->id;
 $show_cat_icon = $this->params->get('jtg_param_use_cats') && ! (bool) $this->params->get('jtg_param_tracks_list_hide_icon_category');
 
@@ -42,45 +48,45 @@ if ($uid != 0)
 </script>
 <?php
 if (empty($this->items)) {
-	JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_LIST_NO_TRACK'), 'Warning');
-	echo '<b>' . JText::_('COM_JTG_LIST_NO_TRACK') . '</b>';
+	Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_LIST_NO_TRACK'), 'Warning');
+	echo '<b>' . Text::_('COM_JTG_LIST_NO_TRACK') . '</b>';
 } else 
 {
 
-echo $this->parseTemplate("subheadline", JText::_("COM_JTG_USER_TOTALS"), "summary", null);
+echo $this->parseTemplate("subheadline", Text::_("COM_JTG_USER_TOTALS"), "summary", null);
 $user_summary = $this->getModel()->getTotals($uid);
 // TODO: add units for distance
  ?>
 <div class="gps-info">
    <table class="gps-info-tab">
 	<tr>
-		<td><?php echo JText::_('COM_JTG_DISTANCE'); ?>:</td>
+		<td><?php echo Text::_('COM_JTG_DISTANCE'); ?>:</td>
 		<td><?php echo JtgHelper::getFormattedDistance($user_summary->distance,'-',$this->cfg->unit); ?>
 		</td>
 	</tr>
 	<tr>
-		<td><?php echo JText::_('COM_JTG_ELEVATION_UP'); ?>:</td>
+		<td><?php echo Text::_('COM_JTG_ELEVATION_UP'); ?>:</td>
 		<td><?php
 			echo $user_summary->ele_asc;
-			echo ' ' . JText::_('COM_JTG_METERS');
+			echo ' ' . Text::_('COM_JTG_METERS');
 			?>
 		</td>
 	</tr>
 	<tr>
-		<td><?php echo JText::_('COM_JTG_ELEVATION_DOWN'); ?>:</td>
+		<td><?php echo Text::_('COM_JTG_ELEVATION_DOWN'); ?>:</td>
 		<td><?php echo $user_summary->ele_desc; ?>
-			<?php echo ' ' . JText::_('COM_JTG_METERS'); ?>
+			<?php echo ' ' . Text::_('COM_JTG_METERS'); ?>
 		</td>
 	</tr>
 
 	</table>
 </div>
-<?php echo $this->parseTemplate('subheadline', JText::_('COM_JTG_MY_FILES'), 'tracklist', null); ?>
+<?php echo $this->parseTemplate('subheadline', Text::_('COM_JTG_MY_FILES'), 'tracklist', null); ?>
 <form action="<?php echo $this->action; ?>" method="post"
 	name="adminForm" id="adminForm">
 	<table style="width:100%;">
 		<tr>
-<!-- fixme:			<td><?php echo JText::_('JGLOBAL_DISPLAY_NUM') . '&nbsp;' . $this->pagination->getLimitBox(); ?>
+<!-- fixme:			<td><?php echo Text::_('JGLOBAL_DISPLAY_NUM') . '&nbsp;' . $this->pagination->getLimitBox(); ?>
 			</td> -->
 			<td style="text-align: right"><?php echo $this->pagination->getResultsCounter(); ?>
 			</td>
@@ -92,31 +98,31 @@ $user_summary = $this->getModel()->getTotals($uid);
 			<tr
 				class="sectiontableheader<?php echo $this->escape($this->params->get('pageclass_sfx')); ?>">
 				<th width="60px">#</th>
-				<th><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TITLE'), 'title', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+				<th><?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_TITLE'), 'title', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
 <?php
 				if ($show_cat_icon)
 				{   
 ?> 
-				<th width="80px"><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_CAT'), 'catid', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+				<th width="80px"><?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_CAT'), 'catid', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
 <?php			} ?>
-				<th width="50px"><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_HITS'), 'hits', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+				<th width="50px"><?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_HITS'), 'hits', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
 <?php
 				if (! $this->params->get("jtg_param_disable_terrains"))
 				{   
 ?> 
-				<th width="80px"><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_TERRAIN'), 'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+				<th width="80px"><?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_TERRAIN'), 'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
 <?php			} 
 				if ($this->cfg->usevote == 1)
 				{
 				?> 
-				<th width="20px"><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_VOTING'), 'vote', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+				<th width="20px"><?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_VOTING'), 'vote', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
 <?php			} ?>
-				<th width="20px"><?php echo JHtml::_('grid.sort', JText::_('COM_JTG_DISTANCE'), 'distance', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
+				<th width="20px"><?php echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_DISTANCE'), 'distance', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 				</th>
 			</tr>
 		</thead>
@@ -136,7 +142,7 @@ $user_summary = $this->getModel()->getTotals($uid);
 				$distance = JtgHelper::getFormattedDistance($row->distance, "-", $this->cfg->unit);
 
 				$votes = LayoutHelper::parseVoteFloat($row->vote);
-				$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $row->id, false);
+				$link = Route::_('index.php?option=com_jtg&view=track&id=' . $row->id, false);
 				$cats = JtgHelper::parseMoreCats($this->cats, $row->catid, "list", true);
 				?>
 			<tr>
@@ -146,9 +152,9 @@ $user_summary = $this->getModel()->getTotals($uid);
 	{
 ?>
 					<a
-					href="<?php echo JRoute::_("index.php?option=com_jtg&view=track&layout=form&id=".$row->id); ?>">
+					href="<?php echo Route::_("index.php?option=com_jtg&view=track&layout=form&id=".$row->id); ?>">
 						<img <?php echo $edit ?>
-						src="<?php echo JUri::root() ?>components/com_jtg/assets/images/edit_f2.png" width="16px" />
+						src="<?php echo Uri::root() ?>components/com_jtg/assets/images/edit_f2.png" width="16px" />
 				</a> 
 <?php
 	}
@@ -157,9 +163,9 @@ $user_summary = $this->getModel()->getTotals($uid);
 ?>
 <a
 					href="index.php?option=com_jtg&controller=track&task=delete&id=<?php echo $row->id; ?>"
-					onclick="return confirm('<?php echo JText::_('COM_JTG_VALIDATE_DELETE_TRACK')?>')">
+					onclick="return confirm('<?php echo Text::_('COM_JTG_VALIDATE_DELETE_TRACK')?>')">
 						<img <?php echo $delete ?>
-						src="<?php echo JUri::root() ?>components/com_jtg/assets/images/cancel_f2.png" width="16px" />
+						src="<?php echo Uri::root() ?>components/com_jtg/assets/images/cancel_f2.png" width="16px" />
 				</a>
 <?php
 	}
@@ -195,13 +201,13 @@ $user_summary = $this->getModel()->getTotals($uid);
 // Adding the comments
 if ($this->cfg->comments == 1)
 {
-   echo $this->parseTemplate("subheadline", JText::_('COM_JTG_COMMENTS'), "commentstome");
+   echo $this->parseTemplate("subheadline", Text::_('COM_JTG_COMMENTS'), "commentstome");
    $comments = $this->getModel()->getCommentsToTracks();
 	// TODO: need to add links to the tracks in the displayed list
 	//LayoutHelper::parseComments($comments);
 	if (!$comments)
    {
-      echo $this->parseTemplate("description",JText::_('COM_JTG_NO_COMMENTS_DESC'));
+      echo $this->parseTemplate("description",Text::_('COM_JTG_NO_COMMENTS_DESC'));
    }
    else
    {
@@ -215,9 +221,9 @@ if ($this->cfg->comments == 1)
          <?php echo $i + 1 . ": " . $comment->title; ?>
       </div>
       <div class="date">
-         <?php if ($comment->date != null) echo JHtml::_('date', $comment->date, JText::_('COM_JTG_DATE_FORMAT_LC4')); ?>
+         <?php if ($comment->date != null) echo HTMLHelper::_('date', $comment->date, Text::_('COM_JTG_DATE_FORMAT_LC4')); ?>
       </div>
-		<div class="comment-tracklink"> <a href="<?php echo JRoute::_("index.php?option=com_jtg&view=track&id=".$comment->tid); ?>"><?php echo $comment->tracktitle; ?></a>
+		<div class="comment-tracklink"> <a href="<?php echo Route::_("index.php?option=com_jtg&view=track&id=".$comment->tid); ?>"><?php echo $comment->tracktitle; ?></a>
 		</div>
       <div class="no-float"></div>
    </div>
@@ -243,11 +249,11 @@ if ($this->cfg->comments == 1)
 <?php
 	}
 	}
-   echo $this->parseTemplate("subheadline", JText::_('COM_JTG_MYCOMMENTS'), "mycomments");
+   echo $this->parseTemplate("subheadline", Text::_('COM_JTG_MYCOMMENTS'), "mycomments");
    $mycomments = $this->getModel()->getComments();
 	if (!$mycomments)
    {
-      echo $this->parseTemplate("description",JText::_('COM_JTG_NO_COMMENTS_DESC'));
+      echo $this->parseTemplate("description",Text::_('COM_JTG_NO_COMMENTS_DESC'));
    }
    else
    {
@@ -262,9 +268,9 @@ if ($this->cfg->comments == 1)
          <?php echo $i + 1 . ": " . $comment->title; ?>
       </div>
       <div class="date">
-         <?php if ($comment->date != null) echo JHtml::_('date', $comment->date, JText::_('COM_JTG_DATE_FORMAT_LC4')); ?>
+         <?php if ($comment->date != null) echo HTMLHelper::_('date', $comment->date, Text::_('COM_JTG_DATE_FORMAT_LC4')); ?>
       </div>
-		<div class="comment-tracklink"> <a href="<?php echo JRoute::_("index.php?option=com_jtg&view=track&id=".$comment->tid); ?>"><?php echo $comment->tracktitle; ?></a>
+		<div class="comment-tracklink"> <a href="<?php echo Route::_("index.php?option=com_jtg&view=track&id=".$comment->tid); ?>"><?php echo $comment->tracktitle; ?></a>
 		</div>
       <div class="no-float"></div>
    </div>
@@ -280,7 +286,7 @@ if ($this->cfg->comments == 1)
 }
 else
 {
-	JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_ALERT_NOT_AUTHORISED'), 'Error');
+	Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_ALERT_NOT_AUTHORISED'), 'Error');
 }
 
 echo $this->footer;

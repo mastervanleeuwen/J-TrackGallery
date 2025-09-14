@@ -20,6 +20,8 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
 
+use Joomla\CMS\Factory;
+
 /**
  * jtg Component Controller
  *
@@ -43,7 +45,7 @@ class JtgController extends JControllerLegacy
 	public function display ($cachable = false, $urlparams = false)
 	{
 		// Make sure we have a default view
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		if (! $input->get('view'))
 		{
 			$input->set('view', 'jtg');
@@ -72,16 +74,16 @@ class JtgController extends JControllerLegacy
 	 */
 	public function displayimg ()
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// By default, just display an image
-		$document = JFactory::getDocument();
+		$document = Factory::getDocument();
 		$doc = JDocument::getInstance('raw');
 
 		// Swap the objects
 		$document = $doc;
 		$ok = null;
-		$mainframe->triggerEvent('onCaptcha_Display', array($ok));
+		$app->triggerEvent('onCaptcha_Display', array($ok));
 
 		if (! $ok)
 		{

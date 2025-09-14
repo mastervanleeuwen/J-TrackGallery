@@ -25,7 +25,7 @@ jimport('joomla.application.component.model');
 class JtgModelDPCalLocations extends JModelList
 {
 	protected function getListQuery() {
-		$db = JFactory::getDBO();
+		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 		$query->select('loc.*')
 		->from('#__dpcalendar_locations as loc')

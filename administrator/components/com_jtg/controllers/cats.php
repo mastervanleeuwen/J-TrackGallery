@@ -19,8 +19,15 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Table\Table;
 use Joomla\Utilities\ArrayHelper;
-JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jtg/tables');
+
+Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jtg/tables');
 
 /**
  * Controller Class Categories
@@ -55,21 +62,21 @@ class JtgControllerCats extends JtgController
 	function uploadcatimages ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('cat');
 		$success = $model->saveCatImage();
 
 		// Redirect to cats overview
-		$link = JRoute::_("index.php?option=com_jtg&controller=cats&task=managecatpics", false);
+		$link = Route::_("index.php?option=com_jtg&controller=cats&task=managecatpics", false);
 
 		if ($success)
 		{
-			$this->setRedirect($link, JText::_('COM_JTG_CATPIC_SAVED'));
+			$this->setRedirect($link, Text::_('COM_JTG_CATPIC_SAVED'));
 		}
 		else
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_CATPIC_NOTSAVED'), 'Warning');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_CATPIC_NOTSAVED'), 'Warning');
 			$this->setRedirect($link);
 		}
 	}
@@ -83,21 +90,21 @@ class JtgControllerCats extends JtgController
 	function savecat ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('cat');
 		$success = $model->saveCat();
 
 		// Redirect to cats overview
-		$link = JRoute::_("index.php?option=com_jtg&task=cats&controller=cats", false);
+		$link = Route::_("index.php?option=com_jtg&task=cats&controller=cats", false);
 
 		if ($success)
 		{
-			$this->setRedirect($link, JText::_('COM_JTG_CAT_SAVED'));
+			$this->setRedirect($link, Text::_('COM_JTG_CAT_SAVED'));
 		}
 		else
 		{
-			$this->setRedirect($link, JText::_('COM_JTG_CAT_NOT_SAVED'));
+			$this->setRedirect($link, Text::_('COM_JTG_CAT_NOT_SAVED'));
 		}
 	}
 
@@ -109,12 +116,12 @@ class JtgControllerCats extends JtgController
 	function orderup ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('cat');
 		$model->move(- 1);
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=cats&controller=cats', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=cats&controller=cats', false));
 	}
 
 	/**
@@ -125,12 +132,12 @@ class JtgControllerCats extends JtgController
 	function orderdown ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('cat');
 		$model->move(1);
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=cats&controller=cats', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=cats&controller=cats', false));
 	}
 
 	/**
@@ -141,17 +148,17 @@ class JtgControllerCats extends JtgController
 	function saveorder ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
-		$order = JFactory::getApplication()->input->get('order', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
+		$order = Factory::getApplication()->input->get('order', array(), 'array');
 		ArrayHelper::toInteger($cid);
 		ArrayHelper::toInteger($order);
 
 		$model = $this->getModel('cat');
 		$model->saveorder($order, $cid);
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=cats&controller=cats', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=cats&controller=cats', false));
 	}
 
 	/**
@@ -162,14 +169,14 @@ class JtgControllerCats extends JtgController
 	function publish ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_PUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_PUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('cat');
@@ -179,7 +186,7 @@ class JtgControllerCats extends JtgController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=cats&controller=cats', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=cats&controller=cats', false));
 	}
 
 	/**
@@ -190,14 +197,14 @@ class JtgControllerCats extends JtgController
 	function unpublish ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('cat');
@@ -207,7 +214,7 @@ class JtgControllerCats extends JtgController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=cats&controller=cats', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=cats&controller=cats', false));
 	}
 
 	/**
@@ -218,13 +225,13 @@ class JtgControllerCats extends JtgController
 	function removepic ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_DELETE'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_DELETE'), 'Error');
 		}
 
 		$model = $this->getModel('cat');
@@ -234,7 +241,7 @@ class JtgControllerCats extends JtgController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=cats&controller=cats&task=managecatpics', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=cats&controller=cats&task=managecatpics', false));
 	}
 
 	/**
@@ -245,14 +252,14 @@ class JtgControllerCats extends JtgController
 	function remove ()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_DELETE'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_DELETE'), 'Error');
 		}
 
 		$model = $this->getModel('cat');
@@ -262,7 +269,7 @@ class JtgControllerCats extends JtgController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=cats&controller=cats', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=cats&controller=cats', false));
 	}
 
 	/**
@@ -273,21 +280,21 @@ class JtgControllerCats extends JtgController
 	function updatecat ()
 	{
 		// Check the token
-		JSession::checkToken() or die('JINVALID_TOKEN');
+		Session::checkToken() or die('JINVALID_TOKEN');
 
 		$model = $this->getModel('cat');
 		$success = $model->updateCat();
 
 		// Redirect to cats overview
-		$link = JRoute::_("index.php?option=com_jtg&task=cats&controller=cats", false);
+		$link = Route::_("index.php?option=com_jtg&task=cats&controller=cats", false);
 
 		if ($success)
 		{
-			$this->setRedirect($link, JText::_('COM_JTG_CAT_SAVED'));
+			$this->setRedirect($link, Text::_('COM_JTG_CAT_SAVED'));
 		}
 		else
 		{
-			$this->setRedirect($link, JText::_('COM_JTG_CAT_NOT_SAVED'));
+			$this->setRedirect($link, Text::_('COM_JTG_CAT_NOT_SAVED'));
 		}
 	}
 }

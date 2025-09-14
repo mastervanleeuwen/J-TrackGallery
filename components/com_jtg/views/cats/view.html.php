@@ -20,6 +20,9 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.view');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 /**
  * HTML View class for the jtg component
  *
@@ -38,14 +41,14 @@ class JtgViewCats extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$this->lh = LayoutHelper::navigation();
 		$this->footer = LayoutHelper::footer();
-		$pathway = $mainframe->getPathway();
-		$pathway->addItem(JText::_('COM_JTG_CATS'), '');
-		$sitename = $mainframe->getCfg('sitename');
-		$document = JFactory::getDocument();
-		$document->setTitle(JText::_('COM_JTG_CATS') . " - " . $sitename);
+		$pathway = $app->getPathway();
+		$pathway->addItem(Text::_('COM_JTG_CATS'), '');
+		$sitename = $app->getCfg('sitename');
+		$document = Factory::getDocument();
+		$document->setTitle(Text::_('COM_JTG_CATS') . " - " . $sitename);
 		$model = $this->getModel();
 		$this->cats = $model->getCats();
 

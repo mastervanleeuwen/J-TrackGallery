@@ -20,6 +20,11 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Language\Text;
+
 /**
  * Model Class Categories
  *
@@ -64,15 +69,14 @@ class JtgModelCats extends JModelLegacy
 	public function __construct()
 	{
 		parent::__construct();
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Get the pagination request variables
-		$limit		= $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
-		$limitstart	= $mainframe->getUserStateFromRequest($this->option . '.limitstart', 'limitstart', 0, 'int');
+		$limit		= $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'), 'int');
+		$limitstart	= $app->getUserStateFromRequest($this->option . '.limitstart', 'limitstart', 0, 'int');
 
 		// In case limit has been changed, adjust limitstart accordingly
-		// 	$limitstart = ($limit != 0 ? (floor($limitstart / $limit) * $limit) : 0);
-		$limitstart = JFactory::getApplication()->input->get('limitstart', 0);
+		$limitstart = $app->input->get('limitstart', 0);
 
 		$this->setState('limit', $limit);
 		$this->setState('limitstart', $limitstart);
@@ -107,7 +111,7 @@ class JtgModelCats extends JModelLegacy
 		{
 			$folder = JPATH_SITE . '/images/jtrackgallery/cats/';
 			jimport('joomla.filesystem.folder');
-			$files = JFolder::files($folder);
+			$files = Folder::files($folder);
 			$this->_pics = $files;
 		}
 
@@ -208,7 +212,7 @@ class JtgModelCats extends JModelLegacy
 		foreach ($result as $k => $v)
 		{
 			$newresult[$k] = $v;
-			$newresult[$k]->name = JText::_($newresult[$k]->title);
+			$newresult[$k]->name = Text::_($newresult[$k]->title);
 		}
 
 		return $newresult;
@@ -234,7 +238,7 @@ class JtgModelCats extends JModelLegacy
 		foreach ($result as $k => $v)
 		{
 			$newresult[$k] = $v;
-			$newresult[$k]->name = JText::_($newresult[$k]->name);
+			$newresult[$k]->name = Text::_($newresult[$k]->name);
 		}
 
 		return $newresult;

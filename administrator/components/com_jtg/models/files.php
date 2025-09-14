@@ -18,12 +18,18 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
-use Joomla\Utilities\ArrayHelper;
 
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Table\Table;
+use Joomla\Utilities\ArrayHelper;
 
 /**
  * Model Class Files
@@ -65,8 +71,8 @@ class JtgModelFiles extends AdminModel
 	function updateGeneratedValues()
 	{
 		// Get the post data
-		$id = JFactory::getApplication()->input->get('id');
-		$file = JFactory::getApplication()->input->get('file');
+		$id = Factory::getApplication()->input->get('id');
+		$file = Factory::getApplication()->input->get('file');
 		$cfg = JtgHelper::getConfig();
 		jimport('joomla.filesystem.file');
 		require_once '../components/com_jtg/helpers/gpsClass.php';
@@ -181,8 +187,8 @@ class JtgModelFiles extends AdminModel
 			{
 				if ($file['name'] != "")
 				{
-					$filename = JFile::makeSafe($file['name']);
-					$ext = JFile::getExt($filename);
+					$filename = File::makeSafe($file['name']);
+					$ext = File::getExt($filename);
 
 					if ( ( $types === true ) OR (in_array(strtolower($ext), $types)))
 					{
@@ -205,21 +211,21 @@ class JtgModelFiles extends AdminModel
 	public function __construct()
 	{
 		parent::__construct();
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Get the pagination request variables
-		$limit		= $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
-		$limitstart	= $mainframe->getUserStateFromRequest($this->option . '.limitstart', 'limitstart', 0, 'int');
+		$limit		= $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'), 'int');
+		$limitstart	= $app->getUserStateFromRequest($this->option . '.limitstart', 'limitstart', 0, 'int');
 
 		// In case limit has been changed, adjust limitstart accordingly
 		// 	$limitstart = ($limit != 0 ? (floor($limitstart / $limit) * $limit) : 0);
-		$limitstart = JFactory::getApplication()->input->get('limitstart', 0);
+		$limitstart = Factory::getApplication()->input->get('limitstart', 0);
 
 		$this->setState('limit', $limit);
 		$this->setState('limitstart', $limitstart);
 
-		$array = JFactory::getApplication()->input->get('cid', array(0), 'array');
-		$edit	= JFactory::getApplication()->input->get('edit', true);
+		$array = Factory::getApplication()->input->get('cid', array(0), 'array');
+		$edit	= Factory::getApplication()->input->get('edit', true);
 
 		if ($edit)
 		{
@@ -309,8 +315,6 @@ class JtgModelFiles extends AdminModel
 	 */
 	protected function _buildQuery()
 	{
-		$mainframe = JFactory::getApplication();
-
 		$orderby = $this->_buildContentOrderBy();
 		$where = $this->_buildContentWhere();
 
@@ -332,11 +336,10 @@ class JtgModelFiles extends AdminModel
 	 */
 	protected function _buildContentOrderBy()
 	{
-		$mainframe = JFactory::getApplication();
-
-		$filter_order = $mainframe->getUserStateFromRequest(
+		$app = Factory::getApplication();
+		$filter_order = $app->getUserStateFromRequest(
 				$this->option . 'filter_order', 'filter_order', 'ordering', 'cmd');
-		$filter_order_Dir = $mainframe->getUserStateFromRequest(
+		$filter_order_Dir = $app->getUserStateFromRequest(
 				$this->option . 'filter_order_Dir', 'filter_order_Dir', '', 'word');
 
 		if ($filter_order == 'ordering')
@@ -359,9 +362,9 @@ class JtgModelFiles extends AdminModel
 	 */
 	protected function _buildContentWhere()
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 
-		$search = $mainframe->input->get('search');
+		$search = $app->input->get('search');
 		$where = array();
 		$db = $this->getDbo();
 
@@ -394,7 +397,7 @@ class JtgModelFiles extends AdminModel
 
 		if (!$result)
 		{
-			return JTable::getInstance('jtg_files', 'table');
+			return Table::getInstance('jtg_files', 'table');
 		}
 
 		return $result;
@@ -442,7 +445,7 @@ class JtgModelFiles extends AdminModel
 	 */
 	function publish(&$cid, $publish = 1)
 	{
-		$user 	= JFactory::getUser();
+		$user 	= Factory::getUser();
 
 		if (count($cid))
 		{
@@ -476,7 +479,7 @@ class JtgModelFiles extends AdminModel
 	 */
 	function showhide($cid = array(), $hide = 0)
 	{
-		$user 	= JFactory::getUser();
+		$user 	= Factory::getUser();
 
 		if (count($cid))
 		{
@@ -510,7 +513,7 @@ class JtgModelFiles extends AdminModel
 	 */
 	function access($cid = array(), $access = 1)
 	{
-		$user 	= JFactory::getUser();
+		$user 	= Factory::getUser();
 
 		if (count($cid))
 		{
@@ -567,21 +570,21 @@ class JtgModelFiles extends AdminModel
 				// Folder and Pictures within delete
 				$folder = JPATH_SITE . "/images/jtrackgallery/" . $row->id;
 
-				if (JFolder::exists($folder))
+				if (Folder::exists($folder))
 				{
-					JFolder::delete($folder);
+					Folder::delete($folder);
 				}
 				$img_path = JPATH_SITE . 'images/jtrackgallery/uploaded_tracks_images/track_' . $row->id;
-				if (JFolder::exists($img_path))
+				if (Folder::exists($img_path))
 				{
-					JFolder::delete($img_path);
+					Folder::delete($img_path);
 				}
 				// File (gpx?) delete
 				$filename = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $row->file;
 
-				if (JFile::exists($filename))
+				if (File::exists($filename))
 				{
-					JFile::delete($filename);
+					File::delete($filename);
 				}
 				// Delete from DB
 				$this->getTable()->delete($row->id);
@@ -610,21 +613,21 @@ class JtgModelFiles extends AdminModel
 	 */
 	function deleteFromImport($found)
 	{
-		$cid = JFactory::getApplication()->input->get('import_0');
+		$cid = Factory::getApplication()->input->get('import_0');
 		jimport('joomla.filesystem.file');
 		$result = false;
 
 		for ($i = 0; $i <= $found; $i++)
 		{
-			$file = JFactory::getApplication()->input->get('import_' . $i);
+			$file = Factory::getApplication()->input->get('import_' . $i);
 
 			if ( $file !== null )
 			{
-				if (JFile::exists($file))
+				if (File::exists($file))
 				{
-					if (!JFile::delete($file))
+					if (!File::delete($file))
 					{
-						JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_ERROR_FILE_NOT_ERASEABLE') . "(" . $file . ")", 'Error');
+						Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_ERROR_FILE_NOT_ERASEABLE') . "(" . $file . ")", 'Error');
 
 						return false;
 					}
@@ -656,18 +659,18 @@ class JtgModelFiles extends AdminModel
 			{
 				if ( $i == 0 )
 				{
-					$levels[0] = JText::_('COM_JTG_SELECT');
+					$levels[0] = Text::_('COM_JTG_SELECT');
 				}
 				else
 				{
-					$levels[$i] = $i . " - " . JText::_(trim($level));
+					$levels[$i] = $i . " - " . Text::_(trim($level));
 				}
 
 				$i++;
 			}
 		}
 
-		return JHtml::_('select.genericlist', $levels, 'level', 'class="form-select"', 'id', 'title', $selected);
+		return HTMLHelper::_('select.genericlist', $levels, 'level', 'class="form-select"', 'id', 'title', $selected);
 	}
 
 	/**
@@ -693,7 +696,7 @@ class JtgModelFiles extends AdminModel
 		{
 			if ( ( ($nosubcats) AND ($v->parent_id == 0) ) OR (!$nosubcats) )
 			{
-				$v->title = JText::_($v->title);
+				$v->title = Text::_($v->title);
 
 				// TODO  unnecessary ?
 				$v->name = $v->title;
@@ -705,18 +708,18 @@ class JtgModelFiles extends AdminModel
 		}
 
 		$levellimit = 50;
-		$rows = JHtml::_('menu.treerecurse', 0, '', array(), $children, max(0, $levellimit - 1), 0, $type);
+		$rows = HTMLHelper::_('menu.treerecurse', 0, '', array(), $children, max(0, $levellimit - 1), 0, $type);
 		$nullcat = array(
 				"id" => $stdid,
 				"parent" => "0",
-				"title" => JText::_($stdtext),
+				"title" => Text::_($stdtext),
 				"description" => "",
 				"image" => "",
 				"ordering" => "0",
 				"published" => "0",
 				"checked_out" => "0",
-				"name" => JText::_($stdtext),
-				"treename" => JText::_($stdtext),
+				"name" => Text::_($stdtext),
+				"treename" => Text::_($stdtext),
 				"children" => ""
 		);
 		$nullcat = (object) $nullcat;
@@ -757,7 +760,7 @@ class JtgModelFiles extends AdminModel
 		if ($nullter !== false)
 		{
 			$nullter = new stdClass;
-			$nullter->title = JText::_('COM_JTG_SELECT');
+			$nullter->title = Text::_('COM_JTG_SELECT');
 			$nullter->id = null;
 			array_unshift($users, $nullter);
 		}
@@ -793,7 +796,7 @@ class JtgModelFiles extends AdminModel
 		{
 			foreach ($rows as $v)
 			{
-				$v->title = JText::_($v->title);
+				$v->title = Text::_($v->title);
 				$terrain[] = $v;
 			}
 		}
@@ -801,7 +804,7 @@ class JtgModelFiles extends AdminModel
 		if ($nullter !== false)
 		{
 			$nullter = new stdClass;
-			$nullter->title = JText::_('COM_JTG_SELECT');
+			$nullter->title = Text::_('COM_JTG_SELECT');
 			$nullter->id = null;
 			array_unshift($terrain, $nullter);
 		}
@@ -833,21 +836,21 @@ class JtgModelFiles extends AdminModel
 	 */
 	function saveFiles()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 		require_once '../components/com_jtg/helpers/gpsClass.php';
 		$fileokay = true;
 		$db = $this->getDbo();
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$targetdir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$found = $input->getInt('found');
 		$params = JComponentHelper::getParams('com_jtg');
 
 		for ($i = 0;$i < $found;$i++)
 		{
-			$existingfiles = JFolder::files($targetdir);
+			$existingfiles = Folder::files($targetdir);
 			$import = $input->get('import_' . $i);
 
 			if ( $import !== null )
@@ -881,7 +884,7 @@ class JtgModelFiles extends AdminModel
 				$file_tmp = explode('/', $file);
 				$filename = strtolower($file_tmp[(count($file_tmp) - 1)]);
 				$target = File::MakeSafe($filename);
-				$extension = JFile::getExt($filename);
+				$extension = File::getExt($filename);
 
 				// Truncate filename to 127 characters
 				if (strlen($target) > 127)
@@ -896,7 +899,7 @@ class JtgModelFiles extends AdminModel
 
 					while ($fncount < 1000)
 					{
-						$basename = JFile::stripExt($target);
+						$basename = File::stripExt($target);
 						if (strlen($target) > 124) $basename = substr($basename,0,119);
 						$target = $basename. '_' . $fncount . "." . $extension;
 
@@ -918,7 +921,7 @@ class JtgModelFiles extends AdminModel
 				$data['uid'] = $input->get('uid_' . $i);
 				$data['date'] = $input->get('date_' . $i);
 				/*
-				 * $images = JFactory::getApplication()->input->files->get('images_'.$i,);
+				 * $images = Factory::getApplication()->input->files->get('images_'.$i,);
 				*/
 				$data['access'] = $input->getInt('access_' . $i);
 
@@ -934,14 +937,14 @@ class JtgModelFiles extends AdminModel
 					$coords = "";
 					$distance_float = 0;
 					$data['distance'] = 0;
-					$app->enqueueMessage(JText::_('COM_JTG_NO_SUPPORT') . "<br>" . $errors);
+					$app->enqueueMessage(Text::_('COM_JTG_NO_SUPPORT') . "<br>" . $errors);
 
 					// Remove file before exiting
-					if (!JFile::delete($file))
+					if (!File::delete($file))
 					{
 						// TODO JTEXT + warning
 
-						JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_JTG_FILE_DELETE_FAILED', $file), 'Warning');
+						Factory::getApplication()->enqueueMessage(Text::sprintf('COM_JTG_FILE_DELETE_FAILED', $file), 'Warning');
 
 						// TODO check if exit is correct here ???
 						exit;
@@ -969,15 +972,7 @@ class JtgModelFiles extends AdminModel
 
 				if ($fileokay == true)
 				{
-					/*
-					 * Upload the file
-					 * $upload_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
-					 * $filename = explode('/',$file);
-					 * $filename = $filename[(count($filename)-1)];
-					 * $filename = JFile::makeSafe($filename);
-					 */
-
-					if (!JFile::copy($file, $targetdir . $target))
+					if (!File::copy($file, $targetdir . $target))
 					{
 						// TODO translation string 
 						$app->enqueueMessage("Upload failed (file: \"" . $file . "\") !",'error');
@@ -987,7 +982,7 @@ class JtgModelFiles extends AdminModel
 						chmod($targetdir . $target, 0664);
 					}
 
-					if (!JFile::delete($file))
+					if (!File::delete($file))
 					{
 						// TODO translation string 
 						$app->enqueueMessage("Erasing failed (file: \"" . $file . "\")",'error');
@@ -1026,7 +1021,7 @@ class JtgModelFiles extends AdminModel
 		foreach ($result as $k => $v)
 		{
 			$newresult[$k] = $v;
-			$newresult[$k]->name = JText::_($newresult[$k]->name);
+			$newresult[$k]->name = Text::_($newresult[$k]->name);
 		}
 
 		return $newresult;
@@ -1042,7 +1037,6 @@ class JtgModelFiles extends AdminModel
 	function importFromJPT($track)
 	{
 		// TODO Deprecated, can be replacd by import from injooosm
-		$mainframe = JFactory::getApplication();
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 		require_once '../components/com_jtg/helpers/gpsClass.php';
@@ -1050,7 +1044,7 @@ class JtgModelFiles extends AdminModel
 		$fileokay = false;
 		$targetdir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
 		$sourcedir = JPATH_SITE . '/components/com_joomgpstracks/uploaded_tracks/';
-		$existingfiles = JFolder::files($targetdir);
+		$existingfiles = Folder::files($targetdir);
 		$file = $sourcedir . $track['file'];
 		$file_tmp = explode('/', $file);
 		$file_tmp = str_replace(' ', '_', strtolower($file_tmp[(count($file_tmp) - 1)]));
@@ -1069,7 +1063,7 @@ class JtgModelFiles extends AdminModel
 		}
 
 		$target = $file_tmp . "." . $extension;
-		$target = JFile::makeSafe($target);
+		$target = File::makeSafe($target);
 
 		if ( in_array($target, $existingfiles) )
 		{
@@ -1110,13 +1104,13 @@ class JtgModelFiles extends AdminModel
 		else
 		{
 			// TODO print an error message
-			$alert_text = json_encode(JText::_('COM_JTG_NO_SUPPORT') . "(2): " . $target);
+			$alert_text = json_encode(Text::_('COM_JTG_NO_SUPPORT') . "(2): " . $target);
 			echo "<script type='text/javascript'>alert($alert_text);window.history.back(-1);</script>";
 		}
 
 		if ($fileokay == true)
 		{
-			if (!JFile::copy($file, $targetdir . $target))
+			if (!File::copy($file, $targetdir . $target))
 			{
 				echo "Upload failed (file: \"" . $file . "\") !\n";
 			}
@@ -1157,17 +1151,17 @@ class JtgModelFiles extends AdminModel
 			$result = $db->loadObject();
 
 			$imagedirsource = JPATH_SITE . "/images/joomgpstracks/" . md5($track['title']) . '/';
-			$imagedirsourcedir = JFolder::files($imagedirsource);
+			$imagedirsourcedir = Folder::files($imagedirsource);
 			$imagedirdestination = JPATH_SITE . "/images/jtrackgallery/" . $result->id . '/';
 
-			if ((!JFolder::exists($imagedirdestination)) AND (count($imagedirsourcedir) > 0) )
+			if ((!Folder::exists($imagedirdestination)) AND (count($imagedirsourcedir) > 0) )
 			{
-				JFolder::create($imagedirdestination, 0777);
+				Folder::create($imagedirdestination, 0777);
 			}
 
 			foreach ( $imagedirsourcedir AS $imagetocopy )
 			{
-				if (!JFile::copy($imagedirsource . $imagetocopy, $imagedirdestination . $imagetocopy))
+				if (!File::copy($imagedirsource . $imagetocopy, $imagedirdestination . $imagetocopy))
 				{
 					echo "Upload failed:<pre>\"" . $imagedirsource . $imagetocopy . "\"</pre> to <pre>\"" . $imagedirdestination . $imagetocopy . "\"</pre>\n";
 
@@ -1188,16 +1182,16 @@ class JtgModelFiles extends AdminModel
 	 */
 	function saveFile()
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 		require_once '../components/com_jtg/helpers/gpsClass.php';
 
 		$db = $this->getDbo();
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		// Get the post data
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$catid = $input->get('catid', null, 'array');
 		$data['catid'] = $catid ? implode(',', $catid) : '';
 		$data['level'] = $input->get('level', 0, 'integer');
@@ -1248,11 +1242,11 @@ class JtgModelFiles extends AdminModel
 
 		while (true)
 		{
-			if (!JFile::exists($upload_dir . $target))
+			if (!File::exists($upload_dir . $target))
 			{
-				if (!JFile::upload($file['tmp_name'], $upload_dir . $target))
+				if (!File::upload($file['tmp_name'], $upload_dir . $target))
 				{
-					echo JText::_('COM_JTG_UPLOAD_FAILED');
+					echo Text::_('COM_JTG_UPLOAD_FAILED');
 				}
 				else
 				{
@@ -1268,7 +1262,7 @@ class JtgModelFiles extends AdminModel
 				if ( $fncount > 100 )
 				{
 					// This would never happen !!
-					die("<html>Booah! No free Filename available!<br />\"<i>" . JFile::makeSafe($file['name']) . "</i>\"</html>");
+					die("<html>Booah! No free Filename available!<br />\"<i>" . File::makeSafe($file['name']) . "</i>\"</html>");
 				}
 
 				$fncount++;
@@ -1287,9 +1281,9 @@ class JtgModelFiles extends AdminModel
 			$coords = "";
 			$distance_float = 0;
 			$distance = 0;
-			$app->enqueueMessage(JText::_('COM_JTG_NO_SUPPORT') . "<br>" . $errors, 'error');
+			$app->enqueueMessage(Text::_('COM_JTG_NO_SUPPORT') . "<br>" . $errors, 'error');
 
-			JFile::delete($upload_dir . $target);
+			File::delete($upload_dir . $target);
 
 			return false;
 		}
@@ -1320,7 +1314,7 @@ class JtgModelFiles extends AdminModel
 			$trackTable->newTags = $input->get('tags');
 			$trackTable->check();
 			if (! $trackTable->save()) {
-				JFile::delete($file);
+				File::delete($file);
 				return false;
 			}
 
@@ -1332,7 +1326,7 @@ class JtgModelFiles extends AdminModel
 			$id = $result->id;
 
 			// Images upload part
-			$finput = JFactory::getApplication()->input->files();
+			$finput = Factory::getApplication()->input->files();
 			$images = $finput->get('images');
 
 			if (count($images) > 0)
@@ -1344,8 +1338,8 @@ class JtgModelFiles extends AdminModel
 				{
 					if ($image['name'] != "")
 					{
-						$imgfilename = JFile::makesafe($image['name']);
-						$ext = JFile::getExt($imgfilename);
+						$imgfilename = File::makesafe($image['name']);
+						$ext = File::getExt($imgfilename);
 
 						if (in_array(strtolower($ext), $types))
 						{
@@ -1371,19 +1365,19 @@ class JtgModelFiles extends AdminModel
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 		$importfiles = $this->_fetchJPTfiles;
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 		require_once '../components/com_jtg/helpers/gpsClass.php';
 		$fileokay = true;
 		$db = $this->getDbo();
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$targetdir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
 
 		for ($i = 0;$i < count($importfiles);$i++)
 		{
 			$importfile = $importfiles[$i];
-			$existingfiles = JFolder::files($targetdir);
+			$existingfiles = Folder::files($targetdir);
 
-			// 	$import = JFactory::getApplication()->input->get('import_'.$i);
+			// 	$import = Factory::getApplication()->input->get('import_'.$i);
 			// 	if ( $import == "on" ) {
 			$catid = $importfile['catid'];
 			$level = $importfile['level'];
@@ -1410,7 +1404,7 @@ class JtgModelFiles extends AdminModel
 			}
 
 			$target = $file_tmp . "." . $extension;
-			$target = JFile::makeSafe($target);
+			$target = File::makeSafe($target);
 
 			if ( in_array($target, $existingfiles) )
 			{
@@ -1449,7 +1443,7 @@ class JtgModelFiles extends AdminModel
 			$start_n = $importfile['start_n'];
 			$start_e = $importfile['start_e'];
 
-			if (!JFile::copy($file, $targetdir . $target))
+			if (!File::copy($file, $targetdir . $target))
 			{
 				// TODO Jtext
 				echo "Upload failed (file: \"" . $file . "\") !\n";
@@ -1459,7 +1453,7 @@ class JtgModelFiles extends AdminModel
 				chmod($targetdir . $target, 0664);
 			}
 			/*
-						if (!JFile::delete($file))
+						if (!File::delete($file))
 							echo "Erasing failed (file: \"" . $file . "\") !\n";
 
 						$start_n = $start[1];
@@ -1510,7 +1504,7 @@ class JtgModelFiles extends AdminModel
 			$rows = $db->loadObject();
 
 			// Images upload part
-			$newimages = JFactory::getApplication()->input->files->get('images');
+			$newimages = Factory::getApplication()->input->files->get('images');
 			$cfg = JtgHelper::getConfig();
 			$types = explode(',', $cfg->type);
 
@@ -1518,8 +1512,8 @@ class JtgModelFiles extends AdminModel
 			{
 				foreach ($newimages['name'] as $newimage)
 				{
-					$filename = JFile::makeSafe($newimage['name']);
-					$ext = JFile::getExt($filename);
+					$filename = File::makeSafe($newimage['name']);
+					$ext = File::getExt($filename);
 
 					if (in_array($ext, $types))
 					{
@@ -1545,12 +1539,12 @@ class JtgModelFiles extends AdminModel
 		jimport('joomla.filesystem.folder');
 		$img_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/track_' . $id;
 
-		if (!JFolder::exists($img_dir))
+		if (!Folder::exists($img_dir))
 		{
 			return null;
 		}
 
-		$images = JFolder::files($img_dir);
+		$images = Folder::files($img_dir);
 
 		return $images;
 	}
@@ -1562,16 +1556,16 @@ class JtgModelFiles extends AdminModel
 	 */
 	function updateFile()
 	{
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 		require_once '../components/com_jtg/helpers/gpsClass.php';
 
 		$db = $this->getDbo();
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		// Get the post data
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$id = $input->getInt('id');
 		$data['id'] = $id;
 		$catid = $input->get('catid', null, 'array');
@@ -1592,10 +1586,10 @@ class JtgModelFiles extends AdminModel
 			$delimage = $input->get('deleteimage_' . $image->id);
 			if ($delimage !== null)
 			{
-				JFile::delete($imgpath . $delimage);
-				JFile::delete($imgpath . 'thumbs/' . 'thumb0_' . $delimage);
-				JFile::delete($imgpath . 'thumbs/' . 'thumb1_' . $delimage);
-				JFile::delete($imgpath . 'thumbs/' . 'thumb2_' . $delimage);
+				File::delete($imgpath . $delimage);
+				File::delete($imgpath . 'thumbs/' . 'thumb0_' . $delimage);
+				File::delete($imgpath . 'thumbs/' . 'thumb1_' . $delimage);
+				File::delete($imgpath . 'thumbs/' . 'thumb2_' . $delimage);
 				$query = "DELETE FROM #__jtg_photos\n WHERE id='".$image->id."'";
 				$db->setQuery($query);
 				if (! $db->execute())
@@ -1644,12 +1638,12 @@ class JtgModelFiles extends AdminModel
 		{
 			$cfg = JtgHelper::getConfig();
 			$types = explode(',', $cfg->type);
-			JFolder::create($imgpath, 0777);
+			Folder::create($imgpath, 0777);
 
 			foreach ($newimages as $newimage)
 			{
-				$filename = JFile::makeSafe($newimage['name']);
-				$ext = JFile::getExt($filename);
+				$filename = File::makeSafe($newimage['name']);
+				$ext = File::getExt($filename);
 
 				if (in_array(strtolower($ext), $types))
 				{

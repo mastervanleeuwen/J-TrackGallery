@@ -16,7 +16,11 @@
  */
 
 // No direct access
-    defined('_JEXEC') or die('Restricted access');
+defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
     echo $this->lh;
     // Don't show description column when no description are set
@@ -29,17 +33,17 @@
 <table class="table tracktable">
 	<thead>
 		<tr class="sectiontableheader">
-			<th colspan="2" width="100px" style="text-align:center"><?php echo JText::_('COM_JTG_CAT'); ?>
+			<th colspan="2" width="100px" style="text-align:center"><?php echo Text::_('COM_JTG_CAT'); ?>
 			</th>
 			<?php if ($showdescription) 
-			    echo '<th>'.JText::_('COM_JTG_DESCRIPTION').'</th>'; ?>
-			<th><?php echo JText::_('COM_JTG_NTRACK'); ?></th>
+			    echo '<th>'.Text::_('COM_JTG_DESCRIPTION').'</th>'; ?>
+			<th><?php echo Text::_('COM_JTG_NTRACK'); ?></th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php
 		$k = 0;
-		$imgdir = JUri::base() . "images/jtrackgallery/cats/";
+		$imgdir = Uri::base() . "images/jtrackgallery/cats/";
 
         for ($i = 0, $n = count($this->cats); $i < $n; $i++)
 		{
@@ -48,9 +52,9 @@
 
 			if ($cat->image)
 			{
-				$cat->img = "&nbsp;<img title=\"" . JText::_($cat->title) . "\" alt=\"" . JText::_($cat->title) . "\" src=\"" . $imgdir . $cat->image . "\" />";
+				$cat->img = "&nbsp;<img title=\"" . Text::_($cat->title) . "\" alt=\"" . Text::_($cat->title) . "\" src=\"" . $imgdir . $cat->image . "\" />";
 			}
-			$link = JRoute::_('index.php?option=com_jtg&view=cat&id=' . $cat->id);
+			$link = Route::_('index.php?option=com_jtg&view=cat&id=' . $cat->id);
 			?>
 		<tr>
 			<td width="10%" align="center"><a href="<?php echo $link; ?>">
@@ -59,12 +63,12 @@
 			<td><b>
 				<?php if ($cat->ntracks) { ?>
 				<a href="<?php echo $link; ?>">
-				<?php echo JText::_($cat->treename); ?>
+				<?php echo Text::_($cat->treename); ?>
 				</a> 
-				<?php } else echo JText::_($cat->treename); ?>
+				<?php } else echo Text::_($cat->treename); ?>
 			</b></td>
 			<?php if ($showdescription) 
-			echo '<td> '.JText::_($cat->description).' </td>'; ?>
+			echo '<td> '.Text::_($cat->description).' </td>'; ?>
 			<td><?php echo $cat->ntracks; ?><td>
 		</tr>
 		<?php

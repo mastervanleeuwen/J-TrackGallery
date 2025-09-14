@@ -17,66 +17,69 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Uri\Uri;
+
 // Toolbar
 if ($this->id < 1)
 {
-$title = JText::_('COM_JTG_ADD_FILE');
+$title = Text::_('COM_JTG_ADD_FILE');
 }
 else
 {
-	$title = JText::_('COM_JTG_EDIT_FILE');
+	$title = Text::_('COM_JTG_EDIT_FILE');
 }
 
-JToolBarHelper::title($title, 'categories.png');
-JToolBarHelper::back();
-JToolBarHelper::spacer();
+ToolbarHelper::title($title, 'categories.png');
+ToolbarHelper::back();
+ToolbarHelper::spacer();
 
 if ($this->id < 1)
 {
-	JToolBarHelper::save('savefile', $alt = 'COM_JTG_SAVE', 'save.png');
+	ToolbarHelper::save('savefile', $alt = 'COM_JTG_SAVE', 'save.png');
 }
 else
 {
-	JToolBarHelper::save('updatefile', $alt = 'COM_JTG_SAVE');
-	JToolBarHelper::custom('updateGeneratedValues', 'apply', 'apply', 'COM_JTG_REFRESH_DATAS', false);
+	ToolbarHelper::save('updatefile', $alt = 'COM_JTG_SAVE');
+	ToolbarHelper::custom('updateGeneratedValues', 'apply', 'apply', 'COM_JTG_REFRESH_DATAS', false);
 }
+ToolbarHelper::help('files/form', true);
 
-JToolBarHelper::help('files/form', true);
-$document = JFactory::getDocument();
-$document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
-$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/default/jtg_style.css');
-$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
-$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css.map');
+$document = Factory::getDocument();
+$document->addStyleSheet(Uri::base(true) . '/components/com_jtg/template.css');
+$document->addStyleSheet(Uri::root(true) . '/components/com_jtg/assets/template/default/jtg_style.css');
+$document->addStyleSheet(Uri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
+$document->addStyleSheet(Uri::root(true) . '/media/com_jtg/js/openlayers/ol.css.map');
 
 // Add jtg_map stylesheet
 $cfg = JtgHelper::getConfig();
 $tmpl = strlen($cfg->template) ? $cfg->template : 'default';
-$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
+$document->addStyleSheet(Uri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 $map = "";
 
 if ($this->id >= 1)
 {
 	// Edit file
 	$infoIconText = 0;
-	if (version_compare(JVERSION, '3.9', 'lt'))
-	{
-		JHtml::_('behavior.tooltip');
+	if (version_compare(JVERSION, '4.0', 'ge')) {
+		$infoIconText = '<i class="fas fa-info-circle"></i>';
 	}
-	else
-	{
-		JHtmlBootstrap::tooltip('.hasTooltip');
-		if (version_compare(JVERSION, '4.0', 'ge')) $infoIconText = '<i class="fas fa-info-circle"></i>';
+	else {
+		HTMLHelper::_('behavior.tooltip');
 	}
 	$cfg = JtgHelper::getConfig();
 	$params = JComponentHelper::getParams('com_jtg');
 	$model = $this->getModel();
 	$track = $model->getFile($this->id);
-	$document = JFactory::getDocument();
+	$document = Factory::getDocument();
 	require_once '../components/com_jtg/helpers/gpsClass.php';
-	$document->addScript( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
-	$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
+	$document->addScript( Uri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
+	$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/jtg.js');
 	if ($params->get('jtg_param_disable_map_animated_cursor') == "0") {
-		$document->addScript(JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
+		$document->addScript(Uri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 	}
 	$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $this->track->file;
 	$gpsData = new GpsDataClass($file, $track->file);
@@ -126,7 +129,7 @@ img.olTileImage {
 			<tr>
 				<td>
 				<?php
-				echo JText::_('COM_JTG_GPS_FILE') . ":";
+				echo Text::_('COM_JTG_GPS_FILE') . ":";
 				echo $this->id < 1? '*': '';
 				?>
 				</td>
@@ -157,70 +160,70 @@ if ($this->id >= 1)
 }
 ?>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_PUBLISHED'); ?>:*</td>
+				<td><?php echo Text::_('COM_JTG_PUBLISHED'); ?>:*</td>
 				<td><?php echo $this->lists['published']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_TITLE'); ?>:*</td>
+				<td><?php echo Text::_('COM_JTG_TITLE'); ?>:*</td>
 				<td><input id="title" class="inputbox form-control" type="text" name="title"
 					value="<?php echo (isset($this->id) AND ($this->id != 0))? $this->track->title: ''; ?>"
 					style="width:100%;" /></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('JALIAS'); ?>:</td>
-				<td><input id="alias" class="inputbox form-control" type="text" name="alias" placeholder="<?php echo JText::_('JFIELD_ALIAS_PLACEHOLDER'); ?>"
+				<td><?php echo Text::_('JALIAS'); ?>:</td>
+				<td><input id="alias" class="inputbox form-control" type="text" name="alias" placeholder="<?php echo Text::_('JFIELD_ALIAS_PLACEHOLDER'); ?>"
 					value="<?php echo (isset($this->id) AND ($this->id != 0))? $this->track->alias: ''; ?>"
 					style="width:100%;" /></td>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_DATE'); ?>:*</td>
+				<td><?php echo Text::_('COM_JTG_DATE'); ?>:*</td>
 				<td><input id="date" class="inputbox form-control" type="text" name="date"
 					value="<?php echo (isset($this->id) AND ($this->id != 0))? $this->track->date: ''; ?>"
 					size="10" /></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_INFO_AUTHOR'); ?>:*<br />
+				<td><?php echo Text::_('COM_JTG_INFO_AUTHOR'); ?>:*<br />
 				</td>
 				<td><?php echo $this->lists['uid']; ?></td>
 			</tr>
 			<tr>
 				<td>
 <?php
-		echo JText::_('COM_JTG_LEVEL').':*';
-		echo JHtml::tooltip(JText::_('COM_JTG_TT_LEVEL'),'','tooltip.png',$infoIconText);
+		echo Text::_('COM_JTG_LEVEL').':*';
+		echo HTMLHelper::tooltip(Text::_('COM_JTG_TT_LEVEL'),'','tooltip.png',$infoIconText);
 ?>
 				</td>
 				<td><?php echo $this->lists['level']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_CAT'); ?>:</td>
+				<td><?php echo Text::_('COM_JTG_CAT'); ?>:</td>
 				<td><?php echo $this->lists['cats']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_ACCESS_LEVEL'); ?>:</td>
+				<td><?php echo Text::_('COM_JTG_ACCESS_LEVEL'); ?>:</td>
 				<td><?php echo $this->lists['access']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_HIDDEN'); ?>:</td>
+				<td><?php echo Text::_('COM_JTG_HIDDEN'); ?>:</td>
 				<td><?php echo $this->lists['hidden']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_FILE_DEFAULT_MAP'); ?>:</td>
+				<td><?php echo Text::_('COM_JTG_FILE_DEFAULT_MAP'); ?>:</td>
 				<td><?php echo $this->lists['default_map']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_TERRAIN'); ?>:</td>
+				<td><?php echo Text::_('COM_JTG_TERRAIN'); ?>:</td>
 				<td><?php echo $this->lists['terrain']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('JTAG'); ?>:</td>
+				<td><?php echo Text::_('JTAG'); ?>:</td>
 				<td><?php echo $this->lists['tags']; ?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_CALCULATED_VALUES'); ?>:</td>
+				<td><?php echo Text::_('COM_JTG_CALCULATED_VALUES'); ?>:</td>
 				<td><?php echo $this->lists['values']; ?></td>
 			</tr>
 			<tr>
-				<td colspan="3"><?php echo JText::_('COM_JTG_DESCRIPTION'); ?>:*
+				<td colspan="3"><?php echo Text::_('COM_JTG_DESCRIPTION'); ?>:*
 				<?php
 				if ( isset($this->track->description) )
 				{
@@ -238,18 +241,18 @@ if ($this->id >= 1)
 			<?php
 			/*
 			 echo "	<tr>
-			<td>" . JText::_('COM_JTG_WPS') . ":</td>
+			<td>" . Text::_('COM_JTG_WPS') . ":</td>
 			<td colspan=\"2\"></td>
 			</tr>
 			<tr>
-			<td>" . JText::_('COM_JTG_TRACKS') . ":</td>
+			<td>" . Text::_('COM_JTG_TRACKS') . ":</td>
 			<td colspan=\"2\"></td>
 			</tr>
 			";
 		 */
 			?>
 			<tr>
-				<td valign="top" colspan="3"><?php echo JText::_('COM_JTG_IMAGES'); ?>
+				<td valign="top" colspan="3"><?php echo Text::_('COM_JTG_IMAGES'); ?>
 					(max. 10): <input type="file" name="images[]" class="multi"
 					maxlength="10"><br clear="all" /> <br /> <?php echo isset($this->images)? $this->images: ''; ?>
 				</td>
@@ -259,18 +262,18 @@ if ($this->id >= 1)
 			{
 			?>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_TERMS'); ?></td>
-				<td><input id="terms" type="checkbox" name="terms" value="" /> <?php echo JText::_('COM_JTG_AGREE'); ?>
+				<td><?php echo Text::_('COM_JTG_TERMS'); ?></td>
+				<td><input id="terms" type="checkbox" name="terms" value="" /> <?php echo Text::_('COM_JTG_AGREE'); ?>
 					<a class="modal"
-					href="<?php echo JUri::base() . "../?option=com_content&view=article&id=" . $cfg->terms_id; ?>"
-					target="_blank"><?php echo JText::_('COM_JTG_TERMS'); ?> </a></td>
+					href="<?php echo Uri::base() . "../?option=com_content&view=article&id=" . $cfg->terms_id; ?>"
+					target="_blank"><?php echo Text::_('COM_JTG_TERMS'); ?> </a></td>
 			</tr>
 			<?php
 			}
 			?>
 		</tbody>
 	</table>
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="controller" value="files" /> <input type="hidden"
 		name="task" value="" />

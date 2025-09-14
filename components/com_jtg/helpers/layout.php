@@ -18,6 +18,13 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * LayoutHelper class for the jtg component
  *
@@ -41,7 +48,7 @@ class LayoutHelper
 		{
 			if ( $expressive )
 			{
-				return "<font class=\"emptyEntry\">" . JText::_('COM_JTG_NOT_VOTED') . "</font>";
+				return "<font class=\"emptyEntry\">" . Text::_('COM_JTG_NOT_VOTED') . "</font>";
 			}
 			else
 			{
@@ -50,7 +57,7 @@ class LayoutHelper
 		}
 
 		$int = (int) round($float, 0);
-		$stars = JText::_('COM_JTG_STAR' . $int);
+		$stars = Text::_('COM_JTG_STAR' . $int);
 		$return = "<font title=\"" . JtgHelper::getLocatedFloat($float, 1) . "\">";
 		$return .= $int;
 		$return .= " ";
@@ -72,7 +79,7 @@ class LayoutHelper
 	 */
 	static public function navigation()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		if  ($isModal = $input->getInt( 'print' ) == 1)
 		{
 			// Return an empty header when preparing for printing
@@ -83,19 +90,19 @@ class LayoutHelper
 		$navi = '';
 		$navi .= '<div class="gps-navi">';
 		$geoloc = '';
-		if (JFactory::getApplication()->getParams()->get('jtg_overview_geoloc')) $geoloc = '&geoloc=1';
+		if (Factory::getApplication()->getParams()->get('jtg_overview_geoloc')) $geoloc = '&geoloc=1';
 		$navi .= '<div class="navi-part"><a href="' .
-				JRoute::_("index.php?option=com_jtg&view=jtg&introtext=1".$geoloc) .
-				'">' . JText::_('COM_JTG_OVERVIEW') . '</a></div>';
-		if (JComponentHelper::getParams("com_jtg")->get('jtg_param_use_cats'))
+				Route::_("index.php?option=com_jtg&view=jtg&introtext=1".$geoloc) .
+				'">' . Text::_('COM_JTG_OVERVIEW') . '</a></div>';
+		if (ComponentHelper::getParams("com_jtg")->get('jtg_param_use_cats'))
 		{
 			$navi .= '<div class="navi-part"><a href="' .
-				JRoute::_("index.php?option=com_jtg&view=cats&layout=default") . '">' . JText::_('COM_JTG_CATS') . '</a></div>';
+				Route::_("index.php?option=com_jtg&view=cats&layout=default") . '">' . Text::_('COM_JTG_CATS') . '</a></div>';
 		}
 		$navi .= '<div class="navi-part"><a href="' .
-				JRoute::_("index.php?option=com_jtg&view=files&layout=list") . '">' . JText::_('COM_JTG_TRACKS') . '</a></div>';
+				Route::_("index.php?option=com_jtg&view=files&layout=list") . '">' . Text::_('COM_JTG_TRACKS') . '</a></div>';
 
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		if ($user->get('id'))
 		{
 			// Erscheint nur, wenn User kein Gast
@@ -103,13 +110,13 @@ class LayoutHelper
 			if ( $canDo->get('core.create') )
 			{
 				$navi .= '<div class="navi-part"><a href="' .
-						JRoute::_("index.php?option=com_jtg&view=track&layout=form") . '">' .
-						JText::_('COM_JTG_ADD_FILE') . '</a></div>';
+						Route::_("index.php?option=com_jtg&view=track&layout=form") . '">' .
+						Text::_('COM_JTG_ADD_FILE') . '</a></div>';
 			}
 			// Erscheint bei jedem Registrierten
 			$navi .= '<div class="navi-part"><a href="' .
-					JRoute::_("index.php?option=com_jtg&view=user") . '">' .
-					JText::_('COM_JTG_MY_FILES') . '</a></div>';
+					Route::_("index.php?option=com_jtg&view=user") . '">' .
+					Text::_('COM_JTG_MY_FILES') . '</a></div>';
 		}
 
 		$navi .= '<div class="no-float"></div>';
@@ -125,18 +132,18 @@ class LayoutHelper
 	 */
 	static public function footer()
 	{
-		$params = JComponentHelper::getParams('com_jtg');
+		$params = ComponentHelper::getParams('com_jtg');
 
 		if ($params->get('jtg_param_display_jtg_credits') == 1)
 		{
-			$footer = '<div class="gps-footer">' . JText::_('COM_JTG_POWERED_BY');
+			$footer = '<div class="gps-footer">' . Text::_('COM_JTG_POWERED_BY');
 			$footer .= ' <a href="https://mastervanleeuwen.github.io/J-TrackGallery/"';
 			$footer .= ' target="_blank">J!Track Gallery</a>';
 
 			if ( (strpos($_SERVER['SERVER_NAME'], 'localcarto') !== false)
 				or (strpos($_SERVER['SERVER_NAME'], 'jtrackgallery.net') !== false) )
 			{
-				$db = JFactory::getDbo();
+				$db = Factory::getDbo();
 				$query = $db->getQuery(true);
 				$query->select('manifest_cache');
 				$query->from($db->quoteName('#__extensions'));
@@ -152,7 +159,7 @@ class LayoutHelper
 		else
 		{
 			// Add a comment with a link to jtrackgallery.net
-			$footer = '<!--' . JText::_('COM_JTG_POWERED_BY');
+			$footer = '<!--' . Text::_('COM_JTG_POWERED_BY');
 			$footer .= ' <a href="http://jtrackgallery.net"';
 			$footer .= ' target="_blank">J!Track Gallery</a>';
 			$footer .= "-->\n";
@@ -168,8 +175,8 @@ class LayoutHelper
 	 */
 	static public function disclaimericons()
 	{
-		$disclaimericons = '<div class="gps-footer">' . JText::_('COM_JTG_DISCLAIMER_ICONS');
-		$disclaimericons .= ' ' . JText::_('COM_JTG_SUBMITTER') . ': <a href="" target="_blank"></a></div>';
+		$disclaimericons = '<div class="gps-footer">' . Text::_('COM_JTG_DISCLAIMER_ICONS');
+		$disclaimericons .= ' ' . Text::_('COM_JTG_SUBMITTER') . ': <a href="" target="_blank"></a></div>';
 
 		return $disclaimericons;
 	}
@@ -185,7 +192,7 @@ class LayoutHelper
 	{
   if (!$comments)
    {  
-      echo $this->parseTemplate("description",JText::_('COM_JTG_NO_COMMENTS_DESC'));
+      echo $this->parseTemplate("description",Text::_('COM_JTG_NO_COMMENTS_DESC'));
    }
    else
    {
@@ -199,7 +206,7 @@ class LayoutHelper
          <?php echo $i + 1 . ": " . $comment->title; ?>
       </div>
       <div class="date">
-         <?php if ($comment->date != null) echo JHtml::_('date', $comment->date, JText::_('COM_JTG_DATE_FORMAT_LC4')); ?>
+         <?php if ($comment->date != null) echo HTMLHelper::_('date', $comment->date, Text::_('COM_JTG_DATE_FORMAT_LC4')); ?>
       </div>
       <div class="no-float"></div>
    </div>
@@ -237,9 +244,9 @@ class LayoutHelper
 	{
                 // MvL TODO: Used in jtg view, but not in file view?
                 // where is this used? Remove duplication?
-		$document->addScript( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
-		$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js');
-		$document->addStyleSheet( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');  // Load OpenLayers Stylesheet
+		$document->addScript( Uri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
+		$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/jtg.js');
+		$document->addStyleSheet( Uri::root(true) . '/media/com_jtg/js/openlayers/ol.css');  // Load OpenLayers Stylesheet
 	}
 
 	/**
@@ -575,7 +582,7 @@ class LayoutHelper
 	 */
 	static public function filterTracks($cats)
 	{
-		$params = JComponentHelper::getParams('com_jtg');
+		$params = ComponentHelper::getParams('com_jtg');
 
 		$access = $params->get('jtg_param_otherfiles');
 		$where = array();

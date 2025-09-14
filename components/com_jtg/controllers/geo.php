@@ -17,6 +17,12 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+
 /**
  * JtgControllerGeo class for the jtg component
  *
@@ -43,34 +49,34 @@ class JtgControllerGeo extends JtgController
 	 */
 	function save()
 	{
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$userid = (int) $user->id;
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
-		$lat = JFactory::getApplication()->input->get('lat');
-		$lon = JFactory::getApplication()->input->get('lon');
-		$visible = JFactory::getApplication()->input->get('visible');
-		$mainframe = JFactory::getApplication();
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		$lat = Factory::getApplication()->input->get('lat');
+		$lon = Factory::getApplication()->input->get('lon');
+		$visible = Factory::getApplication()->input->get('visible');
+		$mainframe = Factory::getApplication();
 		$query = "INSERT INTO #__jtg_users (jtglat,jtglon,jtgvisible,user_id) VALUES " .
 				"('" . $lat . "','" . $lon . "','" . $visible . "','" . $userid . "') " .
 				"ON DUPLICATE KEY UPDATE " .
 				"jtglat='" . $lat . "', " .
 				"jtglon='" . $lon . "', " .
 				"jtgvisible='" . $visible . "' ";
-		$db = JFactory::getDBO();
+		$db = Factory::getDbo();
 		$db->setQuery($query);
 		$db->execute();
 
 		if ($db->getErrorNum)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_DATABASE_ERROR_H'), 'Warning');
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_DATABASE_ERROR') . "<br /><br />\n" . $db->stderr(), 'Warning');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_DATABASE_ERROR_H'), 'Warning');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_DATABASE_ERROR') . "<br /><br />\n" . $db->stderr(), 'Warning');
 
 			return false;
 		}
 		else
 		{
 			$url = "index.php?option=com_jtg&view=jtg&layout=geo";
-			$this->setRedirect(JRoute::_($url, false), JText::_('COM_JTG_POSITION_SUCCESSFUL_SAVED'));
+			$this->setRedirect(Route::_($url, false), Text::_('COM_JTG_POSITION_SUCCESSFUL_SAVED'));
 
 			return true;
 		}

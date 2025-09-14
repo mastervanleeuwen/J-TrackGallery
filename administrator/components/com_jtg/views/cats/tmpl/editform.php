@@ -18,11 +18,15 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-JToolBarHelper::title(JText::_('COM_JTG_EDIT_CAT'), 'categories.png');
-JToolBarHelper::back();
-JToolBarHelper::spacer();
-JToolBarHelper::save('updatecat', $alt = 'COM_JTG_SAVE', 'save.png');
-JToolBarHelper::help('cats/form', true);
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
+ToolbarHelper::title(Text::_('COM_JTG_EDIT_CAT'), 'categories.png');
+ToolbarHelper::back();
+ToolbarHelper::spacer();
+ToolbarHelper::save('updatecat', $alt = 'COM_JTG_SAVE', 'save.png');
+ToolbarHelper::help('cats/form', true);
 
 $image = $this->data->image;
 ?>
@@ -31,44 +35,44 @@ $image = $this->data->image;
 	<table class="adminlist">
 		<thead>
 			<tr>
-				<th colspan="2" align="center"><?php echo JText::_('COM_JTG_EDIT_CAT'); ?>
+				<th colspan="2" align="center"><?php echo Text::_('COM_JTG_EDIT_CAT'); ?>
 				</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td width="150px"><?php echo JText::_('COM_JTG_TITLE'); ?></td>
+				<td width="150px"><?php echo Text::_('COM_JTG_TITLE'); ?></td>
 				<td><input type="text" name="title" size="30" maxlength="30"
 					value="<?php echo $this->data->title; ?>" />
 				</td>
 			</tr>
 			<tr>
-				<td width="150px"><?php echo JText::_('COM_JTG_PARENT'); ?></td>
+				<td width="150px"><?php echo Text::_('COM_JTG_PARENT'); ?></td>
 				<td><?php echo $this->lists['parent']; ?></td>
 			</tr>
 			<tr>
-				<td width="150px"><?php echo JText::_('COM_JTG_PUBLISHED'); ?></td>
+				<td width="150px"><?php echo Text::_('COM_JTG_PUBLISHED'); ?></td>
 				<td><?php echo $this->lists['block']; ?></td>
 			</tr>
 			<tr>
-				<td width="150px"><?php echo JText::_('COM_JTG_CATS_DEFAULT_MAP'); ?></td>
+				<td width="150px"><?php echo Text::_('COM_JTG_CATS_DEFAULT_MAP'); ?></td>
 				<td><?php echo $this->lists['default_map']; ?></td>
 			</tr>
 			<tr>
-				<td width="150px"><?php echo JText::_('COM_JTG_USEPACE'); ?></td>
+				<td width="150px"><?php echo Text::_('COM_JTG_USEPACE'); ?></td>
 				<td><?php echo $this->lists['usepace']; ?></td>
 			</tr>
 			<tr>
-				<td width="150px"><?php echo JText::_('COM_JTG_IMAGE'); ?></td>
+				<td width="150px"><?php echo Text::_('COM_JTG_IMAGE'); ?></td>
 				<td><input type="radio" name="catpic" value=""
-					title="<?php echo JText::_('COM_JTG_NONE'); ?>"
+					title="<?php echo Text::_('COM_JTG_NONE'); ?>"
 					<?php echo !$image? ' checked="checked"': ''; ?>>
-					<?php echo JText::_('COM_JTG_NONE'); ?>
+					<?php echo Text::_('COM_JTG_NONE'); ?>
 					&nbsp; <?php
 
 					foreach ($this->images as $img)
 					{
-						$imageurl = JUri::root() . 'images/jtrackgallery/cats/';
+						$imageurl = Uri::root() . 'images/jtrackgallery/cats/';
 						$pic = "";
 						$pic .= "<input type=\"radio\" name=\"catpic\" value=\"" . $img . "\" title=\"" . $img . "\"";
 
@@ -85,13 +89,13 @@ $image = $this->data->image;
 					?></td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_DESC_JTEXT_ALLOWED'); ?></td>
+				<td><?php echo Text::_('COM_JTG_DESC_JTEXT_ALLOWED'); ?></td>
 				<td><input type="text" name="desc" size="60" maxlength="255" value="<?php echo $this->data->description; ?>" />
 				</td>
 			</tr>
 		</tbody>
 	</table>
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 	<input type="hidden" name="id" value="<?php echo $this->data->id; ?>">
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="controller" value="cats" /> <input type="hidden"

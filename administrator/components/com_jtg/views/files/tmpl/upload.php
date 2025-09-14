@@ -17,6 +17,9 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 // Toolbar
 JToolBarHelper::title($alt = 'COM_JTG_UPLOAD', 'categories.png');
 JToolBarHelper::back();
@@ -36,22 +39,22 @@ $max = 100;
 			<td>
 				<form action="" method="post" name="adminForm" id="adminForm"
 					class="adminForm" enctype="multipart/form-data" target="_parent">
-					<?php echo JText::sprintf('COM_JTG_ALLOWED_FILETYPES', implode(", ", $accept)); ?>
+					<?php echo Text::sprintf('COM_JTG_ALLOWED_FILETYPES', implode(", ", $accept)); ?>
 					<br />
-					<?php echo JText::_('COM_JTG_MAXIMAL') . " " . $max; ?>
+					<?php echo Text::_('COM_JTG_MAXIMAL') . " " . $max; ?>
 					<br /> <br /> <input type="file" name="files[]" class="multi" multiple="multiple"
 						maxlength="<?php echo $max; ?>"
 						accept="<?php echo implode("|", $accept) ?>" /> <br /> <br /> <input
 						type="radio" name="toimport" value="1" checked="checked">
-					<?php echo JText::_('COM_JTG_REDIRECT_TO_IMPORT') ?>
+					<?php echo Text::_('COM_JTG_REDIRECT_TO_IMPORT') ?>
 					<br /> <input type="radio" name="toimport" value="0">
-					<?php echo JText::_('COM_JTG_REDIRECT_TO_IMPORT_NO') ?>
+					<?php echo Text::_('COM_JTG_REDIRECT_TO_IMPORT_NO') ?>
 					<input type="hidden" name="option" value="com_jtg" /> <input
 						type="hidden" name="controller" value="files" /> <input
 						type="hidden" name="task" value="uploadfiles" />
-					<?php echo JHtml::_('form.token'); ?>
+					<?php echo HTMLHelper::_('form.token'); ?>
 				</form> <br /> <br /> <input type='submit'
-				value='<?php echo JText::_('COM_JTG_UPLOAD') ?>' class='submit'
+				value='<?php echo Text::_('COM_JTG_UPLOAD') ?>' class='submit'
 				onclick="javascript:Joomla.submitbutton('uploadfiles')" />
 			</td>
 		</tr>

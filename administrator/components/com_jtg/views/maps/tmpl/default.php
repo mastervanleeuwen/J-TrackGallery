@@ -16,32 +16,29 @@
  */
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 // Toolbar
-JToolBarHelper::title(JText::_('COM_JTG_MAPS'), 'generic.png');
-JToolBarHelper::back();
-JToolBarHelper::addNew('newmap', 'COM_JTG_NEW_MAP');
-JToolBarHelper::editList('editmap');
-JToolBarHelper::spacer();
-JToolBarHelper::publish();
-JToolBarHelper::unpublish();
-JToolBarHelper::deleteList();
-JToolBarHelper::spacer();
-JToolBarHelper::help("maps", true);
+ToolbarHelper::title(Text::_('COM_JTG_MAPS'), 'generic.png');
+ToolbarHelper::back();
+ToolbarHelper::addNew('newmap', 'COM_JTG_NEW_MAP');
+ToolbarHelper::editList('editmap');
+ToolbarHelper::spacer();
+ToolbarHelper::publish();
+ToolbarHelper::unpublish();
+ToolbarHelper::deleteList();
+ToolbarHelper::spacer();
+ToolbarHelper::help("maps", true);
 
 jimport('joomla.html.pane');
 
-if (version_compare(JVERSION,'3.0','ge'))
-{
-	JHtmlBootstrap::tooltip('.hasTooltip');
-}
-else
-{
-	JHtml::_('behavior.tooltip');
-}
-
 $ordering = ($this->lists['order'] == 'ordering' );
 
-$link = JRoute::_('index.php?option=com_jtg&task=maps&controller=maps&layout=default');
+$link = Route::_('index.php?option=com_jtg&task=maps&controller=maps&layout=default');
 if (version_compare(JVERSION,'4.0','lt'))
 {
 ?>
@@ -60,10 +57,10 @@ if (version_compare(JVERSION,'4.0','lt'))
 	<!-- <table>
 	<tr>
 		<td align="left" style="width:100%;">
-			<?php echo JText::_('COM_JTG_FILTER'); ?>:
+			<?php echo Text::_('COM_JTG_FILTER'); ?>:
 			<input type="text" name="search" id="search" value="<?php echo $this->lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
-			<button onclick="this.form.submit();"><?php echo JText::_('COM_JTG_APPLY'); ?></button>
-			<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo JText::_('COM_JTG_RESET'); ?></button>
+			<button onclick="this.form.submit();"><?php echo Text::_('COM_JTG_APPLY'); ?></button>
+			<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_('COM_JTG_RESET'); ?></button>
 		</td>
 		<td nowrap="nowrap">
 			<?php
@@ -76,36 +73,36 @@ if (version_compare(JVERSION,'4.0','lt'))
 		<thead>
 			<tr>
 				<th class="title" nowrap="nowrap"><?php
-				// 				echo JHtml::_('grid.sort', JText::_('COM_JTG_ID'), 'id', @$this->lists['order_Dir'], @$this->lists['order'], 'maps' );
-				echo JText::_('COM_JTG_ID');
+				// 				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_ID'), 'id', @$this->lists['order_Dir'], @$this->lists['order'], 'maps' );
+				echo Text::_('COM_JTG_ID');
 				?>
 				</th>
 				<th class="title"><input type="checkbox"
 					onclick="Joomla.checkAll(this)"
-					title="<?php echo JText::_('JGLOBAL_CHECK_ALL');?>" value=""
+					title="<?php echo Text::_('JGLOBAL_CHECK_ALL');?>" value=""
 					name="checkall-toggle"></th>
 				<th class="title"><?php
-				echo JText::_('COM_JTG_NAME');
+				echo Text::_('COM_JTG_NAME');
 				?></th>
 				<?php if ($ordering)
 				{
 				?>
-				<th class="order"><?php echo JText::_('COM_JTG_ORDER'); ?> <?php
+				<th class="order"><?php echo Text::_('COM_JTG_ORDER'); ?> <?php
 				?>
 				</th>
-				<th class="order"><?php echo JHtml::_('grid.order',  $this->maps); ?>
+				<th class="order"><?php echo HTMLHelper::_('grid.order',  $this->maps); ?>
 				</th>
 <?php
 }
 ?>
 				<th class="title"><?php
-				// 				echo JHtml::_('grid.sort', JText::_('COM_JTG_PUBLISHED'), 'published', @$this->lists['order_Dir'], @$this->lists['order'], 'maps' ); ? >:</th>
-				echo JText::_('COM_JTG_PUBLISHED'); ?></th>
+				// 				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_PUBLISHED'), 'published', @$this->lists['order_Dir'], @$this->lists['order'], 'maps' ); ? >:</th>
+				echo Text::_('COM_JTG_PUBLISHED'); ?></th>
 				<th class="title"><?php
-				echo JText::_('COM_JTG_MAP_TYPE');
+				echo Text::_('COM_JTG_MAP_TYPE');
 				?></th>
 				<th class="title"><?php
-				echo JText::_('COM_JTG_OL_PARAMETERS');
+				echo Text::_('COM_JTG_OL_PARAMETERS');
 				?></th>
 				<th class="title">API Key</th>
 			</tr>
@@ -113,15 +110,15 @@ if (version_compare(JVERSION,'4.0','lt'))
 		<tbody>
 			<?php
 			$k = 0;
-			$user = JFactory::getUser();
+			$user = Factory::getUser();
 			$maptypes = JtgMapHelper::getMapTypes();
 			for ($i = 0, $n = count($this->maps); $i < $n; $i++)
 			{
 				// $map->published
 				$map = $this->maps[$i];
-				$published 	= JHtml::_('jgrid.published', $map->published, $i);
-				$checked 	= JHtml::_('grid.checkedout', $map, $i);
-				$name		= $this->buildEditKlicks(JText::_($map->name), $i, $map->id);
+				$published 	= HTMLHelper::_('jgrid.published', $map->published, $i);
+				$checked 	= HTMLHelper::_('grid.checkedout', $map, $i);
+				$name		= $this->buildEditKlicks(Text::_($map->name), $i, $map->id);
 				$map_type = $maptypes[$map->type];
 				?>
 			<tr
@@ -174,7 +171,7 @@ if ($ordering)
 		value="<?php echo $this->lists['order']; ?>" /> <input type="hidden"
 		name="filter_order_Dir"
 		value="<?php echo $this->lists['order_Dir']; ?>" />
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 	&nbsp;
 </form>
 <?php

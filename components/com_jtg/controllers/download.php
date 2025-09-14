@@ -19,6 +19,11 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Session\Session;
+
 /**
  * JtgControllerDownload class for the jtg component
  *
@@ -37,18 +42,18 @@ class JtgControllerDownload extends JtgController
 	function download()
 	{
 
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$format = JFactory::getApplication()->input->get('format');
+		$format = Factory::getApplication()->input->get('format');
 		$model = $this->getModel('download');
-		$id = JFactory::getApplication()->input->get('id');
+		$id = Factory::getApplication()->input->get('id');
 		$track = $model->getFile($id);
 		$trackname = str_replace(' ', '_', $track->title);
 
 		if ($format == 'original')
 		{
 			jimport('joomla.filesystem.file');
-			$output_format = JFile::getext($track->file);
+			$output_format = File::getext($track->file);
 			$trackname = str_replace('.' . $output_format, '', $track->file);
 		}
 		else

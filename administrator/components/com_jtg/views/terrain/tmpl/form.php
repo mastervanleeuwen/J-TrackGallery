@@ -17,9 +17,12 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 if ($this->id < 1)
 {
-	$title = JText::_('COM_JTG_ADD_TERRAIN');
+	$title = Text::_('COM_JTG_ADD_TERRAIN');
 	$save["func"] = 'save';
 	$save["name"] = 'COM_JTG_SAVE';
 	$terrain = new stdClass;
@@ -30,7 +33,7 @@ if ($this->id < 1)
 }
 else
 {
-	$title = JText::_('COM_JTG_UPDATE_TERRAIN');
+	$title = Text::_('COM_JTG_UPDATE_TERRAIN');
 	$save["func"] = 'update';
 	$save["name"] = 'COM_JTG_EDIT';
 	$id = $this->id;
@@ -57,29 +60,29 @@ if ( $this->id )
 {
 ?>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_ID'); ?></td>
+				<td><?php echo Text::_('COM_JTG_ID'); ?></td>
 				<td><?php echo $this->id ?></td>
 			</tr>
 <?php
 }
 ?>
 			<tr>
-				<td width="150px"><?php echo JText::_('COM_JTG_TITLE'); ?></td>
+				<td width="150px"><?php echo Text::_('COM_JTG_TITLE'); ?></td>
 				<td><input type="text" name="title"
-					value="<?php echo $terrain->title ?>" /> (<?php echo JText::_($terrain->title); ?>)</td>
+					value="<?php echo $terrain->title ?>" /> (<?php echo Text::_($terrain->title); ?>)</td>
 			</tr>
 			<tr>
-				<td width="150px"><?php echo JText::_('COM_JTG_ORDER'); ?></td>
+				<td width="150px"><?php echo Text::_('COM_JTG_ORDER'); ?></td>
 				<td><input type="number" name="ordering"
 					value="<?php echo $terrain->ordering ?>" /> </td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_PUBLISHED'); ?></td>
+				<td><?php echo Text::_('COM_JTG_PUBLISHED'); ?></td>
 				<td><?php echo $this->lists['block']; ?></td>
 			</tr>
 		</tbody>
 	</table>
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="controller" value="terrain" /> <input
 		type="hidden" name="task" value="" />

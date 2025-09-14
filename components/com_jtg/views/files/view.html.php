@@ -19,6 +19,10 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 jimport('joomla.application.component.view');
 
 /*
@@ -52,7 +56,7 @@ class JtgViewFiles extends JViewLegacy
 	{
 		if (!isset($param->track))
 		{
-			return JText::_('COM_JTG_NO_RESSOURCE');
+			return Text::_('COM_JTG_NO_RESSOURCE');
 		}
 
 		if ($this->cfg->access == 0)
@@ -69,9 +73,9 @@ class JtgViewFiles extends JViewLegacy
 		2 = special // Ie admin
 		9 = private
 		*/
-		$uid = JFactory::getUser()->id;
+		$uid = Factory::getUser()->id;
 
-		if (JFactory::getUser()->get('isRoot'))
+		if (Factory::getUser()->get('isRoot'))
 		{
 			$admin = true;
 		}
@@ -178,7 +182,7 @@ class JtgViewFiles extends JViewLegacy
 		$file = JPATH_SITE . "/components/com_jtg/models/jtg.php";
 		require_once $file;
 
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		if ($app->getUserState("jtg.files.layout") && $this->getLayout() != $app->getUserState("jtg.files.layout")) {
 			// Reset filters when layout changes (list->files and vice versa)
 			$this->resetFilter($app->input->get('cat'));
@@ -221,13 +225,13 @@ class JtgViewFiles extends JViewLegacy
 	 */
 	function _displayList($tpl)
 	{
-		$mainframe = JFactory::getApplication();
+		$mainframe = Factory::getApplication();
 		$option = $mainframe->input->get('option');
 
 		$model = $this->getModel();
 		$sortedcats = JtgModeljtg::getCatsData(true);
 		$sortedter = JtgModeljtg::getTerrainData(true);
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$uid = $user->get('id');
 		$gid = $user->get('gid');
 		$deletegid = $user->get('deletegid');
@@ -235,10 +239,10 @@ class JtgViewFiles extends JViewLegacy
 		$footer = LayoutHelper::footer();
 		$cfg = JtgHelper::getConfig();
 		$pathway = $mainframe->getPathway();
-		$pathway->addItem(JText::_('COM_JTG_GPS_FILES'), '');
+		$pathway->addItem(Text::_('COM_JTG_GPS_FILES'), '');
 		$sitename = $mainframe->getCfg('sitename');
 		$document = $mainframe->getDocument();
-		$document->setTitle(JText::_('COM_JTG_GPS_FILES') . " - " . $sitename);
+		$document->setTitle(Text::_('COM_JTG_GPS_FILES') . " - " . $sitename);
 		$params = $mainframe->getParams();
 
 		//Following variables used more than once
@@ -277,17 +281,17 @@ class JtgViewFiles extends JViewLegacy
 	 */
 	function _displayUserTracks($tpl)
 	{
-		$mainframe = JFactory::getApplication();
+		$mainframe = Factory::getApplication();
 		$option = $mainframe->input->get('option');
 		$lh = LayoutHelper::navigation();
 		$footer = LayoutHelper::footer();
 		$model = $this->getModel();
 		$cfg = JtgHelper::getConfig();
 		$pathway = $mainframe->getPathway();
-		$pathway->addItem(JText::_('COM_JTG_MY_FILES'), '');
+		$pathway->addItem(Text::_('COM_JTG_MY_FILES'), '');
 		$sitename = $mainframe->getCfg('sitename');
 		$document = $mainframe->getDocument();
-		$document->setTitle(JText::_('COM_JTG_MY_FILES') . " - " . $sitename);
+		$document->setTitle(Text::_('COM_JTG_MY_FILES') . " - " . $sitename);
 
 		$order = $mainframe->input->getWord('order', 'order');
 
@@ -323,22 +327,9 @@ class JtgViewFiles extends JViewLegacy
 	function approach($service)
 	{
 		// 	$userparams = explode("\n", $this->user->params);
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$lang = $app->getLanguage();
 		$user = Factory::getUser();
-
-		/*
-		 if ($user->id == 0) // User is public
-		{
-		$config = JFactory::getConfig();
-		$lang = $config->getValue('language');
-		}
-		else
-		{
-		$user = JFactory::getUser();
-		$lang = $user->getParam('language', 'the default');
-		}
-		*/
 
 		$lang = explode("-", $lang);
 		$userlang = $lang[0];
@@ -355,7 +346,7 @@ class JtgViewFiles extends JViewLegacy
 			$lang = "en";
 		}
 
-		$imgdir = JUri::base() . "components/com_jtg/assets/images/approach/" . $this->cfg->routingiconset . "/";
+		$imgdir = Uri::base() . "components/com_jtg/assets/images/approach/" . $this->cfg->routingiconset . "/";
 		$routservices = array();
 		$return = "";
 
@@ -367,47 +358,47 @@ class JtgViewFiles extends JViewLegacy
 				$routservices = array (
 						array (
 								"img" => $imgdir . "car.png",
-								"name" => JText::_('COM_JTG_BY_CAR'),
+								"name" => Text::_('COM_JTG_BY_CAR'),
 								array (
 										array (
 												"Fastest",
-												JText::_('COM_JTG_FASTEST')
+												Text::_('COM_JTG_FASTEST')
 										),
 										array (
 												"Shortest",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "bike.png",
-								"name" => JText::_('COM_JTG_BY_BICYCLE'),
+								"name" => Text::_('COM_JTG_BY_BICYCLE'),
 								array (
 										array (
 												"BicycleSafety",
-												JText::_('COM_JTG_SAFEST')
+												Text::_('COM_JTG_SAFEST')
 										),
 										array (
 												"Bicycle",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										),
 										array (
 												"BicycleMTB",
-												JText::_('COM_JTG_BY_MTB')
+												Text::_('COM_JTG_BY_MTB')
 										),
 										array (
 												"BicycleRacer",
-												JText::_('COM_JTG_BY_RACERBIKE')
+												Text::_('COM_JTG_BY_RACERBIKE')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "foot.png",
-								"name" => JText::_('COM_JTG_BY_FOOT'),
+								"name" => Text::_('COM_JTG_BY_FOOT'),
 								array (
 										array (
 												"Pedestrian",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						)
@@ -420,35 +411,35 @@ class JtgViewFiles extends JViewLegacy
 				$routservices = array (
 						array (
 								"img" => $imgdir . "car.png",
-								"name" => JText::_('COM_JTG_CAR'),
+								"name" => Text::_('COM_JTG_CAR'),
 								array (
 										array (
 												"car",
-												JText::_('COM_JTG_FASTEST')
+												Text::_('COM_JTG_FASTEST')
 										),
 										array (
 												"car/shortest",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "bike.png",
-								"name" => JText::_('COM_JTG_BY_BICYCLE'),
+								"name" => Text::_('COM_JTG_BY_BICYCLE'),
 								array (
 										array (
 												"bicycle",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "foot.png",
-								"name" => JText::_('COM_JTG_BY_FOOT'),
+								"name" => Text::_('COM_JTG_BY_FOOT'),
 								array (
 										array (
 												"foot",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						)
@@ -461,35 +452,35 @@ class JtgViewFiles extends JViewLegacy
 				$routservices = array (
 						array (
 								"img" => $imgdir . "car.png",
-								"name" => JText::_('COM_JTG_BY_CAR'),
+								"name" => Text::_('COM_JTG_BY_CAR'),
 								array (
 										array (
 												"car",
-												JText::_('COM_JTG_FASTEST')
+												Text::_('COM_JTG_FASTEST')
 										),
 										array (
 												"car/shortest",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "bike.png",
-								"name" => JText::_('COM_JTG_BY_BICYCLE'),
+								"name" => Text::_('COM_JTG_BY_BICYCLE'),
 								array (
 										array (
 												"bicycle",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "foot.png",
-								"name" => JText::_('COM_JTG_BY_FOOT'),
+								"name" => Text::_('COM_JTG_BY_FOOT'),
 								array (
 										array (
 												"foot",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						)
@@ -539,24 +530,24 @@ class JtgViewFiles extends JViewLegacy
 	{
 		$height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px;" ' : ' ');
 		$imagelink = "";
-		$iconpath = JUri::root()."/components/com_jtg/assets/images";
+		$iconpath = Uri::root()."/components/com_jtg/assets/images";
 		if (!$hide_icon_istrack)
 		{
 			$foundtrackroute = 0;
 			if ( ( isset($track) ) AND ( $track == "1" ) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/track1.png\" title=\"" . JText::_('COM_JTG_ISTRACK1') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/track1.png\" title=\"" . Text::_('COM_JTG_ISTRACK1') . "\"/>\n";
                                 $foundtrackroute = 1;
 			}
 
 			if ( ( isset($route) ) AND ( $route == "1" ) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/route1.png\" title=\"" . JText::_('COM_JTG_ISROUTE1') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/route1.png\" title=\"" . Text::_('COM_JTG_ISROUTE1') . "\"/>\n";
 				$foundtrackroute = 1;
 			}
 
 			if ( !$foundtrackroute )
-				$imagelink .= "<img $height src =\"$iconpath/track0.png\" title=\"" . JText::_('COM_JTG_ISTRACK0') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/track0.png\" title=\"" . Text::_('COM_JTG_ISTRACK0') . "\"/>\n";
 		}
 
 		if (! $hide_icon_isroundtrip)
@@ -572,11 +563,11 @@ class JtgViewFiles extends JViewLegacy
 
 			if ( isset($roundtrip) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . JText::_('COM_JTG_ISROUNDTRIP' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . Text::_('COM_JTG_ISROUNDTRIP' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . JText::_('COM_JTG_DKROUNDTRIP') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . Text::_('COM_JTG_DKROUNDTRIP') . "\"/>\n";
 			}
 		}
 
@@ -593,11 +584,11 @@ class JtgViewFiles extends JViewLegacy
 
 			if ( isset($wp) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . JText::_('COM_JTG_ISWP' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . Text::_('COM_JTG_ISWP' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . JText::_('COM_JTG_DKWP') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . Text::_('COM_JTG_DKWP') . "\"/>\n";
 			}
 		}
 
@@ -614,11 +605,11 @@ class JtgViewFiles extends JViewLegacy
 
 			if ( isset($cache) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . JText::_('COM_JTG_ISCACHE' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . Text::_('COM_JTG_ISCACHE' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . JText::_('COM_JTG_DKCACHE') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . Text::_('COM_JTG_DKCACHE') . "\"/>\n";
 			}
 		}
 

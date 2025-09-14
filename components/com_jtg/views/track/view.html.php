@@ -18,6 +18,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 
 jimport('joomla.application.component.view');
 require_once JPATH_COMPONENT . '/helpers/maphelper.php';
@@ -45,7 +48,7 @@ class JtgViewTrack extends JViewLegacy
 	{
 		if (!isset($param->track))
 		{
-			return JText::_('COM_JTG_NO_RESSOURCE');
+			return Text::_('COM_JTG_NO_RESSOURCE');
 		}
 
 		if ($this->cfg->access == 0)
@@ -151,38 +154,37 @@ class JtgViewTrack extends JViewLegacy
 		$file = JPATH_SITE . "/components/com_jtg/models/jtg.php";
 		require_once $file;
 
-		$mainframe = Factory::getApplication();
+		$app = Factory::getApplication();
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
 
 		// Code support for joomla version greater than 3.0
 		if (version_compare(JVERSION,'3.0','ge'))
 		{
-			JHtml::_('jquery.framework');
-			JHtml::script(Juri::base() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
+			HTMLHelper::_('jquery.framework');
+			HTMLHelper::script(Juri::base() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
 		}
 		else
 		{
-			JHtml::script('jquery.js', 'components/com_jtg/assets/js/', false);
-			JHtml::script('jquery.MultiFile.js', 'components/com_jtg/assets/js/', false);
+			HTMLHelper::script('jquery.js', 'components/com_jtg/assets/js/', false);
+			HTMLHelper::script('jquery.MultiFile.js', 'components/com_jtg/assets/js/', false);
 		}
 
 		$cfg = JtgHelper::getConfig();
 		$this->cfg = $cfg;
 
-		$document = $mainframe->getDocument();
+		$document = $app->getDocument();
 
 		// Then load jtg_map stylesheet
 		$tmpl = strlen($cfg->template) ? $cfg->template : 'default';
 
 		// Load Openlayers stylesheet first (for overriding)
-		$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
+		$document->addStyleSheet(Uri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
 
-		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
+		$document->addStyleSheet(Uri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 
 		$this->params = JComponentHelper::getParams('com_jtg');
-		//$this->id = $mainframe->getInput()->getInt('id');
-		$this->id = $mainframe->input->getInt('id');
+		$this->id = $app->input->getInt('id');
 		$uid = Factory::getUser()->id;
 
 		$this->footer = LayoutHelper::footer();
@@ -193,16 +195,16 @@ class JtgViewTrack extends JViewLegacy
 		if (isset ($this->id))
 		{
 			// In the form view, $id would not be available for new files
-			$document->addScript( JUri::root(true) . '/media/com_jtg/js/openlayers/ol.js');  // Load OpenLayers
-			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/jtg.js',array('version'=>'auto'));
-			$document->addScript( JUri::root(true) . '/components/com_jtg/assets/js/geolocation.js',array('version'=>'auto'));
+			$document->addScript( Uri::root(true) . '/media/com_jtg/js/openlayers/ol.js');  // Load OpenLayers
+			$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/jtg.js',array('version'=>'auto'));
+			$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/geolocation.js',array('version'=>'auto'));
 			if ($this->params->get('jtg_param_disable_map_animated_cursor') == 0) {
-				$document->addScript(JUri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
+				$document->addScript(Uri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 			}
 			$this->track = $model->getFile( $this->id );
 			if (!$this->track) {
-				$mainframe->enqueueMessage("Track not found id ".$this->id,'Error');
-				$mainframe->redirect(Uri::root());
+				$app->enqueueMessage("Track not found id ".$this->id,'Error');
+				$app->redirect(Uri::root());
 				return false;
 			}
 			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($this->track->file);
@@ -227,7 +229,7 @@ class JtgViewTrack extends JViewLegacy
 				$this->heightdata = $gpsData->elevationData;
 				$this->speeddata = $gpsData->speedData;
 				$this->pacedata = $gpsData->paceData;
-				$this->date = $this->track->date?JHtml::_('date', $this->track->date, JText::_('COM_JTG_DATE_FORMAT_LC4')):'';
+				$this->date = $this->track->date?HTMLHelper::_('date', $this->track->date, Text::_('COM_JTG_DATE_FORMAT_LC4')):'';
 				$this->speedDataExists = $gpsData->speedDataExists;
 				$this->elevationDataExists = $gpsData->elevationDataExists;
 				$this->beatDataExists = $gpsData->beatDataExists;
@@ -301,7 +303,7 @@ class JtgViewTrack extends JViewLegacy
 			$lang = "en";
 		}
 
-		$imgdir = JUri::base() . "components/com_jtg/assets/images/approach/" . $this->cfg->routingiconset . "/";
+		$imgdir = Uri::base() . "components/com_jtg/assets/images/approach/" . $this->cfg->routingiconset . "/";
 		$routservices = array();
 		$return = "";
 
@@ -313,47 +315,47 @@ class JtgViewTrack extends JViewLegacy
 				$routservices = array (
 						array (
 								"img" => $imgdir . "car.png",
-								"name" => JText::_('COM_JTG_BY_CAR'),
+								"name" => Text::_('COM_JTG_BY_CAR'),
 								array (
 										array (
 												"Fastest",
-												JText::_('COM_JTG_FASTEST')
+												Text::_('COM_JTG_FASTEST')
 										),
 										array (
 												"Shortest",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "bike.png",
-								"name" => JText::_('COM_JTG_BY_BICYCLE'),
+								"name" => Text::_('COM_JTG_BY_BICYCLE'),
 								array (
 										array (
 												"BicycleSafety",
-												JText::_('COM_JTG_SAFEST')
+												Text::_('COM_JTG_SAFEST')
 										),
 										array (
 												"Bicycle",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										),
 										array (
 												"BicycleMTB",
-												JText::_('COM_JTG_BY_MTB')
+												Text::_('COM_JTG_BY_MTB')
 										),
 										array (
 												"BicycleRacer",
-												JText::_('COM_JTG_BY_RACERBIKE')
+												Text::_('COM_JTG_BY_RACERBIKE')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "foot.png",
-								"name" => JText::_('COM_JTG_BY_FOOT'),
+								"name" => Text::_('COM_JTG_BY_FOOT'),
 								array (
 										array (
 												"Pedestrian",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						)
@@ -366,35 +368,35 @@ class JtgViewTrack extends JViewLegacy
 				$routservices = array (
 						array (
 								"img" => $imgdir . "car.png",
-								"name" => JText::_('COM_JTG_CAR'),
+								"name" => Text::_('COM_JTG_CAR'),
 								array (
 										array (
 												"car",
-												JText::_('COM_JTG_FASTEST')
+												Text::_('COM_JTG_FASTEST')
 										),
 										array (
 												"car/shortest",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "bike.png",
-								"name" => JText::_('COM_JTG_BY_BICYCLE'),
+								"name" => Text::_('COM_JTG_BY_BICYCLE'),
 								array (
 										array (
 												"bicycle",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "foot.png",
-								"name" => JText::_('COM_JTG_BY_FOOT'),
+								"name" => Text::_('COM_JTG_BY_FOOT'),
 								array (
 										array (
 												"foot",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						)
@@ -407,35 +409,35 @@ class JtgViewTrack extends JViewLegacy
 				$routservices = array (
 						array (
 								"img" => $imgdir . "car.png",
-								"name" => JText::_('COM_JTG_BY_CAR'),
+								"name" => Text::_('COM_JTG_BY_CAR'),
 								array (
 										array (
 												"car",
-												JText::_('COM_JTG_FASTEST')
+												Text::_('COM_JTG_FASTEST')
 										),
 										array (
 												"car/shortest",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "bike.png",
-								"name" => JText::_('COM_JTG_BY_BICYCLE'),
+								"name" => Text::_('COM_JTG_BY_BICYCLE'),
 								array (
 										array (
 												"bicycle",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						),
 						array (
 								"img" => $imgdir . "foot.png",
-								"name" => JText::_('COM_JTG_BY_FOOT'),
+								"name" => Text::_('COM_JTG_BY_FOOT'),
 								array (
 										array (
 												"foot",
-												JText::_('COM_JTG_SHORTEST')
+												Text::_('COM_JTG_SHORTEST')
 										)
 								)
 						)
@@ -485,24 +487,24 @@ class JtgViewTrack extends JViewLegacy
 	{
 		$height = ($iconheight > 0? ' style="max-height:' . $iconheight . 'px;" ' : ' ');
 		$imagelink = "";
-		$iconpath = JUri::root()."/components/com_jtg/assets/images";
+		$iconpath = Uri::root()."/components/com_jtg/assets/images";
 		if (!$hide_icon_istrack)
 		{
 			$foundtrackroute = 0;
 			if ( ( isset($track) ) AND ( $track == "1" ) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/track1.png\" title=\"" . JText::_('COM_JTG_ISTRACK1') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/track1.png\" title=\"" . Text::_('COM_JTG_ISTRACK1') . "\"/>\n";
                                 $foundtrackroute = 1;
 			}
 
 			if ( ( isset($route) ) AND ( $route == "1" ) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/route1.png\" title=\"" . JText::_('COM_JTG_ISROUTE1') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/route1.png\" title=\"" . Text::_('COM_JTG_ISROUTE1') . "\"/>\n";
 				$foundtrackroute = 1;
 			}
 
 			if ( !$foundtrackroute )
-				$imagelink .= "<img $height src =\"$iconpath/track0.png\" title=\"" . JText::_('COM_JTG_ISTRACK0') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/track0.png\" title=\"" . Text::_('COM_JTG_ISTRACK0') . "\"/>\n";
 		}
 
 		if (! $hide_icon_isroundtrip)
@@ -518,11 +520,11 @@ class JtgViewTrack extends JViewLegacy
 
 			if ( isset($roundtrip) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . JText::_('COM_JTG_ISROUNDTRIP' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . Text::_('COM_JTG_ISROUNDTRIP' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . JText::_('COM_JTG_DKROUNDTRIP') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/roundtrip$m.png\" title=\"" . Text::_('COM_JTG_DKROUNDTRIP') . "\"/>\n";
 			}
 		}
 
@@ -539,11 +541,11 @@ class JtgViewTrack extends JViewLegacy
 
 			if ( isset($wp) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . JText::_('COM_JTG_ISWP' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . Text::_('COM_JTG_ISWP' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . JText::_('COM_JTG_DKWP') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/wp$m.png\" title=\"" . Text::_('COM_JTG_DKWP') . "\"/>\n";
 			}
 		}
 
@@ -560,11 +562,11 @@ class JtgViewTrack extends JViewLegacy
 
 			if ( isset($cache) )
 			{
-				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . JText::_('COM_JTG_ISCACHE' . $m) . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . Text::_('COM_JTG_ISCACHE' . $m) . "\"/>\n";
 			}
 			else
 			{
-				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . JText::_('COM_JTG_DKCACHE') . "\"/>\n";
+				$imagelink .= "<img $height src =\"$iconpath/cache$m.png\" title=\"" . Text::_('COM_JTG_DKCACHE') . "\"/>\n";
 			}
 		}
 

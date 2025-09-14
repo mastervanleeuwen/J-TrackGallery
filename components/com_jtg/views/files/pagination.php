@@ -10,6 +10,10 @@
 
 defined('JPATH_PLATFORM') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 /**
  * Pagination Class.  Provides a common interface for content pagination for the
  * Joomla! Platform.
@@ -231,7 +235,7 @@ class JtgPagination extends JObject
 
 		if ($this->get('pages.total') > 1)
 		{
-			$html .= JText::sprintf('JLIB_HTML_PAGE_CURRENT_OF_TOTAL', $this->get('pages.current'), $this->get('pages.total'));
+			$html .= Text::sprintf('JLIB_HTML_PAGE_CURRENT_OF_TOTAL', $this->get('pages.current'), $this->get('pages.total'));
 		}
 
 		return $html;
@@ -263,12 +267,12 @@ class JtgPagination extends JObject
 		// If there are results found.
 		if ($this->total > 0)
 		{
-			$msg = JText::sprintf('JLIB_HTML_RESULTS_OF', $fromResult, $toResult, $this->total);
+			$msg = Text::sprintf('JLIB_HTML_RESULTS_OF', $fromResult, $toResult, $this->total);
 			$html .= "\n" . $msg;
 		}
 		else
 		{
-			$html .= "\n" . JText::_('JLIB_HTML_NO_RECORDS_FOUND');
+			$html .= "\n" . Text::_('JLIB_HTML_NO_RECORDS_FOUND');
 		}
 
 		return $html;
@@ -283,7 +287,7 @@ class JtgPagination extends JObject
 	 */
 	public function getPagesLinks()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Build the page navigation list.
 		$data = $this->_buildDataObject();
@@ -403,7 +407,7 @@ class JtgPagination extends JObject
 	 */
 	public function getListFooter()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		$list = array();
 		$list['prefix'] = $this->prefix;
@@ -438,7 +442,7 @@ class JtgPagination extends JObject
 	 */
 	public function getLimitBox()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Initialise variables.
 		$limits = array();
@@ -446,19 +450,19 @@ class JtgPagination extends JObject
 		// Make the option list.
 		for ($i = 5; $i <= 30; $i += 5)
 		{
-			$limits[] = JHtml::_('select.option', "$i");
+			$limits[] = HTMLHelper::_('select.option', "$i");
 		}
 
-		$limits[] = JHtml::_('select.option', '50', JText::_('J50'));
-		$limits[] = JHtml::_('select.option', '100', JText::_('J100'));
-		$limits[] = JHtml::_('select.option', '0', JText::_('JALL'));
+		$limits[] = HTMLHelper::_('select.option', '50', Text::_('J50'));
+		$limits[] = HTMLHelper::_('select.option', '100', Text::_('J100'));
+		$limits[] = HTMLHelper::_('select.option', '0', Text::_('JALL'));
 
 		$selected = $this->_viewall ? 0 : $this->limit;
 
 		// Build the select list.
 		if ($app->isClient('admin'))
 		{
-			$html = JHtml::_(
+			$html = HTMLHelper::_(
 				'select.genericlist',
 				$limits,
 				$this->prefix . 'limit',
@@ -470,7 +474,7 @@ class JtgPagination extends JObject
 		}
 		else
 		{
-			$html = JHtml::_(
+			$html = HTMLHelper::_(
 				'select.genericlist',
 				$limits,
 				$this->prefix . 'limit',
@@ -502,7 +506,7 @@ class JtgPagination extends JObject
 	{
 		if (($i > 0 || ($i + $this->limitstart > 0)) && $condition)
 		{
-			return JHtml::_('jgrid.orderUp', $i, $task, '', $alt, $enabled, $checkbox);
+			return HTMLHelper::_('jgrid.orderUp', $i, $task, '', $alt, $enabled, $checkbox);
 		}
 		else
 		{
@@ -529,7 +533,7 @@ class JtgPagination extends JObject
 	{
 		if (($i < $n - 1 || $i + $this->limitstart < $this->total - 1) && $condition)
 		{
-			return JHtml::_('jgrid.orderDown', $i, $task, '', $alt, $enabled, $checkbox);
+			return HTMLHelper::_('jgrid.orderDown', $i, $task, '', $alt, $enabled, $checkbox);
 		}
 		else
 		{
@@ -549,10 +553,10 @@ class JtgPagination extends JObject
 	protected function _list_footer($list)
 	{
 		// Initialise variables.
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$html = "<div class=\"jtg_container\"><div class=\"jtgpagination\">\n";
 
-		$html .= "\n<div class=\"limit\">" . JText::_('JGLOBAL_DISPLAY_NUM') . $list['limitfield'] . "";
+		$html .= "\n<div class=\"limit\">" . Text::_('JGLOBAL_DISPLAY_NUM') . $list['limitfield'] . "";
 		$html .= $list['pageslinks'];
 		$html .= "\n" . $list['pagescounter'] . "</div>";
 
@@ -574,7 +578,7 @@ class JtgPagination extends JObject
 	protected function _list_render($list)
 	{
 		// Initialise variables.
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$html = null;
 
 		if ($list['start']['active'])
@@ -683,7 +687,7 @@ class JtgPagination extends JObject
 			}
 		}
 
-		$data->all = new JPaginationObject(JText::_('JLIB_HTML_VIEW_ALL'), $this->prefix);
+		$data->all = new JPaginationObject(Text::_('JLIB_HTML_VIEW_ALL'), $this->prefix);
 
 		if (!$this->_viewall)
 		{
@@ -692,8 +696,8 @@ class JtgPagination extends JObject
 		}
 
 		// Set the start and previous data objects.
-		$data->start = new JPaginationObject(JText::_('JLIB_HTML_START'), $this->prefix);
-		$data->previous = new JPaginationObject(JText::_('JPREV'), $this->prefix);
+		$data->start = new JPaginationObject(Text::_('JLIB_HTML_START'), $this->prefix);
+		$data->previous = new JPaginationObject(Text::_('JPREV'), $this->prefix);
 
 		if ($this->get('pages.current') > 1)
 		{
@@ -705,8 +709,8 @@ class JtgPagination extends JObject
 		}
 
 		// Set the next and end data objects.
-		$data->next = new JPaginationObject(JText::_('JNEXT'), $this->prefix);
-		$data->end = new JPaginationObject(JText::_('JLIB_HTML_END'), $this->prefix);
+		$data->next = new JPaginationObject(Text::_('JNEXT'), $this->prefix);
+		$data->end = new JPaginationObject(Text::_('JLIB_HTML_END'), $this->prefix);
 
 		if ($this->get('pages.current') < $this->get('pages.total'))
 		{

@@ -21,6 +21,10 @@ defined('_JEXEC') or die('Restricted access');
 // Import Joomla! libraries
 jimport('joomla.application.component.model');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Session\Session;
+
 /**
  * Model Class Configuration
  *
@@ -46,7 +50,7 @@ class JtgModelConfig extends JModelLegacy
 	function saveConfig()
 	{
 		// Get post data
-		$row = JFactory::getApplication()->input->getArray();
+		$row = Factory::getApplication()->input->getArray();
 
 		// Store tables if they not exists
 		$cfg = JtgHelper::getConfig();
@@ -119,7 +123,7 @@ class JtgModelConfig extends JModelLegacy
 
 		foreach ($row AS $key => $value)
 		{
-			$istoken = JSession::checkToken();
+			$istoken = Session::checkToken();
 
 			if ((!in_array($key, $ignore)) AND (!array_key_exists($key, $existarr)) AND (!$istoken))
 			{
@@ -226,7 +230,6 @@ class JtgModelConfig extends JModelLegacy
 			return false;
 		}
 
-		$mainframe = JFactory::getApplication();
 		$query = "SELECT id, title FROM #__content WHERE"
 		. "\n sectionid='" . $secid . "'"
 		. "\n AND catid='" . $catid . "'"
@@ -246,7 +249,7 @@ class JtgModelConfig extends JModelLegacy
 	function getTemplates()
 	{
 		jimport('joomla.filesystem.folder');
-		$templates = JFolder::listFolderTree('../components/com_jtg/assets/template', '', 1);
+		$templates = Folder::listFolderTree('../components/com_jtg/assets/template', '', 1);
 
 		return $templates;
 	}

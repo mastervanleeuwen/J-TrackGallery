@@ -20,8 +20,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
-use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Language\Text;
+use Joomla\Utilities\ArrayHelper;
 
 /**
  * JtgModeljtg class for the jtg component
@@ -60,7 +62,7 @@ class JtgModeljtg extends ListModel
       // TODO: add accesslevel logic, or remove completely? replace by per-track access using native Joomla! logic?
 
       $db = $this->getDbo();
-      $user = JFactory::getUser();
+      $user = Factory::getUser();
       $uid = $user->id;
 
 		if (!is_null($this->getState('filter.tag')))
@@ -93,7 +95,7 @@ class JtgModeljtg extends ListModel
 			$query->where('('.$catselect.')');
 		}
       else {
-          $trackcat = JFactory::getApplication()->input->get('cat');
+          $trackcat = Factory::getApplication()->input->get('cat');
           if ($trackcat !== null) {
               $this->setState('filter.trackcat', $trackcat);
               $query->where('a.catid LIKE '.$db->quote('%'.$trackcat.'%'));
@@ -104,7 +106,7 @@ class JtgModeljtg extends ListModel
          $query->where('a.level = '.$db->quote($tracklevel));
       }
       // Filter by state (published, trashed, etc.) OR user tracks
-      if (JFactory::getApplication()->input->get('layout') == 'user') {
+      if (Factory::getApplication()->input->get('layout') == 'user') {
          $query->where("a.uid=$uid");
       }
       else {
@@ -138,8 +140,6 @@ class JtgModeljtg extends ListModel
 	 */
 	function getFile($id)
 	{
-		$mainframe = JFactory::getApplication();
-
 		$db = $this->getDbo();
 
 		$query = "SELECT * FROM #__jtg_files WHERE id='" . $id . "'";
@@ -185,9 +185,8 @@ class JtgModeljtg extends ListModel
 			$where .= " AND a.access <= " . $access;
 		}
 
-		$mainframe = JFactory::getApplication();
 		$db = $this->getDBO();
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$uid = $user->id;
 		$query = "SELECT a.* FROM #__jtg_files AS a"
 		. "\n WHERE (a.published = 1 OR a.uid='$uid') " . $where
@@ -209,7 +208,6 @@ class JtgModeljtg extends ListModel
 	 */
 	static public function getCatsData($sort=false, $catid=null)
 	{
-		$mainframe = JFactory::getApplication();
 		$db = JtgHelper::getDbo();
 
 		$query = "SELECT * FROM #__jtg_cats WHERE published = 1";
@@ -229,7 +227,7 @@ class JtgModeljtg extends ListModel
 			$nullcat = array(
 					"id"			=> 0,
 					"parent"		=> 0,
-					"title"			=> "<label title=\"" . JText::_('COM_JTG_CAT_NONE') . "\">-</label>",
+					"title"			=> "<label title=\"" . Text::_('COM_JTG_CAT_NONE') . "\">-</label>",
 					"description"	=> null,
 					"image"			=> null,
 					"ordering"		=> 0,
@@ -259,7 +257,6 @@ class JtgModeljtg extends ListModel
 	 */
 	static public function getTerrainData($sort=false)
 	{
-		$mainframe = JFactory::getApplication();
 		$db = JtgHelper::getDbo();
 
 		$query = "SELECT * FROM #__jtg_terrains"
@@ -276,7 +273,7 @@ class JtgModeljtg extends ListModel
 		{
 			$nullter = array(
 					"id"			=> 0,
-					"title"			=> "<label title=\"" . JText::_('COM_JTG_TERRAIN_NONE') . "\">-</label>",
+					"title"			=> "<label title=\"" . Text::_('COM_JTG_TERRAIN_NONE') . "\">-</label>",
 					"ordering"		=> 0,
 					"published"		=> 1,
 					"checked_out"	=> 0
@@ -302,8 +299,6 @@ class JtgModeljtg extends ListModel
 	 */
 	static public function getVotesData()
 	{
-		$mainframe = JFactory::getApplication();
-
 		$db = JtgHelper::getDbo();
 
 		$query = "SELECT trackid AS id ,rating FROM #__jtg_votes"

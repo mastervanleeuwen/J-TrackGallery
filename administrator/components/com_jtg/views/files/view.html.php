@@ -20,9 +20,15 @@ defined('_JEXEC') or die('Restricted access');
 
 // Import Joomla! libraries
 jimport('joomla.application.component.view');
-use Joomla\String\StringHelper;
+
 use Joomla\CMS\Editor\Editor;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\String\StringHelper;
 
 /**
  * HTML View tracks class for the jtg component
@@ -46,21 +52,21 @@ class JtgViewFiles extends JViewLegacy
 		switch ($rowaccess)
 		{
 			case 0:
-				$access = JText::_('COM_JTG_PUBLIC');
+				$access = Text::_('COM_JTG_PUBLIC');
 				$color = "green";
 				break;
 			case 1:
-				$access = JText::_('COM_JTG_REGISTERED');
+				$access = Text::_('COM_JTG_REGISTERED');
 				$color = "red";
 				break;
 
 			case 2:
-				$access = JText::_('COM_JTG_ADMINISTRATORS');
+				$access = Text::_('COM_JTG_ADMINISTRATORS');
 				$color = "black";
 				break;
 
 			case 9:
-				$access = JText::_('COM_JTG_PRIVATE');
+				$access = Text::_('COM_JTG_PRIVATE');
 				$color = "orange";
 				break;
 		}
@@ -107,7 +113,7 @@ class JtgViewFiles extends JViewLegacy
 		}
 		else
 		{
-			return "<a href=\"".JRoute::_("index.php?option=com_jtg&task=editfile&controller=files&id=$id")."\">". $file."</a>";
+			return "<a href=\"".Route::_("index.php?option=com_jtg&task=editfile&controller=files&id=$id")."\">". $file."</a>";
 		}
 	}
 
@@ -128,7 +134,7 @@ class JtgViewFiles extends JViewLegacy
 				// Visible
 				$link = "tohide";
 				$icon = $iconpath . "icon_visible.png";
-				$tt = JText::_('COM_JTG_TOHIDE');
+				$tt = Text::_('COM_JTG_TOHIDE');
 				$item = "<img alt=\"" . $tt . "\" title=\"" . $tt . "\" src=\"" . $icon . "\" />";
 				break;
 
@@ -136,13 +142,13 @@ class JtgViewFiles extends JViewLegacy
 				// Hidden
 				$link = "toshow";
 				$icon = $iconpath . "icon_hidden.png";
-				$tt = JText::_('COM_JTG_TOSHOW');
+				$tt = Text::_('COM_JTG_TOSHOW');
 				$item = "<img alt=\"" . $tt . "\" title=\"" . $tt . "\" src=\"" . $icon . "\" />";
 				break;
 
 			default:
 				// Not saved
-				$tt = JText::_('COM_JTG_NOT_SAVED');
+				$tt = Text::_('COM_JTG_NOT_SAVED');
 				$item = "<span title=\"" . $tt . "\">-- ? --</span>";
 
 				return $item;
@@ -170,16 +176,16 @@ class JtgViewFiles extends JViewLegacy
 		$foundtrackroute = 0;
 		if ( ( isset($track) ) AND ( $track == "1" ) )
 		{
-			$imagelink .= "<td class=\"icon\"><span class=\"track1\" title=\"" . JText::_('COM_JTG_ISTRACK1') . "\"></span></td>";
+			$imagelink .= "<td class=\"icon\"><span class=\"track1\" title=\"" . Text::_('COM_JTG_ISTRACK1') . "\"></span></td>";
        			$foundtrackroute = 1;
 		}
 		if ( ( isset($route) ) AND ( $route == "1" ) )
 		{
-			$imagelink .= "<td class=\"icon\"><span class=\"route1\" title=\"" . JText::_('COM_JTG_ISROUTE1') . "\"></span></td>";
+			$imagelink .= "<td class=\"icon\"><span class=\"route1\" title=\"" . Text::_('COM_JTG_ISROUTE1') . "\"></span></td>";
 			$foundtrackroute = 1;
 		}
 		if (!$foundtrackroute)
-			$imagelink .= "<td class=\"icon\"><span class=\"track0\" title=\"" . JText::_('COM_JTG_ISTRACK0') . "\"></span></td>";
+			$imagelink .= "<td class=\"icon\"><span class=\"track0\" title=\"" . Text::_('COM_JTG_ISTRACK0') . "\"></span></td>";
 
 		if ( ( isset($wp) ) AND ( $wp == "1" ) )
 		{
@@ -194,11 +200,11 @@ class JtgViewFiles extends JViewLegacy
 
 		if ( isset($wp) )
 		{
-			$imagelink .= "<span class=\"wp" . $m . "\" title=\"" . JText::_('COM_JTG_ISWP' . $m) . "\"></span>";
+			$imagelink .= "<span class=\"wp" . $m . "\" title=\"" . Text::_('COM_JTG_ISWP' . $m) . "\"></span>";
 		}
 		else
 		{
-			$imagelink .= "<span class=\"wp" . $m . "\" title=\"" . JText::_('COM_JTG_DKWP') .
+			$imagelink .= "<span class=\"wp" . $m . "\" title=\"" . Text::_('COM_JTG_DKWP') .
 			"\" style=\"text-align:center\"><font size=\"+2\">?</font>";
 		}
 
@@ -217,11 +223,11 @@ class JtgViewFiles extends JViewLegacy
 
 		if ( isset($cache) )
 		{
-			$imagelink .= "<span class=\"cache" . $m . "\" title=\"" . JText::_('COM_JTG_ISCACHE' . $m) . "\">";
+			$imagelink .= "<span class=\"cache" . $m . "\" title=\"" . Text::_('COM_JTG_ISCACHE' . $m) . "\">";
 		}
 		else
 		{
-			$imagelink .= "<span class=\"cache" . $m . "\" title=\"" . JText::_('COM_JTG_DKCACHE') . "\" style=\"text-align:center\"><font size=\"+2\">?</font>";
+			$imagelink .= "<span class=\"cache" . $m . "\" title=\"" . Text::_('COM_JTG_DKCACHE') . "\" style=\"text-align:center\"><font size=\"+2\">?</font>";
 		}
 
 		$imagelink .= "</span>";
@@ -431,7 +437,7 @@ class JtgViewFiles extends JViewLegacy
 
 			if (isset($cat->title))
 			{
-				$newcat[$cat->id]->title = JText::_($cat->title);
+				$newcat[$cat->id]->title = Text::_($cat->title);
 			}
 		}
 
@@ -441,7 +447,7 @@ class JtgViewFiles extends JViewLegacy
 			$missingcat[$catid] = $catid;
 			$newcat[$catid] = new stdClass;
 			$newcat[$catid]->id = 0;
-			$newcat[$catid]->title = JText::sprintf('COM_JTG_ERROR_MISSING_CATID', $catid);
+			$newcat[$catid]->title = Text::sprintf('COM_JTG_ERROR_MISSING_CATID', $catid);
 			$newcat[$catid]->parent_id = 0;
 			$newcat[$catid]->treename = "<font class=\"errorEntry\">" . $newcat[$catid]->title . "</font>";
 		}
@@ -453,7 +459,7 @@ class JtgViewFiles extends JViewLegacy
 		{
 			$cat = $newcat[$catid];
 			$catid = $cat->parent_id;
-			array_unshift($return, JText::_($cat->treename));
+			array_unshift($return, Text::_($cat->treename));
 
 			if ( ( $cat->parent_id == 0 ) OR ( $j <= 0 ) )
 			{
@@ -470,7 +476,7 @@ class JtgViewFiles extends JViewLegacy
 		// TODO unused code below!!
 		if ((isset($parentid) AND ($parentid != 0) AND isset($title[$parentid])))
 		{
-			return (JText::_($title[$parentid]));
+			return (Text::_($title[$parentid]));
 		}
 
 		return null;
@@ -485,8 +491,8 @@ class JtgViewFiles extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$mainframe = JFactory::getApplication();
-		$option = JFactory::getApplication()->input->get('option');
+		$app = Factory::getApplication();
+		$option = Factory::getApplication()->input->get('option');
 		$this->canDo = ContentHelper::getActions('com_jtg');
 
 		if ($this->getLayout() == 'form')
@@ -505,19 +511,19 @@ class JtgViewFiles extends JViewLegacy
 
 		$model = $this->getModel();
 
-		$order = JFactory::getApplication()->input->get('order', 'order', 'string');
+		$order = Factory::getApplication()->input->get('order', 'order', 'string');
 
-		$filter_order = $mainframe->getUserStateFromRequest(
+		$filter_order = $app->getUserStateFromRequest(
 				$option . "filter_order",
 				'filter_order',
 				'ordering',
 				'cmd');
-		$filter_order_Dir = $mainframe->getUserStateFromRequest(
+		$filter_order_Dir = $app->getUserStateFromRequest(
 				$option . "filter_order_Dir",
 				'filter_order_Dir',
 				'',
 				'word');
-		$search = $mainframe->getUserStateFromRequest(
+		$search = $app->getUserStateFromRequest(
 				$option . "search",
 				'search',
 				'',
@@ -554,21 +560,21 @@ class JtgViewFiles extends JViewLegacy
 	{
 		if (version_compare(JVERSION,'4.0','ge'))
 		{
-			JHtml::_('jquery.framework');
-			JHtml::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
+			HTMLHelper::_('jquery.framework');
+			HTMLHelper::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
 		}
 		else if (version_compare(JVERSION,'3.0','ge'))
 		{
-			JHtml::_('jquery.framework');
-			JHtml::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
+			HTMLHelper::_('jquery.framework');
+			HTMLHelper::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
 			JHTML::_('behavior.framework');
 		}
 		else
 		{
-			JHtml::script('jquery.js', 'components/com_jtg/assets/js/', false);
-			JHtml::script('jquery.MultiFile.js', 'components/com_jtg/assets/js/', false);
-			JHtml::script('mootools.js', '/media/system/js/', false);
-			JHtml::script('core-uncompressed.js', 'media/system/js/', false);
+			HTMLHelper::script('jquery.js', 'components/com_jtg/assets/js/', false);
+			HTMLHelper::script('jquery.MultiFile.js', 'components/com_jtg/assets/js/', false);
+			HTMLHelper::script('mootools.js', '/media/system/js/', false);
+			HTMLHelper::script('core-uncompressed.js', 'media/system/js/', false);
 		}
 
 		parent::display($tpl);
@@ -585,39 +591,39 @@ class JtgViewFiles extends JViewLegacy
 	{
 		if (JVERSION >= 4.0)
 		{
-			JHtml::_('jquery.framework');
-			JHtml::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
+			HTMLHelper::_('jquery.framework');
+			HTMLHelper::script(Uri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
 		}
 		else if (JVERSION >= 3.0)
 		{
-			JHtml::_('jquery.framework');
-			JHtml::script(Juri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
+			HTMLHelper::_('jquery.framework');
+			HTMLHelper::script(Uri::root() . 'components/com_jtg/assets/js/jquery.MultiFile.js');
 			JHTML::_('behavior.framework');
 		}
 		else
 		{
-			JHtml::script('jquery.js', 'components/com_jtg/assets/js/', false);
-			JHtml::script('jquery.MultiFile.js', 'components/com_jtg/assets/js/', false);
-			JHtml::script('mootools.js', '/media/system/js/', false);
+			HTMLHelper::script('jquery.js', 'components/com_jtg/assets/js/', false);
+			HTMLHelper::script('jquery.MultiFile.js', 'components/com_jtg/assets/js/', false);
+			HTMLHelper::script('mootools.js', '/media/system/js/', false);
 		}
 
 		jimport('joomla.filesystem.folder');
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		if (count($cid))
 		{
 			$id = $cid[0];
 		}
 		else
 		{
-			$id = JFactory::getApplication()->input->getInt('id');
+			$id = Factory::getApplication()->input->getInt('id');
 		}
 		$cfg = JtgHelper::getConfig();
-		$editor = JFactory::getConfig()->get('editor');
+		$editor = Factory::getConfig()->get('editor');
 		$editor = Editor::getInstance($editor);;
 		$model = $this->getModel();
 		$cats = $model->getCats(0, 'COM_JTG_SELECT', 0, 0);
 		$terrain = $model->getTerrain("*", true, " WHERE published=1 ");
-		$user 	= JFactory::getUser();
+		$user 	= Factory::getUser();
 		$uid = $user->get('id');
 
 		if (!isset($id))
@@ -629,14 +635,14 @@ class JtgViewFiles extends JViewLegacy
 			$track = $model->getFile($id);
 			$access = $model->getAccess($id);
 			$size = min(count($cats), 6);
-			$lists['cats']		= JHtml::_('select.genericlist', $cats, 'catid[]', 'size="' . $size . '" multiple="multiple"', 'id', 'treename');
+			$lists['cats']		= HTMLHelper::_('select.genericlist', $cats, 'catid[]', 'size="' . $size . '" multiple="multiple"', 'id', 'treename');
 			$size = min(count($terrain), 6);
-			$lists['terrain']	= JHtml::_('select.genericlist', $terrain, 'terrain[]', 'multiple="multiple" size="' . $size . '"', 'id', 'title', 0);
+			$lists['terrain']	= HTMLHelper::_('select.genericlist', $terrain, 'terrain[]', 'multiple="multiple" size="' . $size . '"', 'id', 'title', 0);
 			$row->access = $access;
-			$lists['uid']		= JHtml::_('list.users', 'uid', $uid, 1, null, 'name', 0);
-			$lists['hidden']	= JHtml::_('select.booleanlist', 'hidden', null, 0);
-			$lists['published']	= JHtml::_('select.booleanlist', 'published', null, 1);
-			$lists['default_map'] 	= JHtml::_('select.genericlist', $default_map, 'default_map', 'size="1"', 'id', 'name', null);
+			$lists['uid']		= HTMLHelper::_('list.users', 'uid', $uid, 1, null, 'name', 0);
+			$lists['hidden']	= HTMLHelper::_('select.booleanlist', 'hidden', null, 0);
+			$lists['published']	= HTMLHelper::_('select.booleanlist', 'published', null, 1);
+			$lists['default_map'] 	= HTMLHelper::_('select.genericlist', $default_map, 'default_map', 'size="1"', 'id', 'name', null);
 
 			$this->lists = $lists;
 			$this->track = $track;
@@ -651,7 +657,7 @@ class JtgViewFiles extends JViewLegacy
 			$access = $model->getAccess($id);
 
 			$default_map=$model->getDefaultMaps();
-			array_unshift($default_map, array('id' => 'null', "name" => JText::_('JNONE')) );
+			array_unshift($default_map, array('id' => 'null', "name" => Text::_('JNONE')) );
 
 			$error = false;
 			$terrainlist = ($track->terrain? explode(',', $track->terrain): 0);
@@ -661,37 +667,37 @@ class JtgViewFiles extends JViewLegacy
 			* 		foreach ($terrainlist as $t) {
 			* 			if ( !is_numeric($t) ) $error = true;
 			* 		}
-			*		if ( $error === true ) $error = "<font color=\"red\">" . JText::_('Error') . ": " . $track->terrain . "</font><br />";
+			*		if ( $error === true ) $error = "<font color=\"red\">" . Text::_('Error') . ": " . $track->terrain . "</font><br />";
 			*/
 			$size = min(count($cats), 6);
 			$trackids = explode(",", $track->catid);
-			$lists['cats']		= JHtml::_('select.genericlist', $cats, 'catid[]', 'class="form-select" size="' . $size . '" multiple="multiple"', 'id', 'treename', $trackids, '', true);
+			$lists['cats']		= HTMLHelper::_('select.genericlist', $cats, 'catid[]', 'class="form-select" size="' . $size . '" multiple="multiple"', 'id', 'treename', $trackids, '', true);
 			$size = min(count($terrain), 6);
-			$lists['terrain']	= $error . JHtml::_('select.genericlist', $terrain, 'terrain[]', 'class="form-select" multiple="multiple" size="' . $size . '"', 'id', 'title', $terrainlist);
-			$lists['default_map'] 	= JHtml::_('select.genericlist', $default_map, 'default_map', 'class="form-select" size="1"', 'id', 'name', $track->default_map);
+			$lists['terrain']	= $error . HTMLHelper::_('select.genericlist', $terrain, 'terrain[]', 'class="form-select" multiple="multiple" size="' . $size . '"', 'id', 'title', $terrainlist);
+			$lists['default_map'] 	= HTMLHelper::_('select.genericlist', $default_map, 'default_map', 'class="form-select" size="1"', 'id', 'name', $track->default_map);
 
 			// 		$row->access = $access;
 			$lists['access']	= JtgHelper::getAccessList($access);
 
-			// 		$lists['access']	= JHtml::_('list.accesslevel', $row );
-			$lists['hidden'] = JHtml::_('select.booleanlist', 'hidden', null, $track->hidden);
-			$lists['uid'] = JHtml::_('list.users', 'uid', $track->uid, 1, 'class="form-select"', 'name', 0);
+			// 		$lists['access']	= HTMLHelper::_('list.accesslevel', $row );
+			$lists['hidden'] = HTMLHelper::_('select.booleanlist', 'hidden', null, $track->hidden);
+			$lists['uid'] = HTMLHelper::_('list.users', 'uid', $track->uid, 1, 'class="form-select"', 'name', 0);
 
 			$imagelist = $model->getImages($id);
 
-			$img_path = JUri::root() . 'images/jtrackgallery/uploaded_tracks_images/track_' . $id . '/';
+			$img_path = Uri::root() . 'images/jtrackgallery/uploaded_tracks_images/track_' . $id . '/';
 			
 			$images = "<div class=\"jtg-photo-grid\">";
 			foreach ($imagelist as $image) 
 			{
 				$thumb_name = 'thumb1_' . $image->filename;
-				$images .= "<div class=\"jtg-photo-item\"\><input type=\"checkbox\" name=\"deleteimage_" . $image->id. "\" value=\"" . $image->filename . "\">" . JText::_('COM_JTG_DELETE_IMAGE') . " (" . $image->filename . ")<br />\n".
+				$images .= "<div class=\"jtg-photo-item\"\><input type=\"checkbox\" name=\"deleteimage_" . $image->id. "\" value=\"" . $image->filename . "\">" . Text::_('COM_JTG_DELETE_IMAGE') . " (" . $image->filename . ")<br />\n".
 				"<img src=\"" . $img_path . 'thumbs/' . $thumb_name . "\" alt=\"" . $image->filename . "\" title=\"" . $image->filename . " (thumbnail)\" /><br />\n".
 				"<input type=\"text\" class=\"inputbox jtg-photo-input\" name=\"img_title_".$image->id. "\" value=\"".$image->title."\" placeholder=\"Title\"> <br /></div>\n";
 			}
          $images .= "</div>";
 
-			$lists['published'] = JHtml::_('select.booleanlist', 'published', null, $track->published);
+			$lists['published'] = HTMLHelper::_('select.booleanlist', 'published', null, $track->published);
 			$lists['values'] = JtgHelper::giveGeneratedValues('backend', $this->buildImageFiletypes($track->istrack, $track->iswp, $track->isroute, $track->iscache), $track);
 			$lists['level']	= $model->getLevelList($track->level);
 			if (version_compare(JVERSION,'4.0','ge')) {

@@ -17,25 +17,30 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 // Toolbar
 $ordering = ($this->lists['order'] == 'ordering');
-$document = JFactory::getDocument();
-$document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
+$document = Factory::getDocument();
+$document->addStyleSheet(Uri::base(true) . '/components/com_jtg/template.css');
 
 ?>
 <form action="" method="post" name="adminForm" id="adminForm">
 	<table>
 		<tr>
-			<td align="left" style="width:100%;"><?php echo JText::_('COM_JTG_FILTER'); ?>:
+			<td align="left" style="width:100%;"><?php echo Text::_('COM_JTG_FILTER'); ?>:
 				<input type="text" name="search" id="search"
 				value="<?php echo $this->lists['search'];?>" class="text_area"
 				onchange="document.adminForm.submit();" />
 				<button onclick="this.form.submit();">
-					<?php echo JText::_('COM_JTG_APPLY'); ?>
+					<?php echo Text::_('COM_JTG_APPLY'); ?>
 				</button>
 				<button
 					onclick="document.getElementById('search').value='';this.form.getElementById('filter_state').value='';this.form.submit();">
-					<?php echo JText::_('COM_JTG_RESET'); ?>
+					<?php echo Text::_('COM_JTG_RESET'); ?>
 				</button>
 			</td>
 			<td nowrap="nowrap"></td>
@@ -44,39 +49,39 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 	<table class="adminlist">
 		<thead>
 			<tr>
-				<th class="title"><?php echo JText::_('COM_JTG_NUM'); ?></th>
+				<th class="title"><?php echo Text::_('COM_JTG_NUM'); ?></th>
 				<th class="title" nowrap="nowrap"><?php
-				echo JHtml::_('grid.sort',
-						JText::_('COM_JTG_ID'), 'id', @$this->lists['order_Dir'], @$this->lists['order'], 'element' ); ?>:</th>
+				echo HTMLHelper::_('grid.sort',
+						Text::_('COM_JTG_ID'), 'id', @$this->lists['order_Dir'], @$this->lists['order'], 'element' ); ?>:</th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_GPS_FILE'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_GPS_FILE'),
 						'file', @$this->lists['order_Dir'], @$this->lists['order'], 'element' ); ?>:</th>
 				<th class="title"><?php
-				echo JText::_('COM_JTG_GPS_FILETYPE');
+				echo Text::_('COM_JTG_GPS_FILETYPE');
 				?>:</th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_TITLE'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_TITLE'),
 						'title', @$this->lists['order_Dir'], @$this->lists['order'], 'element' ); ?>:</th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_CAT'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_CAT'),
 						'cat', @$this->lists['order_Dir'], @$this->lists['order'], 'element' ); ?>:</th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_TERRAIN'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_TERRAIN'),
 						'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'element' ); ?>:</th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_LEVEL'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_LEVEL'),
 						'level', @$this->lists['order_Dir'], @$this->lists['order'], 'element' ); ?>:</th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_DATE'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_DATE'),
 						'date', @$this->lists['order_Dir'], @$this->lists['order'], 'element' ); ?>:</th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_PUBLISHED'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_PUBLISHED'),
 						'published', @$this->lists['order_Dir'], @$this->lists['order'], 'element' ); ?>:</th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_ACCESS_LEVEL'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_ACCESS_LEVEL'),
 						'access', @$this->lists['order_Dir'], @$this->lists['order'], 'element' ); ?>:</th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_INFO_AUTHOR'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_INFO_AUTHOR'),
 						'uid', @$this->lists['order_Dir'], @$this->lists['order'], 'element' ); ?>:</th>
 			</tr>
 		</thead>
@@ -99,14 +104,14 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 
 				if ($published == 0)
 				{
-					$published = "<font color=red>" . JText::_('JNO') . "</font>";
+					$published = "<font color=red>" . Text::_('JNO') . "</font>";
 				}
 				else
 				{
-					$published = "<font color=green>" . JText::_('JYES') . "</font>";
+					$published = "<font color=green>" . Text::_('JYES') . "</font>";
 				}
 
-				$user		= JFactory::getUser($row->uid);
+				$user		= Factory::getUser($row->uid);
 				$imagelink	= $this->buildImageFiletypes($row->istrack, $row->iswp, $row->isroute);
 				$file		= $this->buildChooseKlicks($row->id, $row->title);
 				$parent		= $this->giveParentCat($row->catid);
@@ -118,7 +123,7 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 
 				if ($row->cat === null)
 				{
-					$row->cat = "<i>" . JText::_('COM_JTG_NOTHING') . "</i>";
+					$row->cat = "<i>" . Text::_('COM_JTG_NOTHING') . "</i>";
 				}
 
 				?>
@@ -151,5 +156,5 @@ $document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
 		value="<?php echo $this->lists['order']; ?>" /> <input type="hidden"
 		name="filter_order_Dir"
 		value="<?php echo $this->lists['order_Dir']; ?>" />
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 </form>

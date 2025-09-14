@@ -21,8 +21,13 @@ jimport('joomla.application.component.model');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\Filter\OutputFilter;
-use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
 
 /**
  * JtgModelTrack class for the jtg component
@@ -76,11 +81,11 @@ class JtgModelTrack extends FormModel
 
 				if ($i == 0)
 				{
-					$return .= JText::_('COM_JTG_SELECT');
+					$return .= Text::_('COM_JTG_SELECT');
 				}
 				else
 				{
-					$return .= $i . " - " . JText::_(trim($level));
+					$return .= $i . " - " . Text::_(trim($level));
 				}
 
 				$return .= ("</option>\n");
@@ -120,7 +125,7 @@ class JtgModelTrack extends FormModel
 			}
 		}
 
-		$return .= $selectedlevel . "/" . ($i - 1) . " - " . JText::_(trim($selectedtext));
+		$return .= $selectedlevel . "/" . ($i - 1) . " - " . Text::_(trim($selectedtext));
 
 		return $return;
 	}
@@ -132,7 +137,7 @@ class JtgModelTrack extends FormModel
 	 */
 	function getCats ()
 	{
-		$mainframe = JFactory::getApplication();
+		$mainframe = Factory::getApplication();
 		$db = $this->getDbo();
 
 		$query = "SELECT * FROM #__jtg_cats WHERE published=1 ORDER BY ordering ASC";
@@ -144,20 +149,20 @@ class JtgModelTrack extends FormModel
 
 		foreach ($rows as $v)
 		{
-			$v->title = JText::_($v->title);
+			$v->title = Text::_($v->title);
 			$pt = $v->parent_id;
 			$list = @$children[$pt] ? $children[$pt] : array();
 			array_push($list, $v);
 			$children[$pt] = $list;
 		}
 
-		$list = JHtml::_('menu.treerecurse', 0, '', array(), $children, $maxlevel = 9999, $level = 0, $type = 0);
+		$list = HTMLHelper::_('menu.treerecurse', 0, '', array(), $children, $maxlevel = 9999, $level = 0, $type = 0);
 		$list = array_slice($list, 0, $limit);
 		$cats = array();
 		$nullcat = array(
 				'id' => 0,
-				'title' => JText::_('JNONE'),
-				'name' => JText::_('JNONE'),
+				'title' => Text::_('JNONE'),
+				'name' => Text::_('JNONE'),
 				'image' => ""
 		);
 		$cats[0] = $nullcat;
@@ -176,7 +181,7 @@ class JtgModelTrack extends FormModel
 			$arr = array(
 					'id' => $cat->id,
 					'title' => $title,
-					'name' => JText::_($cat->title),
+					'name' => Text::_($cat->title),
 					'image' => $cat->image
 			);
 			$cats[$cat->id] = $arr;
@@ -196,8 +201,8 @@ class JtgModelTrack extends FormModel
 		$user = Factory::getUser();
 
 		if (!$user->authorise('core.create', 'com_jtg')) {
-			$app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
-			$this->setRedirect(JRoute::_('index.php?option=com_jtg&view=jtg',false), false);
+			$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
+			$this->setRedirect(Route::_('index.php?option=com_jtg&view=jtg',false), false);
 			return false;
 		}
 
@@ -211,7 +216,7 @@ class JtgModelTrack extends FormModel
 		$data['uid'] = $user->id;
 
 		// Get the post data
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$catid = $input->get('catid', null, 'array');
 		if ($catid) {
 			$data['catid'] = $catid ? implode(',', $catid) : '';
@@ -237,7 +242,7 @@ class JtgModelTrack extends FormModel
 
 		// Upload the file
 		$upload_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
-		$filename = strtolower(JFile::makeSafe($file['name']));
+		$filename = strtolower(File::makeSafe($file['name']));
 		if (strlen($filename) > 127)
 		{
 			$name = pathinfo($filename, PATHINFO_FILENAME);
@@ -248,14 +253,14 @@ class JtgModelTrack extends FormModel
 
 		$newfile = $upload_dir . $filename;
 
-		if (JFile::exists($newfile))
+		if (File::exists($newfile))
 		{
-			$alert_text = JText::sprintf("COM_JTG_FILE_ALREADY_EXISTS", $filename);
+			$alert_text = Text::sprintf("COM_JTG_FILE_ALREADY_EXISTS", $filename);
 			$app->enqueueMessage($alert_text,'warning');
 			return false;
 		}
 
-		if (! JFile::upload($file['tmp_name'], $newfile))
+		if (! File::upload($file['tmp_name'], $newfile))
 		{
 			$app->enqueueMessage('COM_JTG_UPLOAD_FAILS','error');
 			return false;
@@ -270,7 +275,7 @@ class JtgModelTrack extends FormModel
 			$data['title'] = trim($gpsData->trackname);
 		}
 		if (strlen($data['title'])==0) {
-			$data['title'] = JFile::stripExt($file['name']);
+			$data['title'] = File::stripExt($file['name']);
 		}
 		$errors = $gpsData->displayErrors();
 
@@ -282,12 +287,12 @@ class JtgModelTrack extends FormModel
 			$data['distance'] = 0;
 
 			// Try to delete the file
-			if (JFile::exists($upload_dir . $filename))
+			if (File::exists($upload_dir . $filename))
 			{
-				JFile::delete($upload_dir . $filename);
+				File::delete($upload_dir . $filename);
 			}
 
-			$app->enqueueMessage(JText::_('COM_JTG_NO_SUPPORT') .' '. $errors);
+			$app->enqueueMessage(Text::_('COM_JTG_NO_SUPPORT') .' '. $errors);
 			return false;
 		}
 
@@ -331,8 +336,8 @@ class JtgModelTrack extends FormModel
 			{
 				if ($image['name'] != "")
 				{
-					$imgfilename = JFile::makesafe($image['name']);
-					$ext = JFile::getExt($imgfilename);
+					$imgfilename = File::makesafe($image['name']);
+					$ext = File::getExt($imgfilename);
 
 					if (in_array(strtolower($ext), $types))
 					{
@@ -346,18 +351,18 @@ class JtgModelTrack extends FormModel
 		$params = $app->getParams();
 		if ((int) $params->get('upload_notify_uid'))
 		{
-			$mailer = JFactory::getMailer();
+			$mailer = Factory::getMailer();
 			$user = JUser::getInstance((int)  $params->get('upload_notify_uid'));
 			$recipient = $user->email;
 			if (strlen($recipient))
 			{
 				$mailer->addRecipient($recipient);
-				$link = JRoute::_(JUri::base() . "index.php?option=com_jtg&view=track&layout=default&id=" . $rows->id);
-				$msg = JText::_('COM_JTG_NEW_TRACK_MAIL_MSG');
-				$config = JFactory::getConfig();
+				$link = Route::_(JUri::base() . "index.php?option=com_jtg&view=track&layout=default&id=" . $rows->id);
+				$msg = Text::_('COM_JTG_NEW_TRACK_MAIL_MSG');
+				$config = Factory::getConfig();
          	$sitename = $config->get('sitename');
 				$body = sprintf($msg, $sitename, $link);
-				$mailer->setSubject(JText::_('COM_JTG_NEW_TRACK_MAIL_SUBJECT'));
+				$mailer->setSubject(Text::_('COM_JTG_NEW_TRACK_MAIL_SUBJECT'));
 				$mailer->setBody($body);
 				$mailer->isHtml(true);
 				$senderr = $mailer->Send();
@@ -377,7 +382,7 @@ class JtgModelTrack extends FormModel
 	 */
 	function hit ()
 	{
-		$mainframe = JFactory::getApplication();
+		$mainframe = Factory::getApplication();
 
 		$id = $mainframe->input->getInt('id');
 
@@ -576,8 +581,8 @@ class JtgModelTrack extends FormModel
 			if (!($user->authorise('core.edit.own') && $this->track->uid == $user->id) &&
 				!($app->getUserState('com_jtg.newfileid') == $id))
      		{
-        		$app->redirect(JRoute::_('index.php?option=com_jtg&view=files&layout=user', false),
-				JText::_('COM_JTG_ALERT_NOT_AUTHORISED'), 'Error');
+        		$app->redirect(Route::_('index.php?option=com_jtg&view=files&layout=user', false),
+				Text::_('COM_JTG_ALERT_NOT_AUTHORISED'), 'Error');
         		return false;
 			}
       }
@@ -590,23 +595,23 @@ class JtgModelTrack extends FormModel
 		// Folder and Pictures within delete
 		$folder = JPATH_SITE . "/images/jtrackgallery/uploaded_tracks_images/" . 'track_' . $id;
 
-		if (JFolder::exists($folder))
+		if (Folder::exists($folder))
 		{
-			JFolder::delete($folder);
+			Folder::delete($folder);
 		}
 
 		$img_path = JPATH_SITE . 'images/jtrackgallery/uploaded_tracks_images/track_' . $id;
-		if (JFolder::exists($img_path))
+		if (Folder::exists($img_path))
 		{
-			JFolder::delete($img_path);
+			Folder::delete($img_path);
 		}
 
 		// File (gpx?) delete
 		$filename = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $file->file;
 
-		if (JFile::exists($filename))
+		if (File::exists($filename))
 		{
-			JFile::delete($filename);
+			File::delete($filename);
 		}
 		// Delete from DB
 		if (!$this->getTable()->delete($id))
@@ -639,12 +644,12 @@ class JtgModelTrack extends FormModel
 	{
 		$img_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/track_' . $id;
 
-		if (! JFolder::exists($img_dir))
+		if (! Folder::exists($img_dir))
 		{
 			return null;
 		}
 
-		$images = JFolder::files($img_dir);
+		$images = Folder::files($img_dir);
 
 		return $images;
 	}
@@ -685,8 +690,8 @@ class JtgModelTrack extends FormModel
 			if (!isset($this->track) || $this->track->id != $id) $this->getFile($id);
 			if (!($user->authorise('core.edit.own', 'com_jtg') && $user->id == $this->track->uid))
 	      {
-				$app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
-      	   $this->setRedirect(JRoute::_('index.php?option=com_jtg&view=jtg',false), false);
+				$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
+      	   $this->setRedirect(Route::_('index.php?option=com_jtg&view=jtg',false), false);
 				return "Action not permitted";
 			}
 		}
@@ -695,7 +700,7 @@ class JtgModelTrack extends FormModel
 		jimport('joomla.filesystem.folder');
 
 		$db = $this->getDbo();
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		$data['id'] = $id;
 		// Get the post data
@@ -746,10 +751,10 @@ class JtgModelTrack extends FormModel
 			$delimage = $input->get('deleteimage_' . $image->id);
          if ($delimage !== null)
          {
-            JFile::delete($imgpath . $delimage);
-            JFile::delete($imgpath . 'thumbs/' . 'thumb0_' . $delimage);
-            JFile::delete($imgpath . 'thumbs/' . 'thumb1_' . $delimage);
-            JFile::delete($imgpath . 'thumbs/' . 'thumb2_' . $delimage);
+            File::delete($imgpath . $delimage);
+            File::delete($imgpath . 'thumbs/' . 'thumb0_' . $delimage);
+            File::delete($imgpath . 'thumbs/' . 'thumb1_' . $delimage);
+            File::delete($imgpath . 'thumbs/' . 'thumb2_' . $delimage);
             $query = "DELETE FROM #__jtg_photos\n WHERE id='".$image->id."'";
             $db->setQuery($query);
             $db->execute();
@@ -781,8 +786,8 @@ class JtgModelTrack extends FormModel
 		{
 			foreach ($newimages as $newimage)
 			{
-				$filename = JFile::makesafe($newimage['name']);
-				$ext = JFile::getExt($filename);
+				$filename = File::makesafe($newimage['name']);
+				$ext = File::getExt($filename);
 
 				if (in_array(strtolower($ext), $types))
 				{
@@ -822,7 +827,7 @@ class JtgModelTrack extends FormModel
 		{
 			foreach ($row as $v)
 			{
-				$v->title = JText::_($v->title);
+				$v->title = Text::_($v->title);
 				$terrain[] = $v;
 			}
 		}
@@ -859,26 +864,26 @@ class JtgModelTrack extends FormModel
 	{
 		if (version_compare(JVERSION,'4.0','lt'))
 		{
-			JHtml::_('behavior.formvalidation');
-			$editor = JFactory::getConfig()->get('editor');
+			HTMLHelper::_('behavior.formvalidation');
+			$editor = Factory::getConfig()->get('editor');
 		}
 		else {
 			HTMLHelper::_('behavior.formvalidator');
 			$editor = Factory::getApplication()->getConfig()->get('editor');
 		}
 		$editor = Editor::getInstance($editor);
-		$user = JFactory::getUser();
-		$id = JFactory::getApplication()->input->getInt('id'); // Check whether getComment works here
+		$user = Factory::getUser();
+		$id = Factory::getApplication()->input->getInt('id'); // Check whether getComment works here
 		?>
 
 		<script type="text/javascript">
 		Joomla.myValidate = function(f) {
 				if (document.formvalidator.isValid(f)) {
-						f.check.value='<?php echo JSession::getFormToken(); ?>';//send token
+						f.check.value='<?php echo Session::getFormToken(); ?>';//send token
 						return true;
 				}
 				else {
-						alert('<?php echo JText::_('COM_JTG_FILLOUT'); ?>');
+						alert('<?php echo Text::_('COM_JTG_FILLOUT'); ?>');
 				}
 				return false;
 		}
@@ -890,13 +895,13 @@ class JtgModelTrack extends FormModel
 	<table class='comment-form'>
 		<thead>
 			<tr>
-				<th colspan='2'><b><?php echo JText::_('COM_JTG_WRITE_COMMENT'); ?>
+				<th colspan='2'><b><?php echo Text::_('COM_JTG_WRITE_COMMENT'); ?>
 				</b></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td><label class='form-label' for='name'><?php echo JText::_('COM_JTG_NAME'); ?>*</label>
+				<td><label class='form-label' for='name'><?php echo Text::_('COM_JTG_NAME'); ?>*</label>
 				</td>
 				<td><input type='text' name='name' id='name' size='20'
 					value='<?php echo $user->get('username'); ?>' class='required form-text'
@@ -904,14 +909,14 @@ class JtgModelTrack extends FormModel
 			</tr>
 			<tr>
 				<td>
-					<label class='form-label' for='show-email'><?php echo JText::_('COM_JTG_SHOW_EMAIL'); ?></label>
+					<label class='form-label' for='show-email'><?php echo Text::_('COM_JTG_SHOW_EMAIL'); ?></label>
 				</td>
 				<td>
 					<input type='checkbox' name='show-email' onchange="document.getElementById('email').disabled=!this.checked;">
 				</td>
 			</tr>
 			<tr>
-				<td><label class='form-label' for='email'><?php echo JText::_('COM_JTG_EMAIL'); ?></label>
+				<td><label class='form-label' for='email'><?php echo Text::_('COM_JTG_EMAIL'); ?></label>
 				</td>
 				<td>
 					<input type='text' name='email' id='email' size='30' disabled 
@@ -919,19 +924,19 @@ class JtgModelTrack extends FormModel
 					class='validate-email form-text' maxlength='50' /></td>
 			</tr>
 			<tr>
-				<td><label class='form-label' for='homepage'><?php echo JText::_('COM_JTG_INFO_AUTHOR_WWW'); ?>
+				<td><label class='form-label' for='homepage'><?php echo Text::_('COM_JTG_INFO_AUTHOR_WWW'); ?>
 				</label></td>
 				<td><input type='text' name='homepage' id='homepage' class='form-text' size='30'
 					maxlength='50' /></td>
 			</tr>
 			<tr>
-				<td><label class='form-label' for='title'><?php echo JText::_('COM_JTG_COMMENT_TITLE'); ?>*</label>
+				<td><label class='form-label' for='title'><?php echo Text::_('COM_JTG_COMMENT_TITLE'); ?>*</label>
 				</td>
 				<td><input type='text' name='title' id='title' size='40' value=''
 					class='required form-text' maxlength='80' /></td>
 			</tr>
 			<tr>
-				<td colspan='2'><label class='form-label' for='text'><?php echo JText::_('COM_JTG_COMMENT_TEXT'); ?>*</label>
+				<td colspan='2'><label class='form-label' for='text'><?php echo Text::_('COM_JTG_COMMENT_TEXT'); ?>*</label>
 					<?php echo $editor->display('text', '', '100%', '200', '80', '8', false, null, null);?>
 				</td>
 			</tr>
@@ -940,10 +945,10 @@ class JtgModelTrack extends FormModel
 ?>
 			<tr>
 				<td><img
-					src='<?php echo JRoute::_("index.php?option=com_jtg&task=displayimg", false); ?>'>
+					src='<?php echo Route::_("index.php?option=com_jtg&task=displayimg", false); ?>'>
 				</td>
 				<td><input type="text" name="word" value="" size="10"
-					class="required" /> <?php echo JText::_('COM_JTG_CAPTCHA_INFO'); ?>
+					class="required" /> <?php echo Text::_('COM_JTG_CAPTCHA_INFO'); ?>
 				</td>
 			</tr>
 <?php
@@ -951,12 +956,12 @@ class JtgModelTrack extends FormModel
 ?>
 			<tr>
 				<td colspan='2' align='right'><input type='submit'
-					value='<?php echo JText::_('COM_JTG_SEND')?>' name='submit'
+					value='<?php echo Text::_('COM_JTG_SEND')?>' name='submit'
 					class='btn btn-primary' /></td>
 			</tr>
 		</tbody>
 	</table>
-	<?php echo JHtml::_('form.token') . "\n"; ?>
+	<?php echo HTMLHelper::_('form.token') . "\n"; ?>
 	<input type='hidden' name='controller' value='track' /> <input
 		type='hidden' name='task' value='savecomment' /> <input type='hidden'
 		name='id' value='<?php echo $id; ?>' />
@@ -974,12 +979,12 @@ class JtgModelTrack extends FormModel
 	 */
 	function savecomment ($id, $cfg)
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		$user = Factory::getUser();
 		$uid = $user->id;
 		if (!$user->authorise('jtg.comment','com_jtg')) {
-         $app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
+         $app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
 			return false;
 		}
 		$input = $app->input;
@@ -1010,19 +1015,19 @@ class JtgModelTrack extends FormModel
 		// Send autor email if set
 		if ($cfg->inform_autor == 1)
 		{
-			$mailer = JFactory::getMailer();
-			$config = JFactory::getConfig();
-			$link = JRoute::_(JUri::base() . "index.php?option=com_jtg&view=track&layout=default&id=" . $id);
-			$msg = JText::_('COM_JTG_CMAIL_MSG');
+			$mailer = Factory::getMailer();
+			$config = Factory::getConfig();
+			$link = Route::_(JUri::base() . "index.php?option=com_jtg&view=track&layout=default&id=" . $id);
+			$msg = Text::_('COM_JTG_CMAIL_MSG');
          $sitename = $config->get('sitename');
 			$body = sprintf($msg, $sitename, $link);
-			$mailer->setSubject(JText::_('COM_JTG_CMAIL_SUBJECT'));
+			$mailer->setSubject(Text::_('COM_JTG_CMAIL_SUBJECT'));
 			$mailer->setBody($body);
 			$mailer->isHtml(true);
 
 			// Optional file attached
 			$attachfile = JPATH_COMPONENT . '/assets/document.pdf';
-			if (JFile::exists($attachfile)) $mailer->addAttachment($attachfile);
+			if (File::exists($attachfile)) $mailer->addAttachment($attachfile);
 
 			$author = $this->getAuthorData($id); 
 			$email = $author->email; 
@@ -1070,7 +1075,7 @@ class JtgModelTrack extends FormModel
 	 */
 	function approachors ($to_lat, $to_lon, $lang)
 	{
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$latlon = JtgHelper::getLatLon($user->id);
 		$link = "http://openrouteservice.org/?";
 
@@ -1104,7 +1109,7 @@ class JtgModelTrack extends FormModel
 	function approachcm ($to_lat, $to_lon, $lang)
 	{
 		$link = "http://maps.cloudmade.com/?";
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$latlon = JtgHelper::getLatLon($user->id);
 
 		if (isset($latlon[0]))
@@ -1156,7 +1161,7 @@ class JtgModelTrack extends FormModel
 	{
 		$key = "651006379c18424d8b5104ed4b7dc210";
 		$link = "http://navigation.cloudmade.com/" . $key . "/api/0.3/";
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$latlon = JtgHelper::getLatLon($user->id);
 
 		if (isset($latlon[0]))
@@ -1220,10 +1225,10 @@ class JtgModelTrack extends FormModel
 		$cfg = JtgHelper::getConfig();
 		// TODO: make this work; the cloaking function quotes the link, only works for text-links
 		//$link = "<img src=\"" . JUri::base() . "components/com_jtg/assets/template/" . $cfg->template . "/images/emailButton.png\" />";
-		//$link = JHtml::image(JUri::base() . "components/com_jtg/assets/template/" . $cfg->template . "/images/emailButton.png","email");
+		//$link = HTMLHelper::image(JUri::base() . "components/com_jtg/assets/template/" . $cfg->template . "/images/emailButton.png","email");
       $link = "email";
 
-		$return = JHtml::_('email.cloak', $mail, true, $link, 0);
+		$return = HTMLHelper::_('email.cloak', $mail, true, $link, 0);
 
 		return $return;
 	}
@@ -1249,7 +1254,7 @@ class JtgModelTrack extends FormModel
 		foreach ($result as $k => $v)
 		{
 			$newresult[$k] = $v;
-			$newresult[$k]->name = JText::_($newresult[$k]->name);
+			$newresult[$k]->name = Text::_($newresult[$k]->name);
 		}
 
 		return $newresult;
@@ -1276,7 +1281,7 @@ class JtgModelTrack extends FormModel
 		foreach ($result as $k => $v)
 		{
 			$newresult[$k] = $v;
-			$newresult[$k]->name = JText::_($newresult[$k]->name);
+			$newresult[$k]->name = Text::_($newresult[$k]->name);
 		}
 
 		return $newresult;
@@ -1313,7 +1318,7 @@ class JtgModelTrack extends FormModel
          $nullcat = array(
                "id"        => 0,
                "parent"    => 0,
-               "title"        => "<label title=\"" . JText::_('COM_JTG_CAT_NONE') . "\">-</label>",
+               "title"        => "<label title=\"" . Text::_('COM_JTG_CAT_NONE') . "\">-</label>",
                "description"  => null,
                "image"        => null,
                "ordering"     => 0,

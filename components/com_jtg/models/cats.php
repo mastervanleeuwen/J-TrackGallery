@@ -19,6 +19,11 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 /**
  * JtgModelCats class for the jtg component
  *
@@ -36,8 +41,8 @@ class JtgModelCats extends JModelLegacy
 	 */
 	function getCats()
 	{
-		$mainframe = JFactory::getApplication();
-		$db = JFactory::getDBO();
+		$mainframe = Factory::getApplication();
+		$db = Factory::getDbo();
 		$query = "SELECT * FROM #__jtg_cats"
 		. "\n WHERE published=1"
 		. "\n ORDER BY ordering";
@@ -48,7 +53,7 @@ class JtgModelCats extends JModelLegacy
 
 		foreach ($rows as $v )
 		{
-			$v->title = JText::_($v->title);
+			$v->title = Text::_($v->title);
 			$pt 	= $v->parent_id;
 			$list 	= @$children[$pt] ? $children[$pt] : array();
 
@@ -62,7 +67,7 @@ class JtgModelCats extends JModelLegacy
 			$children[$pt] = $list;
 		}
 
-		$list = JHtml::_('menu.treerecurse', 0, '', array(), $children);
+		$list = HTMLHelper::_('menu.treerecurse', 0, '', array(), $children);
 		$list = array_slice($list, 0, $limit);
 
 		return $list;

@@ -19,8 +19,12 @@ defined('JPATH_BASE') or die;
 
 jimport('joomla.html.html');
 jimport('joomla.form.formfield');
-jimport('joomla.form.helper');
-JFormHelper::loadFieldClass('list');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Language\Text;
+
+FormHelper::loadFieldClass('list');
 
 /**
  * Custom Field class for the Joomla Framework.
@@ -49,12 +53,12 @@ class JFormFieldTrackcategory extends JFormFieldList
 	{
 		// Initialize variables.
 		$options = array();
-		//$options[] = array('value' => "", 'text' => JText::_('COM_JTG_CAT_SELECT')); 
+		//$options[] = array('value' => "", 'text' => Text::_('COM_JTG_CAT_SELECT')); 
 
-		$db	= JFactory::getDbo();
+		$db	= Factory::getDbo();
 		$query	= $db->getQuery(true);
 
-		$query->select('id As value, title As text');
+		$query->select('a.id As value, a.title As text');
 		$query->from('#__jtg_cats AS a');
 		$query->order('a.ordering');
 		$query->where('published = 1');
@@ -64,7 +68,7 @@ class JFormFieldTrackcategory extends JFormFieldList
 
 		$optionsdb = $db->loadObjectList();
 		foreach ($optionsdb as $key => &$option) {
-			$option->text = JText::_($option->text);
+			$option->text = Text::_($option->text);
 		}
 		$options = array_merge($options, $optionsdb);
 

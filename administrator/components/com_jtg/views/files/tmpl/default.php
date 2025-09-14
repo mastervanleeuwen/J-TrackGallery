@@ -17,25 +17,29 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-use Joomla\CMS\Layout\FileLayout;
-use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Uri\Uri;
 
 // Toolbar
-JToolBarHelper::title(JText::_('COM_JTG_GPS_FILES'), 'categories.png');
-JToolBarHelper::back();
-JToolBarHelper::spacer();
-$bar = JToolBar::getInstance('toolbar');
-$folder = JUri::base() . 'index.php?option=com_jtg&tmpl=component&controller=files&task=upload';
+ToolbarHelper::title(Text::_('COM_JTG_GPS_FILES'), 'categories.png');
+ToolbarHelper::back();
+ToolbarHelper::spacer();
+$bar= Toolbar::getInstance('toolbar');
+$folder = Uri::base() . 'index.php?option=com_jtg&tmpl=component&controller=files&task=upload';
 $bar->appendButton('Popup', 'upload', 'COM_JTG_UPLOAD_TRACKS', $folder, 550, 400);
 
 // Normal Window:
-JToolBarHelper::addNew('newfiles', $alt = 'COM_JTG_IMPORT_FILES');
-JToolBarHelper::publish();
-JToolBarHelper::unpublish();
-JToolBarHelper::custom('toshow', 'toshow', null, $alt = 'COM_JTG_TOSHOW_SMALL');
-JToolBarHelper::custom('tohide', 'tohide', null, $alt = 'COM_JTG_TOHIDE_SMALL');
-JToolBarHelper::deleteList('COM_JTG_VALIDATE_DELETE_ITEMS');
+ToolbarHelper::addNew('newfiles', $alt = 'COM_JTG_IMPORT_FILES');
+ToolbarHelper::publish();
+ToolbarHelper::unpublish();
+ToolbarHelper::custom('toshow', 'toshow', null, $alt = 'COM_JTG_TOSHOW_SMALL');
+ToolbarHelper::custom('tohide', 'tohide', null, $alt = 'COM_JTG_TOHIDE_SMALL');
+ToolbarHelper::deleteList('COM_JTG_VALIDATE_DELETE_ITEMS');
 
 // Add a batch button
 if ($this->canDo->get('core.create') && $this->canDo->get('core.edit')
@@ -48,10 +52,10 @@ if ($this->canDo->get('core.create') && $this->canDo->get('core.edit')
 	$bar->appendButton('Custom', $batchButtonHtml, 'batch');
 }
 
-JToolBarHelper::help('files/default', true);
+ToolbarHelper::help('files/default', true);
 $ordering = ($this->lists['order'] == 'ordering');
-$document = JFactory::getDocument();
-$document->addStyleSheet(JUri::base(true) . '/components/com_jtg/template.css');
+$document = Factory::getDocument();
+$document->addStyleSheet(Uri::base(true) . '/components/com_jtg/template.css');
 
 if (version_compare(JVERSION,'4.0','lt'))
 {
@@ -68,16 +72,16 @@ if (version_compare(JVERSION,'4.0','lt'))
 <form action="" method="post" name="adminForm" id="adminForm">
 	<table>
 		<tr>
-			<td align="left" style="width:100%;"><?php echo JText::_('COM_JTG_FILTER'); ?>:
+			<td align="left" style="width:100%;"><?php echo Text::_('COM_JTG_FILTER'); ?>:
 				<input type="text" class="form-text" name="search" id="search"
 				value="<?php echo $this->lists['search'];?>" class="text_area"
 				onchange="document.adminForm.submit();" />
 				<button class="btn btn-primary" onclick="this.form.submit();">
-					<?php echo JText::_('COM_JTG_APPLY'); ?>
+					<?php echo Text::_('COM_JTG_APPLY'); ?>
 				</button>
 				<button class="btn btn-secondary"
 					onclick="document.getElementById('search').value='';this.form.getElementById('filter_state').value='';this.form.submit();">
-					<?php echo JText::_('COM_JTG_RESET'); ?>
+					<?php echo Text::_('COM_JTG_RESET'); ?>
 				</button>
 			</td>
 			<td nowrap="nowrap"></td>
@@ -94,7 +98,7 @@ if (version_compare(JVERSION,'4.0','lt'))
 			$missingcat = array();
 			$missingterrain = false;
 			$cfg = $this->cfg;
-			$iconpath	= JUri::root() . "components/com_jtg/assets/template/" . $cfg->template . "/images/";
+			$iconpath	= Uri::root() . "components/com_jtg/assets/template/" . $cfg->template . "/images/";
 
 			for ($i = 0, $n = count($this->rows); $i < $n; $i++)
 			{
@@ -104,35 +108,35 @@ if (version_compare(JVERSION,'4.0','lt'))
 				switch ($row->access)
 				{
 					case 9:
-						$access = "<font color='orange'>" . JText::_('COM_JTG_PRIVATE') . "</font>";
+						$access = "<font color='orange'>" . Text::_('COM_JTG_PRIVATE') . "</font>";
 						break;
 
 					case 0:
-						$access = JText::_('COM_JTG_PUBLIC');
+						$access = Text::_('COM_JTG_PUBLIC');
 						break;
 
 					case 1:
-						$access = JText::_('COM_JTG_REGISTERED');
+						$access = Text::_('COM_JTG_REGISTERED');
 						break;
 
 					case 2:
-						$access = JText::_('COM_JTG_ADMINISTRATORS');
+						$access = Text::_('COM_JTG_ADMINISTRATORS');
 						break;
 				}
 
-				$checked 	= JHtml::_('grid.checkedout', $row, $i);
-				$published 	= JHtml::_('jgrid.published', $row->published, $i);
-				$user		= JFactory::getUser($row->uid);
+				$checked 	= HTMLHelper::_('grid.checkedout', $row, $i);
+				$published 	= HTMLHelper::_('jgrid.published', $row->published, $i);
+				$user		= Factory::getUser($row->uid);
 				$imagelink	= $this->buildImageFiletypes($row->istrack, $row->iswp, $row->isroute, $row->iscache);
 
-				$title		= $this->buildEditKlicks(($row->title? $row->title:JText::_('COM_JTG_NO_TITLE')), $i, $row->id);
+				$title		= $this->buildEditKlicks(($row->title? $row->title:Text::_('COM_JTG_NO_TITLE')), $i, $row->id);
 				$hidden		= $row->hidden;
 				$hiddenlink	= $this->buildHiddenImage($iconpath, $hidden, $i);
 				$catids		= explode(",", $row->catid);
 
 				if ( ( $catids === $row->catid ) OR ( $row->catid == "0" ) OR ( $row->catid == "" ) )
 				{
-					$cats = "<font class=\"emptyEntry\">" . JText::_('COM_JTG_NOTHING') . "</font>";
+					$cats = "<font class=\"emptyEntry\">" . Text::_('COM_JTG_NOTHING') . "</font>";
 				}
 				else
 				{
@@ -178,12 +182,12 @@ if (version_compare(JVERSION,'4.0','lt'))
 
 					if ( isset( $tmp[0] ) AND ( $tmp[0]->title ) )
 					{
-						$terrain[] = JText::_($tmp[0]->title);
+						$terrain[] = Text::_($tmp[0]->title);
 					}
 					else
 					{
 						$terrain[] = "<font class=\"errorEntry\">" .
-								JText::sprintf('COM_JTG_ERROR_MISSING_TERRAINID', $v) .
+								Text::sprintf('COM_JTG_ERROR_MISSING_TERRAINID', $v) .
 								"</font>";
 
 						if ( $v != 0 && !empty($v))
@@ -195,7 +199,7 @@ if (version_compare(JVERSION,'4.0','lt'))
 
 				if ( ( isset($terrains[0]) ) AND ( $terrains[0] == "" ) )
 				{
-					$terrain = "<font class=\"emptyEntry\">" . JText::_('JNONE') . "</font>";
+					$terrain = "<font class=\"emptyEntry\">" . Text::_('JNONE') . "</font>";
 				}
 				else
 				{
@@ -231,14 +235,14 @@ if (version_compare(JVERSION,'4.0','lt'))
 		else
 		{
 			$missingcat = "<br /><font class=\"errorEntry\">"
-					. JText::sprintf('COM_JTG_ERROR_MISSING_CATS')
+					. Text::sprintf('COM_JTG_ERROR_MISSING_CATS')
 					. "</font>";
 		}
 
 		if ($missingterrain === true)
 		{
 			$missingterrain = "<br /><font class=\"errorEntry\">"
-					. JText::sprintf('COM_JTG_ERROR_MISSING_TERRAINS')
+					. Text::sprintf('COM_JTG_ERROR_MISSING_TERRAINS')
 					. "</font>";
 		}
 		else
@@ -246,50 +250,50 @@ if (version_compare(JVERSION,'4.0','lt'))
 			$missingterrain = null;
 		}
 
-		$checkall = "<input type=\"checkbox\" onclick=\"Joomla.checkAll(this)\" title=\"" . JText::_('JGLOBAL_CHECK_ALL') . "\" value=\"\" name=\"checkall-toggle\">";
+		$checkall = "<input type=\"checkbox\" onclick=\"Joomla.checkAll(this)\" title=\"" . Text::_('JGLOBAL_CHECK_ALL') . "\" value=\"\" name=\"checkall-toggle\">";
 
 		?>
 		<thead>
 			<tr>
-				<!-- <th class="title"><?php echo JText::_('COM_JTG_NUM'); ?></th> -->
+				<!-- <th class="title"><?php echo Text::_('COM_JTG_NUM'); ?></th> -->
 				<th class="title" nowrap="nowrap"><?php
-				echo JHtml::_('grid.sort',
-						JText::_('COM_JTG_ID'), 'id', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>
+				echo HTMLHelper::_('grid.sort',
+						Text::_('COM_JTG_ID'), 'id', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>:</th>
 				<th class="title"><?php echo $checkall; ?></th>
 				<th class=class="text-center" style="white-space:normal;"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_TITLE') . "<small> (" . JText::_('COM_JTG_GPS_FILE') . ")</small> ",
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_TITLE') . "<small> (" . Text::_('COM_JTG_GPS_FILE') . ")</small> ",
 						'title', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
 				<th class="text-center" style="white-space:normal;"><?php
-				echo JText::_('COM_JTG_GPS_FILETYPE');
+				echo Text::_('COM_JTG_GPS_FILETYPE');
 				?>:</th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_CAT'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_CAT'),
 	'cat', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?>
 					<?php echo $missingcat; ?>
 				</th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_TERRAIN'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_TERRAIN'),
 	'terrain', @$this->lists['order_Dir'], @$this->lists['order'], 'files');
-					if ($missingterrain) JFactory::getApplication()->enqueueMessage('Some terrains are missing from the database','Warning'); ?>
+					if ($missingterrain) Factory::getApplication()->enqueueMessage('Some terrains are missing from the database','Warning'); ?>
 				</th>
 				<th class="text-center" style="white-space:normal;"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_LEVEL'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_LEVEL'),
 						'level', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_DATE'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_DATE'),
 						'date', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_PUBLISHED'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_PUBLISHED'),
 						'published', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
-				<th class="text-center" style="white-space:normal;"><?php echo JText::_('COM_JTG_DEFAULT_MAP'); ?></th>
+				<th class="text-center" style="white-space:normal;"><?php echo Text::_('COM_JTG_DEFAULT_MAP'); ?></th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_HIDDEN'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_HIDDEN'),
 						'hidden', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_ACCESS_LEVEL'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_ACCESS_LEVEL'),
 						'access', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
 				<th class="title"><?php
-				echo JHtml::_('grid.sort', JText::_('COM_JTG_INFO_AUTHOR'),
+				echo HTMLHelper::_('grid.sort', Text::_('COM_JTG_INFO_AUTHOR'),
 						'uid', @$this->lists['order_Dir'], @$this->lists['order'], 'files'); ?></th>
 			</tr>
 		</thead>
@@ -311,7 +315,7 @@ if (version_compare(JVERSION,'4.0','lt'))
 		value="<?php echo $this->lists['order']; ?>" /> <input type="hidden"
 		name="filter_order_Dir"
 		value="<?php echo $this->lists['order_Dir']; ?>" />
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 	&nbsp;
 </form>
 <?php

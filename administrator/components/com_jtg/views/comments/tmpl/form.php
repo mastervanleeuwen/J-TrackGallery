@@ -18,8 +18,11 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 // Toolbar
-JToolBarHelper::title(JText::_('COM_JTG_EDIT_COMMENT'), 'addedit.png');
+JToolBarHelper::title(Text::_('COM_JTG_EDIT_COMMENT'), 'addedit.png');
 JToolBarHelper::back();
 JToolBarHelper::spacer();
 JToolBarHelper::save('saveComment', $alt = 'COM_JTG_SAVE', 'save.png');
@@ -30,39 +33,39 @@ JToolBarHelper::help('comments/form', true);
 	<table class="adminlist">
 		<thead>
 			<tr>
-				<th colspan="2"><?php echo JText::_('COM_JTG_EDIT_COMMENT'); ?></th>
+				<th colspan="2"><?php echo Text::_('COM_JTG_EDIT_COMMENT'); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_USER'); ?></td>
+				<td><?php echo Text::_('COM_JTG_USER'); ?></td>
 				<td><input type="text" name="user"
 					value="<?php echo $this->comment->user; ?>" size="30"
 					readonly="readonly" />
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_EMAIL'); ?></td>
+				<td><?php echo Text::_('COM_JTG_EMAIL'); ?></td>
 				<td><input type="text" name="email"
 					value="<?php echo $this->comment->email; ?>" size="30"
 					readonly="readonly" />
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_COMMENT_TITLE'); ?></td>
+				<td><?php echo Text::_('COM_JTG_COMMENT_TITLE'); ?></td>
 				<td><input type="text" name="title"
 					value="<?php echo $this->comment->title; ?>" size="30" />
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo JText::_('COM_JTG_COMMENT_TEXT'); ?></td>
+				<td><?php echo Text::_('COM_JTG_COMMENT_TEXT'); ?></td>
 				<td><?php echo $this->editor->display('text', $this->comment->text, '500', '200', '100', '50', true, null); ?>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	<?php
-echo JHtml::_('form.token'); ?>
+echo HTMLHelper::_('form.token'); ?>
 	<input type="hidden" name="option" value="com_jtg" /> <input
 		type="hidden" name="controller" value="comments" /> <input
 		type="hidden" name="task" value="" /> <input type="hidden" name="id"

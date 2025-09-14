@@ -17,6 +17,11 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
 use Joomla\Utilities\ArrayHelper;
 
 jimport('joomla.application.component.controller');
@@ -38,25 +43,10 @@ class JtgControllerMaps extends JtgController
 	function bak__construct()
 	{
 		parent::__construct();
-		$mainframe = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$where = array();
 
-		// Get the pagination request variables
-
-		/*
-		$limit		= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
-		$limitstart	= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
-		*/
-
-		// In case limit has been changed, adjust limitstart accordingly
-
-		/*
-		$limitstart = ($limit != 0 ? (floor($limitstart / $limit) * $limit) : 0);
-		$limitstart = JFactory::getApplication()->input->get('limitstart',0);
-		$this->setState('limit', $limit);
-		$this->setState('limitstart', $limitstart);
-		*/
-		$filter_state = $mainframe->getUserStateFromRequest($this->option . 'filter_state', 'filter_state', '', 'word');
+		$filter_state = $app->getUserStateFromRequest($this->option . 'filter_state', 'filter_state', '', 'word');
 
 		if ( $filter_state )
 		{
@@ -71,10 +61,10 @@ class JtgControllerMaps extends JtgController
 		}
 
 		$where = ' WHERE ' . implode(' AND ', $where);
-		$search = JFactory::getApplication()->input->get('search', true);
-		$layout = JFactory::getApplication()->input->get('layout', true);
-		$task = JFactory::getApplication()->input->get('task', true);
-		$controller = JFactory::getApplication()->input->get('controller', true);
+		$search = Factory::getApplication()->input->get('search', true);
+		$layout = Factory::getApplication()->input->get('layout', true);
+		$task = Factory::getApplication()->input->get('task', true);
+		$controller = Factory::getApplication()->input->get('controller', true);
 	}
 
 	/**
@@ -85,12 +75,12 @@ class JtgControllerMaps extends JtgController
 	function orderup()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('maps');
 		$model->move(-1);
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=maps&controller=maps', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=maps&controller=maps', false));
 	}
 
 	/**
@@ -101,12 +91,12 @@ class JtgControllerMaps extends JtgController
 	function orderdown()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('maps');
 		$model->move(1);
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=maps&controller=maps', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=maps&controller=maps', false));
 	}
 
 	/**
@@ -117,17 +107,17 @@ class JtgControllerMaps extends JtgController
 	function saveorder()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid 	= JFactory::getApplication()->input->get('cid', array(), 'array');
-		$order 	= JFactory::getApplication()->input->get('order', array(), 'array');
+		$cid 	= Factory::getApplication()->input->get('cid', array(), 'array');
+		$order 	= Factory::getApplication()->input->get('order', array(), 'array');
 		ArrayHelper::toInteger($cid);
 		ArrayHelper::toInteger($order);
 
 		$model = $this->getModel('map');
 		$model->saveorder($order, $cid);
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=maps&controller=maps', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=maps&controller=maps', false));
 	}
 
 	/**
@@ -138,14 +128,14 @@ class JtgControllerMaps extends JtgController
 	function publish()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_PUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_PUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('maps');
@@ -155,7 +145,7 @@ class JtgControllerMaps extends JtgController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=maps&controller=maps', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=maps&controller=maps', false));
 	}
 
 	/**
@@ -166,14 +156,14 @@ class JtgControllerMaps extends JtgController
 	function unpublish()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_UNPUBLISH'), 'Error');
 		}
 
 		$model = $this->getModel('maps');
@@ -183,7 +173,7 @@ class JtgControllerMaps extends JtgController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=maps&controller=maps', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=maps&controller=maps', false));
 	}
 
 	/**
@@ -194,14 +184,14 @@ class JtgControllerMaps extends JtgController
 	function remove()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
 
 		if (count($cid) < 1)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_SELECT_AN_ITEM_TO_DELETE'), 'Error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_SELECT_AN_ITEM_TO_DELETE'), 'Error');
 		}
 
 		$model = $this->getModel('maps');
@@ -211,7 +201,7 @@ class JtgControllerMaps extends JtgController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=maps&controller=maps', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=maps&controller=maps', false));
 	}
 
 	/**
@@ -222,7 +212,7 @@ class JtgControllerMaps extends JtgController
 	function savemap()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('maps');
 		$savemap = $model->saveMap();
@@ -232,7 +222,7 @@ class JtgControllerMaps extends JtgController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=maps&controller=maps', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=maps&controller=maps', false));
 	}
 
 	/**
@@ -243,7 +233,7 @@ class JtgControllerMaps extends JtgController
 	function savemaps()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('maps');
 
@@ -252,7 +242,7 @@ class JtgControllerMaps extends JtgController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=maps&controller=maps', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=maps&controller=maps', false));
 	}
 
 	/**
@@ -263,7 +253,7 @@ class JtgControllerMaps extends JtgController
 	function updatemap()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('maps');
 
@@ -272,6 +262,6 @@ class JtgControllerMaps extends JtgController
 			echo "<script> alert('" . $model->getError(true) . "'); window.history.go(-1); </script>\n";
 		}
 
-		$this->setRedirect(JRoute::_('index.php?option=com_jtg&task=maps&controller=maps', false));
+		$this->setRedirect(Route::_('index.php?option=com_jtg&task=maps&controller=maps', false));
 	}
 }

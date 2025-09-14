@@ -18,6 +18,11 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 jimport('joomla.application.component.view');
 require_once JPATH_COMPONENT . '/helpers/maphelper.php';
 
@@ -40,31 +45,30 @@ class JtgViewjtg extends JViewLegacy
 	public function display($tpl = null)
 	{
 		// ToDo split in jtg and geoposition
-		$mainframe = JFactory::getApplication();
-		$cfg = JtgHelper::getConfig();
-		$gpsData = new GpsDataClass;
-		$document = $mainframe->getDocument();
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$uid = $user->id;
-		jimport('joomla.filesystem.file');
+
+		$app = Factory::getApplication();
 
 		// Load Openlayers stylesheet first (for overriding)
+		$document = Factory::getDocument();
+		$cfg = JtgHelper::getConfig();
 		$tmpl = strlen($cfg->template) ? $cfg->template : 'default';
-		$document->addStyleSheet(JUri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
-		if (version_compare(JVERSION, '4.0', 'lt')) $document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/filter_box_j3.css');
+		$document->addStyleSheet(Uri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
+		if (version_compare(JVERSION, '4.0', 'lt')) $document->addStyleSheet(Uri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/filter_box_j3.css');
 		// Then load jtg_map stylesheet
-		$document->addStyleSheet(JUri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
+		$document->addStyleSheet(Uri::root(true) . '/components/com_jtg/assets/template/' . $tmpl . '/jtg_map_style.css');
 
 		// Then override style with user templates
-		$template = $mainframe->getTemplate();
+		$template = $app->getTemplate();
 		$template_jtg_map_style = 'templates/' . $template . '/css/jtg_map_style.css';
 
-		if ( JFile::exists($template_jtg_map_style))
+		if ( File::exists($template_jtg_map_style))
 		{
-			$document->addStyleSheet(JUri::root(true) . '/templates/' . $template . '/css/jtg_map_style.css');
+			$document->addStyleSheet(Uri::root(true) . '/templates/' . $template . '/css/jtg_map_style.css');
 		}
 
-		$sitename = $document->getTitle() . " - " . $mainframe->getCfg('sitename');
+		$sitename = $document->getTitle() . " - " . $app->getCfg('sitename');
 		$mapsxml = JPATH_COMPONENT_ADMINISTRATOR . '/views/maps/maps.xml';
 		$this->params_maps = new JRegistry('com_jtg', $mapsxml);
 		$params = JComponentHelper::getParams('com_jtg');
@@ -73,23 +77,23 @@ class JtgViewjtg extends JViewLegacy
 		// Show Tracks in Overview-Map?
 		$showtracks = (bool) $params->get('jtg_param_tracks');
 
-		$catid = (JFactory::getApplication()->input->getInt('cat', null)); // get category ID
+		$catid = (Factory::getApplication()->input->getInt('cat', null)); // get category ID
 		$model = $this->getModel();
 		$cats = $model->getCatsData(false, $catid);
 		$sortedcats = $model->getCatsData(true, $catid);
 		$where = LayoutHelper::filterTracks($cats);
 		if (count($cats) == 0) {
-			$mainframe->enqueueMessage(JText::_('COM_JTG_CAT_NOT_FOUND'));
+			$app->enqueueMessage(Text::_('COM_JTG_CAT_NOT_FOUND'));
 		}
 
 		$access = JtgHelper::giveAccessLevel(); // User access level
 		$otherfiles = $params->get('jtg_param_otherfiles');// Access level defined in backend
 		$mayisee = JtgHelper::MayIsee($where, $access, $otherfiles);
 		$boxlinktext = array(
-				0 => JText::_('COM_JTG_LINK_VIEWABLE_FOR_PUBLIC'),
-				1 => JText::_('COM_JTG_LINK_VIEWABLE_FOR_REGISTERED'),
-				2 => JText::_('COM_JTG_LINK_VIEWABLE_FOR_SPECIAL'),
-				9 => JText::_('COM_JTG_LINK_VIEWABLE_FOR_PRIVATE')
+				0 => Text::_('COM_JTG_LINK_VIEWABLE_FOR_PUBLIC'),
+				1 => Text::_('COM_JTG_LINK_VIEWABLE_FOR_REGISTERED'),
+				2 => Text::_('COM_JTG_LINK_VIEWABLE_FOR_SPECIAL'),
+				9 => Text::_('COM_JTG_LINK_VIEWABLE_FOR_PRIVATE')
 		);
 
 		$lh = '';
@@ -102,7 +106,7 @@ class JtgViewjtg extends JViewLegacy
 		{
 			$lh = null;
 		}
-		if (JFactory::getApplication()->input->getBool('introtext'))
+		if (Factory::getApplication()->input->getBool('introtext'))
 		{
 			$intro_text = $params->get('intro_text_overview');
 			if (strlen($intro_text))
@@ -165,7 +169,7 @@ class JtgViewjtg extends JViewLegacy
 				break;
 		}
 
-		if ($mainframe->getParams()->get('dpcallocs_overview'))
+		if ($app->getParams()->get('dpcallocs_overview'))
 		{
 			// Get locations from DPCalendar
 			$dpcalmodel = $this->getModel("DPCalLocations");
@@ -173,7 +177,7 @@ class JtgViewjtg extends JViewLegacy
 		}
 		else $this->dpcallocs = array();
 
-		$zoomlevel = $mainframe->input->getInt('map_zoom',$mainframe->getParams()->get('map_zoom'));
+		$zoomlevel = $app->input->getInt('map_zoom',$app->getParams()->get('map_zoom'));
 		if (empty($zoomlevel)) $zoomlevel = 6;
 		$this->lh = $lh;
 		$this->boxlinktext = $boxlinktext;

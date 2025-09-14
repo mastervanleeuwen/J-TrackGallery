@@ -18,13 +18,18 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-JToolBarHelper::title(JText::_('COM_JTG_TRANSLATIONS'), 'categories.png');
-JToolBarHelper::back();
-JToolBarHelper::save('saveLanguages', $alt = 'COM_JTG_SAVE', 'save.png');
-JToolBarHelper::help('translations', true);
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
+ToolbarHelper::title(Text::_('COM_JTG_TRANSLATIONS'), 'categories.png');
+ToolbarHelper::back();
+ToolbarHelper::save('saveLanguages', $alt = 'COM_JTG_SAVE', 'save.png');
+ToolbarHelper::help('translations', true);
 
 jimport('joomla.html.html.tabs');
-$document = JFactory::getDocument();
+$document = Factory::getDocument();
 $style = '
 dt.tabs h3
 {
@@ -137,7 +142,7 @@ if (version_compare(JVERSION,'4.0','lt'))
 		type="hidden" name="task" value="" /> <input type="hidden"
 		name="boxchecked" value="0" /> <input type="hidden" name="controller"
 		value="translations" />
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 </form>
 <?php
 if (version_compare(JVERSION,'4.0','lt'))

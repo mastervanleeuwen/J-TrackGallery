@@ -18,6 +18,11 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session;
 use Joomla\Utilities\ArrayHelper;
 
 /**
@@ -37,8 +42,8 @@ class JtgModelCat extends JModelLegacy
 	{
 		parent::__construct();
 
-		$cids = JFactory::getApplication()->input->get('cid', array(), 'array');
-		$edit	= JFactory::getApplication()->input->get('edit', true);
+		$cids = Factory::getApplication()->input->get('cid', array(), 'array');
+		$edit	= Factory::getApplication()->input->get('edit', true);
 
 		if ($edit && isset($cids[0]))
 		{
@@ -53,9 +58,9 @@ class JtgModelCat extends JModelLegacy
 	 */
 	function saveCatImage()
 	{
-		JSession::checkToken() or die( 'JINVALID_TOKEN' );
+		Session::checkToken() or die( 'JINVALID_TOKEN' );
 		jimport('joomla.filesystem.file');
-		$files = JFactory::getApplication()->input->files->get('files');
+		$files = Factory::getApplication()->input->files->get('files');
 
 		return $this->uploadCatImage($files);
 	}
@@ -157,7 +162,7 @@ class JtgModelCat extends JModelLegacy
 	 */
 	function publish($cid = array(), $publish = 1)
 	{
-		$user 	= JFactory::getUser();
+		$user 	= Factory::getUser();
 
 		if (count($cid))
 		{
@@ -197,7 +202,7 @@ class JtgModelCat extends JModelLegacy
 
 		foreach ($files as $file)
 		{
-			if (!JFile::delete($path . $file))
+			if (!File::delete($path . $file))
 			{
 				$return = false;
 			}
@@ -239,7 +244,7 @@ class JtgModelCat extends JModelLegacy
 
 			foreach ($rows as $row)
 			{
-				JFile::delete(JPATH_SITE . '/images/jtrackgallery/cats/' . $row->image);
+				File::delete(JPATH_SITE . '/images/jtrackgallery/cats/' . $row->image);
 			}
 
 			// Delete from DB
@@ -265,23 +270,21 @@ class JtgModelCat extends JModelLegacy
 	 */
 	function saveCat()
 	{
-		$mainframe = JFactory::getApplication();
-
 		// Check the token
-		JSession::checkToken() or die( 'JINVALID_TOKEN' );
+		Session::checkToken() or die( 'JINVALID_TOKEN' );
 		jimport('joomla.filesystem.file');
 
 		$db = $this->getDbo();
-		$title = JFactory::getApplication()->input->get('title', '', 'string');
+		$title = Factory::getApplication()->input->get('title', '', 'string');
 
 		if ( $title == "" )
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_NO_TITLE'), 'Warning');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_NO_TITLE'), 'Warning');
 
 			return false;
 		}
 
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$published = $input->getInt('publish');
 		$desc = $input->get('desc', '', 'string');
 
@@ -330,30 +333,30 @@ class JtgModelCat extends JModelLegacy
 
 		if ($file['name'] != "")
 		{
-			$file['ext'] = JFile::getext($file['name']);
+			$file['ext'] = File::getext($file['name']);
 			$config = JtgHelper::getConfig();
 			$allowedimages = $config->type;
 			$allowedimages = explode(',', $allowedimages);
 
 			if ( !in_array($file['ext'], $allowedimages) )
 			{
-				JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_JTG_NOTALLOWED_FILETYPE', $file['ext']), 'Warning');
+				Factory::getApplication()->enqueueMessage(Text::sprintf('COM_JTG_NOTALLOWED_FILETYPE', $file['ext']), 'Warning');
 
 				return false;
 			}
 
 			$upload_dir = JPATH_SITE . "/images/jtrackgallery/cats/";
-			$filename = JFile::makeSafe(strtolower($file['name']));
+			$filename = File::makeSafe(strtolower($file['name']));
 
-			if (JFile::exists($upload_dir . $filename))
+			if (File::exists($upload_dir . $filename))
 			{
-				JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_CATPIC_ALLREADYEXIST'), 'Warning');
+				Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_CATPIC_ALLREADYEXIST'), 'Warning');
 
 				return false;
 			}
 			else
 			{
-				$upload = JFile::upload($file['tmp_name'], $upload_dir . $filename);
+				$upload = File::upload($file['tmp_name'], $upload_dir . $filename);
 
 				if (!$upload)
 				{
@@ -378,15 +381,13 @@ class JtgModelCat extends JModelLegacy
 	 */
 	function updateCat()
 	{
-		$mainframe = JFactory::getApplication();
-
 		// Check the token
-		JSession::checkToken() or die( 'JINVALID_TOKEN' );
+		Session::checkToken() or die( 'JINVALID_TOKEN' );
 		jimport('joomla.filesystem.file');
 
 		$db = $this->getDbo();
 
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$id = $input->getInt('id');
 		$file = $input->files->get('image');
 		$title = $input->get('title', '', 'string');
@@ -396,7 +397,7 @@ class JtgModelCat extends JModelLegacy
 
 		if ( $title == "" )
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_JTG_NO_TITLE'), 'Warning');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_JTG_NO_TITLE'), 'Warning');
 
 			return false;
 		}
