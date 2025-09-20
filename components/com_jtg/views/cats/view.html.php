@@ -18,10 +18,11 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.view');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+
+use Jtg\Component\Jtg\Site\Helpers\LayoutHelper;
 
 /**
  * HTML View class for the jtg component
@@ -30,7 +31,7 @@ use Joomla\CMS\Language\Text;
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgViewCats extends JViewLegacy
+class JtgViewCats extends HtmlView
 {
 	/**
 	 * function_description

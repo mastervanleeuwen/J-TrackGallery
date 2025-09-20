@@ -18,8 +18,12 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+use Jtg\Component\Jtg\Site\Helpers\JtgMapHelper;
 
 $this->get('State'); // have to get state before we can set state variables
 $this->getModel()->setState('list.limit','0'); // show all tracks
@@ -100,7 +104,7 @@ else
 	<div class="row-fluid">
 		<div class="span12">
 		<?php
-			echo JLayoutHelper::render(
+			echo LayoutHelper::render(
 				'joomla.searchtools.default',
 				array('view' => $this)
 			);

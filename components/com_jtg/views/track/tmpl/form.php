@@ -19,12 +19,14 @@
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\Factory;
-use Joomla\CMS\HTML\Helper\Bootstrap;
+use Joomla\CMS\HTML\Helpers\Bootstrap;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Form\Field\TagField;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 //
 // This form has three states or modes:

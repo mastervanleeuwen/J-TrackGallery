@@ -16,6 +16,8 @@
  *
  */
 
+namespace Jtg\Component\Jtg\Site\Helpers;
+
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
@@ -25,6 +27,8 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 /*
  *  Helper class for mapping functios

@@ -26,6 +26,7 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Language\LanguageHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Session\Session;
 
 /**
@@ -35,7 +36,7 @@ use Joomla\CMS\Session\Session;
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgModelTranslations extends JModelLegacy
+class JtgModelTranslations extends BaseDatabaseModel
 {
 	/**
 	 * function_description

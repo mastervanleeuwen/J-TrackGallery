@@ -18,11 +18,9 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-// Import Joomla! libraries
-jimport('joomla.application.component.view');
-
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\Utilities\ArrayHelper;
 
 /**
@@ -33,7 +31,7 @@ use Joomla\Utilities\ArrayHelper;
  * @since       0.8
  */
 
-class JtgViewComments extends JViewLegacy
+class JtgViewComments extends HtmlView
 {
 	/**
 	 * function_description

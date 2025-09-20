@@ -20,9 +20,13 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+use Jtg\Component\Jtg\Site\Helpers\LayoutHelper as JtgLayoutHelper;
 
 // Load core.js to enable tableordering
 HTMLHelper::_('script', 'system/core.js', false, true);
@@ -74,7 +78,7 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 	<div class="row-fluid">
             <div class="span12">
                 <?php
-                    echo JLayoutHelper::render(
+                    echo LayoutHelper::render(
                         'joomla.searchtools.default',
                         array('view' => $this)
                     );
@@ -188,8 +192,7 @@ if (version_compare(JVERSION, '4.0', 'lt'))
 				}
 				$terrain = JtgHelper::parseMoreTerrains($this->sortedter, $row->terrain, "list", true);
 				$hits = JtgHelper::getLocatedFloat($row->hits, 0);
-				$layoutHelper = new LayoutHelper;
-				$votes = $layoutHelper->parseVoteFloat($row->vote, false);
+				$votes = JtgLayoutHelper::parseVoteFloat($row->vote, false);
 				$links = null;
 				$imagelink = $this->buildImageFiletypes($row->istrack, $row->iswp, $row->isroute, $row->iscache, $row->isroundtrip, $iconheight,
 						$hide_icon_istrack, $hide_icon_is_wp, 0, $hide_icon_isgeocache, $hide_icon_isroundtrip);

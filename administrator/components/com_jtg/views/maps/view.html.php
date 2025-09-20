@@ -20,10 +20,10 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
-
-// Import Joomla! libraries
-jimport('joomla.application.component.view');
+use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\String\StringHelper;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 /**
  * JtgViewMaps class for the jtg component
@@ -33,7 +33,7 @@ use Joomla\String\StringHelper;
  * @since       0.8
  */
 
-class JtgViewMaps extends JViewLegacy
+class JtgViewMaps extends HtmlView 
 {
 	/**
 	 * function_description
@@ -52,7 +52,6 @@ class JtgViewMaps extends JViewLegacy
 			$this->_displayForm($tpl);
 		}
 
-		jimport('joomla.filesystem.file');
 		$config = JtgHelper::getConfig();
 		$model = $this->getModel();
 		$total = $model->getTotal();

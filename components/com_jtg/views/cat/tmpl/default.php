@@ -19,9 +19,14 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+use Jtg\Component\Jtg\Site\Helpers\JtgMapHelper;
+use Jtg\Component\Jtg\Site\Helpers\LayoutHelper as JtgLayoutHelper;
 
 // Load core.js to enable tableordering
 HTMLHelper::_('script', 'system/core.js', false, true);
@@ -141,7 +146,7 @@ if ($this->params->get('jtg_param_cat_filterbox', 1)) {
 	<div class="row-fluid"<?php echo ' '.$addborder; ?>>
             <div class="span12">
                 <?php
-                    echo JLayoutHelper::render(
+                    echo LayoutHelper::render(
                         'joomla.searchtools.default',
                         array('view' => $this)
                     );
@@ -229,8 +234,7 @@ if ($this->params->get('jtg_param_cat_filterbox', 1)) {
 				$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $row->id, false);
 				$profile = JtgHelper::getProfileLink($row->uid, $row->user);
 				$terrain = JtgHelper::parseMoreTerrains($this->sortedter, $row->terrain, "list", true);
-				$layoutHelper = new LayoutHelper;
-				$votes = $layoutHelper->parseVoteFloat($row->vote, false);
+				$votes = JtgLayoutHelper::parseVoteFloat($row->vote, false);
 				$links = null;
 				$imagelink = $this->buildImageFiletypes($row->istrack, $row->iswp, $row->isroute, $row->iscache, $row->isroundtrip, $iconheight,
 						$hide_icon_istrack, $hide_icon_is_wp, 0, $hide_icon_isgeocache, $hide_icon_isroundtrip);

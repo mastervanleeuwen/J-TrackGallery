@@ -16,10 +16,11 @@
  */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 /**
  * JtgModelFiles class for the jtg component
@@ -29,9 +30,7 @@ use Joomla\CMS\Language\Text;
  * @since       0.8
  */
 
-
-
-class JtgModelUser extends JModelList
+class JtgModelUser extends ListModel
 {
 	/**
 	 * files data array

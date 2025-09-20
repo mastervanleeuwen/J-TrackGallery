@@ -19,9 +19,6 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-// Import Joomla! libraries
-jimport('joomla.application.component.model');
-
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
@@ -30,6 +27,9 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Table\Table;
 use Joomla\Utilities\ArrayHelper;
+
+use Jtg\Component\Jtg\Site\Helpers\GPSData;
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 /**
  * Model Class Files
@@ -74,10 +74,8 @@ class JtgModelFiles extends AdminModel
 		$id = Factory::getApplication()->input->get('id');
 		$file = Factory::getApplication()->input->get('file');
 		$cfg = JtgHelper::getConfig();
-		jimport('joomla.filesystem.file');
-		require_once '../components/com_jtg/helpers/gpsClass.php';
 		$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $file;
-		$gpsData = new GpsDataClass($file, $file);
+		$gpsData = new GPSData($file, $file);
 
 		if ($gpsData->displayErrors())
 		{
@@ -837,9 +835,6 @@ class JtgModelFiles extends AdminModel
 	function saveFiles()
 	{
 		$app = Factory::getApplication();
-		jimport('joomla.filesystem.file');
-		jimport('joomla.filesystem.folder');
-		require_once '../components/com_jtg/helpers/gpsClass.php';
 		$fileokay = true;
 		$db = $this->getDbo();
 		$user = Factory::getUser();
@@ -926,7 +921,7 @@ class JtgModelFiles extends AdminModel
 				$data['access'] = $input->getInt('access_' . $i);
 
 				// TODO use $target below!!
-				$gpsData = new GpsDataClass($file, $filename);
+				$gpsData = new GPSData($file, $filename);
 				$errors = $gpsData->displayErrors();
 
 				if ($errors)
@@ -1037,9 +1032,6 @@ class JtgModelFiles extends AdminModel
 	function importFromJPT($track)
 	{
 		// TODO Deprecated, can be replacd by import from injooosm
-		jimport('joomla.filesystem.file');
-		jimport('joomla.filesystem.folder');
-		require_once '../components/com_jtg/helpers/gpsClass.php';
 		$db = $this->getDbo();
 		$fileokay = false;
 		$targetdir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
@@ -1183,9 +1175,6 @@ class JtgModelFiles extends AdminModel
 	function saveFile()
 	{
 		$app = Factory::getApplication();
-		jimport('joomla.filesystem.file');
-		jimport('joomla.filesystem.folder');
-		require_once '../components/com_jtg/helpers/gpsClass.php';
 
 		$db = $this->getDbo();
 		$user = Factory::getUser();
@@ -1271,7 +1260,7 @@ class JtgModelFiles extends AdminModel
 
 		// Get the start coordinates
 		$file = $upload_dir . $target;
-		$gpsData = new GpsDataClass($file, $target);
+		$gpsData = new GPSData($file, $target);
 		$errors = $gpsData->displayErrors();
 
 		if ($errors)
@@ -1362,11 +1351,8 @@ class JtgModelFiles extends AdminModel
 	{
 		/* under construction */
 		// TODO DEPRECATED
-		jimport('joomla.filesystem.file');
-		jimport('joomla.filesystem.folder');
 		$importfiles = $this->_fetchJPTfiles;
 		$app = Factory::getApplication();
-		require_once '../components/com_jtg/helpers/gpsClass.php';
 		$fileokay = true;
 		$db = $this->getDbo();
 		$user = Factory::getUser();
@@ -1557,9 +1543,6 @@ class JtgModelFiles extends AdminModel
 	function updateFile()
 	{
 		$app = Factory::getApplication();
-		jimport('joomla.filesystem.file');
-		jimport('joomla.filesystem.folder');
-		require_once '../components/com_jtg/helpers/gpsClass.php';
 
 		$db = $this->getDbo();
 		$user = Factory::getUser();

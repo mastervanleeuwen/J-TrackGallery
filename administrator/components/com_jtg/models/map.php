@@ -19,6 +19,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\ItemModel;
 
 /**
  * Model Class Categorie
@@ -27,7 +28,7 @@ use Joomla\CMS\Factory;
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgModelMAp extends JModelLegacy
+class JtgModelMap extends ItemModel
 {
 	/**
 	 * function_description

@@ -18,15 +18,19 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Uri\Uri;
 
-jimport('joomla.application.component.view');
-require_once JPATH_COMPONENT . '/helpers/maphelper.php';
+use Jtg\Component\Jtg\Site\Helpers\GPSData;
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+use Jtg\Component\Jtg\Site\Helpers\JtgMapHelper;
+use Jtg\Component\Jtg\Site\Helpers\LayoutHelper;
 
 /**
- * JtgViewTrack class @ see JViewLegacy
+ * JtgViewTrack class
  * HTML View class for the jtg component
  *
  * Returns the specified model
@@ -35,7 +39,7 @@ require_once JPATH_COMPONENT . '/helpers/maphelper.php';
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgViewTrack extends JViewLegacy
+class JtgViewTrack extends HtmlView
 {
 	/**
 	 * Returns true|false if user is allowed to see the file
@@ -208,7 +212,7 @@ class JtgViewTrack extends JViewLegacy
 				return false;
 			}
 			$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . strtolower($this->track->file);
-			$gpsData = new GpsDataClass($file, $this->track->file);
+			$gpsData = new GPSData($file, $this->track->file);
 			$this->imageList = $model->getImages($this->id);
 			$this->mapJS = '';
 			if (!$gpsData->displayErrors())
@@ -249,7 +253,7 @@ class JtgViewTrack extends JViewLegacy
 				}
 			}
 			else {
-				$gpsData = new GpsDataClass;
+				$gpsData = new GPSData;
 				$this->tags = null;
 			}
 		}
@@ -268,7 +272,7 @@ class JtgViewTrack extends JViewLegacy
 			$this->menubar = null;
 		}
 
-		$this->canDo = JHelperContent::getActions('com_jtg');
+		$this->canDo = ContentHelper::getActions('com_jtg');
 		$this->model = $model;
 
 		parent::display($tpl);

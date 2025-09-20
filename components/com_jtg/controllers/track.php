@@ -25,6 +25,8 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+
 /**
  * JtgControllerFiles class for the jtg component
  *

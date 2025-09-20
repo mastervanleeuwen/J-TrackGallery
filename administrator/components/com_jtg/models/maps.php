@@ -18,11 +18,9 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-// Import Joomla! libraries
-jimport('joomla.application.component.model');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\Utilities\ArrayHelper;
 
 /**
@@ -33,7 +31,7 @@ use Joomla\Utilities\ArrayHelper;
  * @since       0.8
  */
 
-class JtgModelMaps extends JModelLegacy
+class JtgModelMaps extends ListModel
 {
 	/**
 	 * Pagination object

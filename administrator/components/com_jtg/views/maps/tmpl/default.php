@@ -22,6 +22,8 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
+use Jtg\Component\Jtg\Site\Helpers\JtgMapHelper;
+
 // Toolbar
 ToolbarHelper::title(Text::_('COM_JTG_MAPS'), 'generic.png');
 ToolbarHelper::back();

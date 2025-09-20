@@ -22,8 +22,11 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Model\ItemModel;
 use Joomla\CMS\Session\Session;
 use Joomla\Utilities\ArrayHelper;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 /**
  * Model Class Categorie
@@ -32,7 +35,7 @@ use Joomla\Utilities\ArrayHelper;
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgModelCat extends JModelLegacy
+class JtgModelCat extends ItemModel
 {
 	/**
 	 * function_description

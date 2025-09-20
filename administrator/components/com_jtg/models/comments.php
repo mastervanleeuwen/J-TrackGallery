@@ -18,11 +18,10 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-// Import Joomla! libraries
-jimport('joomla.application.component.model');
-
 use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\Utilities\ArrayHelper;
+
 /**
  * JtgModelComments class for the jtg component
  *
@@ -31,7 +30,7 @@ use Joomla\Utilities\ArrayHelper;
  * @since       0.8
  */
 
-class JtgModelComments extends JModelLegacy
+class JtgModelComments extends ListModel
 {
 	/**
 	 * function_description

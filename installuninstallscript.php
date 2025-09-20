@@ -34,6 +34,8 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Version;
 
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+
 /**
  * Installer class for the jtg component
  *
@@ -443,8 +445,8 @@ class Com_JtgInstallerScript
 							$exif = exif_read_data($cur_img_dir.'/'.$fname);
 			   	   	if ( isset($exif['GPSLatitude']))
 			      		{
-			         		$lon = jtgHelper::getGpsFromExif($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
-			         		$lat = jtgHelper::getGpsFromExif($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
+			         		$lon = JtgHelper::getGpsFromExif($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
+			         		$lat = JtgHelper::getGpsFromExif($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
 		   		      	$query .= ",\n lon='".$lon."',\n lat='".$lat."'";
   		 	   			}
 

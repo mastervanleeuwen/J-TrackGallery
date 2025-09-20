@@ -17,8 +17,10 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.controller');
 use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\BaseController;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 /**
  * class JtgControllerfor the jtg component
@@ -27,7 +29,7 @@ use Joomla\CMS\Factory;
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgController extends JControllerLegacy
+class JtgController extends BaseController
 {
 	/**
 	 * function_description
@@ -52,8 +54,6 @@ class JtgController extends JControllerLegacy
 	public function display($cachable = false, $urlparams = false)
 	{
 		require_once JPATH_COMPONENT . '/helpers/jtg.php';
-
-		// JtgHelper::updateReset();
 
 		// Load the submenu.
 		JtgHelper::addSubmenu($this->getTask());

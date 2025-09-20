@@ -25,6 +25,9 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+use Jtg\Component\Jtg\Site\Helpers\JtgMapHelper;
+
 $app = Factory::getApplication();
 $sitename = $app->getCfg('sitename');
 $document = Factory::getDocument();

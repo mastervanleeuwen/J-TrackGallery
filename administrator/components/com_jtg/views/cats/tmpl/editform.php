@@ -21,6 +21,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Uri\Uri;
 
 ToolbarHelper::title(Text::_('COM_JTG_EDIT_CAT'), 'categories.png');
 ToolbarHelper::back();

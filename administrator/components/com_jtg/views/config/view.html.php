@@ -21,10 +21,11 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Uri\Uri;
 
-// Import Joomla! libraries
-jimport('joomla.application.component.view');
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+
 /**
  * JtgViewConfig class for the jtg component
  *
@@ -33,7 +34,7 @@ jimport('joomla.application.component.view');
  * @since       0.8
  */
 
-class JtgViewConfig extends JViewLegacy
+class JtgViewConfig extends HtmlView
 {
 	/**
 	 * function_description
@@ -44,8 +45,6 @@ class JtgViewConfig extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		jimport('joomla.filesystem.file');
-		jimport('joomla.filesystem.folder');
 		$config = JtgHelper::getConfig();
 
 		$captcha = JtgHelper::checkCaptcha();

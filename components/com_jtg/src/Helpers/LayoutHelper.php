@@ -15,11 +15,14 @@
  *
  */
 
+namespace Jtg\Component\Jtg\Site\Helpers;
+
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
@@ -106,7 +109,7 @@ class LayoutHelper
 		if ($user->get('id'))
 		{
 			// Erscheint nur, wenn User kein Gast
-			$canDo = JHelperContent::getActions('com_jtg');
+			$canDo = ContentHelper::getActions('com_jtg');
 			if ( $canDo->get('core.create') )
 			{
 				$navi .= '<div class="navi-part"><a href="' .

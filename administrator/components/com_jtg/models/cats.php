@@ -18,12 +18,10 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-// Import Joomla! libraries
-jimport('joomla.application.component.model');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
 
 /**
  * Model Class Categories
@@ -32,7 +30,7 @@ use Joomla\CMS\Language\Text;
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgModelCats extends JModelLegacy
+class JtgModelCats extends ListModel
 {
 	/**
 	 * Category Images array

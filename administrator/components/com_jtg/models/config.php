@@ -18,12 +18,12 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-// Import Joomla! libraries
-jimport('joomla.application.component.model');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Session\Session;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 /**
  * Model Class Configuration
@@ -32,7 +32,7 @@ use Joomla\CMS\Session\Session;
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgModelConfig extends JModelLegacy
+class JtgModelConfig extends BaseDatabaseModel
 {
 	/**
 	 * function_description

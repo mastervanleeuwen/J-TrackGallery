@@ -18,11 +18,10 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-// Import Joomla! libraries
-jimport('joomla.application.component.model');
-
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 /**
  * function_description
@@ -31,8 +30,6 @@ use Joomla\CMS\Filesystem\Folder;
  */
 function Com_Jtg_Refresh_thumbnails()
 {
-	jimport('joomla.filesystem.folder');
-	jimport('joomla.filesystem.file');
 	$cfg = JtgHelper::getConfig();
 	require_once JPATH_SITE . '/administrator/components/com_jtg/models/thumb_creation.php';
 	$base_dir = JPATH_SITE . '/images/jtrackgallery';

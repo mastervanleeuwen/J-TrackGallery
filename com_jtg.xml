@@ -8,7 +8,7 @@
 	<authorUrl>https://mastervanleeuwen.github.io/J-TrackGallery/</authorUrl>
 	<version>0.9.36</version>
 	<description>COM_JTG_DESCRIPTION</description>
-
+	<namespace path="src">Jtg\Component\Jtg</namespace>
 	<install folder="administrator/components/com_jtg">
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install.sql</file>
@@ -35,8 +35,8 @@
 		<folder>assets</folder>
 		<folder>controllers</folder>
 		<folder>docs</folder>
-		<folder>helpers</folder>
 		<folder>models</folder>
+		<folder>src</folder>
 		<folder>views</folder>
 	</files>
 	<media folder="media">

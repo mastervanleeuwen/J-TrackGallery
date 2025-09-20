@@ -17,7 +17,6 @@
 
 defined('JPATH_BASE') or die;
 
-jimport('joomla.html.html');
 jimport('joomla.form.formfield');
 
 use Joomla\CMS\Factory;
@@ -30,10 +29,10 @@ FormHelper::loadFieldClass('list');
  * Custom Field class for the Joomla Framework.
  *
  * @package		Joomla.Administrator
- * @subpackage	        com_my
+ * @subpackage	        com_jtg
  * @since		1.6
  */
-class JFormFieldTrackcategory extends JFormFieldList
+class JFormFieldTrackcategory extends \JFormFieldList
 {
 	/**
 	 * The form field type.

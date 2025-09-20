@@ -20,21 +20,16 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Uri\Uri;
 
-jimport('joomla.application.component.view');
-
-/*
- * Pagination previously made with J!2.5 pagination
- * jimport('joomla.html.pagination');
- * Now include a modified JPagination class working under J!2.5 and J3.x
- */
-//include_once JPATH_BASE . '/components/com_jtg/views/files/pagination.php';
-
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+use Jtg\Component\Jtg\Site\Helpers\LayoutHelper;
 
 /**
- * JtgViewFiles class @ see JViewLegacy
+ * JtgViewFiles class 
  * HTML View class for the jtg component
  *
  * Returns the specified model
@@ -43,7 +38,7 @@ jimport('joomla.application.component.view');
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgViewFiles extends JViewLegacy
+class JtgViewFiles extends HtmlView
 {
 	/**
 	 * Returns true|false if user is allowed to see the file
@@ -188,7 +183,7 @@ class JtgViewFiles extends JViewLegacy
 			$this->resetFilter($app->input->get('cat'));
 		}
 		$app->setUserState("jtg.files.layout",$this->getLayout());
-		$this->canDo = JHelperContent::getActions('com_jtg');
+		$this->canDo = ContentHelper::getActions('com_jtg');
 
 		if ($this->getLayout() == 'list')
 		{

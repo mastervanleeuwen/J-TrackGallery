@@ -15,9 +15,12 @@
  *
  */
 
+namespace Jtg\Component\Jtg\Site\Helpers;
+
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Language\Text;
@@ -30,7 +33,7 @@ use Joomla\CMS\Uri\Uri;
  * @subpackage  Frontend
  * @since       0.8
  */
-class GpsDataClass
+class GPSData
 {
 	var $gpsFile = null;
 
@@ -242,8 +245,8 @@ class GpsDataClass
 
 		if ($this->ext == 'gpx')
 		{
-			// Open (don't load) GPX xml files using XMLReader
-			$xml = new XMLReader;
+			// Open (don't load) GPX xml files using \XMLReader
+			$xml = new \XMLReader;
 			$xml->open($this->gpsFile);
 		}
 		else
@@ -305,7 +308,7 @@ class GpsDataClass
 	 */
 	private function extractCoordsKML($xml)
 	{
-		// TODO use XMLReader
+		// TODO use \XMLReader
 		$xmldom = new DOMDocument;
 		$xmldom->loadXML($xml->asXML());
 
@@ -373,7 +376,7 @@ class GpsDataClass
 								if ($coordinates)
 								{
 									$coordinatesCount = count($coordinates);
-									$this->track[$this->trackCount] = new stdClass;
+									$this->track[$this->trackCount] = new \stdClass;
 									$this->track[$this->trackCount]->coords[] = $coordinates;
 									$this->track[$this->trackCount]->segCount = 1;
 									$this->track[$this->trackCount]->trackname = ($name? $name : $description);
@@ -504,7 +507,7 @@ class GpsDataClass
 	/**
 	 * function_description
 	 *
-	 * @param   unknown_type  $xmlcontents  XMLreader object
+	 * @param   unknown_type  $xmlcontents  \XMLReader object
 	 *
 	 * @return return_description
 	 */
@@ -522,7 +525,7 @@ class GpsDataClass
 		while ($xmlcontents->read() )
 		{
 			// Check to ensure nodeType is an Element not attribute or #Text
-			if ($xmlcontents->nodeType == XMLReader::ELEMENT)
+			if ($xmlcontents->nodeType == \XMLReader::ELEMENT)
 			{
 				// Start element found
 				$currentElement = $xmlcontents->localName;
@@ -535,7 +538,7 @@ class GpsDataClass
 						$xmlcontents->read();
 						$time = $xmlcontents->value;
 						if ($time) {
-							$dt = new DateTime($time);
+							$dt = new \DateTime($time);
 							$this->Date = $dt->format('Y-m-d');
 						}
 						// Read end tag
@@ -565,7 +568,7 @@ class GpsDataClass
 						{
 							$readok = $xmlcontents->read();
 
-							if ($xmlcontents->nodeType == XMLReader::END_ELEMENT)
+							if ($xmlcontents->nodeType == \XMLReader::END_ELEMENT)
 							{
 								$endWptElement = ($xmlcontents->localName == 'wpt');
 							}
@@ -575,7 +578,7 @@ class GpsDataClass
 							}
 
 							// Extract wpt attributes
-							if ($xmlcontents->nodeType == XMLReader::ELEMENT)
+							if ($xmlcontents->nodeType == \XMLReader::ELEMENT)
 							{
 								$key = $xmlcontents->localName;
 								$readok = $xmlcontents->read();
@@ -590,7 +593,7 @@ class GpsDataClass
 						// Track
 						$i_trk++;
 
-						$curTrack = new stdClass;
+						$curTrack = new \stdClass;
 						$curTrack->description = '';
 						$curTrack->trackname = '';
 						$curTrack->segCount = 0;
@@ -600,12 +603,12 @@ class GpsDataClass
 						{
 							$xmlcontents->read();
 
-							if ($xmlcontents->nodeType == XMLReader::END_ELEMENT && $xmlcontents->localName == 'trk')
+							if ($xmlcontents->nodeType == \XMLReader::END_ELEMENT && $xmlcontents->localName == 'trk')
 							{
 								$endTrkElement = true;
 							}
 							// Extract trk data
-							if ( ($xmlcontents->name == 'name') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
+							if ( ($xmlcontents->name == 'name') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) )
 							{
 								$xmlcontents->read();
 								$curTrack->trackname = $xmlcontents->value;
@@ -613,7 +616,7 @@ class GpsDataClass
 								// Read end tag
 								$xmlcontents->read();
 							}
-							elseif ( ($xmlcontents->name == 'trkseg') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
+							elseif ( ($xmlcontents->name == 'trkseg') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) )
 							{
 								// Trkseg found
 								$endTrksegElement = $xmlcontents->isEmptyElement;
@@ -628,7 +631,7 @@ class GpsDataClass
 								{
 									$readok = $xmlcontents->read();
 
-									if ($xmlcontents->nodeType == XMLReader::END_ELEMENT)
+									if ($xmlcontents->nodeType == \XMLReader::END_ELEMENT)
 									{
 										$endTrksegElement = ($xmlcontents->localName == 'trkseg');
 									}
@@ -637,7 +640,7 @@ class GpsDataClass
 										$endTrksegElement = false;
 									}
 
-									if ( ($xmlcontents->name == 'trkpt') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
+									if ( ($xmlcontents->name == 'trkpt') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) )
 									{
 										// Trkpt found
 
@@ -646,7 +649,7 @@ class GpsDataClass
 										$lon = (float) $xmlcontents->getAttribute('lon');
 									}
 
-									if ( ($xmlcontents->name == 'ele') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
+									if ( ($xmlcontents->name == 'ele') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) )
 									{
 										// Trkpt elevation found
 										$readok = $xmlcontents->read();
@@ -656,13 +659,13 @@ class GpsDataClass
 										$readok = $xmlcontents->read();
 									}
 
-									if ( ($xmlcontents->name == 'time') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
+									if ( ($xmlcontents->name == 'time') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) )
 									{
 										// Trkpt time found
 										$readok = $xmlcontents->read();
 										$time = (string) $xmlcontents->value;
 										if ($this->Date === false && $time) {
-											$dt = new DateTime($time);
+											$dt = new \DateTime($time);
 											$this->Date = $dt->format('Y-m-d');
 										}
 										// Read end tag
@@ -670,7 +673,7 @@ class GpsDataClass
 									}
 
 									// set other elements a la waypoint? (cmt, desc, sym)
-									if ( ($xmlcontents->name == 'trkpt') AND ($xmlcontents->nodeType == XMLReader::END_ELEMENT) )
+									if ( ($xmlcontents->name == 'trkpt') AND ($xmlcontents->nodeType == \XMLReader::END_ELEMENT) )
 									{
 										// End Trkpt
 										$coords[] = array((string) $lon, (string) $lat, (string) $ele, (string) $time, 0);
@@ -712,13 +715,13 @@ class GpsDataClass
 						{
 							$readok = $xmlcontents->read();
 
-							if ($xmlcontents->nodeType == XMLReader::END_ELEMENT && $xmlcontents->localName == 'rte')
+							if ($xmlcontents->nodeType == \XMLReader::END_ELEMENT && $xmlcontents->localName == 'rte')
 							{
 								$endRtElement = true;
 							}
 
 							// Extract rte data
-							if ( ($xmlcontents->name == 'name') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
+							if ( ($xmlcontents->name == 'name') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) )
 							{
 								$readok = $xmlcontents->read();
 								$trackname = $xmlcontents->value;
@@ -726,7 +729,7 @@ class GpsDataClass
 								// Read end tag
 								$readok = $xmlcontents->read();
 							}
-							if ( ($xmlcontents->name == 'rtept') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
+							if ( ($xmlcontents->name == 'rtept') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) )
 							{
 								// Rtept found
 								// Add to trkseg for line drawing and as waypoints
@@ -747,7 +750,7 @@ class GpsDataClass
 								$extensionsFound  = false;
 								while ($readok && !$endRoutePoint)
 								{
-								   if ( ($xmlcontents->name == 'ele') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
+								   if ( ($xmlcontents->name == 'ele') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) )
 								   {
 								      // rtept elevation found
 							   	   $readok = $xmlcontents->read();
@@ -757,7 +760,7 @@ class GpsDataClass
 								      $readok = $xmlcontents->read();
 								   }
 
-								   if ( ($xmlcontents->name == 'time') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
+								   if ( ($xmlcontents->name == 'time') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) )
 								   {
 										// rtept time found
 										$readok = $xmlcontents->read();
@@ -766,11 +769,11 @@ class GpsDataClass
 										// Read end tag
 										$readok = $xmlcontents->read();
 								   }
-								   if ( ($xmlcontents->name == 'extensions') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) ) {
+								   if ( ($xmlcontents->name == 'extensions') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) ) {
 								      // Skip extensions, but push via/shaping point
 								      $extensionsFound = true;
-								      while ( !(($xmlcontents->name == 'extensions') AND ($xmlcontents->nodeType == XMLReader::END_ELEMENT))) {
-								      if ( ($xmlcontents->name == 'gpxx:rpt') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) )
+								      while ( !(($xmlcontents->name == 'extensions') AND ($xmlcontents->nodeType == \XMLReader::END_ELEMENT))) {
+								      if ( ($xmlcontents->name == 'gpxx:rpt') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) )
 										{	
 											$latsub = (float) $xmlcontents->getAttribute('lat');
 											$lonsub = (float) $xmlcontents->getAttribute('lon');
@@ -780,14 +783,14 @@ class GpsDataClass
 									}
 							   }	
 
-							   if ( ($xmlcontents->name != 'time') AND ($xmlcontents->name != 'ele') AND ($xmlcontents->nodeType == XMLReader::ELEMENT) ) {
+							   if ( ($xmlcontents->name != 'time') AND ($xmlcontents->name != 'ele') AND ($xmlcontents->nodeType == \XMLReader::ELEMENT) ) {
 							      $key = $xmlcontents->localName;
 						   	   $readok = $xmlcontents->read();
 						      	$value = $xmlcontents->value;
 							      $curWpt->$key = $value;
 							      $readok = $xmlcontents->read();
 							   }
-							   if ( ($xmlcontents->name == 'rtept') AND ($xmlcontents->nodeType == XMLReader::END_ELEMENT) )
+							   if ( ($xmlcontents->name == 'rtept') AND ($xmlcontents->nodeType == \XMLReader::END_ELEMENT) )
 							   {
 							      // End Rtept
 							      if (!$extensionsFound) 
@@ -811,7 +814,7 @@ class GpsDataClass
 					{
 						// This is a route segment with 2 or more points
 						$this->isRoute = true;
-						$this->route[$this->trackCount] = new stdClass;
+						$this->route[$this->trackCount] = new \stdClass;
 						$this->route[$this->trackCount]->description = '';
 						if ($trackname != '')
 						{
@@ -951,7 +954,7 @@ class GpsDataClass
 	private function addTrackCoords($coords)
 	{
 		// TODO: move this to initialisation ?
-		$params = JComponentHelper::getParams('com_jtg');
+		$params = ComponentHelper::getParams('com_jtg');
 
 		$filterMinAscent = (float) $params->get('jtg_param_elevation_filter_min_ascent');
 		$filterMinAscent = max(0, $filterMinAscent);

@@ -19,15 +19,15 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Uri\Uri;
 
-// Import Joomla! libraries
-jimport('joomla.application.component.view');
-use Joomla\CMS\Editor\Editor;
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 /**
  * JtgViewCats class for the jtg component
@@ -37,7 +37,7 @@ use Joomla\CMS\Editor\Editor;
  * @since       0.8
  */
 
-class JtgViewCats extends JViewLegacy
+class JtgViewCats extends HtmlView
 {
 	/**
 	 * function_description

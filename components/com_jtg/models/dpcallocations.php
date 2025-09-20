@@ -16,13 +16,14 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
+use Joomla\CMS\MVC\Model\ListModel;
+
 /**
  * JtgModeljtg class for the jtg component
  *
  */
 
-class JtgModelDPCalLocations extends JModelList
+class JtgModelDPCalLocations extends ListModel
 {
 	protected function getListQuery() {
 		$db = $this->getDbo();

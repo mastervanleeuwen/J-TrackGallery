@@ -23,6 +23,10 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Uri\Uri;
 
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+use Jtg\Component\Jtg\Site\Helpers\JtgMapHelper;
+use Jtg\Component\Jtg\Site\Helpers\GPSData;
+
 // Toolbar
 if ($this->id < 1)
 {
@@ -75,14 +79,13 @@ if ($this->id >= 1)
 	$model = $this->getModel();
 	$track = $model->getFile($this->id);
 	$document = Factory::getDocument();
-	require_once '../components/com_jtg/helpers/gpsClass.php';
 	$document->addScript( Uri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
 	$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/jtg.js');
 	if ($params->get('jtg_param_disable_map_animated_cursor') == "0") {
 		$document->addScript(Uri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 	}
 	$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $this->track->file;
-	$gpsData = new GpsDataClass($file, $track->file);
+	$gpsData = new GPSData($file, $track->file);
 	$imageList = $model->getImages($this->id);
 
 	if ($gpsData->displayErrors())

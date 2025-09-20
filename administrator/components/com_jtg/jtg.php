@@ -43,12 +43,7 @@ $contr = JPATH_COMPONENT . '/controllers/install.php';
 $model = JPATH_COMPONENT . '/models/install.php';
 
 // Require the base controller
-require_once JPATH_COMPONENT_SITE . '/helpers/helper.php';
-require_once JPATH_COMPONENT_SITE . '/helpers/maphelper.php';
 require_once JPATH_COMPONENT . '/controller.php';
-
-// Load the GpsDataClass
-JLoader::import('components.com_jtg.helpers.gpsClass', JPATH_SITE, 'gpsClass');
 
 // Initialize the controller
 $input = Factory::getApplication()->input;

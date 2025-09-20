@@ -22,6 +22,8 @@ jimport('joomla.application.component.model');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 
+use Jtg\Component\Jtg\Site\Helpers\GPSData;
+
 /**
  * JtgModelDownload class for the jtg component
  *
@@ -68,7 +70,7 @@ class JtgModelDownload extends JModelLegacy
 
 
 		// Default unit
-		$gpsData = new GpsDataClass($file, $track->file);
+		$gpsData = new GPSData($file, $track->file);
 
 		if ($gpsData->displayErrors())
 		{

@@ -28,6 +28,8 @@ use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Utilities\ArrayHelper;
 
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+
 JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jtg/tables');
 
 /**

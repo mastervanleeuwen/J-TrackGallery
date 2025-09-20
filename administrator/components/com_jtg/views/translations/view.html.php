@@ -18,10 +18,8 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-// Import Joomla! libraries
-jimport('joomla.application.component.view');
-
 use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\View\HtmlView;
 
 /**
  * JtgViewTranslations class for the jtg component
@@ -31,7 +29,7 @@ use Joomla\CMS\Factory;
  * @since       0.8
  */
 
-class JtgViewTranslations extends JViewLegacy
+class JtgViewTranslations extends HtmlView
 {
 	/**
 	 * function_description

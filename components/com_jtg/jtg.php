@@ -21,19 +21,21 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+
 global $jtg_microtime;
 $jtg_microtime = microtime(true);
 
 // Require the base controller
 require_once JPATH_COMPONENT . '/controller.php';
+require_once JPATH_COMPONENT . '/src/Helpers/JtgHelper.php'; // Needed for Joomla 3.9?
 
-// Require the base helper
-require_once JPATH_COMPONENT . '/helpers/layout.php';
-require_once JPATH_COMPONENT . '/helpers/helper.php';
-JLoader::register('gpsCLass',
-		'./components/com_jtg/helpers/'
-);
-JLoader::import('components.com_jtg.helpers.gpsClass', JPATH_SITE, 'gpsClass');
+JLoader::registerNamespace('Jtg\Component\Jtg\Site', JPATH_COMPONENT . '/src');
+
+//JLoader::register('gpsCLass',
+//		'./components/com_jtg/helpers/'
+//);
+//JLoader::import('components.com_jtg.helpers.gpsClass', JPATH_SITE, 'gpsClass');
 
 $app = Factory::getApplication();
 $app->getLanguage()->load('com_jtg');

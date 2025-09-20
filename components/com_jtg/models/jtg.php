@@ -19,11 +19,12 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Language\Text;
 use Joomla\Utilities\ArrayHelper;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 /**
  * JtgModeljtg class for the jtg component

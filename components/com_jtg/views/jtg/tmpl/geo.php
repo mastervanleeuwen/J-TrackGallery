@@ -23,6 +23,8 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+
 $document = Factory::getDocument();
 $user = Factory::getUser();
 $userid = (int) $user->id;

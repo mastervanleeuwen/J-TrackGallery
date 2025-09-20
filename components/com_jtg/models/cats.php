@@ -18,11 +18,10 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
 
 /**
  * JtgModelCats class for the jtg component
@@ -32,7 +31,7 @@ use Joomla\CMS\Language\Text;
  * @since       0.8
  */
 
-class JtgModelCats extends JModelLegacy
+class JtgModelCats extends ListModel
 {
 	/**
 	 * function_description

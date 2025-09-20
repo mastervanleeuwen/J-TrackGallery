@@ -17,11 +17,13 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Languaga\Text;
+use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Uri\Uri;
 
-jimport('joomla.application.component.view');
-require_once JPATH_COMPONENT . '/helpers/maphelper.php';
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+use Jtg\Component\Jtg\Site\Helpers\LayoutHelper;
 
 /**
  * JtgViewTag class 
@@ -33,7 +35,7 @@ require_once JPATH_COMPONENT . '/helpers/maphelper.php';
  * @subpackage  Frontend
  * @since       0.9.35
  */
-class JtgViewTag extends JViewLegacy
+class JtgViewTag extends HtmlView
 {
 	/**
 	 * function_description
@@ -49,7 +51,7 @@ class JtgViewTag extends JViewLegacy
 
 		$app = Factory::getApplication();
 		$tagid = $app->input->get('id');
-		$this->canDo = JHelperContent::getActions('com_jtg');
+		$this->canDo = ContentHelper::getActions('com_jtg');
 
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');

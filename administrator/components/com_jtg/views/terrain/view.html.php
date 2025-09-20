@@ -20,9 +20,8 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\View\HtmlView;
 
-// Import Joomla! libraries
-jimport('joomla.application.component.view');
 /**
  * JtgViewTerrain class for the jtg component
  *
@@ -31,7 +30,7 @@ jimport('joomla.application.component.view');
  * @since       0.8
  */
 
-class JtgViewTerrain extends JViewLegacy
+class JtgViewTerrain extends HtmlView
 {
 	/**
 	 * function_description

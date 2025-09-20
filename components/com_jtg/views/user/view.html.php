@@ -21,13 +21,16 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Uri\Uri;
 
-jimport('joomla.application.component.view');
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+use Jtg\Component\Jtg\Site\Helpers\LayoutHelper;
 
 /**
- * JtgViewUser class @ see JViewLegacy
+ * JtgViewUser class 
  * HTML View class for the jtg component
  *
  * Returns the specified model
@@ -36,7 +39,7 @@ jimport('joomla.application.component.view');
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgViewUser extends JViewLegacy
+class JtgViewUser extends HtmlView
 {
 	/**
 	 * Returns true|false if user is allowed to see the file
@@ -157,7 +160,7 @@ class JtgViewUser extends JViewLegacy
 
 		$app = Factory::getApplication();
 		$app->setUserState("jtg.files.layout",$this->getLayout());
-		$this->canDo = JHelperContent::getActions('com_jtg');
+		$this->canDo = ContentHelper::getActions('com_jtg');
 
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');

@@ -27,6 +27,9 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Uri\Uri;
 
+use Jtg\Component\Jtg\Site\Helpers\GPSData;
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+
 // Toolbar
 ToolbarHelper::title(Text::_('COM_JTG_ADD_FILES'), 'categories.png');
 ToolbarHelper::back();
@@ -222,7 +225,7 @@ $document->addStyleDeclaration($style);
 				}
 			}
 
-			$gpsData = new GpsDataClass($file, strtolower($filename_wof));
+			$gpsData = new GPSData($file, strtolower($filename_wof));
 
 			if ($check === true)
 			{

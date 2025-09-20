@@ -15,6 +15,9 @@
  *
  */
 
+
+namespace Jtg\Component\Jtg\Site\Helpers;
+ 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
@@ -23,10 +26,11 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 
 /**
- * JtgHelper class for the jtg component
+ * Helper class for the jtg component
  *
  * @package     Comjtg
  * @subpackage  Frontend
@@ -49,42 +53,42 @@ class JtgHelper
 		// TODO move addSubmenu and GetConfig function to backend code
 		//$active = ($vName == 'config') || ($vName == 'cats');
 		$active = false;
-		JHtmlSidebar::addEntry(
+		\JHtmlSidebar::addEntry(
 				Text::_('COM_JTG_CONFIGURATION'),
 				'index.php?option=com_jtg&task=config&controller=config',
 				$tName == 'config'
 		);
-		JHtmlSidebar::addEntry(
+		\JHtmlSidebar::addEntry(
 				Text::_('COM_JTG_GPS_FILES'),
 				'index.php?option=com_jtg&task=files&controller=files',
 				$tName == 'files'
 		);
-		JHtmlSidebar::addEntry(
+		\JHtmlSidebar::addEntry(
 				Text::_('COM_JTG_MAPS'),
 				'index.php?option=com_jtg&task=maps&controller=maps',
 				$tName == 'maps'
 		);
-		JHtmlSidebar::addEntry(
+		\JHtmlSidebar::addEntry(
 				Text::_('COM_JTG_CATS'),
 				'index.php?option=com_jtg&task=cats&controller=cats',
 				$tName == 'cats'
 		);
-		JHtmlSidebar::addEntry(
+		\JHtmlSidebar::addEntry(
 				Text::_('COM_JTG_TERRAIN'),
 				'index.php?option=com_jtg&task=terrain&controller=terrain',
 				$tName == 'terrain'
 		);
-		JHtmlSidebar::addEntry(
+		\JHtmlSidebar::addEntry(
 				Text::_('COM_JTG_COMMENTS'),
 				'index.php?option=com_jtg&task=comments&controller=comments',
 				$tName == 'comments'
 		);
-		JHtmlSidebar::addEntry(
+		\JHtmlSidebar::addEntry(
 				Text::_('COM_JTG_TRANSLATE'),
 				'index.php?option=com_jtg&task=translations&controller=translations',
 				$tName == 'translations'
 		);
-		JHtmlSidebar::addEntry(
+		\JHtmlSidebar::addEntry(
 				Text::_('COM_JTG_INFO'),
 				'index.php?option=com_jtg&task=info&controller=info',
 				$tName == 'info'
@@ -295,7 +299,7 @@ class JtgHelper
 					{
 						if ( isset($allcats[$catid]->id) )
 						{
-							$url = JRoute::_($baseurl . $allcats[$catid]->id, true);
+							$url = Route::_($baseurl . $allcats[$catid]->id, true);
 							$return[] = "<a href=\"" . $url . "\">" .
 									Text::_($allcats[$catid]->title) .
 									"</a>";
@@ -323,7 +327,7 @@ class JtgHelper
 					{
 						if ( isset($allcats[$catid]->id) )
 						{
-							$url = JRoute::_($baseurl . $allcats[$catid]->id, true);
+							$url = Route::_($baseurl . $allcats[$catid]->id, true);
 
 							if ( $allcats[$catid]->image != "")
 							{
@@ -360,7 +364,7 @@ class JtgHelper
 					{
 						if ( isset($allcats[$catid]->id) )
 						{
-							$url = JRoute::_($baseurl . $allcats[$catid]->id, true);
+							$url = Route::_($baseurl . $allcats[$catid]->id, true);
 
 							if ( $allcats[$catid]->image == "" )
 							{
@@ -396,7 +400,7 @@ class JtgHelper
 					{
 						if ( isset($allcats[$catid]))
 						{
-							$url = JRoute::_($baseurl . $allcats[$catid]->id, true);
+							$url = Route::_($baseurl . $allcats[$catid]->id, true);
 
 							if ( $allcats[$catid]->image == "" )
 							{
@@ -480,7 +484,7 @@ class JtgHelper
 					{
 						if ( isset($allterrains[$terrainid]) )
 						{
-							$url = JRoute::_($baseurl . $allterrains[$terrainid]->id, false);
+							$url = Route::_($baseurl . $allterrains[$terrainid]->id, false);
 							$return[] = "<a href=\"" . $url . "\">" .
 									Text::_($allterrains[$terrainid]->title) . "</a>";
 						}
@@ -997,7 +1001,7 @@ static public function autoRotateImage($image) {
 		switch ($cfg->profile)
 		{
 			case "cb":
-				$link = "<a href=" . JRoute::_('index.php?option=com_comprofiler&task=userProfile&user=' . $uid) . " >" . $username . "</a>";
+				$link = "<a href=" . Route::_('index.php?option=com_comprofiler&task=userProfile&user=' . $uid) . " >" . $username . "</a>";
 
 				return $link;
 				break;
@@ -1005,13 +1009,13 @@ static public function autoRotateImage($image) {
 			case "js":
 				$jspath = JPATH_BASE . '/components/com_community';
 				include_once $jspath . '/libraries/core.php';
-				$link = "<a href=" . CRoute::_('index.php?option=com_community&view=profile&userid=' . $uid) . " >" . $username . "</a>";
+				$link = "<a href=" . Route::_('index.php?option=com_community&view=profile&userid=' . $uid) . " >" . $username . "</a>";
 
 				return $link;
 				break;
 
 			case "ku":
-				$link = "<a href=" . JRoute::_('index.php?option=com_kunena&func=fbprofile&userid=' . $uid) . " >" . $username . "</a>";
+				$link = "<a href=" . Route::_('index.php?option=com_kunena&func=fbprofile&userid=' . $uid) . " >" . $username . "</a>";
 
 				return $link;
 				break;
@@ -1349,7 +1353,7 @@ static public function autoRotateImage($image) {
 		}
 		if ($params->get('jtg_param_use_cats'))
 		{
-			$sortedcats = JtgModeljtg::getCatsData(true); // TODO: pass as argument?
+			$sortedcats = \JtgModeljtg::getCatsData(true); // TODO: pass as argument?
 			$htmlout .= "  <tr>\n     <td>".
 				Text::_('COM_JTG_CATS').":</td>\n".
             '  <td colspan="2">'.JtgHelper::parseMoreCats($sortedcats, $track->catid, "TrackDetails", true)."</td>\n".

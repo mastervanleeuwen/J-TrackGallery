@@ -17,7 +17,6 @@
  */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\Filter\OutputFilter;
@@ -28,6 +27,9 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\FormModel;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+use Jtg\Component\Jtg\Site\Helpers\GPSData;
 
 /**
  * JtgModelTrack class for the jtg component
@@ -270,7 +272,7 @@ class JtgModelTrack extends FormModel
 		// Get the start coordinates..
 
 		// Default unit
-		$gpsData = new GpsDataClass($newfile, $filename);
+		$gpsData = new GPSData($newfile, $filename);
 		if (strlen($data['title'])==0) {
 			$data['title'] = trim($gpsData->trackname);
 		}

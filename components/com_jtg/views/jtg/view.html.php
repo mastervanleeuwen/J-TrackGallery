@@ -21,10 +21,11 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Uri\Uri;
 
-jimport('joomla.application.component.view');
-require_once JPATH_COMPONENT . '/helpers/maphelper.php';
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
+use Jtg\Component\Jtg\Site\Helpers\LayoutHelper;
 
 /**
  * HTML View class for the jtg component
@@ -33,7 +34,7 @@ require_once JPATH_COMPONENT . '/helpers/maphelper.php';
  * @subpackage  Frontend
  * @since       0.8
  */
-class JtgViewjtg extends JViewLegacy
+class JtgViewjtg extends HtmlView
 {
 	/**
 	 * function_description
@@ -183,7 +184,6 @@ class JtgViewjtg extends JViewLegacy
 		$this->boxlinktext = $boxlinktext;
 		$this->footer = $footer;
 		$this->disclaimericons = $disclaimericons;
-		$this->gpsData = $gpsData;
 		$this->rows = $rows;
 		$this->where = $where;
 		$this->cats = $cats;

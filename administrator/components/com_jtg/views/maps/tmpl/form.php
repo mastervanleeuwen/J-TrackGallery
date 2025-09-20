@@ -22,6 +22,8 @@ use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 
+use Jtg\Component\Jtg\Site\Helpers\JtgMapHelper;
+
 $id = $this->_models['maps']->_id;
 
 // Toolbar

@@ -13,10 +13,11 @@
  */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
 use Joomla\CMS\Factory;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\MVC\Model\ListModel;
+
+use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 /**
  * JtgModelTag class for the jtg component
