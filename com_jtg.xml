@@ -28,16 +28,11 @@
 
 <scriptfile>installuninstallscript.php</scriptfile>
 	<files folder="components/com_jtg">
-		<file>controller.php</file>
 		<file>index.html</file>
-		<file>jtg.php</file>
-		<file>router.php</file>
 		<folder>assets</folder>
-		<folder>controllers</folder>
-		<folder>docs</folder>
-		<folder>models</folder>
 		<folder>src</folder>
-		<folder>views</folder>
+		<folder>tmpl</folder>
+		<folder>forms</folder>
 	</files>
 	<media folder="media">
 		<folder>com_jtg</folder>
@@ -67,7 +62,7 @@
 			<menu controller="config" task="config">Configuration</menu>
 			<menu controller="files" task="files">Tracks</menu>
 			<menu controller="maps" task="maps">Maps</menu>
-			<menu controller="cats" task="cats">Categories</menu>
+			<menu controller="categories" task="categories">Categories</menu>
 			<menu controller="terrain" task="terrain">Terrain</menu>
 			<menu controller="comments" task="comments">Comments</menu>
 			<menu controller="translations" task="translations">Translations</menu>
@@ -76,17 +71,13 @@
 		<files folder="administrator/components/com_jtg">
 			<file>access.xml</file>
 			<file>config.xml</file>
-			<file>controller.php</file>
 			<file>template.css</file>
 			<file>index.html</file>
-			<file>jtg.php</file>
-			<folder>controllers</folder>
-			<folder>help</folder>
-			<folder>helpers</folder>
-			<folder>models</folder>
+			<folder>forms</folder>
 			<folder>sql</folder>
-			<folder>tables</folder>
-			<folder>views</folder>
+			<folder>src</folder>
+			<folder>tmpl</folder>
+			<folder>services</folder>
 		</files>
 		<languages folder="administrator/components/com_jtg/language">
 			<language tag="de-DE">de-DE/de-DE.com_jtg.ini</language>

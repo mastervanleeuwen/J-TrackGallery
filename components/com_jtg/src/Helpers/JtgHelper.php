@@ -21,6 +21,7 @@ namespace Jtg\Component\Jtg\Site\Helpers;
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\HTML\Helpers\Sidebar;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
@@ -28,6 +29,8 @@ use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+
+use Jtg\Component\Jtg\Site\Model\JtgModel;
 
 /**
  * Helper class for the jtg component
@@ -53,42 +56,42 @@ class JtgHelper
 		// TODO move addSubmenu and GetConfig function to backend code
 		//$active = ($vName == 'config') || ($vName == 'cats');
 		$active = false;
-		\JHtmlSidebar::addEntry(
+		Sidebar::addEntry(
 				Text::_('COM_JTG_CONFIGURATION'),
 				'index.php?option=com_jtg&task=config&controller=config',
 				$tName == 'config'
 		);
-		\JHtmlSidebar::addEntry(
+		Sidebar::addEntry(
 				Text::_('COM_JTG_GPS_FILES'),
 				'index.php?option=com_jtg&task=files&controller=files',
 				$tName == 'files'
 		);
-		\JHtmlSidebar::addEntry(
+		Sidebar::addEntry(
 				Text::_('COM_JTG_MAPS'),
 				'index.php?option=com_jtg&task=maps&controller=maps',
 				$tName == 'maps'
 		);
-		\JHtmlSidebar::addEntry(
+		Sidebar::addEntry(
 				Text::_('COM_JTG_CATS'),
-				'index.php?option=com_jtg&task=cats&controller=cats',
+				'index.php?option=com_jtg&task=categories&controller=categories',
 				$tName == 'cats'
 		);
-		\JHtmlSidebar::addEntry(
+		Sidebar::addEntry(
 				Text::_('COM_JTG_TERRAIN'),
 				'index.php?option=com_jtg&task=terrain&controller=terrain',
 				$tName == 'terrain'
 		);
-		\JHtmlSidebar::addEntry(
+		Sidebar::addEntry(
 				Text::_('COM_JTG_COMMENTS'),
 				'index.php?option=com_jtg&task=comments&controller=comments',
 				$tName == 'comments'
 		);
-		\JHtmlSidebar::addEntry(
+		Sidebar::addEntry(
 				Text::_('COM_JTG_TRANSLATE'),
 				'index.php?option=com_jtg&task=translations&controller=translations',
 				$tName == 'translations'
 		);
-		\JHtmlSidebar::addEntry(
+		Sidebar::addEntry(
 				Text::_('COM_JTG_INFO'),
 				'index.php?option=com_jtg&task=info&controller=info',
 				$tName == 'info'
@@ -681,21 +684,21 @@ static public function autoRotateImage($image) {
     $orientation = $image->getImageOrientation(); 
 
     switch($orientation) { 
-        case imagick::ORIENTATION_BOTTOMRIGHT: 
+        case \imagick::ORIENTATION_BOTTOMRIGHT: 
             $image->rotateimage("#000", 180); // rotate 180 degrees 
         break; 
 
-        case imagick::ORIENTATION_RIGHTTOP: 
+        case \imagick::ORIENTATION_RIGHTTOP: 
             $image->rotateimage("#000", 90); // rotate 90 degrees CW 
         break; 
 
-        case imagick::ORIENTATION_LEFTBOTTOM: 
+        case \imagick::ORIENTATION_LEFTBOTTOM: 
             $image->rotateimage("#000", -90); // rotate 90 degrees CCW 
         break; 
     } 
 
     // Now that it's auto-rotated, make sure the EXIF data is correct in case the EXIF gets saved with the image! 
-    $image->setImageOrientation(imagick::ORIENTATION_TOPLEFT); 
+    $image->setImageOrientation(\imagick::ORIENTATION_TOPLEFT); 
 } 
  
         /**
@@ -862,7 +865,7 @@ static public function autoRotateImage($image) {
 		if (File::exists($image_dir.'/'.$outfname)) {
 			return false;
 		}
-		$image = new Imagick($file_tmp_name);
+		$image = new \Imagick($file_tmp_name);
 		JtgHelper::autoRotateImage($image);
 		$height = $image->getImageHeight();
 		$width = $image->getImageWidth();
@@ -896,7 +899,7 @@ static public function autoRotateImage($image) {
 			$resized = true;
 			$newwidth = (int) $newwidth;
 			$newheight = (int) $newheight;
-			$image->resizeImage($newwidth, $newheight, imagick::FILTER_LANCZOS, 1);
+			$image->resizeImage($newwidth, $newheight, \imagick::FILTER_LANCZOS, 1);
 		}
 		else
 		{
@@ -906,6 +909,147 @@ static public function autoRotateImage($image) {
 		$status = $image->writeImage($image_dir.'/'.$outfname);
 		$image->destroy();
 		return $status;
+	}
+
+	/**
+ 	* Returns thumbnail name (including extension)  if thumbnail creation was successful
+ 	*
+ 	* @param   string   $image_dir         param_description
+ 	* @param   string   $image_name        param_description
+ 	* @param   integer  $max_thumb_height  param_description
+ 	* @param   integer  $max_geoim_height  param_description
+ 	*
+ 	* @return <string>
+ 	*/
+	static function createThumbnails($image_dir, $image_name, $max_thumb_height = 210, $max_geoim_height = 300)
+	{
+		$ext = File::getExt($image_name);
+		$image_path = $image_dir . '/'. $image_name;
+		$thumb_dir = $image_dir . '/thumbs/';
+
+		if (! Folder::exists($thumb_dir))
+		{
+			Folder::create($thumb_dir);
+		}
+
+		switch (strtolower($ext))
+		{
+			case 'jpeg':
+			case 'pjpeg':
+			case 'jpg':
+				$src = \ImageCreateFromJpeg($image_path);
+				break;
+
+			case 'png':
+				$src = \ImageCreateFromPng($image_path);
+				break;
+
+			case 'gif':
+				$src = \ImageCreateFromGif($image_path);
+				break;
+		}
+
+		list($width,$height) = \getimagesize($image_path);
+
+		// Set height and width an integer
+		if ($height > $max_geoim_height)
+		{
+			$thumb_height = (int) $max_geoim_height;
+			$thumb_width = (int) $width / 2 / $height * $max_geoim_height;
+		}
+		else
+		{
+			$thumb_height = $height;
+			$thumb_width = $width;
+		}
+		// Create geotagged image thumbnail (use Geotagged image size)
+		$tmp = \imagecreatetruecolor($thumb_width, $thumb_height);
+
+		// Resample the image
+		\imagecopyresampled($tmp, $src, 0, 0, 0, 0, $thumb_width, $thumb_height, $width, $height);
+		$thumb_path = $thumb_dir . 'thumb0_' . $image_name;
+
+		switch (strtolower($ext))
+		{
+			case 'jpeg':
+			case 'pjpeg':
+			case 'jpg':
+				$statusupload0 = \imagejpeg($tmp, $thumb_path, 85);
+				break;
+
+			case 'png':
+				$statusupload0 = \imagepng($tmp, $thumb_path, 85);
+				break;
+
+			case 'gif':
+				$statusupload0 = \imagegif($tmp, $thumb_path, 85);
+				break;
+		}
+
+		// Create first thumbnail
+		// Set height and width an even integer
+		if ($height > $max_thumb_height)
+		{
+			$thumb_height = 2 * ( (int) $max_thumb_height / 2);
+			$thumb_width = 2 * ( (int) ($width / 2 / $height * $max_thumb_height));
+		}
+		else
+		{
+			$thumb_height = $height;
+			$thumb_width = $width;
+		}
+
+		$thumb_height = 2 * ( (int) $max_thumb_height / 2);
+		$thumb_width = 2 * ( (int) ($width / 2 / $height * $max_thumb_height));
+		$tmp = \imagecreatetruecolor($thumb_width, $thumb_height);
+		\imagecopyresampled($tmp, $src, 0, 0, 0, 0, $thumb_width, $thumb_height, $width, $height);
+		$thumb_path = $thumb_dir . 'thumb1_' . $image_name;
+
+		switch (strtolower($ext))
+		{
+			case 'jpeg':
+			case 'pjpeg':
+			case 'jpg':
+				$statusupload1 = \imagejpeg($tmp, $thumb_path, 85);
+				break;
+
+			case 'png':
+				$statusupload1 = \imagepng($tmp, $thumb_path, 85);
+				break;
+
+			case 'gif':
+				$statusupload1 = \imagegif($tmp, $thumb_path, 85);
+				break;
+		}
+
+		// Create second thumbnail
+		$tmp = \imagecreatetruecolor($thumb_width / 2, $thumb_height / 2);
+		\imagecopyresampled($tmp, $src, 0, 0, 0, 0, $thumb_width / 2, $thumb_height / 2, $width, $height);
+		$thumb_path = $thumb_dir . 'thumb2_' . $image_name;
+
+		switch (strtolower($ext))
+		{
+			case 'jpeg':
+			case 'pjpeg':
+			case 'jpg':
+				$statusupload2 = \imagejpeg($tmp, $thumb_path, 85);
+				break;
+
+			case 'png':
+				$statusupload2 = \imagepng($tmp, $thumb_path, 85);
+				break;
+
+			case 'gif':
+				$statusupload2 = \imagegif($tmp, $thumb_path, 85);
+				break;
+		}
+
+		if ( ($statusupload0) and ($statusupload1) and ($statusupload2) )
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -920,9 +1064,6 @@ static public function autoRotateImage($image) {
 	 */
 	static public function createimageandthumbs($trackID, $file_tmp_name, $ext, $outfname)
 	{
-
-		require_once JPATH_SITE . '/administrator/components/com_jtg/models/thumb_creation.php';
-		jimport('joomla.filesystem.file');
 		$cfg = self::getConfig();
 
 		$image_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/track_' . $trackID;
@@ -973,7 +1114,7 @@ static public function autoRotateImage($image) {
 			$statusdb = true;
 		}
 
-		$statusthumbs = Com_Jtg_Create_thumbnails(
+		$statusthumbs = JtgHelper::createThumbnails(
 					$image_dir, $outfname,
 					$cfg->max_thumb_height, $cfg->max_geoim_height);
 		}
@@ -984,6 +1125,61 @@ static public function autoRotateImage($image) {
 		}
 
 		return false;
+	}
+
+	/**
+	 * function_description
+	 *
+	 * @return <boolean> true  if thumbnail creation was successful for all thumbnails
+	 */
+	static function refreshThumbnails()
+	{
+		$cfg = JtgHelper::getConfig();
+		$base_dir = JPATH_SITE . '/images/jtrackgallery';
+		$success = true;
+		$regex_folder = '^track_';
+		$regex_images = '([^\s]+(\.(?i)(jpg|png|gif|bmp))$)';
+		$folders = Folder::folders($base_dir, $regex_folder, $recurse = false, $full = false);
+
+		foreach ($folders as $folder)
+		{
+			$imgs = Folder::files($base_dir . '/' . $folder);
+			$thumb_dir = $base_dir . '/' . $folder . '/thumbs';
+
+			if ($imgs)
+			{
+				if (Folder::exists($thumb_dir))
+				{
+					// Remove old thumbnails
+					$filesToDelete = Folder::files($thumb_dir, $regex_images);
+
+					foreach ($filesToDelete AS $fileToDelete)
+					{
+						File::delete($thumb_dir . '/' . $fileToDelete);
+					}
+				}
+
+				foreach ($imgs AS $image)
+				{
+					$thumb = JtgHelper::createThumbnails($base_dir . '/' . $folder . '/', $image, $cfg->max_thumb_height, $cfg->max_geoim_height);
+
+					if (! $thumb)
+					{
+						$success = false;
+					}
+				}
+			}
+			else
+			{
+				// No imgs so delete possibly existing folder
+				if (Folder::exists($thumb_dir))
+				{
+					Folder::delete($thumb_dir);
+				}
+			}
+		}
+
+		return $success;
 	}
 
 	/**
@@ -1353,7 +1549,7 @@ static public function autoRotateImage($image) {
 		}
 		if ($params->get('jtg_param_use_cats'))
 		{
-			$sortedcats = \JtgModeljtg::getCatsData(true); // TODO: pass as argument?
+			$sortedcats = JtgModel::getCatsData(true); // TODO: pass as argument?
 			$htmlout .= "  <tr>\n     <td>".
 				Text::_('COM_JTG_CATS').":</td>\n".
             '  <td colspan="2">'.JtgHelper::parseMoreCats($sortedcats, $track->catid, "TrackDetails", true)."</td>\n".

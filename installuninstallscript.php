@@ -30,8 +30,10 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Version;
 
 use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
@@ -43,7 +45,7 @@ use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
  * @subpackage  Frontend
  * @since       0.8
  */
-class Com_JtgInstallerScript
+class com_jtgInstallerScript extends InstallerScript
 {
 	/**
 	 * $parent is the class calling this method.
@@ -137,14 +139,12 @@ class Com_JtgInstallerScript
 	 */
 	public function install( $parent )
 	{
-		jimport('joomla.filesystem.folder');
-		jimport('joomla.filesystem.file');
 		$doc = Factory::getDocument();
 
 		?>
 	<br />
 	<img
-		src="<?php echo JUri::root() . 'components/com_jtg/assets/images/logo_JTG.png'; ?>"
+		src="<?php echo Uri::root() . 'components/com_jtg/assets/images/logo_JTG.png'; ?>"
 		alt="J!Track Gallery" />
 	<br />
 	<table class="adminlist" border="1" style="width:100%;">
@@ -617,8 +617,6 @@ class Com_JtgInstallerScript
 	{
 		// Set a simple message
 
-		jimport('joomla.filesystem.folder');
-		jimport('joomla.filesystem.file');
 		$application = Factory::getApplication();
 		$application->enqueueMessage(Text::_('COM_JTG_THANK_YOU_FOR_USING'));
 		echo '<p>' . Text::_('COM_JTG_UNINSTALLING') . '</p>';
@@ -672,8 +670,9 @@ class Com_JtgInstallerScript
 	 * @param   string  $name  parameter name
 	 *
 	 * @return parameter value
+	 * TODO: can this be removed?
 	 */
-	public function getParam( $name )
+	public function getParam( $name, $id = 0 )
 	{
 		$db = Factory::getDbo();
 		$db->setQuery('SELECT manifest_cache FROM #__extensions WHERE name = "com_jtg"');
@@ -690,8 +689,10 @@ class Com_JtgInstallerScript
 	 * @param   array  $param_array  parameters array
 	 *
 	 * @return void
+	 * 
+	 * TODO: can this be removed?
 	 */
-	public function setParams($param_array)
+	public function setParams($param_array = null, $type = 'edit', $id = 0)
 	{
 		if ( count($param_array) > 0 )
 		{

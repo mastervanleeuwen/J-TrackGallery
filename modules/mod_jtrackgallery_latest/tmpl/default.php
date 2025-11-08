@@ -85,7 +85,7 @@ foreach ($tracks as $track)
 	elseif ($params->get('style') == 1)
 	{
 		echo '<table><tr>';
-		$link = JRoute::_('index.php?option=com_jtg&view=files&layout=file&id=' . $track->id);
+		$link = Route::_('index.php?option=com_jtg&view=files&layout=file&id=' . $track->id);
 		echo '<td align="center" style="padding: 10px" valign="top">';
 		if ( $map != 'none' ) {
 		echo '<img src="https://maps.googleapis.com/maps/api/staticmap?center=' . $track->start_n . ',' .

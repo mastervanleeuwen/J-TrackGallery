@@ -21,6 +21,7 @@ define('_PARSETEMPLATE_HEADLINE_OPEN', true);
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 
 /**
@@ -42,19 +43,19 @@ function ParseTemplate_Headline_open($linkname, $printbutton = false)
 		if (Factory::getApplication()->input->getInt('print') == 1)
 		{
 			$printlink = "<a class =\"anchor\" rel=\"nofollow\" title=\"" . Text::_('COM_JTG_CLIC_FOR_PRINTING') .
-				"\" href= \"javascript:window.print()\" ><img src=\"".JUri::Root(true)."/components/com_jtg/assets/images/printButton.png\"/>";
+				"\" href= \"javascript:window.print()\" ><img src=\"".Uri::Root(true)."/components/com_jtg/assets/images/printButton.png\"/>";
 			$navlink = "";
 		}
 		else
 		{
 			$printhref = 'status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no';
 			$printhref = "window.open(this.href,'win2','" . $printhref . "'); return false;";
-			$printhref = 'href="'.JRoute::_("index.php?option=com_jtg&view=track&id=" .
+			$printhref = 'href="'.Route::_("index.php?option=com_jtg&view=track&id=" .
 					Factory::getApplication()->input->get('id') .
 					"&tmpl=component&print=1").'" onclick="'.$printhref.'"';
 			$printlink = "<a class =\"anchor\" style=\"display:inline; float:right;width:30px;\" title=\"" .
 				Text::_('COM_JTG_PREPARE_FOR_PRINTING') .
-				"\" $printhref ><img src=\"".JUri::root(true)."/components/com_jtg/assets/images/printButton.png\"/></a>";
+				"\" $printhref ><img src=\"".Uri::root(true)."/components/com_jtg/assets/images/printButton.png\"/></a>";
 			$navlink = "<a class=\"anchor\" name=\"" . $linkname . "\" href=\"" . $link . "\">";
 		}
 	}

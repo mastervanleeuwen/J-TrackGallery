@@ -56,7 +56,7 @@ foreach ($tracks as $track)
 
 	if ($params->get('style') == 0)
 	{
-		$link = JRoute::_('index.php?option=com_jtg&view=track&id=' . $track->id);
+		$link = Route::_('index.php?option=com_jtg&view=track&id=' . $track->id);
 		echo '<div align="center" style="margin-bottom:20px;">';
 		if ($map != 'none') { 
 			echo '<img src="https://maps.googleapis.com/maps/api/staticmap?center=' . $track->start_n . ',' .

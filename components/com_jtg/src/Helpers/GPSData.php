@@ -1383,10 +1383,10 @@ class GPSData
 	{
 		$cfg = JtgHelper::getConfig();
 		$Tpath = JPATH_SITE . "/components/com_jtg/assets/template/" . $cfg->template . "/images/";
-		$Tbase = JUri::root() . "components/com_jtg/assets/template/" . $cfg->template . "/images/";
+		$Tbase = Uri::root() . "components/com_jtg/assets/template/" . $cfg->template . "/images/";
 		$unknownicon = "";
 		$jpath = JPATH_SITE . "/components/com_jtg/assets/images/symbols/";
-		$jbase = JUri::root() . "components/com_jtg/assets/images/symbols/";
+		$jbase = Uri::root() . "components/com_jtg/assets/images/symbols/";
 
 		$filename = File::makeSafe($ownicon);
 		$pngfile = $jbase . $filename . ".png";

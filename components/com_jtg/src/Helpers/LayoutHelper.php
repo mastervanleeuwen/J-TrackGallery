@@ -100,7 +100,7 @@ class LayoutHelper
 		if (ComponentHelper::getParams("com_jtg")->get('jtg_param_use_cats'))
 		{
 			$navi .= '<div class="navi-part"><a href="' .
-				Route::_("index.php?option=com_jtg&view=cats&layout=default") . '">' . Text::_('COM_JTG_CATS') . '</a></div>';
+				Route::_("index.php?option=com_jtg&view=categories&layout=default") . '">' . Text::_('COM_JTG_CATS') . '</a></div>';
 		}
 		$navi .= '<div class="navi-part"><a href="' .
 				Route::_("index.php?option=com_jtg&view=files&layout=list") . '">' . Text::_('COM_JTG_TRACKS') . '</a></div>';

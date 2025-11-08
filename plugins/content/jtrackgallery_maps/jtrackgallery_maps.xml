@@ -8,10 +8,12 @@
 	<authorUrl>https://mastervanleeuwen.github.io/J-TrackGallery/</authorUrl>
 	<version>0.9.35</version>
 	<description>PLG_JTG_MAPS_XML_DESCRIPTION</description>
+	<namespace path="src">Jtg\Plugin\Content\JtgMaps</namespace>
 	<files>
-		<filename plugin="jtrackgallery_maps">jtrackgallery_maps.php</filename>
+		<folder plugin="jtrackgallery_maps">services</folder>
 		<filename>index.html</filename>
 		<folder>language</folder>
+		<folder>src</folder>
 	</files>
 	<languages>
 		<language tag="it-IT">language/it-IT/it-IT.plg_content_jtrackgallery_maps.ini</language>
