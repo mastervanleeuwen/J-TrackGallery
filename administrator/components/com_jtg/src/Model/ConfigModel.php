@@ -21,7 +21,8 @@ namespace Jtg\Component\Jtg\Administrator\Model;
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Session\Session;
 
@@ -139,18 +140,15 @@ class ConfigModel extends BaseDatabaseModel
 		}
 
 		// Load install.sql
-		$file = JPath::clean(JPATH_ADMINISTRATOR . '/components/com_jtg/sql/install.sql');
+		$file = Path::clean(JPATH_ADMINISTRATOR . '/components/com_jtg/sql/install.sql');
 
 		if (!is_file($file))
 		{
 			return ('File "' . $file . '" not found');
 		}
 
-		if (jimport('joomla.filesystem.file'))
-		{
-			$sqlcontent = file_get_contents($file);
-		}
-
+		$sqlcontent = file_get_contents($file);
+	
 		$sqlcontent = explode("\n", $sqlcontent);
 		$content = null;
 		$content_switch = false;

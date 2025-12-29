@@ -22,7 +22,8 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Path;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
@@ -1399,7 +1400,7 @@ class GPSData
 				// Vorlage zur Erstellung unbekannter Icons
 				$xmlcontent = "<xml>\n	<sizex>16</sizex>\n	<sizey>16</sizey>\n	<offsetx>8</offsetx>\n	<offsety>8</offsety>\n</xml>\n<!--\nUm dieses Icon verfügbar zu machen, erstelle dieses Bild: \"" . $filename . ".png\",\nund vervollständige obige 4 Parameter.\n\"offsetx\" beschreibt die Anzahl der Pixel von links bis zum Punkt (negativ) und\n\"offsety\" beschreibt die Anzahl der Pixel von oben bis zum Punkt (ebenfalls negativ).\nMit \"Punkt\" ist der Punkt gemeint, der auf der Koordinate sitzt.\n-->\n";
 				File::write($xmlfile, $xmlcontent);
-				JPath::setPermissions($xmlfile, "0666");
+				Path::setPermissions($xmlfile, "0666");
 			}
 			// Standardicon
 			$pngfile = $Tbase . "unknown_WP.png";

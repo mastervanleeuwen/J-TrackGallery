@@ -28,8 +28,9 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filter\OutputFilter;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
 use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
@@ -202,7 +203,7 @@ class com_jtgInstallerScript extends InstallerScript
 
 	foreach ( $folders_to_chmod AS $folder )
 	{
-		if ( JPath::canChmod(JPATH_SITE . '/' . $folder) AND (chmod(JPATH_SITE . '/' . $folder, 0777)))
+		if ( Path::canChmod(JPATH_SITE . '/' . $folder) AND (chmod(JPATH_SITE . '/' . $folder, 0777)))
 		{
 			echo '<tr><td>' . Text::_('COM_JTG_FOLDER') . '</td><td>' .
 					$folder . '</td><td><font color="green">' .
@@ -351,37 +352,42 @@ class com_jtgInstallerScript extends InstallerScript
 		 */
 
 		$folder = JPATH_SITE . '/components/com_jtg/views/files/tmpl';
-		File::delete($folder.'/map.php'); // Function checks whether file exists
-		File::delete($folder.'/map.xml');
-		File::delete($folder.'/file.php'); // Moved to new track view
-		File::delete($folder.'/file.xml');
-		File::delete($folder.'/form.php');
-		File::delete($folder.'/form.xml');
-		File::delete($folder.'/user.php');
-		File::delete($folder.'/user.xml');
-		File::delete(JPATH_SITE.'/components/com_jtg/controllers/files.php');
-		// openlayers code moved from assets to media
-		File::delete(JPATH_SITE.'components/com_jtg/assets/js/ol.js');
-		File::delete(JPATH_SITE.'components/com_jtg/assets/js/ol.js.map');
-		File::delete(JPATH_SITE.'components/com_jtg/assets/template/default/ol.css');
-		File::delete(JPATH_SITE.'components/com_jtg/assets/template/default/ol.css.map');
-		/*
-		 * Move existing old image gallery
-		 * from /images/jtrackgallery/track_xx (version<= 0.9.9)
-		 * to /images/jtrackgallery/uploaded_tracks_images/track_xx (version> 0.9.9)
-		*/
+		try {
+			File::delete($folder.'/map.php');
+			File::delete($folder.'/map.xml');
+			File::delete($folder.'/file.php'); // Moved to new track view
+			File::delete($folder.'/file.xml');
+			File::delete($folder.'/form.php');
+			File::delete($folder.'/form.xml');
+			File::delete($folder.'/user.php');
+			File::delete($folder.'/user.xml');
+			File::delete(JPATH_SITE.'/components/com_jtg/controllers/files.php');
+			// openlayers code moved from assets to media
+			File::delete(JPATH_SITE.'components/com_jtg/assets/js/ol.js');
+			File::delete(JPATH_SITE.'components/com_jtg/assets/js/ol.js.map');
+			File::delete(JPATH_SITE.'components/com_jtg/assets/template/default/ol.css');
+			File::delete(JPATH_SITE.'components/com_jtg/assets/template/default/ol.css.map');
+		}
+		catch (Exception $e) {}
 
-		$folders = Folder::folders(JPATH_SITE . '/images/jtrackgallery', '^track*', false);
-
-		// Move entire folder (track_xx) if destination folder don't exist
-		foreach ($folders as $folder)
+		if (Folder::exists(JPATH_SITE . '/images/jtrackgallery'))
 		{
-			if (!Folder::exists(JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/' . $folder))
+			/*
+		 	 * Move existing old image gallery
+		 	 * from /images/jtrackgallery/track_xx (version<= 0.9.9)
+		 	 * to /images/jtrackgallery/uploaded_tracks_images/track_xx (version> 0.9.9)
+			*/
+			$folders = Folder::folders(JPATH_SITE . '/images/jtrackgallery', '^track*', false);
+
+			// Move entire folder (track_xx) if destination folder don't exist
+			foreach ($folders as $folder)
 			{
-				Folder::move(JPATH_SITE . '/images/jtrackgallery/' . $folder, JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/' . $folder);
+				if (!Folder::exists(JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/' . $folder))
+				{
+					Folder::move(JPATH_SITE . '/images/jtrackgallery/' . $folder, JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images/' . $folder);
+				}
 			}
 		}
-
 		/*
 		 * If it does not exists:
 		 * Create difficulty level icons folder and copy icons in it
@@ -395,29 +401,27 @@ class com_jtgInstallerScript extends InstallerScript
 
 		echo '<p>' . Text::sprintf('COM_JTG_UPDATED', $this->release) . '</p>';
 
-      // Check photo database; import photos if empty
+    	// Check photo database; import photos if empty
 
-      $query = 'SELECT COUNT(*) FROM #__jtg_photos';
-      $db->setQuery($query);
-      $db->execute();
-      $nphotos = $db->loadResult();
+    	$query = 'SELECT COUNT(*) FROM #__jtg_photos';
+    	$db->setQuery($query);
+    	$db->execute();
+    	$nphotos = $db->loadResult();
 		if ( $nphotos == 0 )
 		{
-			require_once JPATH_SITE . '/components/com_jtg/helpers/helper.php';
-
 			$statusdb = true;
 
-      	$img_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images';
+    	  	$img_dir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks_images';
 
-      	$query = 'SELECT id FROM #__jtg_files';
-      	$db->setQuery($query);
-      	$db->execute();
+      		$query = 'SELECT id FROM #__jtg_files';
+      		$db->setQuery($query);
+      		$db->execute();
 			$ids = $db->loadColumn();
 
 			foreach ( $ids as $key => $id )
-	      {
-			//
-			//  Add entry to image database
+	    	{
+				//
+				//  Add entry to image database
   		    	//
 	        	if ( Folder::exists($img_dir.'/track_'.$id) ) {
 					$cur_img_dir = $img_dir.'/track_'.$id;

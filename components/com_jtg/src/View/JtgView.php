@@ -19,7 +19,7 @@ namespace Jtg\Component\Jtg\Site\View;
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\File;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Uri\Uri;
 
