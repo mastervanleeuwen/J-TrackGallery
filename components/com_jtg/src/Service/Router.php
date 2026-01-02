@@ -397,6 +397,11 @@ class Router extends RouterBase
 					$vars['layout'] = 'form';
 					$vars['id'] = null; // Unset id in case some other component has set it
 				}
+				else if ($segments[0] == 'download')
+				{
+					$vars['controller'] = 'track';
+					$vars['task'] = 'download';
+				}
 				else
 				{
 					$vars['view'] = 'track';
