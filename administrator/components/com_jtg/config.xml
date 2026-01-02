@@ -146,6 +146,14 @@
 			<option value="1">COM_JTG_AUTOMATIC</option>
 			<option value="0">JHIDE</option>
 		</field>
+		<field name="jtg_param_fb_share_button" type="radio"
+			default="1"
+			label="COM_JTG_MENU_FBSHARE_BUTTON">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="jtg_param_fb_app_id" type="string" default=""
+			label="COM_JTG_FB_APP_ID"/>
 		<field name="jtg_param_navigate_start_button" type="radio"
 			default="0"
 			label="COM_JTG_MENU_NAVIGATE_BUTTON">

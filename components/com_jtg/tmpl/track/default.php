@@ -50,9 +50,12 @@ $maySeeSingleFile = $this->maySeeSingleFile($this);
 
 if ($maySeeSingleFile === true)
 {	
+	Factory::getDocument()->setMetaData('og:type', 'website', 'property');
+	Factory::getDocument()->setMetaData('og:url', Uri::getInstance()->toString(), 'property');
+	Factory::getDocument()->setMetaData('og:title', $this->track->title, 'property');
 	$mapimagefile='images/jtrackgallery/maps/track_'.$this->track->id.'.png';
 	if (File::exists(JPATH_SITE.'/'.$mapimagefile)) {
-		Factory::getDocument()->setMetaData('og:image',Uri::root().$mapimagefile,'property');
+		Factory::getDocument()->setMetaData('og:image', Uri::root().$mapimagefile, 'property');
 	}
 	
 	if ( $this->params->get("jtg_param_hide_track_info") )
@@ -65,12 +68,27 @@ if ($maySeeSingleFile === true)
 	}
 
 	$durationbox = (bool) $this->params->get("jtg_param_show_durationcalc");
+
+	if ($this->params->get('jtg_param_fb_share_button'))
+	{
+		echo "\n<div id=\"fb-root\"></div>\n";
+		if (!empty($this->params->get('jtg_param_fb_app_id')))
+		{
+			echo '<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v24.0&appId='.$this->params->get('jtg_param_fb_app_id')."\"></script>\n";
+		}
+		else {
 ?>
-
-<div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v11.0&appId=180128866079216&autoLogAppEvents=1" nonce="mBqx9YbV"></script>
-
+<script>(function(d, s, id) {
+var js, fjs = d.getElementsByTagName(s)[0];
+if (d.getElementById(id)) return;
+js = d.createElement(s); js.id = id;
+js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
 <?php
+		}
+	}
 	//echo $this->map;
 
 	if ( !empty($this->imageList) && 
@@ -242,11 +260,22 @@ img.olTileImage {
 	{
   		echo "<a name=\"jtg_param_header_rating\"></a>";
 	}
+
+	if ($this->params->get('jtg_param_fb_share_button'))
+	{
 ?>
-
-<div class="fb-share-button" data-href="<?php echo Uri::getInstance()->toString()?>" data-layout="button" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(Uri::getInstance()->toString())?>&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+<div class="fb-share-button" data-href="<?php echo Uri::getInstance()->toString()?>" data-layout="button" data-size="small" style="padding: 0 15px">
+<?php
+		if (!empty($this->params->get('jtg_param_fb_app_id')))
+		{
+			echo '<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u='.urlencode(Uri::getInstance()->toString()).'&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>'."\n";
+		}
+?>
 </div>
-
+<?php
+	}
+?>
+ </div>
 
 <div class="no-float"></div>
 
@@ -547,7 +576,7 @@ if ($this->cfg->comments == 1)
 		<?php echo $comment->user; ?>
 		<br />
 		<?php
-		if (! empty($comment->email) ) {
+		if (!empty($comment->email)) {
 			echo $this->model->parseEMailIcon($comment->email);
 		}
 		if ($comment->homepage)
