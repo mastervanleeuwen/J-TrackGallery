@@ -567,7 +567,7 @@ EOS;
 EOG;
 			//Factory::getDocument()->addScript("///code.highcharts.com/highcharts.js");
 			$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
-			$wa->registerAndUseScript('highcharts','///code.highcharts.com/highcharts.js');
+			$wa->useScript('highcharts');
 			$autocenter = (bool) $params->get("jtg_param_use_map_autocentering", true) ? 'true':'false';
 			if (! (bool) $params->get("jtg_param_disable_map_animated_cursor", false)) $animatedCursor = 'true, animatedCursorLayer, animatedCursorIcon, allpoints'; else $animatedCursor='false';
 			$graphJS .= '<script type="text/javascript">'."\n".

@@ -16,6 +16,15 @@
         "defer": true
       },
       "version": "1.0.0"
+    },
+    {
+      "name": "highcharts",
+      "type": "script",
+      "uri": "com_jtg/highcharts.js",
+      "attributes": {
+        "defer": true
+      },
+      "version": "12.4.0"
     }
 	]
 }
