@@ -412,7 +412,7 @@ if (($this->imageList) AND ( $this->cfg->gallery != "none" ))
 			$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/jd.gallery.js');
                echo "<div id=\"myGallery\">";
 
-               foreach ($imageList as $image)
+               foreach ($this->imageList as $image)
                {
                   echo "  <div class=\"imageElement\"> <h3>" . $track->title . " <small>(" . $image->filename . ")</small></h3>
                   <p></p>
@@ -461,7 +461,7 @@ if (($this->imageList) AND ( $this->cfg->gallery != "none" ))
 
             case 'straight' :
                echo "<div class=\"jtg-photo-grid\">\n";
-               foreach ($imageList as $image)
+               foreach ($this->imageList as $image)
                {
                   echo "<div class=\"jtg-photo-item\"> <img src=\"" . $imgurlpath
                      . $image->filename . "\" alt=\"" . $image->filename . " (" . $image->filename . ")" . "\" title=\"" . $track->title
