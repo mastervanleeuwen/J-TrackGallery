@@ -429,8 +429,10 @@ class JtgMapHelper {
 					}
 
 					$size = "width=\"" . (int) $width . "\" height=\"" . (int) $height . "\"";
-					$imagehtml = "<img " . $size . " src=\"" . $imagepath . "\" alt=\"" . $image->filename . "\" title=\"" . htmlentities($image->title, ENT_QUOTES) . "\">";
-					if (strlen($image->title)) $imagehtml .= "<div class=\"jtg-caption\">".htmlentities($image->title,ENT_QUOTES)."</div>";
+					$title = '';
+					if (!is_null($image->title)) $title = htmlentities($image->title, ENT_QUOTES);
+					$imagehtml = "<img " . $size . " src=\"" . $imagepath . "\" alt=\"" . $image->filename . "\" title=\"$title\">";
+					if (strlen($image->title)) $imagehtml .= "<div class=\"jtg-caption\">$title</div>";
 					$imgsJS[] = "{long: $image->lon, lat: $image->lat, imghtml : '$imagehtml' }";
             }
 			}
