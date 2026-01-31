@@ -14,6 +14,8 @@
  *
  */
 
+namespace Jtg\Module\JTrackGalleryStats\Site\Helper;
+
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
@@ -26,7 +28,7 @@ use Joomla\CMS\Factory;
  * @subpackage  Module JTrackGalleryStats
  * @since       0.8
  */
-class ModjtrackgalleryStatsHelper
+class StatsHelper
 {
 	/**
 	 * function_description
