@@ -41,4 +41,4 @@ else
 }
 
 
-ModuleHelper::getLayoutPath('mod_jtrackgallery_latest', $params->get('layout', 'default'));
+require ModuleHelper::getLayoutPath('mod_jtrackgallery_latest', $params->get('layout', 'default'));

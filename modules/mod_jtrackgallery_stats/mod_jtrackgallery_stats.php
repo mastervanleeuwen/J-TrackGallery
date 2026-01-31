@@ -76,4 +76,4 @@ if ($decimalseparator != '.')
 	$descent = str_replace('.', $decimalseparator, $descent);
 }
 
-ModuleHelper::getLayoutPath('mod_jtrackgallery_stats', $params->get('layout', 'default'));
+require ModuleHelper::getLayoutPath('mod_jtrackgallery_stats', $params->get('layout', 'default'));
