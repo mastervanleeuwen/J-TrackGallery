@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" client="site" method="upgrade">
 <name>J!Trackgallery recent tracks</name>
-<author>Modified for J!trackGallery by Christophe Seguinot - Modded By Jason Oxley - Original Author Michael Pfister</author>
+<author>Marco van Leeuwen; based on work by Christophe Seguinot, Jason Oxley, and Michael Pfister</author>
 <creationDate>September 2010</creationDate>
 <copyright>(C) 2010 All rights reserved.</copyright>
 <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
-<authorEmail>christophe@jtrackgallery.net</authorEmail>
-<authorUrl>http://jtrackgallery.net/</authorUrl>
+<authorEmail>mastervanleeuwen@gmail.com</authorEmail>
+<authorUrl>https://mastervanleeuwen.github.io/J-TrackGallery/</authorUrl>
 <version>0.9.28</version>
 <description>MOD_JTG_LATEST_DESCRIPTION</description>
-<namespace path="src">Joomla\Module\JTrackGalleryLatest</namespace>
+<namespace path="src">Jtg\Module\JTrackGalleryLatest</namespace>
 <files>
-	<filename module="mod_jtrackgallery_latest">mod_jtrackgallery_latest.php</filename>
-	<filename>index.html</filename>
-	<filename>helper.php</filename>
-	<filename>tmpl/default.php</filename>
-	<filename>tmpl/index.html</filename>
+   <folder module="mod_jtrackgallery_latest">services</folder>
+   <folder>src</folder>
+   <folder>tmpl</folder>
+   <folder>language</folder>
 </files>
+<scriptfile>installscript.php</scriptfile>
 <languages folder="language">
 	<language tag="de-DE">de-DE/de-DE.mod_jtrackgallery_latest.ini</language>
 	<language tag="en-GB">en-GB/en-GB.mod_jtrackgallery_latest.ini</language>
