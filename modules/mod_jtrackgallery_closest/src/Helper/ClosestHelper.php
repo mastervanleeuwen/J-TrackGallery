@@ -14,6 +14,8 @@
  *
  */
 
+namespace Jtg\Module\JTrackGalleryClosest\Site\Helper;
+
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
@@ -27,7 +29,7 @@ use Joomla\CMS\Factory;
  * @since       0.8
  */
 
-class ModjtrackgalleryClosestHelper
+class ClosestHelper
 {
 	/**
 	 * function_description

@@ -6,17 +6,17 @@
 <copyright>(C) 2010 All rights reserved.</copyright>
 <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
 <authorEmail>mastervanleeuwen@gmail.com</authorEmail>
-<authorUrl>https://github.com/mastervanleeuwen/</authorUrl>
+<authorUrl>https://mastervanleeuwen.github.io/J-TrackGallery/</authorUrl>
 <version>0.9.27</version>
 <description>MOD_JTG_CLOSEST_DESCRIPTION</description>
-<namespace path="src">Joomla\Module\JTrackGalleryClosest</namespace>
+<namespace path="src">Jtg\Module\JTrackGalleryClosest</namespace>
 <files>
-	<filename module="mod_jtrackgallery_closest">mod_jtrackgallery_closest.php</filename>
-	<filename>index.html</filename>
-	<filename>helper.php</filename>
-	<filename>tmpl/default.php</filename>
-	<filename>tmpl/index.html</filename>
+	<folder module="mod_jtrackgallery_closest">services</folder>
+   	<folder>src</folder>
+	<folder>tmpl</folder>
+	<folder>language</folder>
 </files>
+<scriptfile>installscript.php</scriptfile>
 <languages folder="language">
 	<language tag="de-DE">de-DE/de-DE.mod_jtrackgallery_closest.ini</language>
 	<language tag="en-GB">en-GB/en-GB.mod_jtrackgallery_closest.ini</language>
