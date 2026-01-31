@@ -104,7 +104,6 @@ class HtmlView extends JtgView
 		$gallery = array(
 				array('id' => 'none', 'text' => Text::_('JNONE')),
 				array('id' => 'straight', 'text' => Text::_('COM_JTG_GAL_STRAIGHT')),
-				array('id' => 'jd2', 'text' => Text::_('COM_JTG_GAL_JDGALLERY2')),
 				array('id' => 'highslide', 'text' => Text::_('COM_JTG_GAL_HIGHSLIDE')),
 				array('id' => 'ext_plugin', 'text' => Text::_('COM_JTG_GAL_EXTERNAL_PLUGIN'))
 		);

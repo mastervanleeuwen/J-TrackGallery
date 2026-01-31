@@ -92,26 +92,8 @@ fjs.parentNode.insertBefore(js, fjs);
 	//echo $this->map;
 
 	if ( !empty($this->imageList) && 
-		( ( $this->cfg->gallery == "jd2" ) OR ( $this->cfg->gallery == "highslide" ) ) )
-	{
-		switch ($this->cfg->gallery)
-  		{
-			case 'jd2' :
-?>
-               <script type="text/javascript">
-               startGallery = function()  {
-               var myGallery = new gallery($('myGallery'), {
-               timed: true,
-               showArrows: true,
-               embedLinks: false,
-               showCarousel: false
-         });
-         }
-         window.addEventListener('domready',startGallery);
-         </script>
-<?php
-				break;
-            case 'highslide' :
+		( $this->cfg->gallery == "highslide" ) )
+		{
 ?>
               <script type="text/javascript">
                hs.graphicsDir = '<?php echo Uri::base() . "components/com_jtg/assets/highslide/graphics/"; ?>';
@@ -133,7 +115,7 @@ fjs.parentNode.insertBefore(js, fjs);
                interval: 5000,
                repeat: false,
                useControls: true,
-fixedControls: 'fit',
+               fixedControls: 'fit',
                overlayOptions: {
                position: 'top right',
                offsetX: 200,
@@ -152,8 +134,6 @@ fixedControls: 'fit',
          }
  </script>
 <?php
-			break;
-		}
 	}
 
 	echo $this->parseTemplate("headline", $this->track->title, "jtg_param_header_map", null, $this->track->title);
@@ -407,22 +387,6 @@ if (($this->imageList) AND ( $this->cfg->gallery != "none" ))
 	$imgurlpath=Uri::root() . "images/jtrackgallery/uploaded_tracks_images/track_" . $this->track->id . "/";
 	switch ($this->cfg->gallery)
 	{
-		case 'jd2' :
-         	//HTMLHelper::_('behavior.framework', true); // Load mootools
-			$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/jd.gallery.js');
-               echo "<div id=\"myGallery\">";
-
-               foreach ($this->imageList as $image)
-               {
-                  echo "  <div class=\"imageElement\"> <h3>" . $track->title . " <small>(" . $image->filename . ")</small></h3>
-                  <p></p>
-                  <img src=\"" . $imgurlpath . $image->filename . "\" class=\"full\" height=\"0px\" />
-                  </div>\n";
-               }
-
-               echo "</div>\n";
-               break;
-
             case 'highslide' :
 
             	$document->addScript( Uri::root(true) . '/components/com_jtg/assets/highslide/highslide-with-gallery.packed.js');
