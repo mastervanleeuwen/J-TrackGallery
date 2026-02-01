@@ -47,13 +47,16 @@ class JtgMapsPlugin extends CMSPlugin implements SubscriberInterface {
 		
 		if (!$this->getApplication()->isClient('site')) {
         	return;
-      	}
+      }
          
-      	[$context, $article, $params, $page] = array_values($event->getArguments());
+      [$context, $article, $params, $page] = array_values($event->getArguments());
  
 		// API
 		$app = Factory::getApplication ();
 		$document = Factory::getDocument ();
+		$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
+		$wr = $wa->getRegistry();
+		$wr->addRegistryFile('media/com_jtg/joomla.asset.json');
 
 		// Assign paths
 		$plg_name = "jtrackgallery_maps";
