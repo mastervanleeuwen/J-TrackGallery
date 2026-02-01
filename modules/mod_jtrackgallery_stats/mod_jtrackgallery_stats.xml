@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" client="site" method="upgrade">
 <name>MOD_JTG_STATS</name>
-<author>arco van Leeuwen; based on work by Christophe Seguinot, Jason Oxley, and Michael Pfister</author>
+<author>Marco van Leeuwen; based on work by Christophe Seguinot, Jason Oxley, and Michael Pfister</author>
 <creationDate>September 2010</creationDate>
 <copyright>(C) 2010 All rights reserved.</copyright>
 <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
