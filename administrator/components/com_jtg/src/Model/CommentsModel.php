@@ -130,8 +130,6 @@ class CommentsModel extends ListModel
 	 */
 	function publish($cid = array(), $publish = 1)
 	{
-		$user 	= Factory::getUser();
-
 		if (count($cid))
 		{
 			ArrayHelper::toInteger($cid);

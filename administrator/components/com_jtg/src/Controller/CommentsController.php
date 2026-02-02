@@ -43,7 +43,7 @@ class CommentsController extends BaseController
 	function publish ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -71,7 +71,7 @@ class CommentsController extends BaseController
 	function unpublish ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -99,7 +99,7 @@ class CommentsController extends BaseController
 	function remove ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -127,7 +127,7 @@ class CommentsController extends BaseController
 	function saveComment ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('comments');
 

@@ -272,7 +272,7 @@ else
 	echo '<a name="jtg_param_header_description"></a>';
 }
 
-$user = Factory::getUser();
+$user = $app->getIdentity();
 if ($this->canDo->get('jtg.download'))
 {
 	$download_buttons ='';

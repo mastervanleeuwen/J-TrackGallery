@@ -103,9 +103,9 @@ class JtgMapsPlugin extends CMSPlugin implements SubscriberInterface {
 			return;
 
 			// Load the plugin language file
-		Factory::getLanguage()->load('plg_content_jtrackgallery_maps', JPATH_SITE . '/plugins/content/jtrackgallery_maps',	null, true);
-		Factory::getLanguage()->load('com_jtg', JPATH_SITE, null, true);
-		Factory::getLanguage()->load('com_jtg_common', JPATH_SITE, null, true);
+		$this->getLanguage()->load('plg_content_jtrackgallery_maps', JPATH_SITE . '/plugins/content/jtrackgallery_maps',	null, true);
+		$this->getLanguage()->load('com_jtg', JPATH_SITE, null, true);
+		$this->getLanguage()->load('com_jtg_common', JPATH_SITE, null, true);
 
 		// Check for basic requirements
 		$db = Factory::getDbo ();
@@ -228,10 +228,10 @@ class JtgMapsPlugin extends CMSPlugin implements SubscriberInterface {
 		$map = "";
 
 		// Load english language file for 'com_jtg' component then override with current language file
-		Factory::getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg',	null, true);
+		$this->getLanguage()->load('com_jtg_common', JPATH_SITE . '/components/com_jtg',	null, true);
 
 		// Com_jtg_additional language files are in /images/jtrackgallery/language folder
-		Factory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',	null, true);
+		$this->getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',	null, true);
 
 		$params = ComponentHelper::getParams('com_jtg');
 

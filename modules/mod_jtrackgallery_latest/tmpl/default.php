@@ -24,10 +24,10 @@ use Joomla\CMS\Router\Route;
 $tcustom_enable = $params->get('tcustom_enable');
 
 // Load english language file for 'com_jtg' component then override with current language file
-Factory::getLanguage()->load('com_jtg_common', JPATH_SITE,	null, true);
+Factory::getApplication()->getLanguage()->load('com_jtg_common', JPATH_SITE,	null, true);
 
 // Com_jtg_additional language files are in /images/jtrackgallery/language folder
-Factory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',	null, true);
+Factory::getApplication()->getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery',	null, true);
 
 foreach ($tracks as $track)
 {

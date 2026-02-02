@@ -57,7 +57,7 @@ class TranslationsController extends BaseController
 	function saveLanguages()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('translations');
 		$success = $model->saveLanguage();

@@ -99,7 +99,7 @@ class FilesController extends FormController
 	function updateGeneratedValues ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('files');
 
@@ -118,7 +118,7 @@ class FilesController extends FormController
 	 */
 	function uploadfiles ()
 	{
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 		$jFileInput = Factory::getApplication()->input->files;
 		$files = $jFileInput->get('files');
 		$model = $this->getModel('files');
@@ -148,7 +148,7 @@ class FilesController extends FormController
 	function publish ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -176,7 +176,7 @@ class FilesController extends FormController
 	function tohide ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -204,7 +204,7 @@ class FilesController extends FormController
 	function toshow ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -232,7 +232,7 @@ class FilesController extends FormController
 	function unpublish ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -260,7 +260,7 @@ class FilesController extends FormController
 	function accessregistered ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -288,7 +288,7 @@ class FilesController extends FormController
 	function accessspecial ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -316,7 +316,7 @@ class FilesController extends FormController
 	function accesspublic ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -344,7 +344,7 @@ class FilesController extends FormController
 	function remove ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -372,7 +372,7 @@ class FilesController extends FormController
 	function removeFromImport ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$found = Factory::getApplication()->input->get('found');
 
@@ -394,7 +394,7 @@ class FilesController extends FormController
 	function savefile ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('files');
 
@@ -416,7 +416,7 @@ class FilesController extends FormController
 	function savefiles ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('files');
 
@@ -436,7 +436,7 @@ class FilesController extends FormController
 	function updatefile ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('files');
 
@@ -455,7 +455,7 @@ class FilesController extends FormController
 	 */
 	function fetchJPTfiles ()
 	{
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 		$model = $this->getModel('files');
 		echo $model->_fetchJPTfiles();
 	}

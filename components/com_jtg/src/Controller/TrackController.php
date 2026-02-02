@@ -69,7 +69,7 @@ class TrackController extends BaseController
 	function download()
 	{
 
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$format = Factory::getApplication()->input->get('format');
 		$model = $this->getModel();
@@ -137,7 +137,7 @@ class TrackController extends BaseController
 	function save()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 		$file = Factory::getApplication()->input->files->get('file');
 
 		if (!$file['name'])
@@ -174,7 +174,7 @@ class TrackController extends BaseController
 	function uploadGPX()
 	{
       // Check for request forgeries
-      Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+      Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
       $file = Factory::getApplication()->input->files->get('file');
 
 		if (!Factory::getUser()->authorise('core.create', 'com_jtg')) {
@@ -302,7 +302,7 @@ class TrackController extends BaseController
 		}
 
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 		$id = Factory::getApplication()->input->getInt('id');
 
 		$model = $this->getModel(); // removed 'track' argument
@@ -340,7 +340,7 @@ class TrackController extends BaseController
 		$mainframe = Factory::getApplication();
 
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 		$cfg = JtgHelper::getConfig();
 		$id = Factory::getApplication()->input->getInt('id');
 

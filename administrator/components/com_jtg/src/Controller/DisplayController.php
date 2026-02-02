@@ -59,8 +59,8 @@ class DisplayController extends BaseController
 	 * @return void
 	 */
 	public function display($cachable = false, $urlparams = array()) {
-		Factory::getLanguage()->load('com_jtg');
-		Factory::getLanguage()->load('com_jtg_common', JPATH_SITE);
+		Factory::getApplication()->getLanguage()->load('com_jtg');
+		Factory::getApplication()->getLanguage()->load('com_jtg_common', JPATH_SITE);
     	return parent::display($cachable, $urlparams);
 	}
 

@@ -29,14 +29,14 @@ class JtgView extends HtmlView
 {
     public function display($tpl = null)
     {
-        Factory::getLanguage()->load('com_jtg');
-        Factory::getLanguage()->load('com_jtg_common', JPATH_SITE);
+        $this->getLanguage()->load('com_jtg');
+        $this->getLanguage()->load('com_jtg_common', JPATH_SITE);
 
         // Com_jtg_additional language files are in /images/jtrackgallery/language
         // folder
-        Factory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery', 'en-GB',
+        $this->getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery', 'en-GB',
 		true);
-        Factory::getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery', null, true);
+        $this->getLanguage()->load('com_jtg_additional', JPATH_SITE . '/images/jtrackgallery', null, true);
 
         parent::display($tpl);
     }

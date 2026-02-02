@@ -91,7 +91,7 @@ class MapsController extends BaseController
 	function orderup()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = $this->input->get('cid', array(), 'array');
 		$model = $this->getModel();
@@ -108,7 +108,7 @@ class MapsController extends BaseController
 	function orderdown()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = $this->input->get('cid', array(), 'array');
 		$model = $this->getModel();
@@ -125,7 +125,7 @@ class MapsController extends BaseController
 	function saveorder()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid 	= Factory::getApplication()->input->get('cid', array(), 'array');
 		$order 	= Factory::getApplication()->input->get('order', array(), 'array');
@@ -146,7 +146,7 @@ class MapsController extends BaseController
 	function publish()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -174,7 +174,7 @@ class MapsController extends BaseController
 	function unpublish()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -202,7 +202,7 @@ class MapsController extends BaseController
 	function remove()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -230,7 +230,7 @@ class MapsController extends BaseController
 	function savemap()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('maps');
 		$savemap = $model->saveMap();
@@ -251,7 +251,7 @@ class MapsController extends BaseController
 	function savemaps()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('maps');
 
@@ -271,7 +271,7 @@ class MapsController extends BaseController
 	function updatemap()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('maps');
 

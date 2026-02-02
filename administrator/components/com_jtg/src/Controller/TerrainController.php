@@ -61,7 +61,7 @@ class TerrainController extends BaseController
 	function save()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('terrain');
 		$model->save();
@@ -79,7 +79,7 @@ class TerrainController extends BaseController
 	function update()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel('terrain');
 		$model->save();
@@ -97,7 +97,7 @@ class TerrainController extends BaseController
 	function publish()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -125,7 +125,7 @@ class TerrainController extends BaseController
 	function unpublish()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -153,7 +153,7 @@ class TerrainController extends BaseController
 	function remove()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);

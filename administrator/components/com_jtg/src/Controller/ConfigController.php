@@ -47,8 +47,8 @@ class ConfigController extends BaseController
 	 */
 	public function display($cachable = false, $urlparams = false)
 	{
-		Factory::getLanguage()->load('com_jtg');
-		Factory::getLanguage()->load('com_jtg_common', JPATH_SITE);
+		Factory::getApplication()->getLanguage()->load('com_jtg');
+		Factory::getApplication()->getLanguage()->load('com_jtg_common', JPATH_SITE);
 		parent::display();
 	}
 

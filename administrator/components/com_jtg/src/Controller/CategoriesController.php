@@ -89,7 +89,7 @@ class CategoriesController extends BaseController
 	function uploadcatimages ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel();
 		$success = $model->saveCatImage();
@@ -117,7 +117,7 @@ class CategoriesController extends BaseController
 	function savecat ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$model = $this->getModel();
 		$success = $model->saveCat();
@@ -143,7 +143,7 @@ class CategoriesController extends BaseController
 	function orderup ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = $this->input->get('cid', array(), 'array');
 		$model = $this->getModel();
@@ -160,7 +160,7 @@ class CategoriesController extends BaseController
 	function orderdown ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = $this->input->get('cid', array(), 'array');
 		$model = $this->getModel();
@@ -177,7 +177,7 @@ class CategoriesController extends BaseController
 	function saveorder ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		$order = Factory::getApplication()->input->get('order', array(), 'array');
@@ -198,7 +198,7 @@ class CategoriesController extends BaseController
 	function publish ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -226,7 +226,7 @@ class CategoriesController extends BaseController
 	function unpublish ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);
@@ -254,7 +254,7 @@ class CategoriesController extends BaseController
 	function removepic ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 
@@ -281,7 +281,7 @@ class CategoriesController extends BaseController
 	function remove ()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JTEXT::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		ArrayHelper::toInteger($cid);

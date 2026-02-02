@@ -72,8 +72,8 @@ class com_jtgInstallerScript extends InstallerScript
 		ignore_user_abort(true);
 
 		// Load english language file for 'com_jtg' component then override with current language file
-		Factory::getLanguage()->load('com_jtg', JPATH_ADMINISTRATOR . '/components/com_jtg/language', 'en-GB', true);
-		Factory::getLanguage()->load('com_jtg', JPATH_ADMINISTRATOR . '/components/com_jtg/language', null, true);
+		Factory::getApplication()->getLanguage()->load('com_jtg', JPATH_ADMINISTRATOR . '/components/com_jtg/language', 'en-GB', true);
+		Factory::getApplication()->getLanguage()->load('com_jtg', JPATH_ADMINISTRATOR . '/components/com_jtg/language', null, true);
 		$jversion = new Version;
 
 		// Installing component manifest file version

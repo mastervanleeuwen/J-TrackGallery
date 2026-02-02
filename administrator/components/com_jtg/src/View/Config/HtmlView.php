@@ -48,8 +48,8 @@ class HtmlView extends JtgView
 	 */
 	public function display($tpl = null)
 	{
-		Factory::getLanguage()->load('com_jtg');
-		Factory::getLanguage()->load('com_jtg_common', JPATH_SITE);
+		$this->getLanguage()->load('com_jtg');
+		$this->getLanguage()->load('com_jtg_common', JPATH_SITE);
 	
 		$config = JtgHelper::getConfig();
 

@@ -131,8 +131,8 @@ $user_summary = $this->getModel()->getTotals($uid);
 		</thead>
 		<tbody>
 			<?php
-			$edit = JTExt::_('edit');
-			$delete = JTExt::_('delete');
+			$edit = Text::_('edit');
+			$delete = Text::_('delete');
 			$edit = "title=\"" . $edit . "\" alt=\"" . $edit . "\"";
 			$delete = "title=\"" . $delete . "\" alt=\"" . $delete . "\"";
 			$k = 0;

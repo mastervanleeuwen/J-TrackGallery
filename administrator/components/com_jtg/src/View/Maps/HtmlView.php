@@ -50,8 +50,8 @@ class HtmlView extends JtgView
 		$app = Factory::getApplication();
 		$option = Factory::getApplication()->input->get('option');
 		
-		Factory::getLanguage()->load('com_jtg');
-		Factory::getLanguage()->load('com_jtg_common', JPATH_SITE);
+		$this->getLanguage()->load('com_jtg');
+		$this->getLanguage()->load('com_jtg_common', JPATH_SITE);
 	
 		if ($this->getLayout() == 'form')
 		{
