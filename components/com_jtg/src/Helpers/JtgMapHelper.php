@@ -432,7 +432,7 @@ class JtgMapHelper {
 					$title = '';
 					if (!is_null($image->title)) $title = htmlentities($image->title, ENT_QUOTES);
 					$imagehtml = "<img " . $size . " src=\"" . $imagepath . "\" alt=\"" . $image->filename . "\" title=\"$title\">";
-					if (strlen($image->title)) $imagehtml .= "<div class=\"jtg-caption\">$title</div>";
+					if (strlen($title)) $imagehtml .= "<div class=\"jtg-caption\">$title</div>";
 					$imgsJS[] = "{long: $image->lon, lat: $image->lat, imghtml : '$imagehtml' }";
             }
 			}
