@@ -261,7 +261,7 @@ $document->addStyleDeclaration($style);
 				{
 					if ( $check == 1 )
 					{
-						$tt = JTEXT::sprintf('COM_JTG_TT_ERR_FILEEXIST', $file_replace);
+						$tt = Text::sprintf('COM_JTG_TT_ERR_FILEEXIST', $file_replace);
 						$color = "green";
 					}
 					elseif ( $check == 2 )
