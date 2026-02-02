@@ -19,14 +19,15 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 // Toolbar
-JToolBarHelper::title($alt = 'COM_JTG_UPLOAD', 'categories.png');
-JToolBarHelper::back();
+ToolBarHelper::title($alt = 'COM_JTG_UPLOAD', 'categories.png');
+ToolBarHelper::back();
 
 // JToolBarHelper::back();
-JToolBarHelper::spacer();
-JToolBarHelper::save('uploadfiles', 'Upload');
+ToolBarHelper::spacer();
+ToolBarHelper::save('uploadfiles', 'Upload');
 $accept = array("gpx","tcx", "kml");
 $max = 100;
 ?>

@@ -20,13 +20,14 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 // Toolbar
-JToolBarHelper::title(Text::_('COM_JTG_EDIT_COMMENT'), 'addedit.png');
-JToolBarHelper::back();
-JToolBarHelper::spacer();
-JToolBarHelper::save('saveComment', $alt = 'COM_JTG_SAVE', 'save.png');
-JToolBarHelper::help('comments/form', true);
+ToolBarHelper::title(Text::_('COM_JTG_EDIT_COMMENT'), 'addedit.png');
+ToolBarHelper::back();
+ToolBarHelper::spacer();
+ToolBarHelper::save('saveComment', $alt = 'COM_JTG_SAVE', 'save.png');
+ToolBarHelper::help('comments/form', true);
 ?>
 <form class="adminForm" name="adminForm" id="adminForm" method="post"
 	action="">

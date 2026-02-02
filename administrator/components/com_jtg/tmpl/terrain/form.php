@@ -19,6 +19,7 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 if ($this->id < 1)
 {
@@ -40,11 +41,11 @@ else
 	$terrain = $this->terrain;
 }
 
-JToolBarHelper::title($title, 'categories.png');
-JToolBarHelper::back();
-JToolBarHelper::spacer();
-JToolBarHelper::save($save["func"], $save["name"], 'save.png');
-JToolBarHelper::help('terrain/form', true);
+ToolBarHelper::title($title, 'categories.png');
+ToolBarHelper::back();
+ToolBarHelper::spacer();
+ToolBarHelper::save($save["func"], $save["name"], 'save.png');
+ToolBarHelper::help('terrain/form', true);
 ?>
 <form action="" method="post" name="adminForm" id="adminForm"
 	class="adminForm">
