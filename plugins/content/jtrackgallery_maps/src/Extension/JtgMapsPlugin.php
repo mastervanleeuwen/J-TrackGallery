@@ -107,9 +107,9 @@ class JtgMapsPlugin extends CMSPlugin implements SubscriberInterface {
 		$this->getLanguage()->load('com_jtg', JPATH_SITE, null, true);
 		$this->getLanguage()->load('com_jtg_common', JPATH_SITE, null, true);
 
-		// Check for basic requirements
-		$db = Factory::getDbo ();
-
+		$com_jtg = $app->bootComponent('com_jtg')->getMVCFactory();
+        $trackModel = $com_jtg->createModel('Track','site');
+		
 		// ----------------------------------- Get plugin parameters -----------------------------------
 
 		// Get plugin info
@@ -139,37 +139,26 @@ class JtgMapsPlugin extends CMSPlugin implements SubscriberInterface {
 					$temp = explode ( '=', $tagparam );
 					$plg_call_params [trim ( $temp [0] )] = trim ( $temp [1] );
 				}
-				$plg_call_params ['id'] = ( int ) $plg_call_params ['id'];
+				$trackID = ( int ) $plg_call_params ['id'];
 				$warningtext = ' id=' . ($plg_call_params ['id'] ? $plg_call_params ['id'] : 'null') . ' gpxfilename=' . ($plg_call_params ['gpxfilename'] ? $plg_call_params ['gpxfilename'] : '') ;
 
 				if ((! $plg_call_params ['id'] > 0) and (! $plg_call_params ['gpxfilename'])) {
-					 Factory::getApplication()->enqueueMessage(Text::_ ( 'PLG_JTG_MAPS_TRACK_NOT_SPECIFIED' ) . "()" );
+					Factory::getApplication()->enqueueMessage(Text::_ ( 'PLG_JTG_MAPS_TRACK_NOT_SPECIFIED' ) . "()" );
 				}
 				// Test if given id or filename correspond to one track in database
 				if ($plg_call_params ['gpxfilename']) {
 					// Determine the id of the filename
-					$query = "SELECT id FROM `#__jtg_files` WHERE file='" . $plg_call_params ['gpxfilename'] . "'";
-					if ($plg_call_params ['id'] > 0) {
-						$query .= " or id=" . $plg_call_params ['id'];
-					}
-					$db->setQuery ( $query );
-					$db->execute ();
-					$ids = $db->loadObjectList ();
+					$trackID = $trackModel->getIdFromFileName($plg_call_params ['gpxfilename']);
 
-					if (count ( $ids ) > 0 and ( int ) $ids [0]->id > 0)
-					{
-						$plg_call_params ['id'] = ( int ) $ids [0]->id;
-					}
-					else
+					if ($trackID <= 0)
 					{
 						Factory::getApplication()->enqueueMessage( Text::_ ( 'PLG_JTG_MAPS_TRACK_NOT_FOUND' ) . " ($warningtext)" );
-						$plg_call_params ['id'] = 0;
 					}
 				}
 
 				$plg_html = $plg_copyrights_start;
 
-				if ($plg_call_params ['id'] > 0)
+				if ($trackID > 0)
 				{
 					// Generate the html code for the map
 					$this->map_count += 1;
@@ -181,7 +170,7 @@ class JtgMapsPlugin extends CMSPlugin implements SubscriberInterface {
 					}
 					if ($this->map_count < 50)
 					{
-						$plg_html .= $this->rendermap($plgParams, $plg_call_params);
+						$plg_html .= $this->rendermap($trackModel->getItem($trackID),$plgParams, $plg_call_params);
 						$linktarget = '';
 						if (isset($plg_call_params['show_link'])) {
 							if ($plg_call_params['show_link']) $showlink = true; else $showlink = false;
@@ -214,7 +203,7 @@ class JtgMapsPlugin extends CMSPlugin implements SubscriberInterface {
 		}
 	}
 
-	private function rendermap($plgParams, $plg_call_params)
+	private function rendermap($track, $plgParams, $plg_call_params)
 	{
 		$document = Factory::getDocument();
 		$document->addStyleSheet(Uri::root(true) . '/media/com_jtg/js/openlayers/ol.css');
@@ -237,9 +226,6 @@ class JtgMapsPlugin extends CMSPlugin implements SubscriberInterface {
 
 		$app = \Joomla\CMS\Factory::getApplication();
         $jtg = $app->bootComponent('com_jtg')->getMVCFactory();
-		$trackmodel = $jtg->createModel('Track', 'site');
-		$track = $trackmodel->getFile($plg_call_params['id']);
-		$trackImages = $trackmodel->getImages($plg_call_params['id']);
 		$document = Factory::getDocument();
 		$document->addScript( Uri::root(true) . '/media/com_jtg/js/openlayers/ol.js');
 		$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/jtg.js');
@@ -247,6 +233,7 @@ class JtgMapsPlugin extends CMSPlugin implements SubscriberInterface {
 		$document->addScript( Uri::root(true) . '/components/com_jtg/assets/js/geolocation.js');
 		$file = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/' . $track->file;
 		$gpsData = new GPSData($file, $track->file);
+		$trackImages = array();
 
 		$plgParams_map_width = $plgParams->get('map_width', false);
 		$plgParams_map_height = $plgParams->get('map_height', false);

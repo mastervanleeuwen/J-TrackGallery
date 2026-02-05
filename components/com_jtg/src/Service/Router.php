@@ -539,7 +539,7 @@ class Router extends RouterBase
    */
    function getAliasFromId($id)
    {
-		$db = Factory::getDbo();
+		$db = Factory::getContainer()->get('DatabaseDriver'); // TODO: use model?
 		$query = $db->getQuery(true);
 		$query->select('alias');
 		$query->from($db->quoteName('#__jtg_files'));
@@ -557,7 +557,7 @@ class Router extends RouterBase
    */
    function getIdFromAlias($alias)
 	{
-		$db = Factory::getDbo();
+		$db = $db = Factory::getContainer()->get('DatabaseDriver');
 		$query = $db->getQuery(true);
 		$query->select('id');
 		$query->from($db->quoteName('#__jtg_files'));

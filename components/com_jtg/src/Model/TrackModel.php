@@ -199,16 +199,13 @@ class TrackModel extends FormModel
 	function saveFile ()
 	{
 		$app = Factory::getApplication();
-		$user = Factory::getUser();
+		$user = $app->getIdentity();
 
 		if (!$user->authorise('core.create', 'com_jtg')) {
 			$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
 			$this->setRedirect(Route::_('index.php?option=com_jtg&view=jtg',false), false);
 			return false;
 		}
-
-		jimport('joomla.filesystem.file');
-		jimport('joomla.filesystem.folder');
 
 		$params = ComponentHelper::getParams('com_jtg');
 
@@ -353,7 +350,7 @@ class TrackModel extends FormModel
 		if ((int) $params->get('upload_notify_uid'))
 		{
 			$mailer = Factory::getMailer();
-			$user = JUser::getInstance((int)  $params->get('upload_notify_uid'));
+			$user = $app->getIdentity((int) $params->get('upload_notify_uid'));
 			$recipient = $user->email;
 			if (strlen($recipient))
 			{
@@ -405,8 +402,9 @@ class TrackModel extends FormModel
 	 *
 	 * @return return_description
 	 */
-	function getFile ($id)
+	function getItem($id = null)
 	{
+		if (is_null($id)) return null;
 		$db = $this->getDbo();
 
 		$query = "SELECT a.*, b.title AS cat, b.image AS image, c.name AS user" . "\n FROM #__jtg_files AS a" .
@@ -419,9 +417,27 @@ class TrackModel extends FormModel
 		return $result;
 	}
 
-	// TODO: rename getFile above to getItem
-	function getItem($id = NULL) {
-		return $this->getFile($id);
+	/**
+	 * Get Track ID from file name
+	 *
+	 * @param  string $fname track file name
+	 *
+	 * @return id number
+	 */
+	function getIdFromFileName($fname)
+	{
+		$db = $this->getDbo();
+		$query = "SELECT id FROM `#__jtg_files` WHERE file='" . $fname . "'";
+	    $db->setQuery($query);
+        $db->execute();
+        $ids = $db->loadObjectList();
+
+        if (count ( $ids ) == 0) 
+		{
+            Factory::getApplication()->enqueueMessage(Text::_('PLG_JTG_MAPS_TRACK_NOT_FOUND') . " ($warningtext)" );
+            return 0;
+	  	}
+		return (int) $ids[0]->id;
 	}
 
 	/**
@@ -575,10 +591,10 @@ class TrackModel extends FormModel
 		$app = Factory::getApplication();
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
-		$user = Factory::getUser();
+		$user = $app->getIdentity();
       	if ( !$user->authorise('core.delete', 'com_jtg') ) 
 		{
-			if (!isset($this->track) || $this->track->id != $id) $this->getFile($id);
+			if (!isset($this->track) || $this->track->id != $id) $this->getItem($id);
 			if (!($user->authorise('core.edit.own') && $this->track->uid == $user->id) &&
 				!($app->getUserState('com_jtg.newfileid') == $id))
      		{
@@ -920,24 +936,20 @@ class TrackModel extends FormModel
 	function updateFile ($id)
 	{
 		$app = Factory::getApplication();
-		$user = Factory::getUser();
+		$user = $app->getIdentity();
 		if (!$user->authorise('core.edit', 'com_jtg') &&
           !($user->authorise('core.create', 'com_jtg') && $app->getUserState('com_jtg.newfileid') == $id))
 		{
-			if (!isset($this->track) || $this->track->id != $id) $this->getFile($id);
+			if (!isset($this->track) || $this->track->id != $id) $this->getItem($id);
 			if (!($user->authorise('core.edit.own', 'com_jtg') && $user->id == $this->track->uid))
 	      {
 				$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
-      	   $this->setRedirect(Route::_('index.php?option=com_jtg&view=jtg',false), false);
+    			$this->setRedirect(Route::_('index.php?option=com_jtg&view=jtg',false), false);
 				return "Action not permitted";
 			}
 		}
 
-		jimport('joomla.filesystem.file');
-		jimport('joomla.filesystem.folder');
-
 		$db = $this->getDbo();
-		$user = Factory::getUser();
 
 		$data['id'] = $id;
 		// Get the post data
@@ -1109,7 +1121,7 @@ class TrackModel extends FormModel
 			$editor = Factory::getApplication()->getConfig()->get('editor');
 		}
 		$editor = Editor::getInstance($editor);
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$id = Factory::getApplication()->input->getInt('id'); // Check whether getComment works here
 		?>
 
@@ -1218,7 +1230,7 @@ class TrackModel extends FormModel
 	{
 		$app = Factory::getApplication();
 
-		$user = Factory::getUser();
+		$user = $app->getIdentity();
 		$uid = $user->id;
 		if (!$user->authorise('jtg.comment','com_jtg')) {
          $app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
@@ -1312,7 +1324,7 @@ class TrackModel extends FormModel
 	 */
 	function approachors ($to_lat, $to_lon, $lang)
 	{
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$latlon = JtgHelper::getLatLon($user->id);
 		$link = "http://openrouteservice.org/?";
 
@@ -1346,7 +1358,7 @@ class TrackModel extends FormModel
 	function approachcm ($to_lat, $to_lon, $lang)
 	{
 		$link = "http://maps.cloudmade.com/?";
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$latlon = JtgHelper::getLatLon($user->id);
 
 		if (isset($latlon[0]))
@@ -1398,7 +1410,7 @@ class TrackModel extends FormModel
 	{
 		$key = "651006379c18424d8b5104ed4b7dc210";
 		$link = "http://navigation.cloudmade.com/" . $key . "/api/0.3/";
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$latlon = JtgHelper::getLatLon($user->id);
 
 		if (isset($latlon[0]))

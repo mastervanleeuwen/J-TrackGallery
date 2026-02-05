@@ -72,9 +72,9 @@ class HtmlView extends JtgView
 		2 = special // Ie admin
 		9 = private
 		*/
-		$uid = Factory::getUser()->id;
+		$uid = Factory::getApplication()->getIdentity()->id;
 
-		if (Factory::getUser()->get('isRoot'))
+		if (Factory::getApplication()->getIdentity()->get('isRoot'))
 		{
 			$admin = true;
 		}
@@ -194,7 +194,7 @@ class HtmlView extends JtgView
 
 		$this->params = ComponentHelper::getParams('com_jtg');
 		$this->id = $app->input->getInt('id');
-		$uid = Factory::getUser()->id;
+		$uid = Factory::getApplication()->getIdentity()->id;
 
 		$this->footer = LayoutHelper::footer();
 
@@ -210,7 +210,7 @@ class HtmlView extends JtgView
 			if ($this->params->get('jtg_param_disable_map_animated_cursor') == 0) {
 				$document->addScript(Uri::root(true) . '/components/com_jtg/assets/js/animatedCursor.js');
 			}
-			$this->track = $model->getFile( $this->id );
+			$this->track = $model->getItem( $this->id );
 			if (!$this->track) {
 				$app->enqueueMessage("Track not found id ".$this->id,'Error');
 				$app->redirect(Uri::root());
@@ -295,7 +295,7 @@ class HtmlView extends JtgView
 		// 	$userparams = explode("\n", $this->user->params);
 		$app = Factory::getApplication();
 		$lang = $app->getLanguage()->getTag();
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		$lang = explode("-", $lang);
 		$userlang = $lang[0];
