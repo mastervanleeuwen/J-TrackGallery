@@ -74,7 +74,7 @@ class TrackController extends BaseController
 		$format = Factory::getApplication()->input->get('format');
 		$model = $this->getModel();
 		$id = Factory::getApplication()->input->get('id');
-		$track = $model->getFile($id);
+		$track = $model->getItem($id);
 		$trackname = str_replace(' ', '_', $track->title);
 
 		if ($format == 'original')
@@ -174,11 +174,11 @@ class TrackController extends BaseController
 	function uploadGPX()
 	{
       // Check for request forgeries
-      Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
-      $file = Factory::getApplication()->input->files->get('file');
+    	Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
+		$app = Factory::getApplication();
+		$file = $app->input->files->get('file');
 
-		if (!Factory::getUser()->authorise('core.create', 'com_jtg')) {
-			$app = Factory::getApplication();
+		if (!$app->getIdentity()->authorise('core.create', 'com_jtg')) {
 			$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
 			$this->setRedirect(Route::_('index.php?option=com_jtg&view=jtg',false), false);
 			return;
@@ -293,11 +293,10 @@ class TrackController extends BaseController
 	 */
 	function update()
 	{
-		$user		= Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if (!$user->get('id'))
 		{
-
 			$this->setRedirect(Route::_('index.php?option=com_jtg', false), false);
 		}
 

@@ -477,7 +477,7 @@ class TrackModel extends FormModel
 		$givenvotes = (int) $db->loadResult();
 
 		// Fetch rating
-		$rate = null;
+		$rate = 0;
 
 		if ($count != 0)
 		{
@@ -520,7 +520,6 @@ class TrackModel extends FormModel
 				return false;
 			}
 		}
-
 		$object = array(
 				"count" => $count,
 				"rate" => (float) $rate,

@@ -621,7 +621,7 @@ class HtmlView extends JtgView
 		$model = $this->getModel();
 		$cats = $model->getCats(0, 'COM_JTG_SELECT', 0, 0);
 		$terrain = $model->getTerrain("*", true, " WHERE published=1 ");
-		$user 	= Factory::getUser();
+		$user 	= Factory::getApplication()->getIdentity();
 		$uid = $user->get('id');
 
 		if (!isset($id))

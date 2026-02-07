@@ -172,7 +172,7 @@ class JtgMapHelper {
 	 */
 	static function parseMapLayersJS($mapid=0,$layerSwitcher=false)
 	{
-		$db = Factory::getDBO();
+		$db = Factory::getContainer()->get('DatabaseDriver');
 		if ($mapid != 0) {
 			$query = $db->getQuery(true);
 			$query->select('*')

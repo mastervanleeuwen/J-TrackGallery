@@ -127,7 +127,7 @@ if (version_compare(JVERSION,'4.0','lt'))
 
 				$checked 	= HTMLHelper::_('grid.checkedout', $row, $i);
 				$published 	= HTMLHelper::_('jgrid.published', $row->published, $i);
-				$user		= Factory::getUser($row->uid);
+				$user		= Factory::getApplication()->getIdentity($row->uid);
 				$imagelink	= $this->buildImageFiletypes($row->istrack, $row->iswp, $row->isroute, $row->iscache);
 
 				$title		= $this->buildEditKlicks(($row->title? $row->title:Text::_('COM_JTG_NO_TITLE')), $i, $row->id);

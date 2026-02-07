@@ -105,7 +105,7 @@ class LayoutHelper
 		$navi .= '<div class="navi-part"><a href="' .
 				Route::_("index.php?option=com_jtg&view=files&layout=list") . '">' . Text::_('COM_JTG_TRACKS') . '</a></div>';
 
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		if ($user->get('id'))
 		{
 			// Erscheint nur, wenn User kein Gast
@@ -146,7 +146,7 @@ class LayoutHelper
 			if ( (strpos($_SERVER['SERVER_NAME'], 'localcarto') !== false)
 				or (strpos($_SERVER['SERVER_NAME'], 'jtrackgallery.net') !== false) )
 			{
-				$db = Factory::getDbo();
+				$db = Factory::getContainer()->get('DatabaseDriver');
 				$query = $db->getQuery(true);
 				$query->select('manifest_cache');
 				$query->from($db->quoteName('#__extensions'));

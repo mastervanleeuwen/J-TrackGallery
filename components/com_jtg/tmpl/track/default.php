@@ -412,11 +412,16 @@ if (($this->imageList) AND ( $this->cfg->gallery != "none" ))
                   {
                      $thumb = $image->filename;
                   }
-                  $title = $image->title;
-                  if (strlen($title)==0) $title = $image->filename;
-                  echo "  <div class=\"jtg-photo-item\"> <a class=\"highslide\" href='" . $imgurlpath . $image->filename . "' title=\"" . $title . "\" onclick=\"return hs.expand(this)\">
+                  $title = '';
+				  $hstitle = $image->filename;
+				if (!empty($image->title)) 
+				{
+					$title = $image->title;
+					$hstitle = $image->title;
+				}
+                  echo "  <div class=\"jtg-photo-item\"> <a class=\"highslide\" href='" . $imgurlpath . $image->filename . "' title=\"" . $hstitle . "\" onclick=\"return hs.expand(this)\">
                      <img src=\"" . $imgurlpath . $thumb . "\" alt=\"$image->filename\"  /></a>
-                     <div class=\"jtg-caption\">$image->title</div> <br>
+                     <div class=\"jtg-caption\">$title</div> <br>
                      </div>\n";
                }
 

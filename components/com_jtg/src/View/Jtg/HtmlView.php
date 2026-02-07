@@ -51,11 +51,10 @@ class HtmlView extends JtgView
 	public function display($tpl = null)
 	{
 		// ToDo split in jtg and geoposition
-		$user = Factory::getUser();
-		$uid = $user->id;
-
 		$app = Factory::getApplication();
-
+		$user = $app->getIdentity();
+		$uid = $user->id;
+	
 		// Load Openlayers stylesheet first (for overriding)
 		$document = Factory::getDocument();
 		$cfg = JtgHelper::getConfig();

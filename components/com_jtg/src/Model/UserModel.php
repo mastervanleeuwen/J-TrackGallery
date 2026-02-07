@@ -73,7 +73,7 @@ class UserModel extends ListModel
 		
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$uid = $user->id;
 		
 		$query->select('a.*, c.name AS user')
@@ -132,7 +132,7 @@ class UserModel extends ListModel
 	{
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$uid = Factory::getUser()->id;
+		$uid = Factory::getApplication()->getIdentity()->id;
 		
 		$query->select('a.title as tracktitle, c.*')
 		->from('#__jtg_comments as c')
@@ -152,7 +152,7 @@ class UserModel extends ListModel
 	{
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$uid = Factory::getUser()->id;
+		$uid = Factory::getApplication()->getIdentity()->id;
 		
 		$query->select('a.title as tracktitle, c.*')
 		->from('#__jtg_comments as c')

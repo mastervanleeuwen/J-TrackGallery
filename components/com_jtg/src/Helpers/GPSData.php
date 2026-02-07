@@ -1553,7 +1553,7 @@ class GPSData
 			return false;
 		}
 
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$return = array();
 
 		foreach ( $rows AS $row )

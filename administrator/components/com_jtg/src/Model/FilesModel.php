@@ -448,7 +448,7 @@ class FilesModel extends AdminModel
 	 */
 	function publish(&$cid, $publish = 1)
 	{
-		$user 	= Factory::getUser();
+		$user 	= Factory::getApplication()->getIdentity();
 
 		if (count($cid))
 		{
@@ -482,7 +482,7 @@ class FilesModel extends AdminModel
 	 */
 	function showhide($cid = array(), $hide = 0)
 	{
-		$user 	= Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if (count($cid))
 		{
@@ -516,7 +516,7 @@ class FilesModel extends AdminModel
 	 */
 	function access($cid = array(), $access = 1)
 	{
-		$user 	= Factory::getUser();
+		$user 	= Factory::getApplication()->getIdentity();
 
 		if (count($cid))
 		{
@@ -842,7 +842,7 @@ class FilesModel extends AdminModel
 		$app = Factory::getApplication();
 		$fileokay = true;
 		$db = $this->getDbo();
-		$user = Factory::getUser();
+		// $user = $app->getIdentity(); // TODO check permissions
 		$targetdir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
 		$input = Factory::getApplication()->input;
 		$found = $input->getInt('found');
@@ -1182,10 +1182,10 @@ class FilesModel extends AdminModel
 		$app = Factory::getApplication();
 
 		$db = $this->getDbo();
-		$user = Factory::getUser();
+		$user = $app->getIdentity();
 
 		// Get the post data
-		$input = Factory::getApplication()->input;
+		$input = $app->input;
 		$catid = $input->get('catid', null, 'array');
 		$data['catid'] = $catid ? implode(',', $catid) : '';
 		$data['level'] = $input->get('level', 0, 'integer');
@@ -1360,7 +1360,7 @@ class FilesModel extends AdminModel
 		$app = Factory::getApplication();
 		$fileokay = true;
 		$db = $this->getDbo();
-		$user = Factory::getUser();
+		$user = $app->getIdentity();
 		$targetdir = JPATH_SITE . '/images/jtrackgallery/uploaded_tracks/';
 
 		for ($i = 0;$i < count($importfiles);$i++)
@@ -1550,7 +1550,7 @@ class FilesModel extends AdminModel
 		$app = Factory::getApplication();
 
 		$db = $this->getDbo();
-		$user = Factory::getUser();
+		$user = $app->getIdentity();
 
 		// Get the post data
 		$input = Factory::getApplication()->input;

@@ -437,9 +437,10 @@ class JtgHelper
 		return $return;
 	}
 
+	// TODO: use Models to access database
 	static public function getDbo()
 	{
-		return Factory::getDbo();
+		return Factory::getContainer()->get('DatabaseDriver');
 	}
 
 	static public function getCatIconName($catid)
@@ -557,7 +558,7 @@ class JtgHelper
 	 */
 	static public function giveAccessLevel()
 	{
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if (!$user->id)
 		{

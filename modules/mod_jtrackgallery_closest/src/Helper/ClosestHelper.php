@@ -40,7 +40,7 @@ class ClosestHelper
 	 */
 	public function getTracks($lon,$lat,$max_dist,$count)
 	{
-		$db = Factory::getDBO();
+		$db = Factory::getContainer()->get('DatabaseDriver');
 
 		$lonrad = deg2rad($lon);
 		$latrad = deg2rad($lat);

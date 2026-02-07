@@ -111,7 +111,7 @@ $document->addStyleSheet(Uri::base(true) . '/components/com_jtg/template.css');
 					$published = "<font color=green>" . Text::_('JYES') . "</font>";
 				}
 
-				$user		= Factory::getUser($row->uid);
+				$user		= Factory::getApplication()->getIdentity($row->uid);
 				$imagelink	= $this->buildImageFiletypes($row->istrack, $row->iswp, $row->isroute);
 				$file		= $this->buildChooseKlicks($row->id, $row->title);
 				$parent		= $this->giveParentCat($row->catid);

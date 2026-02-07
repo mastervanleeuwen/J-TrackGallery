@@ -43,7 +43,7 @@ class CategoriesModel extends ListModel
 	function getCats()
 	{
 		$mainframe = Factory::getApplication();
-		$db = Factory::getDbo();
+		$db = $this->getDbo();
 		$query = "SELECT * FROM #__jtg_cats"
 		. "\n WHERE published=1"
 		. "\n ORDER BY ordering";

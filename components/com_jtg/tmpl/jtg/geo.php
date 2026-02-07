@@ -26,7 +26,7 @@ use Joomla\CMS\Uri\Uri;
 use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 
 $document = Factory::getDocument();
-$user = Factory::getUser();
+$user = Factory::getApplication()->getIdentity();
 $userid = (int) $user->id;
 $tmpl = strlen($this->cfg->template) ? $this->cfg->template : 'default';
 $iconpath = Uri::root() . "components/com_jtg/assets/template/" . $tmpl . "/images/";

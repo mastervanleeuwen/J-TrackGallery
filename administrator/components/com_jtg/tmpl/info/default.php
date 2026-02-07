@@ -29,7 +29,7 @@ ToolbarHelper::title(Text::_('COM_JTG_INFO'), 'generic.png');
 ToolbarHelper::back();
 
 $link = Uri::root() . "components/com_jtg/assets/images/logo_JTG.png";
-$db = Factory::getDbo();
+$db = Factory::getContainer()->get('DatabaseDriver');
 $query = $db->getQuery(true);
 $query->select('manifest_cache');
 $query->from($db->quoteName('#__extensions'));

@@ -73,9 +73,10 @@ class HtmlView extends JtgView
 		2 = special // Ie admin
 		9 = private
 		*/
-		$uid = Factory::getUser()->id;
+		$user = $this->getApplication()->getIdentity();
+		$uid = $user->id;
 
-		if (Factory::getUser()->get('isRoot'))
+		if ($user->get('isRoot'))
 		{
 			$admin = true;
 		}

@@ -109,7 +109,6 @@ if (version_compare(JVERSION,'4.0','lt'))
 		<tbody>
 			<?php
 			$k = 0;
-			$user = Factory::getUser();
 			$maptypes = JtgMapHelper::getMapTypes();
 			for ($i = 0, $n = count($this->maps); $i < $n; $i++)
 			{

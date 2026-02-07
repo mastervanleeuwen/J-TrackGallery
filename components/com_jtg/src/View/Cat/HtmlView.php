@@ -105,7 +105,7 @@ class HtmlView extends JtgView
 			$this->next_cat_title=0;
 		}	
 		$sortedter = JtgModel::getTerrainData(true);
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$uid = $user->get('id');
 		$gid = $user->get('gid');
 		$deletegid = $user->get('deletegid');

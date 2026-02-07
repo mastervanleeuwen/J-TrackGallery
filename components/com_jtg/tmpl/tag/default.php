@@ -236,7 +236,7 @@ if ($this->params->get('jtg_param_cat_filterbox', 1)) {
 					$profile .= "<font class=\"emptyEntry\">" . Text::_('COM_JTG_NO_USER') . "</font>&nbsp;";
 				}
 
-				$user = Factory::getUser();
+				$user = Factory::getApplication()->getIdentity();
 				if ($this->canDo->get('core.edit') ||
 					($this->canDo->get('core.edit.own') && ($row->uid==$user->id)))
 				{

@@ -289,7 +289,7 @@ class com_jtgInstallerScript extends InstallerScript
 	// Update tracks user ID to current user id
 	$db = Factory::getDbo();
 	$application = Factory::getApplication();
-	$uid = Factory::getUser()->id;
+	$uid = $application->getIdentity()->id;
 	$query = $db->getQuery(true);
 	$query->update($db->quoteName('#__jtg_files'))->set($db->quoteName('uid').'='.$db->quote($uid))->where('1'); // Todo: check this is done below as well
 	$db->setQuery($query);
@@ -342,7 +342,7 @@ class com_jtgInstallerScript extends InstallerScript
 			Folder::delete($plg_folder);
 			$db = Factory::getDbo();
 			$application = Factory::getApplication();
-			$uid = Factory::getUser($row->uid);
+			$uid = Factory::getApplication()->getIdentity($row->uid);
 			$db->setQuery("DELETE FROM '#__extensions' WHERE element ='plg_jtrackgallery_maps'");
 			$db->execute();
 		}
@@ -549,7 +549,7 @@ class com_jtgInstallerScript extends InstallerScript
 		{
 			// This is a successful install (not an upgrade):
 			// affect sample tracks to current (admin) user
-			$user = Factory::getUser();
+			$user = $application->getIdentity();
 			$uid = $user->id;
 
 			$query = 'UPDATE #__jtg_files SET uid =' . $uid . ' WHERE 1';

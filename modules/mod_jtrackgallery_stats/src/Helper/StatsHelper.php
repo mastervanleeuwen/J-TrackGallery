@@ -37,7 +37,7 @@ class StatsHelper
 	 */
 	public function countCats()
 	{
-		$db = Factory::getDbo();
+		$db = $db = Factory::getContainer()->get('DatabaseDriver');
 		$query = "SELECT COUNT(*) FROM #__jtg_cats WHERE published='1'";
 		$db->setQuery($query);
 		$result = $db->loadResult();
@@ -52,7 +52,7 @@ class StatsHelper
 	 */
 	public function countTracks()
 	{
-		$db = Factory::getDbo();
+		$db = $db = Factory::getContainer()->get('DatabaseDriver');
 		$query = "SELECT COUNT(*) FROM #__jtg_files WHERE published='1'";
 		$db->setQuery($query);
 		$result = $db->loadResult();
@@ -67,7 +67,7 @@ class StatsHelper
 	 */
 	public function countDistance()
 	{
-		$db = Factory::getDbo();
+		$db = $db = Factory::getContainer()->get('DatabaseDriver');
 
 		$query = "SELECT SUM(distance) FROM #__jtg_files WHERE published='1'";
 		$db->setQuery($query);
@@ -85,7 +85,7 @@ class StatsHelper
 	 */
 	public function countAscent()
 	{
-		$db = Factory::getDbo();
+		$db = $db = Factory::getContainer()->get('DatabaseDriver');
 		$query = "SELECT SUM(ele_asc) FROM #__jtg_files WHERE published='1'";
 		$db->setQuery($query);
 
@@ -102,7 +102,7 @@ class StatsHelper
 	 */
 	public function countDescent()
 	{
-		$db = Factory::getDbo();
+		$db = $db = Factory::getContainer()->get('DatabaseDriver');
 		$query = "SELECT SUM(ele_desc) FROM #__jtg_files WHERE published='1'";
 		$db->setQuery($query);
 
@@ -119,7 +119,7 @@ class StatsHelper
 	 */
 	public function countViews()
 	{
-		$db = Factory::getDbo();
+		$db = $db = Factory::getContainer()->get('DatabaseDriver');
 		$query = "SELECT SUM(hits) FROM #__jtg_files WHERE published='1'";
 		$db->setQuery($query);
 		$result = $db->loadResult();
@@ -134,7 +134,7 @@ class StatsHelper
 	 */
 	public function countVotes()
 	{
-		$db = Factory::getDbo();
+		$db = $db = Factory::getContainer()->get('DatabaseDriver');
 		$query = "SELECT COUNT(*) FROM #__jtg_votes";
 		$db->setQuery($query);
 		$result = $db->loadResult();

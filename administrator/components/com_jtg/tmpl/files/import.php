@@ -84,7 +84,7 @@ $document->addStyleDeclaration($style);
 
 	// File types: *.gpx, *.trk, *.kml (not case sensitive)
 	$regex = "(.[gG][pP][xX]$|.[tT][rR][kK]$|.[kK][mM][lL]$)";
-	$me = Factory::getUser();
+	$me = Factory::getApplication()->getIdentity();
 	$files = Folder::files($importdir, $regex, true, true);
 
 	$model = $this->getModel();

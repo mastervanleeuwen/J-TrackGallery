@@ -66,7 +66,7 @@ class JtgModel extends ListModel
       // TODO: add accesslevel logic, or remove completely? replace by per-track access using native Joomla! logic?
 
       $db = $this->getDbo();
-      $user = Factory::getUser();
+      $user = Factory::getApplication()->getIdentity();
       $uid = $user->id;
 
 		if (!is_null($this->getState('filter.tag')))
@@ -190,7 +190,7 @@ class JtgModel extends ListModel
 		}
 
 		$db = $this->getDBO();
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$uid = $user->id;
 		$query = "SELECT a.* FROM #__jtg_files AS a"
 		. "\n WHERE (a.published = 1 OR a.uid='$uid') " . $where

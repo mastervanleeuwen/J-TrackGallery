@@ -72,9 +72,10 @@ class HtmlView extends JtgView
 		2 = special // Ie admin
 		9 = private
 		*/
-		$uid = Factory::getUser()->id;
+		$user = Factory::getApplication()->getIdentity(); 
+		$uid = $user->id;
 
-		if (Factory::getUser()->get('isRoot'))
+		if ($user->get('isRoot'))
 		{
 			$admin = true;
 		}
@@ -227,7 +228,7 @@ class HtmlView extends JtgView
 		$model = $this->getModel();
 		$sortedcats = JtgModel::getCatsData(true);
 		$sortedter = JtgModel::getTerrainData(true);
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$uid = $user->get('id');
 		$gid = $user->get('gid');
 		$deletegid = $user->get('deletegid');
@@ -325,7 +326,7 @@ class HtmlView extends JtgView
 		// 	$userparams = explode("\n", $this->user->params);
 		$app = Factory::getApplication();
 		$lang = $app->getLanguage();
-		$user = Factory::getUser();
+		$user = $app->getIdentity();
 
 		$lang = explode("-", $lang);
 		$userlang = $lang[0];

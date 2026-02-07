@@ -53,7 +53,7 @@ class TrackcategoryField extends ListField
 		$options = array();
 		//$options[] = array('value' => "", 'text' => Text::_('COM_JTG_CAT_SELECT')); 
 
-		$db	= Factory::getDbo();
+		$db	= $db = Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
 
 		$query->select('a.id As value, a.title As text');

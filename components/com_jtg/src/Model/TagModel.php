@@ -74,7 +74,7 @@ class TagModel extends ListModel
 
 	protected function getListQuery(){
 		$db = $this->getDbo();
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$uid = $user->id;
 		$input = Factory::getApplication()->input;
 

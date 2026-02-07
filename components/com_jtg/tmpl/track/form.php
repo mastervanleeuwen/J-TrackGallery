@@ -37,7 +37,7 @@ use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 // the title is already set; this logic can be improved.
 //
 $tracktitle='';
-$user = Factory::getUser();
+$user = Factory::getApplication()->getIdentity();
 $uid = $user->id;
 $app = Factory::getApplication(); 
 if (isset($this->id))
@@ -111,10 +111,14 @@ $editor = Editor::getInstance($editor);;
 
 // Field list
 $catlist = $this->model->getCats();
-$lists['content'] = HTMLHelper::_('select.genericlist', $catlist, 'catid[]', 'class="form-select" multiple="multiple" ', 'id', 'title', explode(',',$this->track->catid));
+$catids=array();
+if ($this->track->catid) $catids = explode(',',$this->track->catid);
+$lists['content'] = HTMLHelper::_('select.genericlist', $catlist, 'catid[]', 'class="form-select" multiple="multiple" ', 'id', 'title', $catids);
 $terrainlist = $this->model->getTerrain(" WHERE published=1 ");
 $size = min(count($terrainlist), 6);
-$lists['terrain'] = HTMLHelper::_('select.genericlist', $terrainlist, 'terrain[]', 'class="form-select" multiple="multiple" size="' . $size . '"', 'id', 'title', explode(',',$this->track->terrain));
+$terrains = array();
+if ($this->track->terrain) $terrains = explode(',',$this->track->terrain);
+$lists['terrain'] = HTMLHelper::_('select.genericlist', $terrainlist, 'terrain[]', 'class="form-select" multiple="multiple" size="' . $size . '"', 'id', 'title', $terrains);
 $lists['access'] = JtgHelper::getAccessList($this->track->access);
 $lists['hidden']  = HTMLHelper::_('select.booleanlist', 'hidden', null, $this->track->hidden);
 $lists['published']  = HTMLHelper::_('select.booleanlist', 'published', null, $this->track->published);
@@ -269,7 +273,7 @@ else
 				<tr>
 					<td class='width:30%'><?php echo Text::_('JALIAS'); ?></td>
 					<td class='width:70%'><input id="alias" class="form-control" style="width:100%;" type="text" name="alias" description="<?php echo Text::_('JFIELD_ALIAS_DESC'); ?>" placeholder="<?php echo Text::_('JFIELD_ALIAS_PLACEHOLDER'); ?>"
-						value="<?php echo $this->track->alias; ?>" /></td>
+						value="<?php if (isset($this->track->alias)) echo $this->track->alias; ?>" /></td>
 				</tr>
 				<tr>
 					<td><?php echo Text::_('COM_JTG_LEVEL'); ?>*

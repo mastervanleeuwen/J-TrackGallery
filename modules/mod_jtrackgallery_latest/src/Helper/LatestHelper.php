@@ -40,7 +40,7 @@ class LatestHelper
 	 */
 	public function getTracks($count)
 	{
-		$db = Factory::getDbo();
+		$db = $db = Factory::getContainer()->get('DatabaseDriver');
 
 		$query = "SELECT a.*, b.title as cat FROM #__jtg_files AS a"
 				. "\n LEFT JOIN #__jtg_cats AS b ON b.id=a.catid"

@@ -86,13 +86,13 @@ class FilesModel extends ListModel
 		// TODO: add accesslevel logic, or remove completely? replace by per-track access using native Joomla! logic?
 		
 		$db = $this->getDbo();
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$uid = $user->id;
 		
 		$input = Factory::getApplication()->input;
 
 		if (!is_null($this->getState('filter.tag')))
-      {
+    	{
 			if (version_compare(JVERSION,'4.0','ge')) {
 	        	$query = $this->getTable()->getTagsHelper()->getTagItemsQuery($this->getState('filter.tag'));
 			}
@@ -350,7 +350,7 @@ class FilesModel extends ListModel
 		$search = $input->get('search');
 		$cat = $input->get('cat');
 		$terrain = $input->get('terrain');
-		$user = Factory::getUser();
+		$user = $app->getIdentity();
 		$uid = $user->id;
 		$index = "a";
 		$where = array();
@@ -608,7 +608,7 @@ class FilesModel extends ListModel
 	 */
 	function approachors ($to_lat, $to_lon, $lang)
 	{
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$latlon = JtgHelper::getLatLon($user->id);
 		$link = "http://openrouteservice.org/?";
 
@@ -642,7 +642,7 @@ class FilesModel extends ListModel
 	function approachcm ($to_lat, $to_lon, $lang)
 	{
 		$link = "http://maps.cloudmade.com/?";
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$latlon = JtgHelper::getLatLon($user->id);
 
 		if (isset($latlon[0]))
@@ -694,7 +694,7 @@ class FilesModel extends ListModel
 	{
 		$key = "651006379c18424d8b5104ed4b7dc210";
 		$link = "http://navigation.cloudmade.com/" . $key . "/api/0.3/";
-		$user = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$latlon = JtgHelper::getLatLon($user->id);
 
 		if (isset($latlon[0]))
@@ -865,7 +865,7 @@ class FilesModel extends ListModel
       }
 
       $db = $this->getDbo();
-      $user = Factory::getUser();
+      $user = Factory::getApplication()->getIdentity();
       $uid = $user->id;
       $query = "SELECT a.*, b.title AS cat FROM #__jtg_files AS a"
       . "\n LEFT JOIN #__jtg_cats AS b"

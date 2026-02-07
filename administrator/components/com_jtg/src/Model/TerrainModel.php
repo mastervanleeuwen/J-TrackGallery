@@ -213,7 +213,7 @@ class TerrainModel extends ListModel
 	 */
 	function publish($cid = array(), $publish = 1)
 	{
-		$user 	= Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if (count($cid))
 		{

@@ -28,9 +28,9 @@ use Jtg\Component\Jtg\Site\Helpers\JtgHelper;
 use Jtg\Component\Jtg\Site\Helpers\LayoutHelper;
 
 // Load core.js to enable tableordering
-HTMLHelper::_('script', 'system/core.js', false, true);
+HTMLHelper::_('script', 'system/core.js', array(false), true);
 
-$user = Factory::getUser();
+$user = Factory::getApplication()->getIdentity();
 $uid = $user->id;
 $show_cat_icon = $this->params->get('jtg_param_use_cats') && ! (bool) $this->params->get('jtg_param_tracks_list_hide_icon_category');
 
