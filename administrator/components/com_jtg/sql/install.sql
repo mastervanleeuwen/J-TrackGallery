@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `#__jtg_users` (
 PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `#__content_types` (type_title, `table`, rules, field_mappings, router, type_alias)
+INSERT INTO `#__content_types` (type_title, `table`, rules, field_mappings, router, type_alias, content_history_options)
 VALUES ('GPS Track',
 '{"special":{"dbtable":"#__jtg_files","key":"id","type":"Jtg_files","prefix":"Table","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Corecontent","prefix":"Table","config":"array()"}}',
 '',
@@ -164,7 +164,7 @@ VALUES ('GPS Track',
     "core_body": "description"
   }}',
 'JtgHelperRoute::getFileRoute',
-'com_jtg.file');
+'com_jtg.file','');
 
 INSERT IGNORE INTO `#__jtg_maps` (`name`, `ordering`, `published`, `type`, `param`, `apikey`) VALUES
 ('COM_JTG_MAP_MAPNIK', 1, 1, 0, '', ''),

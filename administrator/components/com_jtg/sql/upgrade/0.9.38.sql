@@ -1,4 +1,4 @@
-INSERT INTO `#__content_types` (type_title, `table`, rules, field_mappings, router, type_alias)
+INSERT INTO `#__content_types` (type_title, `table`, rules, field_mappings, router, type_alias, content_history_options)
 VALUES ('GPS Track',
 '{"special":{"dbtable":"#__jtg_files","key":"id","type":"JTG_Files","prefix":"Table","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Corecontent","prefix":"Table","config":"array()"}}',
 '',
@@ -12,4 +12,4 @@ VALUES ('GPS Track',
     "core_body": "description"
   }}',
 'jtgRouter::getFileRoute',
-'com_jtg.file');
+'com_jtg.file', '');
